@@ -9,7 +9,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 
 void main() async {
-  // -- config to firebase 🖊️ --
+  // ? -- config to firebase 🖊️ --
   // WidgetsFlutterBinding.ensureInitialized();
   // await Firebase.initializeApp(
   //   options: DefaultFirebaseOptions.currentPlatform,
@@ -25,14 +25,14 @@ class App extends StatelessWidget {
     SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersive, overlays: []);
 
     return ChangeNotifierProvider(
-      create: (context) => MainProvider(), // Main provider
+      create: (context) => MainProvider(), // * Main provider
       child: MaterialApp(
           title: 'Flutter Demo',
           theme: ThemeData(
             textTheme: GoogleFonts.latoTextTheme(),
             primarySwatch: Colors.blue,
           ),
-          // Feature blocs
+          // * Feature blocs
           home: BlocProvider<UserBloc>(
             bloc: UserBloc(),
             child: BlocProvider<SearchBloc>(

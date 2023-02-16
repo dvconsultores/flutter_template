@@ -7,9 +7,9 @@ buildscript {
 
     dependencies {
         classpath 'com.android.tools.build:gradle:7.1.3'
-        // -- config to google authentication 🖊️ --
+        // ? -- config to google authentication 🖊️ --
         // classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:1.7.20"
-        // -- default config 🖊️ --
+        // ? -- default config 🖊️ --
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
         classpath 'com.google.gms:google-services:4.3.14'
     }

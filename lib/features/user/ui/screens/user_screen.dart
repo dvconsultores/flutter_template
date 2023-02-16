@@ -10,11 +10,9 @@ class UserScreen extends StatelessWidget {
     final searchBloc = BlocProvider.of<SearchBloc>(context);
 
     return Center(
-      child: Container(
-        child: Text(
-          "user \n ${searchBloc.count}",
-          style: Theme.of(context).textTheme.displayMedium,
-        ),
+      child: Text(
+        "user \n ${searchBloc.count}",
+        style: Theme.of(context).textTheme.displayMedium,
       ),
     );
   }

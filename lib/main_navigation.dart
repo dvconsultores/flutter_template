@@ -43,19 +43,19 @@ class _MainNavigationState extends State<MainNavigation> {
                     margin: const EdgeInsets.only(top: 20),
                     child: const Icon(Icons.person)),
                 label: "",
-                tooltip: "user"), // User feature
+                tooltip: "user"), // * User feature
             BottomNavigationBarItem(
                 icon: Container(
                     margin: const EdgeInsets.only(top: 20),
                     child: const Icon(Icons.home)),
                 label: "",
-                tooltip: "home"), // Home page
+                tooltip: "home"), // * Home page
             BottomNavigationBarItem(
                 icon: Container(
                     margin: const EdgeInsets.only(top: 20),
                     child: const Icon(Icons.search)),
                 label: "",
-                tooltip: "search"), // Search feature
+                tooltip: "search"), // * Search feature
           ],
         ),
       ),

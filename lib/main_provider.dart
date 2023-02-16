@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_platzi_trips/utils/model/ticket.dart';
 
 class MainProvider extends ChangeNotifier {
-  // Navigation
+  // * Navigation
   int indexTab = 1;
   void setNavigationIndex(int index) {
     indexTab = index;

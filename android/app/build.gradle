@@ -26,9 +26,9 @@ apply plugin: 'kotlin-android'
 apply from: "$flutterRoot/packages/flutter_tools/gradle/flutter.gradle"
 
 android {
-    // -- config to firebase 🖊️ --
+    // ? -- config to firebase 🖊️ --
     // compileSdkVersion 33
-    // -- default config 🖊️ --
+    // ? -- default config 🖊️ --
     compileSdkVersion flutter.compileSdkVersion
     ndkVersion flutter.ndkVersion
 
@@ -50,10 +50,10 @@ android {
         applicationId "com.example.flutter_platzi_trips"
         // You can update the following values to match your application needs.
         // For more information, see: https://docs.flutter.dev/deployment/android#reviewing-the-build-configuration.
-        // -- config to firebase 🖊️ --
+        // ? -- config to firebase 🖊️ --
         // minSdkVersion 21
         // targetSdkVersion 33
-        // -- default config 🖊️ --
+        // ? -- default config 🖊️ --
         minSdkVersion flutter.minSdkVersion
         targetSdkVersion flutter.targetSdkVersion
         versionCode flutterVersionCode.toInteger()

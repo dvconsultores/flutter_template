@@ -33,7 +33,7 @@ dependencies:
     sdk: flutter
   google_fonts: ^3.0.1
   flutter_svg: ^1.1.6
-  # -- firebase and google auth packages 🖊️ --
+  # ? -- firebase and google auth packages 🖊️ --
   # firebase_core: ^2.4.0
   # firebase_auth: ^4.2.3
   # google_sign_in: ^5.4.2
