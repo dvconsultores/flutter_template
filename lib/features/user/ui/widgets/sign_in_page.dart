@@ -29,7 +29,7 @@ class SignInPage extends StatelessWidget {
             child: const Text(
               "Login Button",
               style: TextStyle(fontSize: 25),
-            ))
+            )),
       ],
     ));
   }

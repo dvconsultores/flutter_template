@@ -25,10 +25,11 @@ class AppThemes {
     ),
   };
 
-  static ThemeData? getTheme(BuildContext context) {
-    final theme = context.watch<MainProvider>().appTheme;
-    return themes[theme];
-  }
+  static ThemeData getTheme(BuildContext context) =>
+      themes[context.watch<MainProvider>().appTheme]!;
+
+  static String getAssetsTheme(BuildContext context) =>
+      'assets/themes/${context.watch<MainProvider>().appTheme.name}';
 }
 
 // * colors app
@@ -58,8 +59,8 @@ class AppColors {
     },
   };
 
-  static Color? getColor(BuildContext context, ColorType color) {
+  static Color getColor(BuildContext context, ColorType color) {
     final theme = context.watch<MainProvider>().appTheme;
-    return colors[theme]![color];
+    return colors[theme]![color]!;
   }
 }

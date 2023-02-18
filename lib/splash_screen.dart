@@ -78,8 +78,8 @@ class _SplashPageState extends State<SplashScreen>
                 decoration: BoxDecoration(
                   gradient: LinearGradient(
                     colors: [
-                      AppColors.getColor(context, ColorType.primary)!,
-                      AppColors.getColor(context, ColorType.secondary)!,
+                      AppColors.getColor(context, ColorType.primary),
+                      AppColors.getColor(context, ColorType.secondary),
                     ],
                   ),
                 ),
