@@ -53,8 +53,10 @@ android {
         // ? -- config to firebase 🖊️ --
         // minSdkVersion 21
         // targetSdkVersion 33
+        // ? -- config to secure storgae 🖊️ --
+        minSdkVersion 18
         // ? -- default config 🖊️ --
-        minSdkVersion flutter.minSdkVersion
+        // minSdkVersion flutter.minSdkVersion
         targetSdkVersion flutter.targetSdkVersion
         versionCode flutterVersionCode.toInteger()
         versionName flutterVersionName
