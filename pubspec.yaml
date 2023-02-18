@@ -45,10 +45,13 @@ dependencies:
   cached_network_image: ^3.2.3
   flutter_rating_bar: ^4.0.1
   provider: ^6.0.5
-  shared_preferences: ^2.0.17
   http: ^0.13.5
   rxdart: ^0.27.7
   another_flushbar: ^1.12.29
+  shared_preferences: ^2.0.17
+  flutter_secure_storage: ^8.0.0
+  hive: ^2.2.3
+  hive_flutter: ^1.1.0
 
 
 dev_dependencies:
