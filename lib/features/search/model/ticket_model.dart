@@ -1,5 +1,5 @@
-class Ticket {
-  Ticket({
+class TicketModel {
+  TicketModel({
     required this.name,
     required this.value,
   });

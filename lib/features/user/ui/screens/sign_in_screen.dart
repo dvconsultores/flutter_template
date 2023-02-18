@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_platzi_trips/features/user/bloc/user_bloc.dart';
-import 'package:flutter_platzi_trips/main_navigation.dart';
+import 'package:flutter_detextre4/features/user/bloc/user_bloc.dart';
+import 'package:flutter_detextre4/features/user/model/user_model.dart';
+import 'package:flutter_detextre4/features/user/ui/widgets/sign_in_page.dart';
+import 'package:flutter_detextre4/main_navigation.dart';
 import 'package:generic_bloc_provider/generic_bloc_provider.dart';
 
 class SignInScreen extends StatefulWidget {
@@ -17,18 +19,14 @@ class _SignInScreen extends State<SignInScreen> {
   Widget build(BuildContext context) {
     final userBloc = BlocProvider.of<UserBloc>(context);
 
-    return StreamBuilder(
-        stream: userBloc.authStatus,
-        builder: (BuildContext context, AsyncSnapshot snapshot) {
+    return StreamBuilder<UserModel?>(
+        stream: userBloc.getDataUserStream,
+        builder: (BuildContext context, snapshot) {
           if (!snapshot.hasData || snapshot.hasError) {
-            return signInUi();
+            return const SignInPage();
           } else {
             return const MainNavigation();
           }
         });
-  }
-
-  Widget signInUi() {
-    return Scaffold(body: Column());
   }
 }

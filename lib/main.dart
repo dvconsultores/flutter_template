@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_platzi_trips/features/search/bloc/search_bloc.dart';
-import 'package:flutter_platzi_trips/features/user/bloc/user_bloc.dart';
-import 'package:flutter_platzi_trips/features/user/ui/screens/sign_in_screen.dart';
-import 'package:flutter_platzi_trips/main_provider.dart';
+import 'package:flutter_detextre4/features/search/bloc/search_bloc.dart';
+import 'package:flutter_detextre4/features/user/bloc/user_bloc.dart';
+import 'package:flutter_detextre4/main_provider.dart';
+import 'package:flutter_detextre4/splash_screen.dart';
+import 'package:flutter_detextre4/utils/config/app_config.dart';
 import 'package:generic_bloc_provider/generic_bloc_provider.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 
 void main() async {
@@ -26,22 +26,21 @@ class App extends StatelessWidget {
   Widget build(BuildContext context) {
     SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersive, overlays: []);
 
-    return ChangeNotifierProvider(
-      create: (context) => MainProvider(), // * Main provider
-      child: MaterialApp(
-          title: 'Flutter Demo',
-          theme: ThemeData(
-            textTheme: GoogleFonts.latoTextTheme(),
-            primarySwatch: Colors.blue,
-          ),
-          // * Feature blocs
-          home: BlocProvider<UserBloc>(
-            bloc: UserBloc(),
-            child: BlocProvider<SearchBloc>(
-              bloc: SearchBloc(),
-              child: const SignInScreen(),
-            ),
-          )),
+    // * Feature blocs
+    return BlocProvider<UserBloc>(
+      bloc: UserBloc(),
+      child: BlocProvider<SearchBloc>(
+          bloc: SearchBloc(),
+          // * Main provider
+          child: ChangeNotifierProvider(
+              create: (context) => MainProvider(),
+              child: Consumer<MainProvider>(builder: (context, value, child) {
+                return MaterialApp(
+                  title: 'Flutter Demo',
+                  theme: AppThemes.getTheme(context), // * Theme switcher
+                  home: const SplashScreen(),
+                );
+              }))),
     );
   }
 }

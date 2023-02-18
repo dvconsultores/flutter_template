@@ -1,4 +1,4 @@
-package com.example.flutter_platzi_trips
+package com.example.flutter_detextre4
 
 import io.flutter.embedding.android.FlutterActivity
 

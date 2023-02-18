@@ -1,7 +1,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.flutter_platzi_trips">
+    package="com.example.flutter_detextre4">
    <application
-        android:label="flutter_platzi_trips"
+        android:label="flutter_detextre4"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <activity

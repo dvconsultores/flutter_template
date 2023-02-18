@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_platzi_trips/features/search/bloc/search_bloc.dart';
+import 'package:flutter_detextre4/features/user/bloc/user_bloc.dart';
 import 'package:generic_bloc_provider/generic_bloc_provider.dart';
 
 class UserScreen extends StatelessWidget {
@@ -7,12 +7,25 @@ class UserScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final searchBloc = BlocProvider.of<SearchBloc>(context);
+    final userBloc = BlocProvider.of<UserBloc>(context);
 
     return Center(
-      child: Text(
-        "user \n ${searchBloc.count}",
-        style: Theme.of(context).textTheme.displayMedium,
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Text(
+            "user",
+            style: Theme.of(context).textTheme.displayMedium,
+          ),
+          TextButton(
+              onPressed: () {
+                userBloc.closeSesion();
+              },
+              child: Text(
+                "close sesion",
+                style: Theme.of(context).textTheme.headlineMedium,
+              )),
+        ],
       ),
     );
   }

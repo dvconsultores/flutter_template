@@ -1,4 +1,10 @@
+import 'package:another_flushbar/flushbar.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_detextre4/features/search/bloc/search_bloc.dart';
+import 'package:flutter_detextre4/main_provider.dart';
+import 'package:flutter_detextre4/utils/config/app_config.dart';
+import 'package:generic_bloc_provider/generic_bloc_provider.dart';
+import 'package:provider/provider.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -14,10 +20,20 @@ class _HomePageState extends State<HomePage> {
     setState(() {
       _counter++;
     });
+
+    Flushbar(
+      message: "El contador ha incrementado",
+      backgroundColor: Colors.black54,
+      duration: const Duration(seconds: 3),
+      borderRadius: BorderRadius.circular(6),
+      margin: const EdgeInsets.symmetric(horizontal: 10.0),
+    ).show(context);
   }
 
   @override
   Widget build(BuildContext context) {
+    final searchBloc = BlocProvider.of<SearchBloc>(context);
+
     return SizedBox(
       child: Center(
         child: Column(
@@ -38,6 +54,31 @@ class _HomePageState extends State<HomePage> {
                   tooltip: 'Increment',
                   child: const Icon(Icons.add),
                 )),
+            Text(
+              context.watch<MainProvider>().appTheme.name,
+              style: Theme.of(context).textTheme.displaySmall,
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                IconButton(
+                  onPressed: () {
+                    context.read<MainProvider>().switchTheme = ThemeType.light;
+                  },
+                  icon: Icon(Icons.light_mode,
+                      color: AppColors.getColor(context, ColorType.primary)),
+                ),
+                IconButton(
+                  onPressed: () {
+                    context.read<MainProvider>().switchTheme = ThemeType.dark;
+                  },
+                  icon: const Icon(
+                    Icons.dark_mode,
+                    color: Colors.blueGrey,
+                  ),
+                ),
+              ],
+            )
           ],
         ),
       ),

@@ -5,18 +5,18 @@
   "version": "0.2.0",
   "configurations": [
     {
-      "name": "flutter_platzi_trips",
+      "name": "flutter_detextre4",
       "request": "launch",
       "type": "dart"
     },
     {
-      "name": "flutter_platzi_trips (profile mode)",
+      "name": "flutter_detextre4 (profile mode)",
       "request": "launch",
       "type": "dart",
       "flutterMode": "profile"
     },
     {
-      "name": "flutter_platzi_trips (release mode)",
+      "name": "flutter_detextre4 (release mode)",
       "request": "launch",
       "type": "dart",
       "flutterMode": "release"

@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_platzi_trips/features/search/ui/screens/search_screen.dart';
-import 'package:flutter_platzi_trips/features/user/ui/screens/user_screen.dart';
-import 'package:flutter_platzi_trips/home_page.dart';
-import 'package:flutter_platzi_trips/main_provider.dart';
+import 'package:flutter_detextre4/features/search/ui/screens/search_screen.dart';
+import 'package:flutter_detextre4/features/user/ui/screens/user_screen.dart';
+import 'package:flutter_detextre4/home_page.dart';
+import 'package:flutter_detextre4/main_provider.dart';
 import 'package:provider/provider.dart';
 
 class MainNavigation extends StatefulWidget {
@@ -33,7 +33,7 @@ class _MainNavigationState extends State<MainNavigation> {
         data: Theme.of(context).copyWith(canvasColor: Colors.white),
         child: BottomNavigationBar(
           onTap: (index) => setState(() {
-            mainProvider.setNavigationIndex(index);
+            mainProvider.setNavigationIndex = index;
           }),
           currentIndex: mainProvider.indexTab,
           selectedItemColor: Colors.blue,
