@@ -121,43 +121,41 @@ class _SplashPageState extends State<SplashScreen>
             top: size.height * 0.33,
             left: 0,
             right: 0,
-            child: Column(
-              children: [
-                AnimatedBuilder(
-                  animation: animationController,
-                  builder: (context, child) => Transform.scale(
-                    scale: animationCurve.value,
-                    child: child,
-                  ),
-                  child: Hero(
-                    tag: 'Logo Icon',
+            child: Hero(
+              tag: "logo demo",
+              child: Column(
+                children: [
+                  AnimatedBuilder(
+                    animation: animationController,
+                    builder: (context, child) => Transform.scale(
+                      scale: animationCurve.value,
+                      child: child,
+                    ),
                     child: Image.asset(
                       'assets/images/avatar.png',
                       height: size.height * 0.15,
                     ),
                   ),
-                ),
-                AnimatedBuilder(
-                  animation: animationController,
-                  builder: (context, child) => Transform.scale(
-                    scale: animationCurve.value,
-                    child: Transform.translate(
-                      offset: Offset(0, animMoveText.value),
-                      child: child,
+                  AnimatedBuilder(
+                    animation: animationController,
+                    builder: (context, child) => Transform.scale(
+                      scale: animationCurve.value,
+                      child: Transform.translate(
+                        offset: Offset(0, animMoveText.value),
+                        child: child,
+                      ),
                     ),
-                  ),
-                  child: const Hero(
-                    tag: 'Logo Title',
-                    child: Text(
-                      'Flutter Demo',
-                      style: TextStyle(
-                        fontSize: 35,
-                        fontWeight: FontWeight.bold,
+                    child: const Material(
+                      color: Colors.transparent,
+                      child: Text(
+                        'Flutter Demo',
+                        style: TextStyle(
+                            fontSize: 35, fontWeight: FontWeight.bold),
                       ),
                     ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
           ),
 
