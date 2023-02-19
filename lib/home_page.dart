@@ -1,7 +1,7 @@
-import 'package:another_flushbar/flushbar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_detextre4/main_provider.dart';
 import 'package:flutter_detextre4/utils/config/app_config.dart';
+import 'package:flutter_detextre4/utils/const/global_functions.dart';
 import 'package:provider/provider.dart';
 
 class HomePage extends StatefulWidget {
@@ -18,14 +18,8 @@ class _HomePageState extends State<HomePage> {
     setState(() {
       _counter++;
     });
-
-    Flushbar(
-      message: "El contador ha incrementado",
-      backgroundColor: Colors.black54,
-      duration: const Duration(seconds: 3),
-      borderRadius: BorderRadius.circular(6),
-      margin: const EdgeInsets.symmetric(horizontal: 10.0),
-    ).show(context);
+    appSnackbar(context, "El contador ha incrementado",
+        type: ColorSnackbarState.neutral);
   }
 
   @override
@@ -68,9 +62,9 @@ class _HomePageState extends State<HomePage> {
                   onPressed: () {
                     context.read<MainProvider>().switchTheme = ThemeType.dark;
                   },
-                  icon: const Icon(
+                  icon: Icon(
                     Icons.dark_mode,
-                    color: Colors.blueGrey,
+                    color: AppColors.getColor(context, ColorType.secondary),
                   ),
                 ),
               ],

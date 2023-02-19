@@ -22,8 +22,7 @@ class _SplashPageState extends State<SplashScreen>
   );
 
   void goToNextPage() {
-    GlobalFunctions.pushReplacementWithTransition(context,
-        widget: const SignInScreen());
+    pushReplacementWithTransition(context, widget: const SignInScreen());
   }
 
   @override

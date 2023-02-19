@@ -38,7 +38,9 @@ enum ColorType {
   secondary,
   accent,
   active,
-  disabled;
+  disabled,
+  success,
+  error;
 }
 
 class AppColors {
@@ -49,6 +51,8 @@ class AppColors {
       ColorType.accent: Colors.red,
       ColorType.active: const Color.fromARGB(255, 255, 17, 0),
       ColorType.disabled: const Color.fromARGB(255, 209, 175, 172),
+      ColorType.success: Colors.green,
+      ColorType.error: Colors.red,
     },
     ThemeType.dark: {
       ColorType.primary: Colors.pink,
@@ -56,6 +60,8 @@ class AppColors {
       ColorType.accent: Colors.indigo,
       ColorType.active: const Color.fromARGB(255, 0, 32, 215),
       ColorType.disabled: const Color.fromARGB(255, 138, 146, 191),
+      ColorType.success: Colors.green,
+      ColorType.error: Colors.red,
     },
   };
 
