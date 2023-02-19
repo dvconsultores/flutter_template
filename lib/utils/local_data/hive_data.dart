@@ -3,6 +3,7 @@ import 'package:hive/hive.dart';
 
 enum HiveBox { aplication }
 
+// ? collection used to know storage elements
 enum HiveDataCollection {
   something,
   somethingMore;
@@ -14,31 +15,33 @@ class HiveData {
 
   // * Read value
   static String read(HiveDataCollection key) {
-    debugPrint("${key.name} 💦");
+    debugPrint("${key.name} from hive data storage 💦");
     return storage.get(key.name) ?? '';
   }
 
   // * Read all values
   static Iterable readAll() {
-    debugPrint("${storage.values} 💦");
+    debugPrint("${storage.values} from hive data storage 💦");
     return storage.values;
   }
 
   // * Delete value
   static delete(HiveDataCollection key) {
-    storage.delete(key.name);
-    debugPrint("$key from hive data storage is cleared 💦");
+    storage.delete(key.name).whenComplete(
+        () => debugPrint('"$key" from hive data storage is cleared 💦'));
   }
 
   // * Delete all
   static deleteAll() {
-    storage.clear();
-    debugPrint("Hive data storage cleared 💦");
+    storage
+        .clear()
+        .whenComplete(() => debugPrint("Hive data storage cleared 💦"));
   }
 
   // * Write value
   static write(HiveDataCollection key, String value) {
-    debugPrint("$value 💦");
-    storage.put(key.name, value);
+    storage
+        .put(key.name, value)
+        .whenComplete(() => debugPrint("$value from hive data storage 💦"));
   }
 }

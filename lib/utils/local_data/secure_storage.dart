@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
+// ? collection used to know storage elements
 enum SecureStorageCollection {
   something,
   somethingMore;
@@ -24,51 +25,52 @@ class SecureStorage {
       iOptions: getIOSOptions(),
     );
 
-    debugPrint("$value 🛡️");
+    debugPrint("$value from Secure storage 🛡️");
     return value ?? "";
   }
 
   // * Read all values
-  static Future readAll() async {
+  static Future<Map<String, String>> readAll() async {
     Map<String, String> allValues = await storage.readAll(
       aOptions: getAndroidOptions(),
       iOptions: getIOSOptions(),
     );
 
-    debugPrint("$allValues 🛡️");
+    debugPrint("$allValues from Secure storage 🛡️");
     return allValues;
   }
 
   // * Delete value
   static Future delete(SecureStorageCollection key) async {
-    await storage.delete(
-      key: key.name,
-      aOptions: getAndroidOptions(),
-      iOptions: getIOSOptions(),
-    );
-
-    debugPrint('"${key.name}" from Secure storage is cleared 🛡️');
+    await storage
+        .delete(
+          key: key.name,
+          aOptions: getAndroidOptions(),
+          iOptions: getIOSOptions(),
+        )
+        .whenComplete(() =>
+            debugPrint('"${key.name}" from Secure storage is cleared 🛡️'));
   }
 
   // * Delete all
   static Future deleteAll() async {
-    await storage.deleteAll(
-      aOptions: getAndroidOptions(),
-      iOptions: getIOSOptions(),
-    );
-
-    debugPrint("Secure storage cleared 🛡️");
+    await storage
+        .deleteAll(
+          aOptions: getAndroidOptions(),
+          iOptions: getIOSOptions(),
+        )
+        .whenComplete(() => debugPrint("Secure storage cleared 🛡️"));
   }
 
   // * Write value
   static Future write(SecureStorageCollection key, String value) async {
-    debugPrint("$value 🛡️");
-
-    await storage.write(
-      key: key.name,
-      value: value,
-      aOptions: getAndroidOptions(),
-      iOptions: getIOSOptions(),
-    );
+    await storage
+        .write(
+          key: key.name,
+          value: value,
+          aOptions: getAndroidOptions(),
+          iOptions: getIOSOptions(),
+        )
+        .whenComplete(() => debugPrint("$value from Secure storage 🛡️"));
   }
 }
