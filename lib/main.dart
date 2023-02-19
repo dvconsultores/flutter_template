@@ -36,17 +36,18 @@ class App extends StatelessWidget {
     return BlocProvider<UserBloc>(
       bloc: UserBloc(),
       child: BlocProvider<SearchBloc>(
-          bloc: SearchBloc(),
-          // * Main provider
-          child: ChangeNotifierProvider(
-              create: (context) => MainProvider(),
-              child: Consumer<MainProvider>(builder: (context, value, child) {
-                return MaterialApp(
-                  title: 'Flutter Demo',
-                  theme: AppThemes.getTheme(context), // * Theme switcher
-                  home: const SplashScreen(),
-                );
-              }))),
+        bloc: SearchBloc(),
+        // * Main provider
+        child: ChangeNotifierProvider(
+            create: (context) => MainProvider(),
+            child: Consumer<MainProvider>(builder: (context, value, child) {
+              return MaterialApp(
+                title: 'Flutter Demo',
+                theme: AppThemes.getTheme(context), // * Theme switcher
+                home: const SplashScreen(),
+              );
+            })),
+      ),
     );
   }
 }
