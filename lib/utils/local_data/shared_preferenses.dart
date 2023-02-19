@@ -16,7 +16,7 @@ class SharedPrefs {
     final SharedPreferences prefs = await futureInstance;
     final Object? value = prefs.get(key.name);
 
-    debugPrint("$value - from shared preferenses 💠");
+    debugPrint("$value - readed from shared preferenses 💠");
     return value;
   }
 
@@ -25,7 +25,7 @@ class SharedPrefs {
     final SharedPreferences prefs = await futureInstance;
     final Set<String> allValues = prefs.getKeys();
 
-    debugPrint("$allValues - from shared preferenses 💠");
+    debugPrint("$allValues - all readed from shared preferenses 💠");
     return allValues;
   }
 
@@ -34,7 +34,7 @@ class SharedPrefs {
     final SharedPreferences prefs = await futureInstance;
 
     return prefs.remove(key.name).whenComplete(
-        () => debugPrint("${key.name} - from shared preferenses is cleared💠"));
+        () => debugPrint("${key.name} - deleted from shared preferenses is cleared💠"));
   }
 
   // * Delete all

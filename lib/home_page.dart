@@ -2,7 +2,6 @@ import 'package:another_flushbar/flushbar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_detextre4/main_provider.dart';
 import 'package:flutter_detextre4/utils/config/app_config.dart';
-import 'package:flutter_detextre4/utils/local_data/shared_preferenses.dart';
 import 'package:provider/provider.dart';
 
 class HomePage extends StatefulWidget {
@@ -20,10 +19,6 @@ class _HomePageState extends State<HomePage> {
       _counter++;
     });
 
-    // prefs.setString(SharedPreferensesCollection.something.name, "algoalgoalgo");
-    // prefs.setInt(SharedPreferensesCollection.somethingMore.name, 2);
-
-    SharedPrefs.read(SharedPreferensesCollection.somethingMore);
     Flushbar(
       message: "El contador ha incrementado",
       backgroundColor: Colors.black54,

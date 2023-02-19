@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:flutter/material.dart';
 import 'package:flutter_detextre4/features/user/model/user_model.dart';
 import 'package:flutter_detextre4/utils/config/fetch_config.dart';
 import 'package:http/http.dart' as http;
@@ -10,13 +11,13 @@ class AuthApi {
     try {
       final response = await http.get(
         Uri.parse('${FetchConfig.baseUrl}/endpoint/'),
-        headers: FetchConfig.headersWithoutAuth,
+        headers: await FetchConfig.headersWithAuth(),
       );
 
       return UserModel.fromJson(jsonDecode(response.body));
     } catch (error) {
       // ? commented just for showcase
-      // throw Exception(error);
+      // rethrow;
       // ? just for showcase
       return UserModel(
         uid: 1,
@@ -33,13 +34,13 @@ class AuthApi {
       await http.post(
         Uri.parse('${FetchConfig.baseUrl}/endpoint/'),
         headers: FetchConfig.headersWithoutAuth,
+        body: {},
       );
 
-      // ignore: avoid_print
-      print("Sesion is closed");
+      debugPrint("Sesion is closed");
     } catch (error) {
       // ? commented just for showcase
-      // throw Exception(error);
+      // rethrow;
     }
   }
 }

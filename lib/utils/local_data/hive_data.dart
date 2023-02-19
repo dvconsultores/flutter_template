@@ -17,7 +17,7 @@ class HiveData {
   static String read(HiveDataCollection key) {
     final String value = storage.get(key.name) ?? '';
 
-    debugPrint("$value - from hive data storage 💦");
+    debugPrint("$value - readed from hive data storage 💦");
     return value;
   }
 
@@ -25,14 +25,14 @@ class HiveData {
   static Iterable readAll() {
     final Iterable allValues = storage.values;
 
-    debugPrint("$allValues - from hive data storage 💦");
+    debugPrint("$allValues - all readed from hive data storage 💦");
     return allValues;
   }
 
   // * Delete value
   static delete(HiveDataCollection key) {
     storage.delete(key.name).whenComplete(
-        () => debugPrint("${key.name} - from hive data storage is cleared 💦"));
+        () => debugPrint("${key.name} - deleted from hive data storage is cleared 💦"));
   }
 
   // * Delete all
@@ -46,6 +46,6 @@ class HiveData {
   static write(HiveDataCollection key, String value) {
     storage
         .put(key.name, value)
-        .whenComplete(() => debugPrint("$value - from hive data storage 💦"));
+        .whenComplete(() => debugPrint("$value - written from hive data storage 💦"));
   }
 }

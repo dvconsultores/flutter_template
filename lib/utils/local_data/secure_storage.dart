@@ -3,6 +3,7 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 // ? collection used to know storage elements
 enum SecureStorageCollection {
+  tokenAuth,
   something,
   somethingMore;
 }
@@ -18,15 +19,15 @@ class SecureStorage {
   static const storage = FlutterSecureStorage();
 
   // * Read value
-  static Future<String> read(SecureStorageCollection key) async {
+  static Future<String?> read(SecureStorageCollection key) async {
     final String? value = await storage.read(
       key: key.name,
       aOptions: getAndroidOptions(),
       iOptions: getIOSOptions(),
     );
 
-    debugPrint("$value - from Secure storage 🛡️");
-    return value ?? "";
+    debugPrint("$value - readed from Secure storage 🛡️");
+    return value;
   }
 
   // * Read all values
@@ -36,7 +37,7 @@ class SecureStorage {
       iOptions: getIOSOptions(),
     );
 
-    debugPrint("$allValues - from Secure storage 🛡️");
+    debugPrint("$allValues - all readed from Secure storage 🛡️");
     return allValues;
   }
 
@@ -49,7 +50,7 @@ class SecureStorage {
           iOptions: getIOSOptions(),
         )
         .whenComplete(() =>
-            debugPrint("${key.name} - from Secure storage is cleared 🛡️"));
+            debugPrint("${key.name} - deleted from Secure storage is cleared 🛡️"));
   }
 
   // * Delete all
@@ -71,6 +72,6 @@ class SecureStorage {
           aOptions: getAndroidOptions(),
           iOptions: getIOSOptions(),
         )
-        .whenComplete(() => debugPrint("$value - from Secure storage 🛡️"));
+        .whenComplete(() => debugPrint("$value - written from Secure storage 🛡️"));
   }
 }
