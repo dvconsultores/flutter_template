@@ -13,25 +13,23 @@ class SplashScreen extends StatefulWidget {
 
 class _SplashPageState extends State<SplashScreen>
     with SingleTickerProviderStateMixin {
+  final int splashDuration = 1500;
   late final AnimationController animationController = AnimationController(
     lowerBound: 0.0,
     upperBound: 1.0,
     vsync: this,
-    duration: const Duration(
-      milliseconds: 1500,
-    ),
+    duration: Duration(milliseconds: splashDuration),
   );
 
-  void goToNextPage() async {
-    await Future.delayed(const Duration(milliseconds: 1500));
-    // ignore: use_build_context_synchronously
+  void goToNextPage() {
     GlobalFunctions.pushReplacementWithTransition(context,
         widget: const SignInScreen());
   }
 
   @override
   void didChangeDependencies() {
-    goToNextPage();
+    Future.delayed(
+        Duration(milliseconds: splashDuration), () => goToNextPage());
     super.didChangeDependencies();
   }
 
