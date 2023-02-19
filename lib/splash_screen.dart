@@ -59,9 +59,7 @@ class _SplashPageState extends State<SplashScreen>
       begin: 0.0,
       end: 125,
     ).animate(animationController);
-    animationController.forward().then(
-          (value) {},
-        );
+    animationController.forward().then((value) {});
 
     return Scaffold(
       body: Stack(
