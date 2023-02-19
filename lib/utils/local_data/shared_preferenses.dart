@@ -13,31 +13,33 @@ class SharedPrefs {
 
   // * Read value
   static Future<Object?> read(SharedPreferensesCollection key) async {
-    final prefs = await futureInstance;
-    debugPrint('"${key.name}" from shared preferenses 💠');
+    final SharedPreferences prefs = await futureInstance;
+    final Object? value = prefs.get(key.name);
 
-    return prefs.get(key.name);
+    debugPrint("$value - from shared preferenses 💠");
+    return value;
   }
 
   // * Read all values
   static Future<Set<String>> readAll() async {
-    final prefs = await futureInstance;
-    debugPrint("${prefs.getKeys()} from shared preferenses 💠");
+    final SharedPreferences prefs = await futureInstance;
+    final Set<String> allValues = prefs.getKeys();
 
-    return prefs.getKeys();
+    debugPrint("$allValues - from shared preferenses 💠");
+    return allValues;
   }
 
   // * Delete value
   static Future<bool> delete(SharedPreferensesCollection key) async {
-    final prefs = await futureInstance;
+    final SharedPreferences prefs = await futureInstance;
 
     return prefs.remove(key.name).whenComplete(
-        () => debugPrint('"${key.name}" from shared preferenses is cleared💠'));
+        () => debugPrint("${key.name} - from shared preferenses is cleared💠"));
   }
 
   // * Delete all
   static Future<bool> deleteAll() async {
-    final prefs = await futureInstance;
+    final SharedPreferences prefs = await futureInstance;
 
     return prefs
         .clear()

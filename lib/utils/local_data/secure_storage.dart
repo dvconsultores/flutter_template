@@ -19,24 +19,24 @@ class SecureStorage {
 
   // * Read value
   static Future<String> read(SecureStorageCollection key) async {
-    String? value = await storage.read(
+    final String? value = await storage.read(
       key: key.name,
       aOptions: getAndroidOptions(),
       iOptions: getIOSOptions(),
     );
 
-    debugPrint("$value from Secure storage 🛡️");
+    debugPrint("$value - from Secure storage 🛡️");
     return value ?? "";
   }
 
   // * Read all values
   static Future<Map<String, String>> readAll() async {
-    Map<String, String> allValues = await storage.readAll(
+    final Map<String, String> allValues = await storage.readAll(
       aOptions: getAndroidOptions(),
       iOptions: getIOSOptions(),
     );
 
-    debugPrint("$allValues from Secure storage 🛡️");
+    debugPrint("$allValues - from Secure storage 🛡️");
     return allValues;
   }
 
@@ -49,7 +49,7 @@ class SecureStorage {
           iOptions: getIOSOptions(),
         )
         .whenComplete(() =>
-            debugPrint('"${key.name}" from Secure storage is cleared 🛡️'));
+            debugPrint("${key.name} - from Secure storage is cleared 🛡️"));
   }
 
   // * Delete all
@@ -71,6 +71,6 @@ class SecureStorage {
           aOptions: getAndroidOptions(),
           iOptions: getIOSOptions(),
         )
-        .whenComplete(() => debugPrint("$value from Secure storage 🛡️"));
+        .whenComplete(() => debugPrint("$value - from Secure storage 🛡️"));
   }
 }
