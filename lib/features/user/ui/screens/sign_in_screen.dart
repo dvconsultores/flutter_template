@@ -1,32 +1,47 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_detextre4/features/user/bloc/user_bloc.dart';
 import 'package:flutter_detextre4/features/user/model/user_model.dart';
-import 'package:flutter_detextre4/features/user/ui/widgets/sign_in_page.dart';
-import 'package:flutter_detextre4/main_navigation.dart';
+import 'package:flutter_detextre4/features/user/repository/auth_api.dart';
 import 'package:generic_bloc_provider/generic_bloc_provider.dart';
 
-class SignInScreen extends StatefulWidget {
+class SignInScreen extends StatelessWidget {
   const SignInScreen({super.key});
 
   @override
-  State<StatefulWidget> createState() {
-    return _SignInScreen();
-  }
-}
-
-class _SignInScreen extends State<SignInScreen> {
-  @override
   Widget build(BuildContext context) {
+    final Size size = MediaQuery.of(context).size;
     final userBloc = BlocProvider.of<UserBloc>(context);
 
-    return StreamBuilder<UserModel?>(
-        stream: userBloc.getDataUserStream,
-        builder: (BuildContext context, snapshot) {
-          if (!snapshot.hasData || snapshot.hasError) {
-            return const SignInPage();
-          } else {
-            return const MainNavigation();
-          }
-        });
+    return Scaffold(
+      body: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
+        Container(
+          margin: const EdgeInsets.only(bottom: 40.0),
+          child: Hero(
+            tag: "logo demo",
+            child: Column(children: [
+              Image.asset('assets/images/avatar.png',
+                  height: size.height * 0.15),
+              const Material(
+                color: Colors.transparent,
+                child: Text('Flutter Demo',
+                    style:
+                        TextStyle(fontSize: 35, fontWeight: FontWeight.bold)),
+              ),
+            ]),
+          ),
+        ),
+        Center(
+          child: Text("login page",
+              style: Theme.of(context).textTheme.displayMedium),
+        ),
+        TextButton(
+          child: const Text("Login Button", style: TextStyle(fontSize: 25)),
+          onPressed: () async {
+            final UserModel result = await AuthApi.authEndpoint();
+            userBloc.setDataUserSink = result;
+          },
+        ),
+      ]),
+    );
   }
 }

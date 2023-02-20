@@ -13,6 +13,7 @@ class WillPopCustom extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return !Platform.isIOS
+        // * Android
         ? WillPopScope(
             onWillPop: () async {
               onWillPop();
@@ -20,6 +21,7 @@ class WillPopCustom extends StatelessWidget {
             },
             child: child,
           )
+        // * IOS
         : WillPopScope(
             onWillPop: () => Future.value(false),
             child: GestureDetector(

@@ -2,6 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_detextre4/features/search/bloc/search_bloc.dart';
 import 'package:flutter_detextre4/features/user/bloc/user_bloc.dart';
+import 'package:flutter_detextre4/features/user/model/user_model.dart';
+import 'package:flutter_detextre4/features/user/ui/screens/sign_in_screen.dart';
+import 'package:flutter_detextre4/main_navigation.dart';
 import 'package:flutter_detextre4/main_provider.dart';
 import 'package:flutter_detextre4/splash_screen.dart';
 import 'package:flutter_detextre4/utils/config/app_config.dart';
@@ -49,5 +52,32 @@ class App extends StatelessWidget {
             })),
       ),
     );
+  }
+}
+
+// * sesion manager - after splash screen
+class SesionManagerScreen extends StatefulWidget {
+  const SesionManagerScreen({super.key});
+
+  @override
+  State<StatefulWidget> createState() {
+    return _SesionManagerScreen();
+  }
+}
+
+class _SesionManagerScreen extends State<SesionManagerScreen> {
+  @override
+  Widget build(BuildContext context) {
+    final userBloc = BlocProvider.of<UserBloc>(context);
+
+    return StreamBuilder<UserModel?>(
+        stream: userBloc.getDataUserStream,
+        builder: (BuildContext context, snapshot) {
+          if (!snapshot.hasData || snapshot.hasError) {
+            return const SignInScreen();
+          } else {
+            return const MainNavigation();
+          }
+        });
   }
 }

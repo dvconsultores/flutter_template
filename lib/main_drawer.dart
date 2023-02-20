@@ -22,7 +22,7 @@ class MainDrawer extends StatelessWidget {
             style:
                 TextStyle(color: AppColors.getColor(context, ColorType.active)),
           ),
-          onPressed: () => goToPage(TestWebSockets()),
+          onPressed: () => goToPage(const TestWebSockets()),
         )
       ],
     ));

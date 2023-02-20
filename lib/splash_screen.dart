@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_detextre4/features/user/ui/screens/sign_in_screen.dart';
+import 'package:flutter_detextre4/main.dart';
 import 'package:flutter_detextre4/utils/config/app_config.dart';
 import 'package:flutter_detextre4/utils/config/extensions_config.dart';
 import 'dart:math' as math;
@@ -23,7 +23,7 @@ class _SplashPageState extends State<SplashScreen>
 
   void goToNextPage() {
     const Navigator()
-        .pushReplacementWithTransition(context, const SignInScreen());
+        .pushReplacementWithTransition(context, const SesionManagerScreen());
   }
 
   @override

@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_detextre4/features/search/ui/screens/search_screen.dart';
+import 'package:flutter_detextre4/features/user/bloc/user_bloc.dart';
 import 'package:flutter_detextre4/features/user/ui/screens/user_screen.dart';
-import 'package:flutter_detextre4/home_page.dart';
+import 'package:flutter_detextre4/home_screen.dart';
 import 'package:flutter_detextre4/main_drawer.dart';
 import 'package:flutter_detextre4/main_provider.dart';
+import 'package:flutter_detextre4/widgets/double_back_to_close_widget.dart';
+import 'package:generic_bloc_provider/generic_bloc_provider.dart';
 import 'package:provider/provider.dart';
 
 class MainNavigation extends StatefulWidget {
@@ -23,14 +26,21 @@ class _MainNavigationState extends State<MainNavigation> {
       appBar: AppBar(
         title: Text(<String>["User", "Home", "Search"][mainProvider.indexTab]),
       ),
-      body: IndexedStack(
-        index: mainProvider.indexTab,
-        children: const [
-          UserScreen(),
-          HomePage(),
-          SearchScreen(),
-        ],
+      // * Routes rendering
+      body: DoubleBackToCloseWidget(
+        onDoubleBack: () =>
+            BlocProvider.of<UserBloc>(context).dataUserController.close(),
+        snackBarMessage: "Press again to close",
+        child: IndexedStack(
+          index: mainProvider.indexTab,
+          children: const [
+            UserScreen(),
+            HomeScreen(),
+            SearchScreen(),
+          ],
+        ),
       ),
+      // * Navigation bar
       bottomNavigationBar: Theme(
         data: Theme.of(context).copyWith(canvasColor: Colors.white),
         child: BottomNavigationBar(

@@ -8,6 +8,7 @@ import 'package:rxdart/rxdart.dart';
 class UserBloc implements Bloc {
   // * user data
   final StreamController<UserModel?> dataUserController = BehaviorSubject();
+
   Stream<UserModel?> get getDataUserStream => dataUserController.stream;
   set setDataUserSink(event) => dataUserController.sink.add(event);
   void closeSesion() {

@@ -2,53 +2,46 @@ import 'package:flutter/material.dart';
 import 'package:web_socket_channel/web_socket_channel.dart';
 
 // TODO web socket test - just for testing
+class TestWebSockets extends StatefulWidget {
+  const TestWebSockets({super.key});
+  @override
+  State<TestWebSockets> createState() => _TestWebSocketsState();
+}
 
-class TestWebSockets extends StatelessWidget {
-  TestWebSockets({super.key});
+class _TestWebSocketsState extends State<TestWebSockets> {
+  final channel =
+      WebSocketChannel.connect(Uri.parse('wss://echo.websocket.events'));
 
-  // * channel controller
-  final testChannel = WebSocketChannel.connect(
-    Uri.parse('wss://echo.websocket.events'),
-  );
-  // * channel stream
-  Stream get testChannelStream => testChannel.stream;
-  // * channel sink
-  set testChannelSink(event) => testChannel.sink.add(event);
+  @override
+  void dispose() {
+    channel.sink.close();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(),
         body: StreamBuilder(
-            stream: testChannelStream,
+            stream: channel.stream,
             builder: (BuildContext context, snapshot) {
               return Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Text(
-                    "${snapshot.data}",
-                    style: Theme.of(context).textTheme.displayMedium,
+                  const Text(
+                    "Web socket test example",
+                    style: TextStyle(fontSize: 17),
                   ),
-                  Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-                    TextButton(
-                      child: const Text(
-                        "press button",
-                        style: TextStyle(fontSize: 18),
-                      ),
-                      onPressed: () {
-                        testChannelSink = "texto nuevo";
-                      },
+                  Container(
+                    margin: const EdgeInsets.all(20),
+                    child: TextField(
+                      onChanged: (value) => channel.sink.add(value),
                     ),
-                    TextButton(
-                      child: const Text(
-                        "press button 2",
-                        style: TextStyle(fontSize: 18),
-                      ),
-                      onPressed: () {
-                        testChannelSink = null;
-                      },
-                    )
-                  ]),
+                  ),
+                  Text(
+                    "database showcase: \n\n ${snapshot.data}",
+                    style: Theme.of(context).textTheme.displaySmall,
+                  ),
                 ],
               );
             }));
