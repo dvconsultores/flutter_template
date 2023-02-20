@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_detextre4/features/search/ui/screens/search_screen.dart';
 import 'package:flutter_detextre4/features/user/ui/screens/user_screen.dart';
 import 'package:flutter_detextre4/home_page.dart';
+import 'package:flutter_detextre4/main_drawer.dart';
 import 'package:flutter_detextre4/main_provider.dart';
 import 'package:provider/provider.dart';
 
@@ -18,6 +19,7 @@ class _MainNavigationState extends State<MainNavigation> {
     final mainProvider = context.watch<MainProvider>();
 
     return Scaffold(
+      drawer: const MainDrawer(),
       appBar: AppBar(
         title: Text(<String>["User", "Home", "Search"][mainProvider.indexTab]),
       ),
