@@ -3,10 +3,11 @@ import 'package:flutter/services.dart';
 import 'package:flutter_detextre4/features/search/bloc/search_bloc.dart';
 import 'package:flutter_detextre4/features/user/bloc/user_bloc.dart';
 import 'package:flutter_detextre4/features/user/model/user_model.dart';
-import 'package:flutter_detextre4/features/user/ui/screens/sign_in_screen.dart';
+import 'package:flutter_detextre4/features/user/ui/screens/log_in_screen.dart';
+import 'package:flutter_detextre4/splash_screen.dart';
+import 'package:flutter_detextre4/widgets/restart_widget.dart';
 import 'package:flutter_detextre4/main_navigation.dart';
 import 'package:flutter_detextre4/main_provider.dart';
-import 'package:flutter_detextre4/splash_screen.dart';
 import 'package:flutter_detextre4/utils/config/app_config.dart';
 import 'package:flutter_detextre4/utils/local_data/hive_data.dart';
 import 'package:generic_bloc_provider/generic_bloc_provider.dart';
@@ -23,7 +24,7 @@ void main() async {
   */
   Hive.initFlutter().then((_) {
     Hive.openBox(HiveData.boxName).then((value) {
-      runApp(const App());
+      runApp(const RestartWidget(child: App()));
     });
   });
 }
@@ -44,10 +45,15 @@ class App extends StatelessWidget {
         child: ChangeNotifierProvider(
             create: (context) => MainProvider(),
             child: Consumer<MainProvider>(builder: (context, value, child) {
+              // * Router Manager
               return MaterialApp(
                 title: 'Flutter Demo',
                 theme: AppThemes.getTheme(context), // * Theme switcher
                 home: const SplashScreen(),
+                supportedLocales: const [
+                  Locale('en', 'US'),
+                  Locale('es', 'ES'),
+                ],
               );
             })),
       ),
@@ -74,7 +80,7 @@ class _SesionManagerScreen extends State<SesionManagerScreen> {
         stream: userBloc.getDataUserStream,
         builder: (BuildContext context, snapshot) {
           if (!snapshot.hasData || snapshot.hasError) {
-            return const SignInScreen();
+            return const LogInScreen();
           } else {
             return const MainNavigation();
           }

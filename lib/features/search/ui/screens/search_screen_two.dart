@@ -1,16 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_detextre4/features/search/bloc/search_bloc.dart';
-import 'package:flutter_detextre4/utils/config/router_navigation_config.dart';
 import 'package:generic_bloc_provider/generic_bloc_provider.dart';
 
-class SearchScreen extends StatefulWidget {
-  const SearchScreen({super.key});
+class SearchScreenTwo extends StatefulWidget {
+  const SearchScreenTwo({super.key});
 
   @override
-  State<SearchScreen> createState() => _SearchScreenState();
+  State<SearchScreenTwo> createState() => _SearchScreenTwoState();
 }
 
-class _SearchScreenState extends State<SearchScreen> {
+class _SearchScreenTwoState extends State<SearchScreenTwo> {
   @override
   Widget build(BuildContext context) {
     final searchBloc = BlocProvider.of<SearchBloc>(context);
@@ -18,22 +17,9 @@ class _SearchScreenState extends State<SearchScreen> {
     return ListView(
       children: [
         Text(
-          "search",
+          "search 2",
           textAlign: TextAlign.center,
           style: Theme.of(context).textTheme.displayMedium,
-        ),
-        TextButton(
-          child: const Text(
-            "Press button to search",
-            style: TextStyle(fontSize: 18),
-          ),
-          onPressed: () {
-            setState(() {
-              searchBloc.addTicket();
-            });
-            const Navigator()
-                .routerPush(context, NavigationRoutesPath.searchTwo);
-          },
         ),
         for (var i = 0; i < searchBloc.totalTickets.length; i++)
           Text(

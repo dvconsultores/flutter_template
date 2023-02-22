@@ -4,8 +4,8 @@ import 'package:flutter_detextre4/features/user/model/user_model.dart';
 import 'package:flutter_detextre4/features/user/repository/auth_api.dart';
 import 'package:generic_bloc_provider/generic_bloc_provider.dart';
 
-class SignInScreen extends StatelessWidget {
-  const SignInScreen({super.key});
+class LogInScreen extends StatelessWidget {
+  const LogInScreen({super.key});
 
   @override
   Widget build(BuildContext context) {

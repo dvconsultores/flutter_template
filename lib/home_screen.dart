@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_detextre4/main_provider.dart';
 import 'package:flutter_detextre4/utils/config/app_config.dart';
-import 'package:flutter_detextre4/utils/const/global_functions.dart';
+import 'package:flutter_detextre4/utils/config/extensions_config.dart';
 import 'package:provider/provider.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -18,8 +18,9 @@ class _HomePageState extends State<HomeScreen> {
     setState(() {
       _counter++;
     });
-    appSnackbar(context, "El contador ha incrementado",
-        type: ColorSnackbarState.neutral);
+
+    // appSnackbar(context, "El contador ha incrementado",
+    //     type: ColorSnackbarState.neutral);
   }
 
   @override

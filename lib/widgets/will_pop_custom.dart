@@ -5,20 +5,25 @@ class WillPopCustom extends StatelessWidget {
   const WillPopCustom({
     super.key,
     required this.child,
-    required this.onWillPop,
+    this.onWillPop,
+    this.onWillPopCallback = defaultCallback,
   });
   final Widget child;
-  final VoidCallback onWillPop;
+  final Future<bool> Function()? onWillPop;
+  final VoidCallback onWillPopCallback;
+
+  static defaultCallback() {}
 
   @override
   Widget build(BuildContext context) {
     return !Platform.isIOS
         // * Android
         ? WillPopScope(
-            onWillPop: () async {
-              onWillPop();
-              return true;
-            },
+            onWillPop: onWillPop ??
+                () async {
+                  onWillPopCallback();
+                  return true;
+                },
             child: child,
           )
         // * IOS
@@ -27,7 +32,7 @@ class WillPopCustom extends StatelessWidget {
             child: GestureDetector(
               onHorizontalDragUpdate: (details) {
                 if (details.delta.dx > 8) {
-                  onWillPop();
+                  onWillPopCallback();
                 }
               },
               child: child,

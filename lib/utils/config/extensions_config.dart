@@ -1,90 +1,32 @@
 import 'dart:convert';
 import 'dart:io';
-import 'dart:typed_data';
 
-import 'package:flutter/material.dart';
-
-extension HiveEnumToString on Enum {
+// ? Enum extension
+extension EnumExtension on Enum {
   String get name => toString().split('.').last;
 }
 
-extension DateTimeToString on DateTime {
-  String get parseToString => toString();
-  String get toDateString {
-    return '${day.toString().padLeft(2, '0')}/${month.toString().padLeft(2, '0')}/$year';
-  }
+// ? DateTime extension
+extension DateTimeExtension on DateTime {
+  String parseToString() => toString();
+
+  String toDateString() =>
+      '${day.toString().padLeft(2, '0')}/${month.toString().padLeft(2, '0')}/$year';
 }
 
-extension StringToDateTime on String {
-  DateTime get parseToDateTime => DateTime.parse(this);
+// ? File extension
+extension FileExtension on File {
+  String parseToBase64() =>
+      // print('parseToBase64: ${base64Encode(readAsBytesSync())} - $path');
+      base64Encode(readAsBytesSync());
 }
 
-extension FileToBase64 on File {
-  String get parseToBase64 {
-    final Uint8List v = readAsBytesSync();
-    // print('v: $v');
-    // print('parseToBase64: ${base64Encode(v)}$path');
-    return base64Encode(v);
-  }
-}
+// ? String extension
+extension StringExtension on String {
+  DateTime parseToDateTime() => DateTime.parse(this);
 
-extension Base64ToFile on String {
-  File get parseBase64ToFile => File.fromRawPath(base64Decode(this));
-}
+  File parseBase64ToFile() => File.fromRawPath(base64Decode(this));
 
-extension NavigatorExtension on Navigator {
-  // * push with transition
-  void pushWithTransition(
-    BuildContext context,
-    Widget page, {
-    Duration transitionDuration = const Duration(milliseconds: 2500),
-    double begin = 0.0,
-    double end = 1.0,
-    Curve curve = Curves.fastLinearToSlowEaseIn,
-  }) {
-    WidgetsBinding.instance.addPostFrameCallback((timeStamp) => Navigator.push(
-          context,
-          PageRouteBuilder(
-            transitionDuration: transitionDuration,
-            pageBuilder: (context, animation, secondaryAnimation) => page,
-            transitionsBuilder:
-                (context, animation, secondaryAnimation, child) =>
-                    FadeTransition(
-                        opacity: Tween<double>(begin: begin, end: end)
-                            .animate(CurvedAnimation(
-                          parent: animation,
-                          curve: curve,
-                        )),
-                        child: child),
-          ),
-        ));
-  }
-
-  // * push replacement with transition
-  void pushReplacementWithTransition(
-    BuildContext context,
-    Widget page, {
-    Duration transitionDuration = const Duration(milliseconds: 2500),
-    double begin = 0.0,
-    double end = 1.0,
-    Curve curve = Curves.fastLinearToSlowEaseIn,
-  }) {
-    WidgetsBinding.instance
-        .addPostFrameCallback((timeStamp) => Navigator.pushReplacement(
-              context,
-              PageRouteBuilder(
-                transitionDuration: transitionDuration,
-                pageBuilder: (context, animation, secondaryAnimation) => page,
-                transitionsBuilder:
-                    (context, animation, secondaryAnimation, child) =>
-                        FadeTransition(
-                            opacity: Tween<double>(begin: begin, end: end)
-                                .animate(CurvedAnimation(
-                              parent: animation,
-                              curve: curve,
-                            )),
-                            child: child),
-              ),
-            ));
-  }
+  String toCapitalize() =>
+      "${this[0].toUpperCase()}${substring(1).toLowerCase()}";
 }

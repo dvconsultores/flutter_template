@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:web_socket_channel/web_socket_channel.dart';
+import 'package:flutter_detextre4/features/user/bloc/user_bloc.dart';
+import 'package:flutter_detextre4/widgets/app_scaffold.dart';
+import 'package:generic_bloc_provider/generic_bloc_provider.dart';
 
 // TODO web socket test - just for testing
 class TestWebSockets extends StatefulWidget {
@@ -9,21 +11,25 @@ class TestWebSockets extends StatefulWidget {
 }
 
 class _TestWebSocketsState extends State<TestWebSockets> {
-  final channel =
-      WebSocketChannel.connect(Uri.parse('wss://echo.websocket.events'));
+  // final channel =
+  //     WebSocketChannel.connect(Uri.parse('wss://echo.websocket.events'));
 
   @override
   void dispose() {
-    channel.sink.close();
+    // final globalKey =
+    // Provider.of<MainProvider>(context, listen: false).globalKey;
+    // BlocProvider.of<UserBloc>(context).closeChannel();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    final userBloc = BlocProvider.of<UserBloc>(context);
+
+    return AppScaffold(
         appBar: AppBar(),
         body: StreamBuilder(
-            stream: channel.stream,
+            stream: userBloc.getChannelStream,
             builder: (BuildContext context, snapshot) {
               return Column(
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -35,7 +41,7 @@ class _TestWebSocketsState extends State<TestWebSockets> {
                   Container(
                     margin: const EdgeInsets.all(20),
                     child: TextField(
-                      onChanged: (value) => channel.sink.add(value),
+                      onChanged: (value) => userBloc.setChannelSink = value,
                     ),
                   ),
                   Text(

@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_detextre4/features/search/ui/screens/search_screen.dart';
-import 'package:flutter_detextre4/features/user/bloc/user_bloc.dart';
-import 'package:flutter_detextre4/features/user/ui/screens/user_screen.dart';
 import 'package:flutter_detextre4/home_screen.dart';
 import 'package:flutter_detextre4/main_drawer.dart';
 import 'package:flutter_detextre4/main_provider.dart';
+import 'package:flutter_detextre4/utils/config/app_config.dart';
+import 'package:flutter_detextre4/utils/config/router_navigation_config.dart';
+import 'package:flutter_detextre4/widgets/app_scaffold.dart';
 import 'package:flutter_detextre4/widgets/double_back_to_close_widget.dart';
-import 'package:generic_bloc_provider/generic_bloc_provider.dart';
+import 'package:flutter_detextre4/widgets/will_pop_custom.dart';
 import 'package:provider/provider.dart';
 
 class MainNavigation extends StatefulWidget {
@@ -17,57 +17,65 @@ class MainNavigation extends StatefulWidget {
 }
 
 class _MainNavigationState extends State<MainNavigation> {
+  List<BottomNavigationBarItem> renderBottomNavigationBarItem() {
+    final itemList = <BottomNavigationBarItem>[];
+
+    for (var element in NavigationRoutes.values) {
+      itemList.add(
+        BottomNavigationBarItem(
+            icon: Container(
+              margin: const EdgeInsets.only(top: 20),
+              child: element.icon,
+            ),
+            label: "",
+            tooltip: element.name),
+      );
+    }
+
+    return itemList;
+  }
+
   @override
   Widget build(BuildContext context) {
     final mainProvider = context.watch<MainProvider>();
+    final indexTab = mainProvider.indexTab;
+    final indexRoute = mainProvider.indexRoute;
 
-    return Scaffold(
-      drawer: const MainDrawer(),
+    return AppScaffold(
+      drawer: indexRoute == 0 ? const MainDrawer() : null,
       appBar: AppBar(
-        title: Text(<String>["User", "Home", "Search"][mainProvider.indexTab]),
+        leading: indexRoute > 0
+            ? IconButton(
+                icon: const Icon(Icons.arrow_back),
+                onPressed: () => const Navigator().routerBackBy(context, 1),
+              )
+            : null,
+        title: Text(NavigationRoutes.values[indexTab].name),
       ),
       // * Routes rendering
-      body: DoubleBackToCloseWidget(
-        onDoubleBack: () =>
-            BlocProvider.of<UserBloc>(context).dataUserController.close(),
-        snackBarMessage: "Press again to close",
-        child: IndexedStack(
-          index: mainProvider.indexTab,
-          children: const [
-            UserScreen(),
-            HomeScreen(),
-            SearchScreen(),
-          ],
-        ),
-      ),
+      body: indexTab == 1 && indexRoute == 0 // ? if home or not
+          ? DoubleBackToCloseWidget(
+              snackBarMessage: "Presione de nuevo para salir",
+              child: const HomeScreen(),
+              onDoubleBack: () {})
+          : WillPopCustom(
+              onWillPop: () async {
+                const Navigator()
+                    .routerPush(context, NavigationRoutesPath.home);
+                return false;
+              },
+              child: NavigationRoutes.values[indexTab].routes[indexRoute]
+                  ["widget"]),
       // * Navigation bar
       bottomNavigationBar: Theme(
         data: Theme.of(context).copyWith(canvasColor: Colors.white),
         child: BottomNavigationBar(
-          onTap: (index) => setState(() {
-            mainProvider.setNavigationIndex = index;
-          }),
-          currentIndex: mainProvider.indexTab,
-          selectedItemColor: Colors.blue,
+          onTap: (index) =>
+              setState(() => mainProvider.setNavigationTab = index),
+          currentIndex: indexTab,
+          selectedItemColor: AppColors.getColor(context, ColorType.active),
           items: [
-            BottomNavigationBarItem(
-                icon: Container(
-                    margin: const EdgeInsets.only(top: 20),
-                    child: const Icon(Icons.person)),
-                label: "",
-                tooltip: "user"), // * User feature
-            BottomNavigationBarItem(
-                icon: Container(
-                    margin: const EdgeInsets.only(top: 20),
-                    child: const Icon(Icons.home)),
-                label: "",
-                tooltip: "home"), // * Home page
-            BottomNavigationBarItem(
-                icon: Container(
-                    margin: const EdgeInsets.only(top: 20),
-                    child: const Icon(Icons.search)),
-                label: "",
-                tooltip: "search"), // * Search feature
+            ...renderBottomNavigationBarItem(), // * Icons rendering
           ],
         ),
       ),
