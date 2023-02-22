@@ -3,6 +3,8 @@ import 'package:flutter_detextre4/main.dart';
 import 'package:flutter_detextre4/utils/config/app_config.dart';
 import 'dart:math' as math;
 
+import 'package:flutter_detextre4/utils/config/router_navigation_config.dart';
+
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
 
@@ -21,8 +23,8 @@ class _SplashPageState extends State<SplashScreen>
   );
 
   void goToNextPage() {
-    Navigator.pushReplacement(context,
-        MaterialPageRoute(builder: (builder) => const SesionManagerScreen()));
+    const Navigator()
+        .pushReplacementWithTransition(context, const SesionManagerScreen());
   }
 
   @override
