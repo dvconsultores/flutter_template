@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_detextre4/features/search/bloc/search_bloc.dart';
-import 'package:flutter_detextre4/utils/config/router_navigation_config.dart';
 import 'package:generic_bloc_provider/generic_bloc_provider.dart';
 
 class SearchScreen extends StatefulWidget {
@@ -31,8 +30,6 @@ class _SearchScreenState extends State<SearchScreen> {
             setState(() {
               searchBloc.addTicket();
             });
-            const Navigator()
-                .routerPush(context, NavigationRoutesPath.searchTwo);
           },
         ),
         for (var i = 0; i < searchBloc.totalTickets.length; i++)
