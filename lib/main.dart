@@ -4,9 +4,9 @@ import 'package:flutter_detextre4/features/search/bloc/search_bloc.dart';
 import 'package:flutter_detextre4/features/user/bloc/user_bloc.dart';
 import 'package:flutter_detextre4/features/user/model/user_model.dart';
 import 'package:flutter_detextre4/features/user/ui/screens/log_in_screen.dart';
+import 'package:flutter_detextre4/main_navigation.dart';
 import 'package:flutter_detextre4/splash_screen.dart';
 import 'package:flutter_detextre4/widgets/restart_widget.dart';
-import 'package:flutter_detextre4/main_navigation.dart';
 import 'package:flutter_detextre4/main_provider.dart';
 import 'package:flutter_detextre4/utils/config/app_config.dart';
 import 'package:flutter_detextre4/utils/local_data/hive_data.dart';
@@ -61,7 +61,7 @@ class App extends StatelessWidget {
   }
 }
 
-// * sesion manager - after splash screen
+// * Sesion manager - after splash screen
 class SesionManagerScreen extends StatefulWidget {
   const SesionManagerScreen({super.key});
 

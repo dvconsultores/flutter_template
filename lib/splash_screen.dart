@@ -23,9 +23,6 @@ class _SplashPageState extends State<SplashScreen>
   void goToNextPage() {
     Navigator.pushReplacement(context,
         MaterialPageRoute(builder: (builder) => const SesionManagerScreen()));
-    // GoRouter.of(context).go("/home");
-    // const Navigator()
-    //     .pushReplacementWithTransition(context, const SesionManagerScreen());
   }
 
   @override

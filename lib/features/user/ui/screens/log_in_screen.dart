@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_detextre4/features/user/bloc/user_bloc.dart';
 import 'package:flutter_detextre4/features/user/model/user_model.dart';
 import 'package:flutter_detextre4/features/user/repository/auth_api.dart';
+import 'package:flutter_detextre4/widgets/app_scaffold.dart';
 import 'package:generic_bloc_provider/generic_bloc_provider.dart';
 
 class LogInScreen extends StatelessWidget {
@@ -12,7 +13,7 @@ class LogInScreen extends StatelessWidget {
     final Size size = MediaQuery.of(context).size;
     final userBloc = BlocProvider.of<UserBloc>(context);
 
-    return Scaffold(
+    return AppScaffold(
       body: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
         Container(
           margin: const EdgeInsets.only(bottom: 40.0),
