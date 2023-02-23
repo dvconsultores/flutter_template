@@ -31,9 +31,18 @@ class UserBloc implements Bloc {
   // final StreamController channelController = BehaviorSubject();
 
   Stream get getChannelStream {
+    // return channel.stream; // ? orignal
+
+    // channelController.addStream(channel.stream);
+
+    // TODO validation to add data if is active stream
+    // channelController.stream.listen((data) {
+    //   if (!channelController.isClosed) {
+    //     channelController.add(data);
+    //   }
+    // });
+
     return channel.stream;
-    // channelController.sink.addStream(channel.stream);
-    // return channelController.stream;
   }
 
   set setChannelSink(event) {
@@ -41,8 +50,8 @@ class UserBloc implements Bloc {
   }
 
   void closeChannel() {
-    channel.sink.close();
     // channelController.sink.close();
+    channel.sink.close();
   }
 
   // ------------------------------------------------------------------------ //

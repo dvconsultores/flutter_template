@@ -16,8 +16,6 @@ class _TestWebSocketsState extends State<TestWebSockets> {
 
   @override
   void dispose() {
-    // final globalKey =
-    // Provider.of<MainProvider>(context, listen: false).globalKey;
     // BlocProvider.of<UserBloc>(context).closeChannel();
     super.dispose();
   }
@@ -48,6 +46,11 @@ class _TestWebSocketsState extends State<TestWebSockets> {
                     "database showcase: \n\n ${snapshot.data}",
                     style: Theme.of(context).textTheme.displaySmall,
                   ),
+                  TextButton(
+                    child: const Text("close stream"),
+                    onPressed: () =>
+                        BlocProvider.of<UserBloc>(context).closeChannel(),
+                  )
                 ],
               );
             }));
