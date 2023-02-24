@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_detextre4/features/user/bloc/user_bloc.dart';
 import 'package:flutter_detextre4/widgets/app_scaffold.dart';
 import 'package:generic_bloc_provider/generic_bloc_provider.dart';
+import 'package:web_socket_channel/web_socket_channel.dart';
 
-// TODO web socket test - just for testing
 class TestWebSockets extends StatefulWidget {
   const TestWebSockets({super.key});
   @override
@@ -11,12 +11,15 @@ class TestWebSockets extends StatefulWidget {
 }
 
 class _TestWebSocketsState extends State<TestWebSockets> {
-  // final channel =
-  //     WebSocketChannel.connect(Uri.parse('wss://echo.websocket.events'));
+  final channel =
+      WebSocketChannel.connect(Uri.parse('wss://echo.websocket.events'));
+  Stream get getChannelStream => channel.stream;
+  set setChannelSink(event) => channel.sink.add(event);
+  void closeChannel() => channel.sink.close();
 
   @override
   void dispose() {
-    // BlocProvider.of<UserBloc>(context).closeChannel();
+    closeChannel();
     super.dispose();
   }
 
@@ -27,8 +30,11 @@ class _TestWebSocketsState extends State<TestWebSockets> {
     return AppScaffold(
         appBar: AppBar(),
         body: StreamBuilder(
-            stream: userBloc.getChannelStream,
-            builder: (BuildContext context, snapshot) {
+            stream: getChannelStream,
+            builder: (BuildContext context, AsyncSnapshot snapshot) {
+              final dataTestWebSocket =
+                  userBloc.getterOfTestWebSocket(snapshot.data);
+
               return Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
@@ -39,18 +45,13 @@ class _TestWebSocketsState extends State<TestWebSockets> {
                   Container(
                     margin: const EdgeInsets.all(20),
                     child: TextField(
-                      onChanged: (value) => userBloc.setChannelSink = value,
+                      onChanged: (value) => setChannelSink = value,
                     ),
                   ),
                   Text(
-                    "database showcase: \n\n ${snapshot.data}",
+                    "database showcase: \n\n $dataTestWebSocket",
                     style: Theme.of(context).textTheme.displaySmall,
                   ),
-                  TextButton(
-                    child: const Text("close stream"),
-                    onPressed: () =>
-                        BlocProvider.of<UserBloc>(context).closeChannel(),
-                  )
                 ],
               );
             }));
