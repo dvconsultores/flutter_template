@@ -6,60 +6,72 @@ import 'package:flutter_detextre4/home_screen.dart';
 import 'package:flutter_detextre4/main_provider.dart';
 import 'package:provider/provider.dart';
 
+class NavigationRoutesModel {
+  const NavigationRoutesModel({
+    required this.name,
+    required this.widget,
+  });
+  final NavigationRoutesName name;
+  final Widget widget;
+}
+
 // * Router navigation config
-enum NavigationRoutesPath {
+// ? setup your custome route names
+enum NavigationRoutesName {
   user,
   home,
   search,
   searchTwo;
 }
 
+// ? setup your custome routes
 enum NavigationRoutes {
   userRoute(name: "User", icon: Icon(Icons.person), routes: [
-    {
-      "path": NavigationRoutesPath.user,
-      "widget": UserScreen(),
-    },
+    NavigationRoutesModel(
+      name: NavigationRoutesName.user,
+      widget: UserScreen(),
+    ),
   ]),
   homeRoute(name: "Home", icon: Icon(Icons.home), routes: [
-    {
-      "path": NavigationRoutesPath.home,
-      "widget": HomeScreen(),
-    },
+    NavigationRoutesModel(
+      name: NavigationRoutesName.home,
+      widget: HomeScreen(),
+    ),
   ]),
   searchRoute(name: "Search", icon: Icon(Icons.search), routes: [
-    {
-      "path": NavigationRoutesPath.search,
-      "widget": SearchScreen(),
-    },
-    {
-      "path": NavigationRoutesPath.searchTwo,
-      "widget": SearchScreenTwo(),
-    },
+    NavigationRoutesModel(
+      name: NavigationRoutesName.search,
+      widget: SearchScreen(),
+    ),
+    NavigationRoutesModel(
+      name: NavigationRoutesName.searchTwo,
+      widget: SearchScreenTwo(),
+    ),
   ]);
 
   const NavigationRoutes(
       {required this.routes, required this.icon, required this.name});
-  final List<Map<String, dynamic>> routes;
+  final List<NavigationRoutesModel> routes;
   final Icon icon;
   final String name;
 }
 
 // ? Navigator extension
 extension NavigatorExtension on Navigator {
+  MainProvider getMainProvider(BuildContext context) =>
+      Provider.of<MainProvider>(context, listen: false);
+
   // * router push
-  void routerPush(BuildContext context, NavigationRoutesPath path) =>
-      Provider.of<MainProvider>(context, listen: false).setCurrentNavigation =
-          path;
+  void routerPush(BuildContext context, NavigationRoutesName name) =>
+      getMainProvider(context).setCurrentNavigation = name;
 
   // * router back by
   void routerBackBy(BuildContext context, int index) =>
-      Provider.of<MainProvider>(context, listen: false).setRouteBackBy = index;
+      getMainProvider(context).setRouteBackBy = index;
 
 // * router back until first
   void routerBackUntilFirst(BuildContext context) =>
-      Provider.of<MainProvider>(context, listen: false)
-          .setRouteBackUntilFirst();
+      getMainProvider(context).setRouteBackUntilFirst();
 
   // * push with transition
   void pushWithTransition(

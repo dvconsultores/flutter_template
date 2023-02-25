@@ -61,11 +61,11 @@ class _MainNavigationState extends State<MainNavigation> {
           : WillPopCustom(
               onWillPop: () async {
                 const Navigator()
-                    .routerPush(context, NavigationRoutesPath.home);
+                    .routerPush(context, NavigationRoutesName.home);
                 return false;
               },
-              child: NavigationRoutes.values[indexTab].routes[indexRoute]
-                  ["widget"]),
+              child:
+                  NavigationRoutes.values[indexTab].routes[indexRoute].widget),
       // * Navigation bar
       bottomNavigationBar: Theme(
         data: Theme.of(context).copyWith(canvasColor: Colors.white),

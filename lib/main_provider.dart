@@ -13,8 +13,8 @@ class MainProvider extends ChangeNotifier {
   // * Navigation Provider
   int indexTab = 1;
   int indexRoute = 0;
-  static int? indexRoutePrevious;
-  static int navigationRouteCounterHelper = 0;
+  // static int? indexRoutePrevious; // ? under testing
+  // static int navigationRouteCounterHelper = 0;  // ? under testing
 
   // ? Function just for main navigation tabs
   set setNavigationTab(int index) {
@@ -23,60 +23,40 @@ class MainProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  set setCurrentNavigation(NavigationRoutesPath path) {
+  // * set currentNavigation
+  set setCurrentNavigation(NavigationRoutesName name) {
     final int indexTabFinded = NavigationRoutes.values.indexWhere((element) {
-      final mapElement = element.routes
-          .firstWhereOrNull((element) => element.containsValue(path));
-      if (mapElement == null) {
+      final navigationRouteFinded =
+          element.routes.firstWhereOrNull((element) => element.name == name);
+      if (navigationRouteFinded == null) {
         return false;
       }
 
-      return mapElement.values.contains(path);
+      return navigationRouteFinded.name == name;
     });
     final int indexRouteFinded = NavigationRoutes.values[indexTabFinded].routes
-        .indexWhere((element) => element.containsValue(path));
-
-    if (navigationRouteCounterHelper > 0) {
-      indexRoutePrevious = indexRoute;
-    }
+        .indexWhere((element) => element.name == name);
 
     indexTab = indexTabFinded;
     indexRoute = indexRouteFinded;
-    navigationRouteCounterHelper++;
     notifyListeners();
   }
 
+  // * set route back by
   set setRouteBackBy(int index) {
     if (indexRoute - index < 0) {
-      throw Exception("Cant go back!");
+      throw Exception("Can't go back!");
     }
 
     indexRoute -= index;
     notifyListeners();
   }
 
+  // * set route back until first
   void setRouteBackUntilFirst() {
     indexRoute = 0;
     notifyListeners();
   }
-
-  // ? first try
-  // set setCurrentNavigation(NavigationRoutesPath path) {
-  //   final int indexTabFinded =
-  //       NavigationRoutes.values.indexWhere((element) => element.routes
-  //           .singleWhere(
-  //             (element) => element.containsValue(path),
-  //             orElse: () => NavigationRoutes.homeRoute.routes.first,
-  //           )
-  //           .values
-  //           .contains(path));
-  //   final int indexRouteFinded = NavigationRoutes.values[indexTabFinded].routes
-  //       .indexWhere((element) => element.containsValue(path));
-
-  //   indexTab = indexTabFinded;
-  //   indexRoute = indexRouteFinded;
-  //   notifyListeners();
-  // }
 
   // ------------------------------------------------------------------------ //
 

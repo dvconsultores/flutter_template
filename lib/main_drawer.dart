@@ -15,9 +15,9 @@ class MainDrawer extends StatelessWidget {
     }
 
     // * Go to router page
-    void goToRouterPage(NavigationRoutesPath page) {
+    void goToRouterPage(NavigationRoutesName pageName) {
       Navigator.pop(context);
-      const Navigator().routerPush(context, page);
+      const Navigator().routerPush(context, pageName);
     }
 
     return Drawer(
@@ -34,7 +34,7 @@ class MainDrawer extends StatelessWidget {
           ),
         ),
         TextButton(
-          onPressed: () => goToRouterPage(NavigationRoutesPath.searchTwo),
+          onPressed: () => goToRouterPage(NavigationRoutesName.searchTwo),
           child: Text(
             "Search Two",
             style: TextStyle(
