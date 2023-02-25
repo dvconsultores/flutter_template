@@ -14,7 +14,6 @@ class HomeScreen extends StatefulWidget {
 
 class _HomePageState extends State<HomeScreen> {
   int _counter = 0;
-  bool isLoading = false;
 
   void _incrementCounter() {
     setState(() {
