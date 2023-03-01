@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
@@ -19,7 +21,7 @@ class SecureStorage {
   static const storage = FlutterSecureStorage();
 
   // * Read value
-  static Future<String?> read(SecureStorageCollection key) async {
+  static Future<dynamic> read(SecureStorageCollection key) async {
     final String? value = await storage.read(
       key: key.name,
       aOptions: getAndroidOptions(),
@@ -27,7 +29,7 @@ class SecureStorage {
     );
 
     debugPrint("$value - readed from Secure storage 🛡️");
-    return value;
+    return jsonDecode(value ?? "null");
   }
 
   // * Read all values
@@ -42,19 +44,19 @@ class SecureStorage {
   }
 
   // * Delete value
-  static Future delete(SecureStorageCollection key) async {
+  static Future<void> delete(SecureStorageCollection key) async {
     await storage
         .delete(
           key: key.name,
           aOptions: getAndroidOptions(),
           iOptions: getIOSOptions(),
         )
-        .whenComplete(() =>
-            debugPrint("${key.name} - deleted from Secure storage is cleared 🛡️"));
+        .whenComplete(() => debugPrint(
+            "${key.name} - deleted from Secure storage is cleared 🛡️"));
   }
 
   // * Delete all
-  static Future deleteAll() async {
+  static Future<void> deleteAll() async {
     await storage
         .deleteAll(
           aOptions: getAndroidOptions(),
@@ -64,7 +66,7 @@ class SecureStorage {
   }
 
   // * Write value
-  static Future write(SecureStorageCollection key, String value) async {
+  static Future<void> write(SecureStorageCollection key, String value) async {
     await storage
         .write(
           key: key.name,
@@ -72,6 +74,7 @@ class SecureStorage {
           aOptions: getAndroidOptions(),
           iOptions: getIOSOptions(),
         )
-        .whenComplete(() => debugPrint("$value - written from Secure storage 🛡️"));
+        .then((_) => debugPrint("$value - written from Secure storage 🛡️"))
+        .catchError((onError) => throw onError);
   }
 }
