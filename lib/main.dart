@@ -50,6 +50,13 @@ class App extends StatelessWidget {
                 title: 'Flutter Demo',
                 theme: AppThemes.getTheme(context), // * Theme switcher
                 home: const SplashScreen(),
+                builder: (context, child) {
+                  // * global text scale factorized
+                  return MediaQuery(
+                    data: MediaQuery.of(context).copyWith(textScaleFactor: 1.0),
+                    child: child!,
+                  );
+                },
                 supportedLocales: const [
                   Locale('en', 'US'),
                   Locale('es', 'ES'),
