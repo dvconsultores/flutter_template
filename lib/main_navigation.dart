@@ -47,7 +47,7 @@ class _MainNavigationState extends State<MainNavigation> {
         leading: indexRoute > 0
             ? IconButton(
                 icon: const Icon(Icons.arrow_back),
-                onPressed: () => const Navigator().routerBackBy(context, 1),
+                onPressed: () => const Navigator().routerBack(context),
               )
             : null,
         title: Text(NavigationRoutes.values[indexTab].name),

@@ -4,20 +4,19 @@ import 'package:flutter_detextre4/utils/config/app_config.dart';
 import 'package:flutter_detextre4/utils/config/router_navigation_config.dart';
 
 class MainProvider extends ChangeNotifier {
-  // * Global context key
+  // ? ---------------------- Global context keys --------------------------- //
   final globalScaffoldKey = GlobalKey<ScaffoldState>();
   final globalNavigatorKey = GlobalKey<NavigatorState>();
 
-  // ------------------------------------------------------------------------ //
+  // ? -----------------------Navigation Provider---------------------------- //
 
-  // * Navigation Provider
   int indexTab = 1;
   int indexRoute = 0;
-  // static int? indexRoutePrevious; // ? under testing
-  // static int navigationRouteCounterHelper = 0;  // ? under testing
+  List<CachedIndexNavigation> cachedIndexNavigation = <CachedIndexNavigation>[];
 
-  // ? Function just for main navigation tabs
+  // * Function just for main navigation tabs
   set setNavigationTab(int index) {
+    cachedIndexNavigation.clear();
     indexTab = index;
     indexRoute = 0;
     notifyListeners();
@@ -37,8 +36,28 @@ class MainProvider extends ChangeNotifier {
     final int indexRouteFinded = NavigationRoutes.values[indexTabFinded].routes
         .indexWhere((element) => element.name == name);
 
+    if (indexTab == indexTabFinded) {
+      cachedIndexNavigation.add(CachedIndexNavigation(
+        indexTab: indexTab,
+        indexRoute: indexRoute,
+      ));
+    } else {
+      cachedIndexNavigation.clear();
+    }
+
     indexTab = indexTabFinded;
     indexRoute = indexRouteFinded;
+    notifyListeners();
+  }
+
+  // * set route back
+  void setRouteBack() {
+    if (cachedIndexNavigation.isEmpty) {
+      indexRoute = 0;
+    } else {
+      indexRoute = cachedIndexNavigation.last.indexRoute;
+      cachedIndexNavigation.removeLast();
+    }
     notifyListeners();
   }
 
@@ -58,17 +77,17 @@ class MainProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  // ------------------------------------------------------------------------ //
+  // ? ----------------------Theme switcher Provider------------------------- //
 
-  // * Theme switcher Provider
   ThemeType appTheme = ThemeType.light;
 
+  // * switch theme
   set switchTheme(ThemeType newTheme) {
     appTheme = newTheme;
     notifyListeners();
   }
 
-  // ------------------------------------------------------------------------ //
+  // ? ---------------------------------------------------------------------- //
 
   @override
   void notifyListeners() {

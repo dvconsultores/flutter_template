@@ -6,22 +6,13 @@ import 'package:flutter_detextre4/home_screen.dart';
 import 'package:flutter_detextre4/main_provider.dart';
 import 'package:provider/provider.dart';
 
-class NavigationRoutesModel {
-  const NavigationRoutesModel({
-    required this.name,
-    required this.widget,
-  });
-  final NavigationRoutesName name;
-  final Widget widget;
-}
-
 // * Router navigation config
 // ? setup your custome route names
 enum NavigationRoutesName {
   user,
   home,
   search,
-  searchTwo;
+  searchTwo,
 }
 
 // ? setup your custome routes
@@ -49,14 +40,17 @@ enum NavigationRoutes {
     ),
   ]);
 
-  const NavigationRoutes(
-      {required this.routes, required this.icon, required this.name});
+  const NavigationRoutes({
+    required this.routes,
+    required this.icon,
+    required this.name,
+  });
   final List<NavigationRoutesModel> routes;
   final Icon icon;
   final String name;
 }
 
-// ? Navigator extension
+// ? --------------------- Navigator extension ------------------------------ //
 extension NavigatorExtension on Navigator {
   MainProvider getMainProvider(BuildContext context) =>
       Provider.of<MainProvider>(context, listen: false);
@@ -65,11 +59,15 @@ extension NavigatorExtension on Navigator {
   void routerPush(BuildContext context, NavigationRoutesName name) =>
       getMainProvider(context).setCurrentNavigation = name;
 
+  // * router back
+  void routerBack(BuildContext context) =>
+      getMainProvider(context).setRouteBack();
+
   // * router back by
   void routerBackBy(BuildContext context, int index) =>
       getMainProvider(context).setRouteBackBy = index;
 
-// * router back until first
+  // * router back until first
   void routerBackUntilFirst(BuildContext context) =>
       getMainProvider(context).setRouteBackUntilFirst();
 
@@ -126,4 +124,24 @@ extension NavigatorExtension on Navigator {
                               child: child),
                 ),
               ));
+}
+
+// ? ------------------------ Navigator models ------------------------------ //
+
+class NavigationRoutesModel {
+  const NavigationRoutesModel({
+    required this.name,
+    required this.widget,
+  });
+  final NavigationRoutesName name;
+  final Widget widget;
+}
+
+class CachedIndexNavigation {
+  const CachedIndexNavigation({
+    required this.indexTab,
+    required this.indexRoute,
+  });
+  final int indexTab;
+  final int indexRoute;
 }
