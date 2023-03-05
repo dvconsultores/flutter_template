@@ -1,6 +1,8 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:flutter/services.dart';
+
 // ? Enum extension
 extension EnumExtension on Enum {
   String get name => toString().split('.').last;
@@ -29,4 +31,11 @@ extension StringExtension on String {
 
   String toCapitalize() =>
       "${this[0].toUpperCase()}${substring(1).toLowerCase()}";
+
+  String toCapitalizeEachFirstWord() =>
+      split(" ").map((str) => str.toCapitalize()).join(" ");
+
+  void copyToClipboard() {
+    Clipboard.setData(ClipboardData(text: this));
+  }
 }
