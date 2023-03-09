@@ -14,6 +14,8 @@ import 'package:generic_bloc_provider/generic_bloc_provider.dart';
 import 'package:hive_flutter/adapters.dart';
 import 'package:provider/provider.dart';
 
+final globalNavigatorKey = GlobalKey<NavigatorState>();
+
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   /*
@@ -50,6 +52,7 @@ class App extends StatelessWidget {
                 title: 'Flutter Demo',
                 theme: AppThemes.getTheme(context), // * Theme switcher
                 home: const SplashScreen(),
+                navigatorKey: globalNavigatorKey,
                 builder: (context, child) {
                   // * global text scale factorized
                   return MediaQuery(

@@ -4,10 +4,6 @@ import 'package:flutter_detextre4/utils/config/app_config.dart';
 import 'package:flutter_detextre4/utils/config/router_navigation_config.dart';
 
 class MainProvider extends ChangeNotifier {
-  // ? ---------------------- Global context keys --------------------------- //
-  final globalScaffoldKey = GlobalKey<ScaffoldState>();
-  final globalNavigatorKey = GlobalKey<NavigatorState>();
-
   // ? -----------------------Navigation Provider---------------------------- //
 
   int indexTab = 1;
