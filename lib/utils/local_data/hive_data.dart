@@ -14,8 +14,8 @@ class HiveData {
   static final Box storage = Hive.box(boxName);
 
   // * Read value
-  static String read(HiveDataCollection key) {
-    final String value = storage.get(key.name) ?? '';
+  static dynamic read(HiveDataCollection key) {
+    final dynamic value = storage.get(key.name);
 
     debugPrint("$value - readed from hive data storage 💦");
     return value;
@@ -31,8 +31,8 @@ class HiveData {
 
   // * Delete value
   static delete(HiveDataCollection key) {
-    storage.delete(key.name).whenComplete(
-        () => debugPrint("${key.name} - deleted from hive data storage is cleared 💦"));
+    storage.delete(key.name).whenComplete(() => debugPrint(
+        "${key.name} - deleted from hive data storage is cleared 💦"));
   }
 
   // * Delete all
@@ -43,9 +43,8 @@ class HiveData {
   }
 
   // * Write value
-  static write(HiveDataCollection key, String value) {
-    storage
-        .put(key.name, value)
-        .whenComplete(() => debugPrint("$value - written from hive data storage 💦"));
+  static write(HiveDataCollection key, dynamic value) {
+    storage.put(key.name, value).whenComplete(
+        () => debugPrint("$value - written from hive data storage 💦"));
   }
 }

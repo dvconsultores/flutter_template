@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_detextre4/utils/config/app_config.dart';
 import 'package:flutter_detextre4/utils/config/router_navigation_config.dart';
-import 'package:flutter_detextre4/widgets/test_web_sockets.dart';
 
 class MainDrawer extends StatelessWidget {
   const MainDrawer({super.key});
@@ -23,16 +22,16 @@ class MainDrawer extends StatelessWidget {
     return Drawer(
         child: Column(
       children: [
-        TextButton(
-          onPressed: () => goToPage(const TestWebSockets()),
-          child: Text(
-            "Test web socket",
-            style: TextStyle(
-              fontSize: 20,
-              color: AppColors.getColor(context, ColorType.active),
-            ),
-          ),
-        ),
+        // TextButton(
+        //   onPressed: () => goToPage(const TestWebSockets()),
+        //   child: Text(
+        //     "Test web socket",
+        //     style: TextStyle(
+        //       fontSize: 20,
+        //       color: AppColors.getColor(context, ColorType.active),
+        //     ),
+        //   ),
+        // ),
         TextButton(
           onPressed: () => goToRouterPage(NavigationRoutesName.searchTwo),
           child: Text(

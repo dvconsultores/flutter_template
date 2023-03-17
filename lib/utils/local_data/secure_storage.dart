@@ -32,6 +32,18 @@ class SecureStorage {
     return jsonDecode(value ?? "null");
   }
 
+  // * Read value as string
+  static Future<dynamic> readString(SecureStorageCollection key) async {
+    final String? value = await storage.read(
+      key: key.name,
+      aOptions: getAndroidOptions(),
+      iOptions: getIOSOptions(),
+    );
+
+    debugPrint("$value - readed from Secure storage 🛡️");
+    return value;
+  }
+
   // * Read all values
   static Future<Map<String, String>> readAll() async {
     final Map<String, String> allValues = await storage.readAll(
