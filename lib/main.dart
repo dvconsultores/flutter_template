@@ -15,6 +15,7 @@ import 'package:hive_flutter/adapters.dart';
 import 'package:provider/provider.dart';
 
 final globalNavigatorKey = GlobalKey<NavigatorState>();
+final globalScaffoldSKey = GlobalKey<ScaffoldState>();
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
