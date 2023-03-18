@@ -41,21 +41,6 @@ class App extends StatelessWidget {
   Widget build(BuildContext context) {
     SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersive, overlays: []);
 
-    final sessionConfig = SessionConfig(
-        // invalidateSessionForAppLostFocus: const Duration(seconds: 15),
-        // invalidateSessionForUserInactivity: const Duration(seconds: 30),
-        );
-
-    sessionConfig.stream.listen((SessionTimeoutState timeoutEvent) {
-      if (timeoutEvent == SessionTimeoutState.userInactivityTimeout) {
-        // * handle user  inactive timeout
-        // Navigator.of(globalNavigatorKey.currentContext!).pushNamed("/auth");
-      } else if (timeoutEvent == SessionTimeoutState.appFocusTimeout) {
-        // * handle user  app lost focus timeout
-        // Navigator.of(globalNavigatorKey.currentContext!).pushNamed("/auth");
-      }
-    });
-
     // * Feature blocs
     return BlocProvider<UserBloc>(
       bloc: UserBloc(),
@@ -66,6 +51,22 @@ class App extends StatelessWidget {
             create: (context) => MainProvider(),
             child: Consumer<MainProvider>(builder: (context, value, child) {
               // * Session timeout manager
+              final sessionConfig = SessionConfig(
+                  // invalidateSessionForAppLostFocus: const Duration(seconds: 15),
+                  // invalidateSessionForUserInactivity: const Duration(seconds: 30),
+                  );
+
+              sessionConfig.stream.listen((SessionTimeoutState timeoutEvent) {
+                if (timeoutEvent == SessionTimeoutState.userInactivityTimeout) {
+                  // * handle user  inactive timeout
+                  // Navigator.of(globalNavigatorKey.currentContext!).pushNamed("/auth");
+                } else if (timeoutEvent ==
+                    SessionTimeoutState.appFocusTimeout) {
+                  // * handle user  app lost focus timeout
+                  // Navigator.of(globalNavigatorKey.currentContext!).pushNamed("/auth");
+                }
+              });
+
               return SessionTimeoutManager(
                 sessionConfig: sessionConfig,
                 child: MaterialApp(
