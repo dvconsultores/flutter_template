@@ -13,6 +13,7 @@ import 'package:flutter_detextre4/utils/local_data/hive_data.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:generic_bloc_provider/generic_bloc_provider.dart';
 import 'package:hive_flutter/adapters.dart';
+import 'package:local_session_timeout/local_session_timeout.dart';
 import 'package:provider/provider.dart';
 
 final globalNavigatorKey = GlobalKey<NavigatorState>();
@@ -40,6 +41,21 @@ class App extends StatelessWidget {
   Widget build(BuildContext context) {
     SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersive, overlays: []);
 
+    final sessionConfig = SessionConfig(
+        // invalidateSessionForAppLostFocus: const Duration(seconds: 15),
+        // invalidateSessionForUserInactivity: const Duration(seconds: 30),
+        );
+
+    sessionConfig.stream.listen((SessionTimeoutState timeoutEvent) {
+      if (timeoutEvent == SessionTimeoutState.userInactivityTimeout) {
+        // * handle user  inactive timeout
+        // Navigator.of(globalNavigatorKey.currentContext!).pushNamed("/auth");
+      } else if (timeoutEvent == SessionTimeoutState.appFocusTimeout) {
+        // * handle user  app lost focus timeout
+        // Navigator.of(globalNavigatorKey.currentContext!).pushNamed("/auth");
+      }
+    });
+
     // * Feature blocs
     return BlocProvider<UserBloc>(
       bloc: UserBloc(),
@@ -49,28 +65,32 @@ class App extends StatelessWidget {
         child: ChangeNotifierProvider(
             create: (context) => MainProvider(),
             child: Consumer<MainProvider>(builder: (context, value, child) {
-              // * Router Manager
-              return MaterialApp(
-                title: 'Flutter Demo',
-                theme: AppThemes.getTheme(context), // * Theme switcher
-                home: const SplashScreen(),
-                navigatorKey: globalNavigatorKey,
-                builder: (context, child) {
-                  // * global text scale factorized
-                  return MediaQuery(
-                    data: MediaQuery.of(context).copyWith(textScaleFactor: 1.0),
-                    child: child!,
-                  );
-                },
-                localizationsDelegates: const [
-                  GlobalMaterialLocalizations.delegate,
-                  GlobalCupertinoLocalizations.delegate,
-                  GlobalWidgetsLocalizations.delegate,
-                ],
-                supportedLocales: const [
-                  Locale('en', 'US'),
-                  Locale('es', 'ES'),
-                ],
+              // * Session timeout manager
+              return SessionTimeoutManager(
+                sessionConfig: sessionConfig,
+                child: MaterialApp(
+                  title: 'Flutter Demo',
+                  theme: AppThemes.getTheme(context), // * Theme switcher
+                  home: const SplashScreen(),
+                  navigatorKey: globalNavigatorKey,
+                  builder: (context, child) {
+                    // * global text scale factorized
+                    return MediaQuery(
+                      data:
+                          MediaQuery.of(context).copyWith(textScaleFactor: 1.0),
+                      child: child!,
+                    );
+                  },
+                  localizationsDelegates: const [
+                    GlobalMaterialLocalizations.delegate,
+                    GlobalCupertinoLocalizations.delegate,
+                    GlobalWidgetsLocalizations.delegate,
+                  ],
+                  supportedLocales: const [
+                    Locale('en', 'US'),
+                    Locale('es', 'ES'),
+                  ],
+                ),
               );
             })),
       ),

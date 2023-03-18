@@ -597,6 +597,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.0.7"
+  local_session_timeout:
+    dependency: "direct main"
+    description:
+      name: local_session_timeout
+      sha256: "506eecedf78b767ad6a61ebaf8ed274ba44f1e5a39ce73bafaf93ad03d3cfdea"
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.2.0"
   matcher:
     dependency: transitive
     description:
