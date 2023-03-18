@@ -31,6 +31,9 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+  flutter_localizations:
+    sdk: flutter
+  intl: any
   google_fonts: ^3.0.1
   flutter_svg: ^1.1.6
   # ? -- firebase and google auth packages 🖊️ --
