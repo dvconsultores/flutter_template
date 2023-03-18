@@ -34,6 +34,7 @@ dependencies:
   flutter_localizations:
     sdk: flutter
   intl: any
+  flutter_launcher_icons: ^0.12.0
   google_fonts: ^3.0.1
   flutter_svg: ^1.1.6
   # ? -- firebase and google auth packages 🖊️ --
@@ -122,3 +123,22 @@ flutter:
   #
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/custom-fonts/#from-packages
+
+# To create app icon run below command #? flutter pub run flutter_launcher_icons
+flutter_icons:
+  android: "launcher_icon"
+  ios: true
+  image_path: "assets/images/avatar.png"
+  min_sdk_android: 21 # android min sdk min:16, default 21
+  web:
+    generate: true
+    image_path: "path/to/images/avatar.png"
+    background_color: "#hexcode"
+    theme_color: "#hexcode"
+  windows:
+    generate: true
+    image_path: "path/to/images/avatar.png"
+    icon_size: 48 # min:48, max:256, default: 48
+  macos:
+    generate: true
+    image_path: "path/to/images/avatar.png"
