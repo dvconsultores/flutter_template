@@ -54,5 +54,7 @@
 	<string>Platzi Trips reuiere tomar una foto. ¿Podemos user tú cámara?</string>
 	<key>NSMicrophoneUsageDescription</key>
 	<string>Platzi Trips reuiere tomar una foto. ¿Podemos user tú cámara?</string>
+	<key>NSFaceIDUsageDescription</key>
+	<string>Why is my app authenticating using face id?</string>
 </dict>
 </plist>
