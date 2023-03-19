@@ -41,5 +41,13 @@ extension StringExtension on String {
   }
 
   String readAsNetworkFile() => "${FetchConfig.fileBaseUrl}$this";
+  String removeNetworkFilePrefix() {
+    if (contains(FetchConfig.fileBaseUrl)) {
+      return split(FetchConfig.fileBaseUrl)[1];
+    }
+
+    return this;
+  }
+
   bool get isNetworkFile => contains(FetchConfig.fileBaseUrl);
 }
