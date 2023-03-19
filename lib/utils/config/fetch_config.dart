@@ -3,6 +3,7 @@ import 'package:flutter_detextre4/utils/local_data/secure_storage.dart';
 class FetchConfig {
   // * base url
   static const String baseUrl = 'domain/api/v1';
+  static const String fileBaseUrl = 'domain/api/v1';
 
   // * headers without auth
   static Map<String, String> headersWithoutAuth = {

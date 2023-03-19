@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:flutter/services.dart';
+import 'package:flutter_detextre4/utils/config/fetch_config.dart';
 
 // ? Enum extension
 extension EnumExtension on Enum {
@@ -38,4 +39,7 @@ extension StringExtension on String {
   void copyToClipboard() {
     Clipboard.setData(ClipboardData(text: this));
   }
+
+  String readAsNetworkFile() => "${FetchConfig.fileBaseUrl}$this";
+  bool get isNetworkFile => contains(FetchConfig.fileBaseUrl);
 }
