@@ -1,8 +1,8 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_detextre4/utils/config/fetch_config.dart';
 
 // ? Enum extension
 extension EnumExtension on Enum {
@@ -40,14 +40,44 @@ extension StringExtension on String {
     Clipboard.setData(ClipboardData(text: this));
   }
 
-  String readAsNetworkFile() => "${FetchConfig.fileBaseUrl}$this";
-  String removeNetworkFilePrefix() {
-    if (contains(FetchConfig.fileBaseUrl)) {
-      return split(FetchConfig.fileBaseUrl)[1];
-    }
+  bool get hasNetworkPath => contains("http");
 
+  String addNetworkPath(String networkPath) {
+    if (!hasNetworkPath) return "$networkPath$this";
+    debugPrint("This uri already has scheme ⭕");
     return this;
   }
 
-  bool get isNetworkFile => contains(FetchConfig.fileBaseUrl);
+  String removeNetworkPath(String networkPath) {
+    if (hasNetworkPath) return split(networkPath)[1];
+    debugPrint("This uri haven't scheme ⭕");
+    return this;
+  }
 }
+
+// ? Unused
+// ? Uri extension
+// extension UriExtension on Uri {
+//   String get originalPath {
+//     if (hasScheme) {
+//       return "/${pathSegments.join("/").split(origin)[0]}";
+//     }
+//     return pathSegments.join("/");
+//   }
+
+//   Uri addNetworkPath(String netWorkPath) {
+//     if (!hasScheme) {
+//       return Uri.parse("$netWorkPath$originalPath");
+//     }
+//     debugPrint("This uri already has scheme ⭕");
+//     return this;
+//   }
+
+//   Uri removeNetworkPath() {
+//     if (hasScheme) {
+//       return Uri.parse(originalPath);
+//     }
+//     debugPrint("This uri haven't scheme ⭕");
+//     return this;
+//   }
+// }
