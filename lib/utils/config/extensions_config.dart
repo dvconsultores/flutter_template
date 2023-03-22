@@ -89,6 +89,10 @@ extension StringExtension on String {
 
 // ? Multipart request extension
 extension MultipartRequestExtension on http.MultipartRequest {
+  /// Adds all key/value pairs of [fieldsInComming] to this map and will be
+  /// transformer to string.
+  ///
+  /// If a key of [fieldsInComming] is already in this map, its value is overwritten.
   void addFields(Map<String, dynamic> fieldsInComming) {
     for (final element in fieldsInComming.keys) {
       if (fieldsInComming[element] == null) continue;
@@ -97,6 +101,8 @@ extension MultipartRequestExtension on http.MultipartRequest {
     }
   }
 
+  /// Generate a MultipartFile from each [FileConstructor] into list and will be
+  /// added to multipart request.
   Future<void> addFiles(List<FileConstructor?> filesIncoming) async {
     for (final element in filesIncoming) {
       if (element == null) continue;
