@@ -6,6 +6,8 @@ import 'package:flutter/services.dart';
 import 'package:http/http.dart' as http;
 // ignore: depend_on_referenced_packages
 import 'package:http_parser/http_parser.dart';
+// ignore: depend_on_referenced_packages
+import 'package:collection/collection.dart';
 
 // ? Enum extension
 extension EnumExtension on Enum {
@@ -85,6 +87,7 @@ extension StringExtension on String {
 //   }
 // }
 
+// ? Multipart request extension
 extension MultipartRequestExtension on http.MultipartRequest {
   void addFields(Map<String, dynamic> fieldsInComming) {
     for (final element in fieldsInComming.keys) {
@@ -94,29 +97,84 @@ extension MultipartRequestExtension on http.MultipartRequest {
     }
   }
 
-  Future<void> addFiles(List<FileIncoming?> filesIncoming) async {
+  Future<void> addFiles(List<FileConstructor?> filesIncoming) async {
     for (final element in filesIncoming) {
       if (element == null) continue;
+
+      final typeFile = element.type ?? element.getType() ?? "unknow";
+      final formatFile = element.format ?? element.getFormat() ?? "unknow";
 
       files.add(http.MultipartFile.fromBytes(
         element.name,
         await File.fromUri(element.uri).readAsBytes(),
-        contentType: MediaType(element.type, element.format),
-        filename: '${element.name}.${element.format}',
+        contentType: MediaType(typeFile, formatFile),
+        filename: '${element.name}.$formatFile',
       ));
     }
   }
 }
 
-class FileIncoming {
-  const FileIncoming({
+class FileConstructor {
+  const FileConstructor({
     required this.uri,
     required this.name,
-    this.format = 'png',
-    this.type = 'image',
+    this.format,
+    this.type,
   });
   final Uri uri;
   final String name;
-  final String format;
-  final String type;
+  final String? format;
+  final String? type;
+
+  /// Get current format of Uri, if dont match will return null
+  String? getFormat() => uri.path.split(".").last;
+
+  /// Get current type of File, if dont match will return null
+  String? getType() {
+    return FilesType.values
+        .firstWhereOrNull((element) => element.value.contains(getFormat()))
+        ?.name;
+  }
+}
+
+enum FilesType {
+  image([
+    "svg",
+    "jpeg",
+    "jpg",
+    "png",
+    "gif",
+    "tiff",
+    "psd",
+    "pdf",
+    "eps",
+    "ai",
+    "indd",
+    "raw",
+  ]),
+  video([
+    "mp4",
+    "mov",
+    "wmv",
+    "avi",
+    "mkv",
+    "avchd",
+    "flv",
+    "f4v",
+    "swf",
+    "webm",
+    "html5",
+    "mpeg-2",
+  ]),
+  audio([
+    "m4a",
+    "flac",
+    "mp3",
+    "wav",
+    "wma",
+    "aac",
+  ]);
+
+  const FilesType(this.value);
+  final List<String> value;
 }
