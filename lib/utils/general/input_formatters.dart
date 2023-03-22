@@ -24,7 +24,7 @@ class DecimalTextInputFormatter extends TextInputFormatter {
   }
 }
 
-// ? RemoveFirstZero input formatter
+// ? Remove first zero input formatter
 class RemoveFirstZeroInputFormatter extends TextInputFormatter {
   RemoveFirstZeroInputFormatter({this.formatByComma});
   final bool? formatByComma;
@@ -36,5 +36,42 @@ class RemoveFirstZeroInputFormatter extends TextInputFormatter {
   ) {
     final newString = newValue.text.replaceAll(RegExp("^0"), "");
     return newString == newValue.text ? newValue : oldValue;
+  }
+}
+
+// ? Separator input formatter
+class SeparatorInputFormatter extends TextInputFormatter {
+  SeparatorInputFormatter({
+    required this.sample,
+    required this.separator,
+  });
+
+  /// 🥇Example: [xxx-xxx-xxx]
+  final String sample;
+
+  /// 🥇Example: [-]
+  final String separator;
+
+  @override
+  TextEditingValue formatEditUpdate(
+    TextEditingValue oldValue,
+    TextEditingValue newValue,
+  ) {
+    if (newValue.text.isNotEmpty &&
+        newValue.text.length > oldValue.text.length) {
+      if (newValue.text.length > sample.length) return oldValue;
+
+      if (newValue.text.length < sample.length &&
+          sample[newValue.text.length - 1] == separator) {
+        return TextEditingValue(
+          text:
+              '${oldValue.text}$separator${newValue.text.substring(newValue.text.length - 1)}',
+          selection:
+              TextSelection.collapsed(offset: newValue.selection.end + 1),
+        );
+      }
+    }
+
+    return newValue;
   }
 }
