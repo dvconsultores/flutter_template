@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_detextre4/main_provider.dart';
 import 'package:flutter_detextre4/utils/config/app_config.dart';
 import 'package:flutter_detextre4/utils/config/extensions_config.dart';
-import 'package:flutter_detextre4/utils/const/global_functions.dart';
+import 'package:flutter_detextre4/utils/general/global_functions.dart';
 import 'package:provider/provider.dart';
 
 class HomeScreen extends StatefulWidget {

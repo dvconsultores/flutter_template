@@ -1,7 +1,7 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_detextre4/utils/const/global_functions.dart';
+import 'package:flutter_detextre4/utils/general/global_functions.dart';
 
 class DoubleBackToCloseWidget extends StatelessWidget {
   const DoubleBackToCloseWidget({
