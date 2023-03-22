@@ -24,9 +24,7 @@ extension DateTimeExtension on DateTime {
 
 // ? File extension
 extension FileExtension on File {
-  String parseToBase64() =>
-      // print('parseToBase64: ${base64Encode(readAsBytesSync())} - $path');
-      base64Encode(readAsBytesSync());
+  String parseToBase64() => base64Encode(readAsBytesSync());
 }
 
 // ? String extension
@@ -43,6 +41,34 @@ extension StringExtension on String {
 
   void copyToClipboard() {
     Clipboard.setData(ClipboardData(text: this));
+  }
+
+  String commasToDot() {
+    if (!contains(",")) return this;
+
+    final splitted = split(",");
+
+    if (splitted.length > 2) {
+      final intire = splitted.first;
+      splitted.removeWhere((element) => element.isEmpty || element == intire);
+      return "$intire,${splitted.join("")}";
+    } else {
+      return splitted.join(".");
+    }
+  }
+
+  String dotsToComma() {
+    if (!contains(".")) return this;
+
+    final splitted = split(".");
+
+    if (splitted.length > 2) {
+      final intire = splitted.first;
+      splitted.removeWhere((element) => element.isEmpty || element == intire);
+      return "$intire.${splitted.join("")}";
+    } else {
+      return splitted.join(",");
+    }
   }
 
   bool get hasNetworkPath => contains("http");
