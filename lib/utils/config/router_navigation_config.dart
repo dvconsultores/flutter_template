@@ -7,7 +7,9 @@ import 'package:flutter_detextre4/main_provider.dart';
 import 'package:provider/provider.dart';
 
 // * Router navigation config
-// ? setup your custome route names
+///? Collection of allowed routes from app.
+///
+/// ? here can setup your custome route names.
 enum NavigationRoutesName {
   user,
   home,
@@ -16,6 +18,7 @@ enum NavigationRoutesName {
 }
 
 // ? setup your custome routes
+/// Navigator router configuration class from app.
 enum NavigationRoutes {
   userRoute(name: "User", icon: Icon(Icons.person), routes: [
     NavigationRoutesModel(
@@ -55,23 +58,23 @@ extension NavigatorExtension on Navigator {
   MainProvider getMainProvider(BuildContext context) =>
       Provider.of<MainProvider>(context, listen: false);
 
-  // * router push
+  ///* Push any route using router navigator from app.
   void routerPush(BuildContext context, NavigationRoutesName name) =>
       getMainProvider(context).setCurrentNavigation = name;
 
-  // * router back
+  ///* Go back based on router navigator cache.
   void routerBack(BuildContext context) =>
       getMainProvider(context).setRouteBack();
 
-  // * router back by
+  ///* Go back based on quantity provided.
   void routerBackBy(BuildContext context, int index) =>
       getMainProvider(context).setRouteBackBy = index;
 
-  // * router back until first
+  ///* Go to the first route from the current router navigator cache.
   void routerBackUntilFirst(BuildContext context) =>
       getMainProvider(context).setRouteBackUntilFirst();
 
-  // * push with transition
+  ///* Normal [Navigator.push(context, route)] with custome transition.
   void pushWithTransition(
     BuildContext context,
     Widget page, {
@@ -98,7 +101,7 @@ extension NavigatorExtension on Navigator {
                 ),
               ));
 
-  // * push replacement with transition
+  ///* Normal [Navigator.pushReplacement(context, newRoute)] with custome transition.
   void pushReplacementWithTransition(
     BuildContext context,
     Widget page, {

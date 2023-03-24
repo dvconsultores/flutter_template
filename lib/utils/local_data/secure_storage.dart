@@ -3,24 +3,25 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
-// ? collection used to know storage elements
+///? Collection used to know storage elements into secure storage.
 enum SecureStorageCollection {
   tokenAuth,
   something,
   somethingMore;
 }
 
+/// Configuration class to Secure storage.
 class SecureStorage {
-  // * Set options
+  ///?  Set options
   static AndroidOptions getAndroidOptions() => const AndroidOptions(
         encryptedSharedPreferences: true,
       );
   static IOSOptions getIOSOptions() =>
       const IOSOptions(accessibility: KeychainAccessibility.first_unlock);
-  // * Create storage
+  ///? Create storage
   static const storage = FlutterSecureStorage();
 
-  // * Read value
+  /// Get any value from secure storage using [SecureStorageCollection] key.
   static Future<dynamic> read(SecureStorageCollection key) async {
     final String? value = await storage.read(
       key: key.name,
@@ -32,7 +33,7 @@ class SecureStorage {
     return jsonDecode(value ?? "null");
   }
 
-  // * Read value as string
+  /// Get any [String] value from secure storage using [SecureStorageCollection] key.
   static Future<dynamic> readString(SecureStorageCollection key) async {
     final String? value = await storage.read(
       key: key.name,
@@ -44,7 +45,7 @@ class SecureStorage {
     return value;
   }
 
-  // * Read all values
+  /// Get all values storaged into secure storage.
   static Future<Map<String, String>> readAll() async {
     final Map<String, String> allValues = await storage.readAll(
       aOptions: getAndroidOptions(),
@@ -55,7 +56,7 @@ class SecureStorage {
     return allValues;
   }
 
-  // * Delete value
+  /// Delete a value from secure storage using [SecureStorageCollection] key.
   static Future<void> delete(SecureStorageCollection key) async {
     await storage
         .delete(
@@ -67,7 +68,7 @@ class SecureStorage {
             "${key.name} - deleted from Secure storage is cleared 🛡️"));
   }
 
-  // * Delete all
+  /// Delete all values from secure storage.
   static Future<void> deleteAll() async {
     await storage
         .deleteAll(
@@ -77,7 +78,7 @@ class SecureStorage {
         .whenComplete(() => debugPrint("Secure storage cleared 🛡️"));
   }
 
-  // * Write value
+  /// Write/storage a value into secure storage using [SecureStorageCollection] key.
   static Future<void> write(SecureStorageCollection key, String value) async {
     await storage
         .write(

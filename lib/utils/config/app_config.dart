@@ -3,12 +3,14 @@ import 'package:flutter_detextre4/main_provider.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 
-// * themes app
+// * Themes app
+///? A Collection of app themes.
 enum ThemeType {
   light,
   dark;
 }
 
+/// Themes configuration class from app.
 class AppThemes {
   static final themes = <ThemeType, ThemeData>{
     ThemeType.light: ThemeData(
@@ -25,14 +27,17 @@ class AppThemes {
     ),
   };
 
+  ///* Getter to current theme.
   static ThemeData getTheme(BuildContext context) =>
       themes[context.watch<MainProvider>().appTheme]!;
 
+  ///* Getter to current theme assets directory.
   static String getAssetsTheme(BuildContext context) =>
       'assets/themes/${context.watch<MainProvider>().appTheme.name}';
 }
 
-// * colors app
+// * Colors app
+///? Collection of colors from app.
 enum ColorType {
   primary,
   secondary,
@@ -43,6 +48,7 @@ enum ColorType {
   error;
 }
 
+/// Colors configuration class from app.
 class AppColors {
   static final colors = <ThemeType, Map<ColorType, Color>>{
     ThemeType.light: {
@@ -65,6 +71,7 @@ class AppColors {
     },
   };
 
+  ///* Getter to colors based on current theme.
   static Color getColor(BuildContext context, ColorType color) {
     final theme = context.watch<MainProvider>().appTheme;
     return colors[theme]![color]!;

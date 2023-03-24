@@ -9,6 +9,12 @@ import 'package:http_parser/http_parser.dart';
 // ignore: depend_on_referenced_packages
 import 'package:collection/collection.dart';
 
+// ? Dynamic extension
+extension Existence on dynamic {
+  /// Getter to know if value is null.
+  bool get isExist => this != null;
+}
+
 // ? Enum extension
 extension EnumExtension on Enum {
   String get name => toString().split('.').last;
@@ -33,16 +39,22 @@ extension StringExtension on String {
 
   File parseBase64ToFile() => File.fromRawPath(base64Decode(this));
 
+  /// Converts first character from string in uppercase.
   String toCapitalize() =>
       "${this[0].toUpperCase()}${substring(1).toLowerCase()}";
 
+  /// Converts all characters from string separated by space in uppercase.
   String toCapitalizeEachFirstWord() =>
       split(" ").map((str) => str.toCapitalize()).join(" ");
 
+  /// Copy text from string to clipboard.
   void copyToClipboard() {
     Clipboard.setData(ClipboardData(text: this));
   }
 
+  /// Converts all commas into string to dots
+  ///
+  /// if has multiple commas will be removes and just stay the first.
   String commasToDot() {
     if (!contains(",")) return this;
 
@@ -57,6 +69,9 @@ extension StringExtension on String {
     }
   }
 
+  /// Converts all dots into string to commas.
+  ///
+  /// if has multiple dots will be removes and just stay the first.
   String dotsToComma() {
     if (!contains(".")) return this;
 
@@ -71,17 +86,20 @@ extension StringExtension on String {
     }
   }
 
+  /// Getter to check if string contains [http] into.
   bool get hasNetworkPath => contains("http");
 
+  /// Add Custom network base url path to string.
   String addNetworkPath(String networkPath) {
     if (!hasNetworkPath) return "$networkPath$this";
-    debugPrint("This uri already has scheme ⭕");
+    debugPrint("$this - already has scheme ⭕");
     return this;
   }
 
+  /// Remove Custom network base url path to string.
   String removeNetworkPath(String networkPath) {
     if (hasNetworkPath) return split(networkPath)[1];
-    debugPrint("This uri haven't scheme ⭕");
+    debugPrint("$this - haven't scheme ⭕");
     return this;
   }
 }
@@ -89,6 +107,7 @@ extension StringExtension on String {
 // ? Unused
 // ? Uri extension
 // extension UriExtension on Uri {
+//   /// Getter to path value without mutations
 //   String get originalPath {
 //     if (hasScheme) {
 //       return "/${pathSegments.join("/").split(origin)[0]}";
@@ -96,19 +115,21 @@ extension StringExtension on String {
 //     return pathSegments.join("/");
 //   }
 
+//   /// Add Custom network base url path to uri.
 //   Uri addNetworkPath(String netWorkPath) {
 //     if (!hasScheme) {
 //       return Uri.parse("$netWorkPath$originalPath");
 //     }
-//     debugPrint("This uri already has scheme ⭕");
+//     debugPrint("$this - already has scheme ⭕");
 //     return this;
 //   }
 
+//   /// Remove Custom network base url path to uri.
 //   Uri removeNetworkPath() {
 //     if (hasScheme) {
 //       return Uri.parse(originalPath);
 //     }
-//     debugPrint("This uri haven't scheme ⭕");
+//     debugPrint("$this - haven't scheme ⭕");
 //     return this;
 //   }
 // }
@@ -146,6 +167,10 @@ extension MultipartRequestExtension on http.MultipartRequest {
   }
 }
 
+/// A constructor used to storage files data.
+///
+/// could be used to add files into [http.MultipartRequest] using [addFiles]
+/// method.
 class FileConstructor {
   const FileConstructor({
     required this.uri,
@@ -164,11 +189,12 @@ class FileConstructor {
   /// Get current type of File, if dont match will return null
   String? getType() {
     return FilesType.values
-        .firstWhereOrNull((element) => element.value.contains(getFormat()))
+        .firstWhereOrNull((element) => element.listValues.contains(getFormat()))
         ?.name;
   }
 }
 
+/// A Collection of formats to diverse file types
 enum FilesType {
   image([
     "svg",
@@ -207,6 +233,8 @@ enum FilesType {
     "aac",
   ]);
 
-  const FilesType(this.value);
-  final List<String> value;
+  const FilesType(this.listValues);
+
+  /// List of admitted formats
+  final List<String> listValues;
 }

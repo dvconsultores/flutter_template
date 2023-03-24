@@ -1,19 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 
-enum HiveBox { aplication }
+///? Collection to Application name used in hive box.
+enum HiveBox { application }
 
-// ? collection used to know storage elements
+///? Collection used to know storage elements into hive data.
 enum HiveDataCollection {
   something,
   somethingMore;
 }
 
+/// Configuration class to hive.
 class HiveData {
-  static String boxName = HiveBox.aplication.name;
+  static String boxName = HiveBox.application.name;
   static final Box storage = Hive.box(boxName);
 
-  // * Read value
+  /// Get any value from hive data using [HiveDataCollection] key.
   static dynamic read(HiveDataCollection key) {
     final dynamic value = storage.get(key.name);
 
@@ -21,7 +23,7 @@ class HiveData {
     return value;
   }
 
-  // * Read all values
+  /// Get all values storaged into hive data.
   static Iterable readAll() {
     final Iterable allValues = storage.values;
 
@@ -29,20 +31,20 @@ class HiveData {
     return allValues;
   }
 
-  // * Delete value
+  /// Delete a value from hive data using [HiveDataCollection] key.
   static delete(HiveDataCollection key) {
     storage.delete(key.name).whenComplete(() => debugPrint(
         "${key.name} - deleted from hive data storage is cleared 💦"));
   }
 
-  // * Delete all
+  /// Delete all values from hive data.
   static deleteAll() {
     storage
         .clear()
         .whenComplete(() => debugPrint("Hive data storage cleared 💦"));
   }
 
-  // * Write value
+  /// Write/storage a value into hive data using [HiveDataCollection] key.
   static write(HiveDataCollection key, dynamic value) {
     storage.put(key.name, value).whenComplete(
         () => debugPrint("$value - written from hive data storage 💦"));

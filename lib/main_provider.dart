@@ -74,10 +74,10 @@ class MainProvider extends ChangeNotifier {
   }
 
   // ? ----------------------Theme switcher Provider------------------------- //
-
+  /// Current app theme.
   ThemeType appTheme = ThemeType.light;
 
-  // * switch theme
+  /// Setter to switch the current app theme from [ThemeType] value.
   set switchTheme(ThemeType newTheme) {
     appTheme = newTheme;
     notifyListeners();
