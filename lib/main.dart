@@ -34,8 +34,8 @@ void main() async {
   });
 }
 
-class App extends StatelessWidget {
-  const App({super.key});
+class AppState extends StatelessWidget {
+  const AppState({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -48,54 +48,62 @@ class App extends StatelessWidget {
         bloc: SearchBloc(),
         // * Main provider
         child: ChangeNotifierProvider(
-            create: (context) => MainProvider(),
-            child: Consumer<MainProvider>(builder: (context, value, child) {
-              // * Session timeout manager
-              final sessionConfig = SessionConfig(
-                  // invalidateSessionForAppLostFocus: const Duration(seconds: 15),
-                  // invalidateSessionForUserInactivity: const Duration(seconds: 30),
-                  );
-
-              sessionConfig.stream.listen((SessionTimeoutState timeoutEvent) {
-                if (timeoutEvent == SessionTimeoutState.userInactivityTimeout) {
-                  // * handle user  inactive timeout
-                  // Navigator.of(globalNavigatorKey.currentContext!).pushNamed("/auth");
-                } else if (timeoutEvent ==
-                    SessionTimeoutState.appFocusTimeout) {
-                  // * handle user  app lost focus timeout
-                  // Navigator.of(globalNavigatorKey.currentContext!).pushNamed("/auth");
-                }
-              });
-
-              return SessionTimeoutManager(
-                sessionConfig: sessionConfig,
-                child: MaterialApp(
-                  title: 'Flutter Demo',
-                  theme: AppThemes.getTheme(context), // * Theme switcher
-                  home: const SplashScreen(),
-                  navigatorKey: globalNavigatorKey,
-                  builder: (context, child) {
-                    // * global text scale factorized
-                    return MediaQuery(
-                      data:
-                          MediaQuery.of(context).copyWith(textScaleFactor: 1.0),
-                      child: child!,
-                    );
-                  },
-                  localizationsDelegates: const [
-                    GlobalMaterialLocalizations.delegate,
-                    GlobalCupertinoLocalizations.delegate,
-                    GlobalWidgetsLocalizations.delegate,
-                  ],
-                  supportedLocales: const [
-                    Locale('en', 'US'),
-                    Locale('es', 'ES'),
-                  ],
-                ),
-              );
-            })),
+          create: (context) => MainProvider(),
+          child: const App(),
+        ),
       ),
     );
+  }
+}
+
+class App extends StatelessWidget {
+  const App({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Consumer<MainProvider>(builder: (context, value, child) {
+      // * Session timeout manager
+      final sessionConfig = SessionConfig(
+          // invalidateSessionForAppLostFocus: const Duration(seconds: 15),
+          // invalidateSessionForUserInactivity: const Duration(seconds: 30),
+          );
+
+      sessionConfig.stream.listen((SessionTimeoutState timeoutEvent) {
+        if (timeoutEvent == SessionTimeoutState.userInactivityTimeout) {
+          // * handle user  inactive timeout
+          // Navigator.of(globalNavigatorKey.currentContext!).pushNamed("/auth");
+        } else if (timeoutEvent == SessionTimeoutState.appFocusTimeout) {
+          // * handle user  app lost focus timeout
+          // Navigator.of(globalNavigatorKey.currentContext!).pushNamed("/auth");
+        }
+      });
+
+      return SessionTimeoutManager(
+        sessionConfig: sessionConfig,
+        child: MaterialApp(
+          title: 'Flutter Demo',
+          theme: AppThemes.getTheme(context), // * Theme switcher
+          home: const SplashScreen(),
+          navigatorKey: globalNavigatorKey,
+          builder: (context, child) {
+            // * global text scale factorized
+            return MediaQuery(
+              data: MediaQuery.of(context).copyWith(textScaleFactor: 1.0),
+              child: child!,
+            );
+          },
+          localizationsDelegates: const [
+            GlobalMaterialLocalizations.delegate,
+            GlobalCupertinoLocalizations.delegate,
+            GlobalWidgetsLocalizations.delegate,
+          ],
+          supportedLocales: const [
+            Locale('en', 'US'),
+            Locale('es', 'ES'),
+          ],
+        ),
+      );
+    });
   }
 }
 
