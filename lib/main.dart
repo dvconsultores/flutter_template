@@ -29,7 +29,7 @@ void main() async {
   */
   Hive.initFlutter().then((_) {
     Hive.openBox(HiveData.boxName).then((value) {
-      runApp(const RestartWidget(child: App()));
+      runApp(const RestartWidget(child: AppState()));
     });
   });
 }
