@@ -11,8 +11,11 @@ import 'package:collection/collection.dart';
 
 // ? Dynamic extension
 extension Existence on dynamic {
-  /// Getter to know if value is null.
+  /// Getter to know if value is not null.
   bool get isExist => this != null;
+
+  /// Getter to know if value is null.
+  bool get isNotExist => this == null;
 }
 
 // ? Enum extension
@@ -38,6 +41,12 @@ extension StringExtension on String {
   DateTime parseToDateTime() => DateTime.parse(this);
 
   File parseBase64ToFile() => File.fromRawPath(base64Decode(this));
+
+  /// Getter to know if String is not null and is empty.
+  bool get isEmptyNullable => isExist && isEmpty;
+
+  /// Getter to know if String is not null and is not empty.
+  bool get isNotEmptyNullable => isExist && isNotEmpty;
 
   /// Converts first character from string in uppercase.
   String toCapitalize() =>
@@ -102,6 +111,24 @@ extension StringExtension on String {
     debugPrint("$this - haven't scheme ⭕");
     return this;
   }
+}
+
+// ? List extension
+extension ListExtension on List {
+  /// Getter to know if String is not null and is empty.
+  bool get isEmptyNullable => isExist && isEmpty;
+
+  /// Getter to know if String is not null and is not empty.
+  bool get isNotEmptyNullable => isExist && isNotEmpty;
+}
+
+// ? Map extension
+extension MapExtension on Map {
+  /// Getter to know if String is not null and is empty.
+  bool get isEmptyNullable => isExist && isEmpty;
+
+  /// Getter to know if String is not null and is not empty.
+  bool get isNotEmptyNullable => isExist && isNotEmpty;
 }
 
 // ? Unused
