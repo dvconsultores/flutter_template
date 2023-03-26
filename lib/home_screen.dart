@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_detextre4/main_provider.dart';
 import 'package:flutter_detextre4/utils/config/app_config.dart';
 import 'package:flutter_detextre4/utils/config/extensions_config.dart';
+import 'package:flutter_detextre4/utils/config/router_navigation_config.dart';
 import 'package:flutter_detextre4/utils/general/global_functions.dart';
+import 'package:flutter_detextre4/widgets/test_web_sockets.dart';
 import 'package:provider/provider.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -20,7 +22,9 @@ class _HomePageState extends State<HomeScreen> {
       _counter++;
     });
 
-    appSnackbar(context, "El contador ha incrementado",
+    const Navigator().routerPush(const TestWebSockets());
+
+    appSnackbar("El contador ha incrementado",
         type: ColorSnackbarState.neutral);
   }
 

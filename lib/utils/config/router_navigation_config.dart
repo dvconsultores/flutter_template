@@ -3,6 +3,7 @@ import 'package:flutter_detextre4/features/search/ui/screens/search_screen.dart'
 import 'package:flutter_detextre4/features/search/ui/screens/search_screen_two.dart';
 import 'package:flutter_detextre4/features/user/ui/screens/user_screen.dart';
 import 'package:flutter_detextre4/home_screen.dart';
+import 'package:flutter_detextre4/main.dart';
 import 'package:flutter_detextre4/main_provider.dart';
 import 'package:provider/provider.dart';
 
@@ -23,23 +24,23 @@ enum NavigationRoutes {
   userRoute(name: "User", icon: Icon(Icons.person), routes: [
     NavigationRoutesModel(
       name: NavigationRoutesName.user,
-      widget: UserScreen(),
+      page: UserScreen(),
     ),
   ]),
   homeRoute(name: "Home", icon: Icon(Icons.home), routes: [
     NavigationRoutesModel(
       name: NavigationRoutesName.home,
-      widget: HomeScreen(),
+      page: HomeScreen(),
     ),
   ]),
   searchRoute(name: "Search", icon: Icon(Icons.search), routes: [
     NavigationRoutesModel(
       name: NavigationRoutesName.search,
-      widget: SearchScreen(),
+      page: SearchScreen(),
     ),
     NavigationRoutesModel(
       name: NavigationRoutesName.searchTwo,
-      widget: SearchScreenTwo(),
+      page: SearchScreenTwo(),
     ),
   ]);
 
@@ -55,24 +56,28 @@ enum NavigationRoutes {
 
 // ? --------------------- Navigator extension ------------------------------ //
 extension NavigatorExtension on Navigator {
-  MainProvider getMainProvider(BuildContext context) =>
-      Provider.of<MainProvider>(context, listen: false);
+  MainProvider get getMainProvider =>
+      Provider.of<MainProvider>(globalNavigatorKey.currentContext!,
+          listen: false);
 
   ///* Push any route using router navigator from app.
-  void routerPush(BuildContext context, NavigationRoutesName name) =>
-      getMainProvider(context).setCurrentNavigation = name;
+  ///
+  /// if widget is not founded into [NavigationRoutes] will pushed using
+  /// [Navigator.push()]
+  void routerPush(Widget page) => getMainProvider.setCurrentNavigation = page;
+
+  ///* Push any route using router navigator from app.
+  void routerPushByName(NavigationRoutesName name) =>
+      getMainProvider.setCurrentNavigationByName = name;
 
   ///* Go back based on router navigator cache.
-  void routerBack(BuildContext context) =>
-      getMainProvider(context).setRouteBack();
+  void routerBack() => getMainProvider.setRouteBack();
 
   ///* Go back based on quantity provided.
-  void routerBackBy(BuildContext context, int index) =>
-      getMainProvider(context).setRouteBackBy = index;
+  void routerBackBy(int index) => getMainProvider.setRouteBackBy = index;
 
   ///* Go to the first route from the current router navigator cache.
-  void routerBackUntilFirst(BuildContext context) =>
-      getMainProvider(context).setRouteBackUntilFirst();
+  void routerBackUntilFirst() => getMainProvider.setRouteBackUntilFirst();
 
   ///* Normal [Navigator.push(context, route)] with custome transition.
   void pushWithTransition(
@@ -134,10 +139,10 @@ extension NavigatorExtension on Navigator {
 class NavigationRoutesModel {
   const NavigationRoutesModel({
     required this.name,
-    required this.widget,
+    required this.page,
   });
   final NavigationRoutesName name;
-  final Widget widget;
+  final Widget page;
 }
 
 class CachedIndexNavigation {

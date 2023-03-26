@@ -47,7 +47,7 @@ class _MainNavigationState extends State<MainNavigation> {
         leading: indexRoute > 0
             ? IconButton(
                 icon: const Icon(Icons.arrow_back),
-                onPressed: () => const Navigator().routerBack(context),
+                onPressed: () => const Navigator().routerBack(),
               )
             : null,
         title: Text(NavigationRoutes.values[indexTab].name),
@@ -60,12 +60,10 @@ class _MainNavigationState extends State<MainNavigation> {
               onDoubleBack: () {})
           : WillPopCustom(
               onWillPop: () async {
-                const Navigator()
-                    .routerPush(context, NavigationRoutesName.home);
+                const Navigator().routerPushByName(NavigationRoutesName.home);
                 return false;
               },
-              child:
-                  NavigationRoutes.values[indexTab].routes[indexRoute].widget),
+              child: NavigationRoutes.values[indexTab].routes[indexRoute].page),
       // * Navigation bar
       bottomNavigationBar: Theme(
         data: Theme.of(context).copyWith(canvasColor: Colors.white),

@@ -1,5 +1,6 @@
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_detextre4/main.dart';
 import 'package:flutter_detextre4/utils/config/app_config.dart';
 import 'package:flutter_detextre4/utils/config/router_navigation_config.dart';
 
@@ -19,7 +20,40 @@ class MainProvider extends ChangeNotifier {
   }
 
   // * set currentNavigation
-  set setCurrentNavigation(NavigationRoutesName name) {
+  set setCurrentNavigation(Widget page) {
+    final int indexTabFinded = NavigationRoutes.values.indexWhere((element) {
+      final navigationRouteFinded = element.routes.firstWhereOrNull(
+          (element) => element.page.toString() == page.toString());
+      if (navigationRouteFinded == null) return false;
+
+      return navigationRouteFinded.page.toString() == page.toString();
+    });
+
+    if (indexTabFinded == -1) {
+      Navigator.of(globalNavigatorKey.currentContext!)
+          .push(MaterialPageRoute(builder: (context) => page));
+      return;
+    }
+
+    final int indexRouteFinded = NavigationRoutes.values[indexTabFinded].routes
+        .indexWhere((element) => element.page.toString() == page.toString());
+
+    if (indexTab == indexTabFinded) {
+      cachedIndexNavigation.add(CachedIndexNavigation(
+        indexTab: indexTab,
+        indexRoute: indexRoute,
+      ));
+    } else {
+      cachedIndexNavigation.clear();
+    }
+
+    indexTab = indexTabFinded;
+    indexRoute = indexRouteFinded;
+    notifyListeners();
+  }
+
+  // * set currentNavigationByName
+  set setCurrentNavigationByName(NavigationRoutesName name) {
     final int indexTabFinded = NavigationRoutes.values.indexWhere((element) {
       final navigationRouteFinded =
           element.routes.firstWhereOrNull((element) => element.name == name);

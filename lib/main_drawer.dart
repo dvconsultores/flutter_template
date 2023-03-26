@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_detextre4/features/search/ui/screens/search_screen_two.dart';
 import 'package:flutter_detextre4/utils/config/app_config.dart';
 import 'package:flutter_detextre4/utils/config/router_navigation_config.dart';
 import 'package:flutter_detextre4/widgets/test_web_sockets.dart';
@@ -8,23 +9,17 @@ class MainDrawer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // * Go to page
-    void goToPage(Widget page) {
-      Navigator.pop(context);
-      Navigator.push(context, MaterialPageRoute(builder: (builder) => page));
-    }
-
     // * Go to router page
-    void goToRouterPage(NavigationRoutesName pageName) {
+    void goToRouterPage(Widget page) {
       Navigator.pop(context);
-      const Navigator().routerPush(context, pageName);
+      const Navigator().routerPush(page);
     }
 
     return Drawer(
         child: Column(
       children: [
         TextButton(
-          onPressed: () => goToPage(const TestWebSockets()),
+          onPressed: () => goToRouterPage(const TestWebSockets()),
           child: Text(
             "Test web socket",
             style: TextStyle(
@@ -34,7 +29,7 @@ class MainDrawer extends StatelessWidget {
           ),
         ),
         TextButton(
-          onPressed: () => goToRouterPage(NavigationRoutesName.searchTwo),
+          onPressed: () => goToRouterPage(const SearchScreenTwo()),
           child: Text(
             "Search Two",
             style: TextStyle(

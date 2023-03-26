@@ -1,7 +1,8 @@
 import 'package:another_flushbar/flushbar.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_detextre4/main.dart';
 
-// * app snackbar
+// * App snackbar
 enum ColorSnackbarState {
   neutral(
     color: Colors.black54,
@@ -28,8 +29,8 @@ enum ColorSnackbarState {
   final Color textColor;
 }
 
+/// A global snackbar that can be invoked onto whatever widget.
 void appSnackbar(
-  BuildContext context,
   String message, {
   required ColorSnackbarState type,
   Duration duration = const Duration(seconds: 3),
@@ -41,5 +42,5 @@ void appSnackbar(
     duration: duration,
     borderRadius: BorderRadius.circular(6),
     margin: const EdgeInsets.symmetric(horizontal: 10.0),
-  ).show(context);
+  ).show(globalNavigatorKey.currentContext!);
 }
