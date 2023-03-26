@@ -5,7 +5,7 @@
 	<key>CFBundleDevelopmentRegion</key>
 	<string>$(DEVELOPMENT_LANGUAGE)</string>
 	<key>CFBundleDisplayName</key>
-	<string>Flutter Platzi Trips</string>
+	<string>Flutter Detextre4</string>
 	<key>CFBundleExecutable</key>
 	<string>$(EXECUTABLE_NAME)</string>
 	<key>CFBundleIdentifier</key>
@@ -49,11 +49,11 @@
 	<true/>
 
 	<key>NSCameraUsageDescription</key>
-	<string>Platzi Trips reuiere tomar una foto. ¿Podemos user tú cámara?</string>
+	<string>Flutter Detextre4 reuiere tomar una foto. ¿Podemos user tú cámara?</string>
 	<key>NSPhotoLibraryUsageDescription</key>
-	<string>Platzi Trips reuiere tomar una foto. ¿Podemos user tú cámara?</string>
+	<string>Flutter Detextre4 reuiere tomar una foto. ¿Podemos user tú cámara?</string>
 	<key>NSMicrophoneUsageDescription</key>
-	<string>Platzi Trips reuiere tomar una foto. ¿Podemos user tú cámara?</string>
+	<string>Flutter Detextre4 reuiere tomar una foto. ¿Podemos user tú cámara?</string>
 	<key>NSFaceIDUsageDescription</key>
 	<string>Why is my app authenticating using face id?</string>
 </dict>
