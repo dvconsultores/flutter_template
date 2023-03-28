@@ -8,6 +8,7 @@ import 'package:http/http.dart' as http;
 import 'package:http_parser/http_parser.dart';
 // ignore: depend_on_referenced_packages
 import 'package:collection/collection.dart';
+import 'package:intl/intl.dart';
 
 // ? Dynamic extension
 extension Existence on dynamic {
@@ -47,6 +48,14 @@ extension StringExtension on String {
 
   /// Getter to know if String is not null and is not empty.
   bool get isNotEmptyNullable => isExist && isNotEmpty;
+
+  /// Format text to decimal number system.
+  ///
+  /// by default [locale] has ['en_US'] value and 2 decimals max.
+  String amountFormatter({int maxDecimals = 2, String? locale}) {
+    final formatter = NumberFormat('#,##0.${"#" * maxDecimals}', locale);
+    return formatter.format(double.parse(toString().replaceAll(",", "")));
+  }
 
   /// Converts first character from string in uppercase.
   String toCapitalize() =>
