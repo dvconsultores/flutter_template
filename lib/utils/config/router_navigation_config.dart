@@ -63,7 +63,7 @@ extension NavigatorExtension on Navigator {
   ///* Push any route using router navigator from app.
   ///
   /// if widget is not founded into [NavigationRoutes] will pushed using
-  /// [Navigator.push()]
+  /// [push] method from [Navigator].
   void routerPush(Widget page) => getMainProvider.setCurrentNavigation = page;
 
   ///* Push any route using router navigator from app.
@@ -79,7 +79,7 @@ extension NavigatorExtension on Navigator {
   ///* Go to the first route from the current router navigator cache.
   void routerBackUntilFirst() => getMainProvider.setRouteBackUntilFirst();
 
-  ///* Normal [Navigator.push(context, route)] with custome transition.
+  ///* Normal [push] method from [Navigator] with custome transition.
   void pushWithTransition(
     BuildContext context,
     Widget page, {
@@ -106,7 +106,7 @@ extension NavigatorExtension on Navigator {
                 ),
               ));
 
-  ///* Normal [Navigator.pushReplacement(context, newRoute)] with custome transition.
+  ///* Normal [pushReplacement] method from [Navigator] with custome transition.
   void pushReplacementWithTransition(
     BuildContext context,
     Widget page, {

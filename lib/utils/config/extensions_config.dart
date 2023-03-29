@@ -37,6 +37,31 @@ extension FileExtension on File {
   String parseToBase64() => base64Encode(readAsBytesSync());
 }
 
+// ? Duration extension
+extension DurationExtension on Duration {
+  String toStringShort() {
+    String twoDigits(int n) => n.toString().padLeft(2, "0");
+    String twoDigitMinutes = twoDigits(inMinutes.remainder(60));
+    String twoDigitSeconds = twoDigits(inSeconds.remainder(60));
+    return "${twoDigits(inHours)}:$twoDigitMinutes:$twoDigitSeconds";
+  }
+
+  String toStringSimple() {
+    int minutes = inMinutes.remainder(60);
+    int seconds = inSeconds.remainder(60);
+
+    // ? seconds
+    if (inHours == 0 && inMinutes == 0) {
+      return "${seconds}seg";
+      // ? minutes
+    } else if (inHours == 0) {
+      return "${minutes}min ${seconds}seg";
+    }
+    // ? hours
+    return "${inHours}h ${minutes}min ${seconds}seg";
+  }
+}
+
 // ? Double extension
 extension DoubleExtension on double {
   /// Format text to decimal number system.
