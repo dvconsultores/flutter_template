@@ -37,6 +37,17 @@ extension FileExtension on File {
   String parseToBase64() => base64Encode(readAsBytesSync());
 }
 
+// ? Double extension
+extension DoubleExtension on double {
+  /// Format text to decimal number system.
+  ///
+  /// by default [locale] has ['en_US'] value and 2 decimals max.
+  String amountFormatter({int maxDecimals = 2, String? locale}) {
+    final formatter = NumberFormat('#,##0.${"#" * maxDecimals}', locale);
+    return formatter.format(double.parse(toString().replaceAll(",", "")));
+  }
+}
+
 // ? String extension
 extension StringExtension on String {
   DateTime parseToDateTime() => DateTime.parse(this);
@@ -54,7 +65,7 @@ extension StringExtension on String {
   /// by default [locale] has ['en_US'] value and 2 decimals max.
   String amountFormatter({int maxDecimals = 2, String? locale}) {
     final formatter = NumberFormat('#,##0.${"#" * maxDecimals}', locale);
-    return formatter.format(double.parse(toString().replaceAll(",", "")));
+    return formatter.format(double.parse(replaceAll(",", "")));
   }
 
   /// Converts first character from string in uppercase.
