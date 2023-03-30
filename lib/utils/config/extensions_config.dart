@@ -12,10 +12,10 @@ import 'package:intl/intl.dart';
 
 // ? Dynamic extension
 extension Existence on dynamic {
-  /// Getter to know if value is not null.
+  /// Getter to know if value is not [Null].
   bool get isExist => this != null;
 
-  /// Getter to know if value is null.
+  /// Getter to know if value is [Null].
   bool get isNotExist => this == null;
 }
 
