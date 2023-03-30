@@ -62,34 +62,22 @@ extension DurationExtension on Duration {
   }
 }
 
-// ? List extension
-extension ListExtension on List {
+// ? Nullable list extension
+extension NullableListExtension on List? {
   /// Getter to know if List is not [Null] or is not [Empty].
-  bool get hasValue => isExist || isNotEmpty;
+  bool get hasValue => this?.isNotEmpty ?? false;
 
   /// Getter to know if List is [Null] or is [Empty].
-  bool get hasNotValue => isNotExist || isEmpty;
-
-  /// Getter to know if List is not [Null] and is [Empty].
-  bool get isEmptyNullable => isExist && isEmpty;
-
-  /// Getter to know if List is not [Null] and is not [Empty].
-  bool get isNotEmptyNullable => isExist && isNotEmpty;
+  bool get hasNotValue => this?.isEmpty ?? true;
 }
 
-// ? Map extension
-extension MapExtension on Map {
+// ? Nullable map extension
+extension NullableMapExtension on Map? {
   /// Getter to know if Map is not [Null] or is not [Empty].
-  bool get hasValue => isExist || isNotEmpty;
+  bool get hasValue => this?.isNotEmpty ?? false;
 
   /// Getter to know if Map is [Null] or is [Empty].
-  bool get hasNotValue => isNotExist || isEmpty;
-
-  /// Getter to know if Map is not [Null] and is [Empty].
-  bool get isEmptyNullable => isExist && isEmpty;
-
-  /// Getter to know if Map is not [Null] and is not [Empty].
-  bool get isNotEmptyNullable => isExist && isNotEmpty;
+  bool get hasNotValue => this?.isEmpty ?? true;
 }
 
 // ? Double extension
@@ -121,23 +109,20 @@ extension DoubleExtension on double {
   }
 }
 
+// ? Nullable string extension
+extension NullableStringExtension on String? {
+  /// Getter to know if String is not [Null] or is not [Empty].
+  bool get hasValue => this?.isNotEmpty ?? false;
+
+  /// Getter to know if String is [Null] or is [Empty].
+  bool get hasNotValue => this?.isEmpty ?? true;
+}
+
 // ? String extension
 extension StringExtension on String {
   DateTime parseToDateTime() => DateTime.parse(this);
 
   File parseBase64ToFile() => File.fromRawPath(base64Decode(this));
-
-  /// Getter to know if String is not [Null] or is not [Empty].
-  bool get hasValue => isExist || isNotEmpty;
-
-  /// Getter to know if String is [Null] or is [Empty].
-  bool get hasNotValue => isNotExist || isEmpty;
-
-  /// Getter to know if String is not [Null] and is [Empty].
-  bool get isEmptyNullable => isExist && isEmpty;
-
-  /// Getter to know if String is not [Null] and is not [Empty].
-  bool get isNotEmptyNullable => isExist && isNotEmpty;
 
   /// Format text to decimal number system.
   ///
