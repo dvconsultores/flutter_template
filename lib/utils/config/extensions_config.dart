@@ -62,6 +62,36 @@ extension DurationExtension on Duration {
   }
 }
 
+// ? List extension
+extension ListExtension on List {
+  /// Getter to know if List is not [Null] or is not [Empty].
+  bool get hasValue => isExist || isNotEmpty;
+
+  /// Getter to know if List is [Null] or is [Empty].
+  bool get hasNotValue => isNotExist || isEmpty;
+
+  /// Getter to know if List is not [Null] and is [Empty].
+  bool get isEmptyNullable => isExist && isEmpty;
+
+  /// Getter to know if List is not [Null] and is not [Empty].
+  bool get isNotEmptyNullable => isExist && isNotEmpty;
+}
+
+// ? Map extension
+extension MapExtension on Map {
+  /// Getter to know if Map is not [Null] or is not [Empty].
+  bool get hasValue => isExist || isNotEmpty;
+
+  /// Getter to know if Map is [Null] or is [Empty].
+  bool get hasNotValue => isNotExist || isEmpty;
+
+  /// Getter to know if Map is not [Null] and is [Empty].
+  bool get isEmptyNullable => isExist && isEmpty;
+
+  /// Getter to know if Map is not [Null] and is not [Empty].
+  bool get isNotEmptyNullable => isExist && isNotEmpty;
+}
+
 // ? Double extension
 extension DoubleExtension on double {
   /// Format text to decimal number system.
@@ -71,6 +101,24 @@ extension DoubleExtension on double {
     final formatter = NumberFormat('#,##0.${"#" * maxDecimals}', locale);
     return formatter.format(double.parse(toString().replaceAll(",", "")));
   }
+
+  /// Format text to decimal number system with filling in with zeros.
+  ///
+  /// by default [locale] has ['en_US'] value and 2 decimals max.
+  String amountFormatterWithFilledIn({int maxDecimals = 2, String? locale}) {
+    final formattedAmount =
+        amountFormatter(maxDecimals: maxDecimals, locale: locale);
+    final dotOrComma = locale == null ? "." : ",";
+    final amountSplitted = formattedAmount.split(dotOrComma);
+
+    if (amountSplitted.length == 1 || amountSplitted.last.isEmpty) {
+      return "${amountSplitted.first}${maxDecimals > 0 ? dotOrComma + '0' * maxDecimals : ''}";
+    }
+
+    return amountSplitted.last.length < maxDecimals
+        ? "$formattedAmount${'0' * (maxDecimals - amountSplitted.last.length)}"
+        : formattedAmount;
+  }
 }
 
 // ? String extension
@@ -79,10 +127,16 @@ extension StringExtension on String {
 
   File parseBase64ToFile() => File.fromRawPath(base64Decode(this));
 
-  /// Getter to know if String is not null and is empty.
+  /// Getter to know if String is not [Null] or is not [Empty].
+  bool get hasValue => isExist || isNotEmpty;
+
+  /// Getter to know if String is [Null] or is [Empty].
+  bool get hasNotValue => isNotExist || isEmpty;
+
+  /// Getter to know if String is not [Null] and is [Empty].
   bool get isEmptyNullable => isExist && isEmpty;
 
-  /// Getter to know if String is not null and is not empty.
+  /// Getter to know if String is not [Null] and is not [Empty].
   bool get isNotEmptyNullable => isExist && isNotEmpty;
 
   /// Format text to decimal number system.
@@ -91,6 +145,24 @@ extension StringExtension on String {
   String amountFormatter({int maxDecimals = 2, String? locale}) {
     final formatter = NumberFormat('#,##0.${"#" * maxDecimals}', locale);
     return formatter.format(double.parse(replaceAll(",", "")));
+  }
+
+  /// Format text to decimal number system with filling in with zeros.
+  ///
+  /// by default [locale] has ['en_US'] value and 2 decimals max.
+  String amountFormatterWithFilledIn({int maxDecimals = 2, String? locale}) {
+    final formattedAmount =
+        amountFormatter(maxDecimals: maxDecimals, locale: locale);
+    final dotOrComma = locale == null ? "." : ",";
+    final amountSplitted = formattedAmount.split(dotOrComma);
+
+    if (amountSplitted.length == 1 || amountSplitted.last.isEmpty) {
+      return "${amountSplitted.first}${maxDecimals > 0 ? dotOrComma + '0' * maxDecimals : ''}";
+    }
+
+    return amountSplitted.last.length < maxDecimals
+        ? "$formattedAmount${'0' * (maxDecimals - amountSplitted.last.length)}"
+        : formattedAmount;
   }
 
   /// Converts first character from string in uppercase.
@@ -156,24 +228,6 @@ extension StringExtension on String {
     debugPrint("$this - haven't scheme ⭕");
     return this;
   }
-}
-
-// ? List extension
-extension ListExtension on List {
-  /// Getter to know if String is not null and is empty.
-  bool get isEmptyNullable => isExist && isEmpty;
-
-  /// Getter to know if String is not null and is not empty.
-  bool get isNotEmptyNullable => isExist && isNotEmpty;
-}
-
-// ? Map extension
-extension MapExtension on Map {
-  /// Getter to know if String is not null and is empty.
-  bool get isEmptyNullable => isExist && isEmpty;
-
-  /// Getter to know if String is not null and is not empty.
-  bool get isNotEmptyNullable => isExist && isNotEmpty;
 }
 
 // ? Unused
