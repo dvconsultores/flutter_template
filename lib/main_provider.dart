@@ -8,12 +8,12 @@ import 'package:flutter_detextre4/utils/local_data/hive_data.dart';
 
 class MainProvider extends ChangeNotifier {
   // ? ----------------------Localization translate-------------------------- //
-  Locale locale = Locale(
-      HiveData.read(HiveDataCollection.language) ?? LanguageList.en.name);
+  Locale locale = Locale(HiveData.read(HiveDataCollection.language) ??
+      LanguageList.deviceLanguage().lcidString);
 
   set changeLocale(LanguageList value) {
-    HiveData.write(HiveDataCollection.language, value.name);
-    locale = Locale(value.name);
+    HiveData.write(HiveDataCollection.language, value.lcidString);
+    locale = Locale(value.lcidString);
     notifyListeners();
   }
 
