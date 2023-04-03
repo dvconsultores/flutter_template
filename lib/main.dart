@@ -10,11 +10,11 @@ import 'package:flutter_detextre4/widgets/restart_widget.dart';
 import 'package:flutter_detextre4/main_provider.dart';
 import 'package:flutter_detextre4/utils/config/app_config.dart';
 import 'package:flutter_detextre4/utils/local_data/hive_data.dart';
-import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:generic_bloc_provider/generic_bloc_provider.dart';
 import 'package:hive_flutter/adapters.dart';
 import 'package:local_session_timeout/local_session_timeout.dart';
 import 'package:provider/provider.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 final globalNavigatorKey = GlobalKey<NavigatorState>();
 final globalScaffoldSKey = GlobalKey<ScaffoldState>();
@@ -81,9 +81,13 @@ class App extends StatelessWidget {
       return SessionTimeoutManager(
         sessionConfig: sessionConfig,
         child: MaterialApp(
+          locale: value.locale,
+          debugShowCheckedModeBanner: true,
           title: 'Flutter Demo',
           theme: AppThemes.getTheme(context), // * Theme switcher
           home: const SplashScreen(),
+          localizationsDelegates: AppLocalizations.localizationsDelegates,
+          supportedLocales: AppLocalizations.supportedLocales,
           navigatorKey: globalNavigatorKey,
           builder: (context, child) {
             // * global text scale factorized
@@ -92,15 +96,6 @@ class App extends StatelessWidget {
               child: child!,
             );
           },
-          localizationsDelegates: const [
-            GlobalMaterialLocalizations.delegate,
-            GlobalCupertinoLocalizations.delegate,
-            GlobalWidgetsLocalizations.delegate,
-          ],
-          supportedLocales: const [
-            Locale('en', 'US'),
-            Locale('es', 'ES'),
-          ],
         ),
       );
     });

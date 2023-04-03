@@ -33,7 +33,7 @@ dependencies:
     sdk: flutter
   flutter_localizations:
     sdk: flutter
-  intl: any
+  intl: ^0.17.0
   flutter_launcher_icons: ^0.12.0
   google_fonts: ^3.0.1
   flutter_svg: ^1.1.6
@@ -87,6 +87,7 @@ dev_dependencies:
 
 # The following section is specific to Flutter packages.
 flutter:
+  generate: true
   uses-material-design: true
 
   # To add assets to your application, add an assets section, like this:

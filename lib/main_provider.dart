@@ -1,10 +1,22 @@
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_detextre4/main.dart';
+import 'package:flutter_detextre4/model/language_list.dart';
 import 'package:flutter_detextre4/utils/config/app_config.dart';
 import 'package:flutter_detextre4/utils/config/router_navigation_config.dart';
+import 'package:flutter_detextre4/utils/local_data/hive_data.dart';
 
 class MainProvider extends ChangeNotifier {
+  // ? ----------------------Localization translate-------------------------- //
+  Locale locale = Locale(
+      HiveData.read(HiveDataCollection.language) ?? LanguageList.en.name);
+
+  set changeLocale(LanguageList value) {
+    HiveData.write(HiveDataCollection.language, value.name);
+    locale = Locale(value.name);
+    notifyListeners();
+  }
+
   // ? -----------------------Navigation Provider---------------------------- //
 
   int indexTab = 1;

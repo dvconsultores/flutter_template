@@ -1,6 +1,9 @@
 import 'package:another_flushbar/flushbar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_detextre4/main.dart';
+import 'package:flutter_detextre4/main_provider.dart';
+import 'package:flutter_detextre4/model/language_list.dart';
+import 'package:provider/provider.dart';
 
 // * App snackbar
 enum ColorSnackbarState {
@@ -44,3 +47,8 @@ void appSnackbar(
     margin: const EdgeInsets.symmetric(horizontal: 10.0),
   ).show(globalNavigatorKey.currentContext!);
 }
+
+/// A global function to change current language.
+void changeLanguage(LanguageList value) =>
+    Provider.of<MainProvider>(globalNavigatorKey.currentContext!, listen: false)
+        .changeLocale = value;
