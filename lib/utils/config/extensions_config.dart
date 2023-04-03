@@ -3,6 +3,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_detextre4/model/files_type.dart';
 import 'package:http/http.dart' as http;
 // ignore: depend_on_referenced_packages
 import 'package:http_parser/http_parser.dart';
@@ -303,49 +304,4 @@ class FileConstructor {
         .firstWhereOrNull((element) => element.listValues.contains(getFormat()))
         ?.name;
   }
-}
-
-/// A Collection of formats to diverse file types
-enum FilesType {
-  image([
-    "svg",
-    "jpeg",
-    "jpg",
-    "png",
-    "gif",
-    "tiff",
-    "psd",
-    "pdf",
-    "eps",
-    "ai",
-    "indd",
-    "raw",
-  ]),
-  video([
-    "mp4",
-    "mov",
-    "wmv",
-    "avi",
-    "mkv",
-    "avchd",
-    "flv",
-    "f4v",
-    "swf",
-    "webm",
-    "html5",
-    "mpeg-2",
-  ]),
-  audio([
-    "m4a",
-    "flac",
-    "mp3",
-    "wav",
-    "wma",
-    "aac",
-  ]);
-
-  const FilesType(this.listValues);
-
-  /// List of admitted formats
-  final List<String> listValues;
 }

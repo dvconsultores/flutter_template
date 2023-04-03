@@ -1,3 +1,4 @@
+/// A Collection of diverse languages.
 enum LanguageList {
   en('english'),
   es('español'),
