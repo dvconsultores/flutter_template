@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_detextre4/utils/config/extensions_config.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 ///? Collection used to know storage elements into secure storage.
@@ -18,10 +19,13 @@ class SecureStorage {
       );
   static IOSOptions getIOSOptions() =>
       const IOSOptions(accessibility: KeychainAccessibility.first_unlock);
+
   ///? Create storage
   static const storage = FlutterSecureStorage();
 
   /// Get any value from secure storage using [SecureStorageCollection] key.
+  ///
+  /// this method will parse [Map], [List], [bool], [Null].
   static Future<dynamic> read(SecureStorageCollection key) async {
     final String? value = await storage.read(
       key: key.name,
@@ -29,8 +33,14 @@ class SecureStorage {
       iOptions: getIOSOptions(),
     );
 
+    final isMapOrList = RegExp(r'^[\[,{]|[\],}]$').hasMatch(value ?? '');
+    final isBoolean = value == "true" || value == "false";
+
     debugPrint("$value - readed from Secure storage 🛡️");
-    return jsonDecode(value ?? "null");
+    if (value.isNotExist || isMapOrList || isBoolean) {
+      return jsonDecode(value ?? "null");
+    }
+    return value;
   }
 
   /// Get any [String] value from secure storage using [SecureStorageCollection] key.
