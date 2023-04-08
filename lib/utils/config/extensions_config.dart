@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_detextre4/model/files_type.dart';
+import 'package:flutter_detextre4/utils/general/global_functions.dart';
 import 'package:http/http.dart' as http;
 // ignore: depend_on_referenced_packages
 import 'package:http_parser/http_parser.dart';
@@ -160,8 +161,14 @@ extension StringExtension on String {
       split(" ").map((str) => str.toCapitalize()).join(" ");
 
   /// Copy text from string to clipboard.
-  void copyToClipboard() {
-    Clipboard.setData(ClipboardData(text: this));
+  void copyToClipboard({String? message, Duration? duration}) {
+    Clipboard.setData(ClipboardData(text: this))
+        .then((value) => message.isExist
+            ? appSnackbar(message!,
+                type: ColorSnackbarState.success, duration: duration)
+            : null)
+        .catchError((onError) => appSnackbar(onError,
+            type: ColorSnackbarState.error, duration: duration));
   }
 
   /// Converts all commas into string to dots

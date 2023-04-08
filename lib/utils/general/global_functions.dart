@@ -36,13 +36,13 @@ enum ColorSnackbarState {
 void appSnackbar(
   String message, {
   required ColorSnackbarState type,
-  Duration duration = const Duration(seconds: 3),
+  Duration? duration,
 }) {
   Flushbar(
     message: message,
     backgroundColor: ColorSnackbarState.values.byName(type.name).color,
     messageColor: ColorSnackbarState.values.byName(type.name).textColor,
-    duration: duration,
+    duration: duration ?? const Duration(seconds: 3),
     borderRadius: BorderRadius.circular(6),
     margin: const EdgeInsets.symmetric(horizontal: 10.0),
   ).show(globalNavigatorKey.currentContext!);
