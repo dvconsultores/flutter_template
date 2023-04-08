@@ -25,7 +25,7 @@ class SecureStorage {
 
   /// Get any value from secure storage using [SecureStorageCollection] key.
   ///
-  /// this method will parse [Map], [List], [bool], [Null].
+  /// this method will parse [Map], [List], [bool], [Null], [double] or [int].
   static Future<dynamic> read(SecureStorageCollection key) async {
     final String? value = await storage.read(
       key: key.name,
@@ -33,12 +33,15 @@ class SecureStorage {
       iOptions: getIOSOptions(),
     );
 
+    final valueDecoded = jsonDecode(value ?? "null");
     final isMapOrList = RegExp(r'^[\[,{]|[\],}]$').hasMatch(value ?? '');
     final isBoolean = value == "true" || value == "false";
+    final isNumeric =
+        valueDecoded.runtimeType == double || valueDecoded.runtimeType == int;
 
     debugPrint("$value - readed from Secure storage 🛡️");
-    if (value.isNotExist || isMapOrList || isBoolean) {
-      return jsonDecode(value ?? "null");
+    if (value.isNotExist || isMapOrList || isBoolean || isNumeric) {
+      return valueDecoded;
     }
     return value;
   }
