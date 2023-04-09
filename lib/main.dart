@@ -89,13 +89,11 @@ class App extends StatelessWidget {
           localizationsDelegates: AppLocalizations.localizationsDelegates,
           supportedLocales: AppLocalizations.supportedLocales,
           navigatorKey: globalNavigatorKey,
-          builder: (context, child) {
-            // * global text scale factorized
-            return MediaQuery(
-              data: MediaQuery.of(context).copyWith(textScaleFactor: 1.0),
-              child: child!,
-            );
-          },
+          // * global text scale factorized
+          builder: (context, child) => MediaQuery(
+            data: MediaQuery.of(context).copyWith(textScaleFactor: 1.0),
+            child: child!,
+          ),
         ),
       );
     });
