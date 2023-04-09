@@ -171,7 +171,7 @@ extension StringExtension on String {
             type: ColorSnackbarState.error, duration: duration));
   }
 
-  /// Converts all commas into string to dots
+  /// Converts all commas inside string to dots
   ///
   /// if has multiple commas will be removes and just stay the first.
   String commasToDot() {
@@ -188,7 +188,7 @@ extension StringExtension on String {
     }
   }
 
-  /// Converts all dots into string to commas.
+  /// Converts all dots inside string to commas.
   ///
   /// if has multiple dots will be removes and just stay the first.
   String dotsToComma() {
@@ -205,10 +205,12 @@ extension StringExtension on String {
     }
   }
 
-  /// Getter to check if string contains [http] into.
+  /// Getter to check if string contains [http] inside.
   bool get hasNetworkPath => contains("http");
 
   /// Add Custom network base url path to string.
+  /// 
+  /// normally must to end without slash [/].
   String addNetworkPath(String networkPath) {
     if (!hasNetworkPath) return "$networkPath$this";
     debugPrint("$this - already has scheme ⭕");
@@ -216,6 +218,8 @@ extension StringExtension on String {
   }
 
   /// Remove Custom network base url path to string.
+  /// 
+  /// normally must to end without slash [/].
   String removeNetworkPath(String networkPath) {
     if (hasNetworkPath) return split(networkPath)[1];
     debugPrint("$this - haven't scheme ⭕");

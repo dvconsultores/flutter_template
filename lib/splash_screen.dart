@@ -22,15 +22,12 @@ class _SplashPageState extends State<SplashScreen>
     duration: Duration(milliseconds: splashDuration),
   );
 
-  void goToNextPage() {
-    const Navigator()
-        .pushReplacementWithTransition(context, const SesionManagerScreen());
-  }
+  void goToNextPage() => const Navigator()
+      .pushReplacementWithTransition(context, const SesionManagerScreen());
 
   @override
   void didChangeDependencies() {
-    Future.delayed(
-        Duration(milliseconds: splashDuration), () => goToNextPage());
+    Future.delayed(Duration(milliseconds: splashDuration), goToNextPage);
     super.didChangeDependencies();
   }
 
