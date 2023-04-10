@@ -209,7 +209,7 @@ extension StringExtension on String {
   bool get hasNetworkPath => contains("http");
 
   /// Add Custom network base url path to string.
-  /// 
+  ///
   /// normally must to end without slash [/].
   String addNetworkPath(String networkPath) {
     if (!hasNetworkPath) return "$networkPath$this";
@@ -218,7 +218,7 @@ extension StringExtension on String {
   }
 
   /// Remove Custom network base url path to string.
-  /// 
+  ///
   /// normally must to end without slash [/].
   String removeNetworkPath(String networkPath) {
     if (hasNetworkPath) return split(networkPath)[1];
@@ -273,8 +273,8 @@ extension MultipartRequestExtension on http.MultipartRequest {
 
   /// Generate a MultipartFile from each [FileConstructor] into list and will be
   /// added to multipart request.
-  Future<void> addFiles(List<FileConstructor?> filesIncoming) async {
-    for (final element in filesIncoming) {
+  Future<void> addFiles(List<FileConstructor?> filesIncomingList) async {
+    for (final element in filesIncomingList) {
       if (element == null) continue;
 
       final typeFile = element.type ?? element.getType() ?? "unknow";
