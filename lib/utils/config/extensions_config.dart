@@ -259,15 +259,15 @@ extension StringExtension on String {
 
 // ? Multipart request extension
 extension MultipartRequestExtension on http.MultipartRequest {
-  /// Adds all key/value pairs of [fieldsInComming] to this map and will be
+  /// Adds all key/value pairs of [fieldsIncomming] to this map and will be
   /// transformer to string.
   ///
-  /// If a key of [fieldsInComming] is already in this map, its value is overwritten.
-  void addFields(Map<String, dynamic> fieldsInComming) {
-    for (final element in fieldsInComming.keys) {
-      if (fieldsInComming[element] == null) continue;
+  /// If a key of [fieldsIncomming] is already in this map, its value is overwritten.
+  void addFields(Map<String, dynamic> fieldsIncomming) {
+    for (final element in fieldsIncomming.keys) {
+      if (fieldsIncomming[element] == null) continue;
 
-      fields[element] = fieldsInComming[element].toString();
+      fields[element] = fieldsIncomming[element].toString();
     }
   }
 
