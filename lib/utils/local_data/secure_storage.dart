@@ -24,8 +24,6 @@ class SecureStorage {
   static const storage = FlutterSecureStorage();
 
   /// Get any value from secure storage using [SecureStorageCollection] key.
-  ///
-  /// this method will parse [Map], [List], [bool], [Null], [double] or [int].
   static Future<dynamic> read(SecureStorageCollection key) async {
     final String? value = await storage.read(
       key: key.name,
@@ -33,29 +31,7 @@ class SecureStorage {
       iOptions: getIOSOptions(),
     );
 
-    final valueDecoded = jsonDecode(value ?? "null");
-    final isMapOrList = RegExp(r'^[\[,{]|[\],}]$').hasMatch(value ?? '');
-    final isBoolean = value == "true" || value == "false";
-    final isNumeric =
-        valueDecoded.runtimeType == double || valueDecoded.runtimeType == int;
-
-    debugPrint("$value - readed from Secure storage 🛡️");
-    if (value.isNotExist || isMapOrList || isBoolean || isNumeric) {
-      return valueDecoded;
-    }
-    return value;
-  }
-
-  /// Get any [String] value from secure storage using [SecureStorageCollection] key.
-  static Future<dynamic> readString(SecureStorageCollection key) async {
-    final String? value = await storage.read(
-      key: key.name,
-      aOptions: getAndroidOptions(),
-      iOptions: getIOSOptions(),
-    );
-
-    debugPrint("$value - readed from Secure storage 🛡️");
-    return value;
+    return jsonDecode(value ?? "null");
   }
 
   /// Get all values storaged into secure storage.
@@ -92,11 +68,11 @@ class SecureStorage {
   }
 
   /// Write/storage a value into secure storage using [SecureStorageCollection] key.
-  static Future<void> write(SecureStorageCollection key, String value) async {
+  static Future<void> write(SecureStorageCollection key, dynamic value) async {
     await storage
         .write(
           key: key.name,
-          value: value,
+          value: jsonEncode(value),
           aOptions: getAndroidOptions(),
           iOptions: getIOSOptions(),
         )
