@@ -257,6 +257,18 @@ extension StringExtension on String {
 //   }
 // }
 
+// ? response extension
+extension ResponseExtension on http.Response {
+  /// Will return the error message from the api request.
+  ///
+  /// in case not be founded will return a custome default message.
+  String catchErrorMessage({
+    String searchBy = "message",
+    String defaultMessage = "Error",
+  }) =>
+      body.isNotEmpty ? jsonDecode(body)[searchBy] : defaultMessage;
+}
+
 // ? Multipart request extension
 extension MultipartRequestExtension on http.MultipartRequest {
   /// Adds all key/value pairs of [fieldsIncomming] to this map and will be
