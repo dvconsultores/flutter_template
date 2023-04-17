@@ -1,12 +1,15 @@
 import 'package:flutter_detextre4/utils/local_data/secure_storage.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 class FetchConfig {
   // * base url
   /// Base url from app domain.
-  static const String baseUrl = 'domain/api/v1';
+  static final String baseUrl =
+      dotenv.get("BASE_URL", fallback: "domain/api/v1");
 
   /// Base url from app domain where files are storaged.
-  static const String fileBaseUrl = 'domain/api/v1';
+  static final String fileBaseUrl =
+      dotenv.get("FILE_BASE_URL", fallback: "domain/api/v1");
 
   // * headers without auth
   /// A map that contains header used to application/json http request.

@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_detextre4/features/search/bloc/search_bloc.dart';
@@ -10,6 +12,7 @@ import 'package:flutter_detextre4/widgets/restart_widget.dart';
 import 'package:flutter_detextre4/main_provider.dart';
 import 'package:flutter_detextre4/utils/config/app_config.dart';
 import 'package:flutter_detextre4/utils/local_data/hive_data.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:generic_bloc_provider/generic_bloc_provider.dart';
 import 'package:hive_flutter/adapters.dart';
 import 'package:local_session_timeout/local_session_timeout.dart';
@@ -21,12 +24,19 @@ final globalScaffoldSKey = GlobalKey<ScaffoldState>();
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+
+  // ? -- config to dotenv 🖊️ --
+  await dotenv
+      .load(fileName: '.env')
+      .catchError((error) => log('Error loading .env file: $error'));
+
   /*
   ? -- config to firebase 🖊️ --
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
   */
+
   Hive.initFlutter().then((_) {
     Hive.openBox(HiveData.boxName).then((value) {
       runApp(const RestartWidget(child: AppState()));
