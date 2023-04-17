@@ -14,10 +14,10 @@ import 'package:intl/intl.dart';
 
 // ? Dynamic extension
 extension Existence on dynamic {
-  /// Getter to know if value is not [Null].
+  /// Getter to know if value is not `null`.
   bool get isExist => this != null;
 
-  /// Getter to know if value is [Null].
+  /// Getter to know if value is `null`.
   bool get isNotExist => this == null;
 }
 
@@ -66,19 +66,19 @@ extension DurationExtension on Duration {
 
 // ? Nullable list extension
 extension NullableListExtension on List? {
-  /// Getter to know if List is not [Null] or is not [Empty].
+  /// Getter to know if List is not `null` or is not [Empty].
   bool get hasValue => this?.isNotEmpty ?? false;
 
-  /// Getter to know if List is [Null] or is [Empty].
+  /// Getter to know if List is `null` or is [Empty].
   bool get hasNotValue => this?.isEmpty ?? true;
 }
 
 // ? Nullable map extension
 extension NullableMapExtension on Map? {
-  /// Getter to know if Map is not [Null] or is not [Empty].
+  /// Getter to know if Map is not `null` or is not [Empty].
   bool get hasValue => this?.isNotEmpty ?? false;
 
-  /// Getter to know if Map is [Null] or is [Empty].
+  /// Getter to know if Map is `null` or is [Empty].
   bool get hasNotValue => this?.isEmpty ?? true;
 }
 
@@ -86,7 +86,7 @@ extension NullableMapExtension on Map? {
 extension DoubleExtension on double {
   /// Format text to decimal number system.
   ///
-  /// by default [locale] has ['en_US'] value and 2 decimals max.
+  /// by default `locale` has `'en_US'` value and 2 decimals max.
   String amountFormatter({int maxDecimals = 2, String? locale}) {
     final formatter = NumberFormat('#,##0.${"#" * maxDecimals}', locale);
     return formatter.format(double.parse(toString().replaceAll(",", "")));
@@ -94,7 +94,7 @@ extension DoubleExtension on double {
 
   /// Format text to decimal number system with filling in with zeros.
   ///
-  /// by default [locale] has ['en_US'] value and 2 decimals max.
+  /// by default `locale` has `'en_US'` value and 2 decimals max.
   String amountFormatterWithFilledIn({int maxDecimals = 2, String? locale}) {
     final formattedAmount =
         amountFormatter(maxDecimals: maxDecimals, locale: locale);
@@ -113,10 +113,10 @@ extension DoubleExtension on double {
 
 // ? Nullable string extension
 extension NullableStringExtension on String? {
-  /// Getter to know if String is not [Null] or is not [Empty].
+  /// Getter to know if String is not `null` or is not [Empty].
   bool get hasValue => this?.isNotEmpty ?? false;
 
-  /// Getter to know if String is [Null] or is [Empty].
+  /// Getter to know if String is `null` or is [Empty].
   bool get hasNotValue => this?.isEmpty ?? true;
 }
 
@@ -126,9 +126,36 @@ extension StringExtension on String {
 
   File parseBase64ToFile() => File.fromRawPath(base64Decode(this));
 
+  /// Parse [source] as a, possibly signed, integer literal.
+  ///
+  /// Like [parse] except that this function returns `null` where a
+  /// similar call to [parse] would throw a [FormatException].
+  ///
+  /// Example:
+  /// ```dart
+  /// print('2021'.parseToInt()); // 2021
+  /// print('1f'.parseToInt()); // defaultValue ?? 0
+  /// ```
+  int parseToInt({int? defaultValue}) =>
+      int.tryParse(this) ?? defaultValue ?? 0;
+
+  /// Parse [source] as a double literal and return its value.
+  ///
+  /// Like [parse], except that this function returns `null` for invalid inputs
+  /// instead of throwing.
+  ///
+  /// Example:
+  /// ```dart
+  /// var value = '3.14'.parseToDouble(); // 3.14
+  /// value = '  3.14 \xA0'.parseToDouble(); // 3.14
+  /// value = '0xFF'.parseToDouble(); // defaultValue ?? 0.0
+  /// ```
+  double parseToDouble({double? defaultValue}) =>
+      double.tryParse(this) ?? defaultValue ?? 0.0;
+
   /// Format text to decimal number system.
   ///
-  /// by default [locale] has ['en_US'] value and 2 decimals max.
+  /// by default `locale` has `'en_US'` value and 2 decimals max.
   String amountFormatter({int maxDecimals = 2, String? locale}) {
     final formatter = NumberFormat('#,##0.${"#" * maxDecimals}', locale);
     return formatter.format(double.parse(replaceAll(",", "")));
@@ -136,7 +163,7 @@ extension StringExtension on String {
 
   /// Format text to decimal number system with filling in with zeros.
   ///
-  /// by default [locale] has ['en_US'] value and 2 decimals max.
+  /// by default `locale` has `'en_US'` value and 2 decimals max.
   String amountFormatterWithFilledIn({int maxDecimals = 2, String? locale}) {
     final formattedAmount =
         amountFormatter(maxDecimals: maxDecimals, locale: locale);
@@ -152,15 +179,15 @@ extension StringExtension on String {
         : formattedAmount;
   }
 
-  /// Converts first character from string in uppercase.
+  /// Converts first character from `string` in uppercase.
   String toCapitalize() =>
       "${this[0].toUpperCase()}${substring(1).toLowerCase()}";
 
-  /// Converts all characters from string separated by space in uppercase.
+  /// Converts all characters from `string` separated by space in uppercase.
   String toCapitalizeEachFirstWord() =>
       split(" ").map((str) => str.toCapitalize()).join(" ");
 
-  /// Copy text from string to clipboard.
+  /// Copy text from `string` to clipboard.
   void copyToClipboard({String? message, Duration? duration}) {
     Clipboard.setData(ClipboardData(text: this))
         .then((value) => message.isExist
@@ -171,7 +198,7 @@ extension StringExtension on String {
             type: ColorSnackbarState.error, duration: duration));
   }
 
-  /// Converts all commas inside string to dots
+  /// Converts all commas inside `string` to dots
   ///
   /// if has multiple commas will be removes and just stay the first.
   String commasToDot() {
@@ -188,7 +215,7 @@ extension StringExtension on String {
     }
   }
 
-  /// Converts all dots inside string to commas.
+  /// Converts all dots inside `string` to commas.
   ///
   /// if has multiple dots will be removes and just stay the first.
   String dotsToComma() {
@@ -205,19 +232,19 @@ extension StringExtension on String {
     }
   }
 
-  /// Getter to check if string contains [http] inside.
+  /// Getter to check if `string` contains `http` inside.
   bool get hasNetworkPath => contains("http");
 
-  /// Add Custom network base url path to string.
+  /// Add Custom network base url path to `string`.
   ///
-  /// normally must to end without slash [/].
+  /// normally must to end without slash `/`.
   String addNetworkPath(String networkPath) {
     if (!hasNetworkPath) return "$networkPath$this";
     debugPrint("$this - already has scheme ⭕");
     return this;
   }
 
-  /// Remove Custom network base url path to string.
+  /// Remove Custom network base url path to `string`.
   ///
   /// normally must to end without slash [/].
   String removeNetworkPath(String networkPath) {
@@ -259,7 +286,7 @@ extension StringExtension on String {
 
 // ? response extension
 extension ResponseExtension on http.Response {
-  /// Will return the error message from the api request.
+  /// Will return the `error message` from the api request.
   ///
   /// in case not be founded will return a custome default message.
   String catchErrorMessage({
@@ -271,10 +298,10 @@ extension ResponseExtension on http.Response {
 
 // ? Multipart request extension
 extension MultipartRequestExtension on http.MultipartRequest {
-  /// Adds all key/value pairs of [fieldsIncomming] to this map and will be
+  /// Adds all key/value pairs of `fieldsIncomming` to this map and will be
   /// transformer to string.
   ///
-  /// If a key of [fieldsIncomming] is already in this map, its value is overwritten.
+  /// If a key of `fieldsIncomming` is already in this map, its value is overwritten.
   void addFields(Map<String, dynamic> fieldsIncomming) {
     for (final element in fieldsIncomming.keys) {
       if (fieldsIncomming[element] == null) continue;
@@ -283,7 +310,7 @@ extension MultipartRequestExtension on http.MultipartRequest {
     }
   }
 
-  /// Generate a MultipartFile from each [FileConstructor] into list and will be
+  /// Generate a MultipartFile from each `FileConstructor` into list and will be
   /// added to multipart request.
   Future<void> addFiles(List<FileConstructor?> filesIncomingList) async {
     for (final element in filesIncomingList) {
@@ -304,7 +331,7 @@ extension MultipartRequestExtension on http.MultipartRequest {
 
 /// A constructor used to storage files data.
 ///
-/// could be used to add files into [http.MultipartRequest] using [addFiles]
+/// could be used to add files into `http.MultipartRequest` using `addFiles`
 /// method.
 class FileConstructor {
   const FileConstructor({
