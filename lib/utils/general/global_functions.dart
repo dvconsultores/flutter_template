@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_detextre4/main.dart';
 import 'package:flutter_detextre4/main_provider.dart';
 import 'package:flutter_detextre4/model/language_list.dart';
+import 'package:flutter_detextre4/utils/config/extensions_config.dart';
 import 'package:provider/provider.dart';
 
 // * App snackbar
@@ -52,3 +53,29 @@ void appSnackbar(
 void changeLanguage(LanguageList value) =>
     Provider.of<MainProvider>(globalNavigatorKey.currentContext!, listen: false)
         .changeLocale = value;
+
+// * Sort Data
+/// Will return sortBy sended into function aswell will sort `List` provided
+/// in parameters.
+String? sortData({
+  required List<Map<String, dynamic>> data,
+  required List<Map<String, dynamic>> dataFiltered,
+  required String? currentSort,
+  required String sortBy,
+  List<String>? exclude,
+}) {
+  if (exclude.isExist && exclude!.contains(sortBy)) return null;
+
+  if (currentSort != sortBy) {
+    dataFiltered.sort(
+      (a, b) => (a[sortBy] as String)
+          .toLowerCase()
+          .compareTo((b[sortBy] as String).toLowerCase()),
+    );
+    return sortBy;
+  }
+
+  dataFiltered.clear();
+  dataFiltered.addAll(data);
+  return null;
+}
