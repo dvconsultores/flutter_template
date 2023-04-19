@@ -21,6 +21,23 @@ extension Existence on dynamic {
   bool get isNotExist => this == null;
 }
 
+// ? Bool extension
+extension BoolExtension on bool {
+  /// Used to invoke function like terniary operation in case recieve `true` expression.
+  dynamic inCase(dynamic returnedValue) {
+    if (this) {
+      return returnedValue is Function ? returnedValue() : returnedValue;
+    }
+  }
+
+  /// Used to invoke function like terniary operation in case recieve `false` expression.
+  dynamic ifNot(dynamic returnedValue) {
+    if (!this) {
+      return returnedValue is Function ? returnedValue() : returnedValue;
+    }
+  }
+}
+
 // ? Enum extension
 extension EnumExtension on Enum {
   String get name => toString().split('.').last;
