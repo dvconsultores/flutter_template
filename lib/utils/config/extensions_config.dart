@@ -106,7 +106,8 @@ extension DoubleExtension on double {
   /// by default `locale` has `'en_US'` value and 2 decimals max.
   String amountFormatter({int maxDecimals = 2, String? locale}) {
     final formatter = NumberFormat('#,##0.${"#" * maxDecimals}', locale);
-    return formatter.format(double.parse(toString().replaceAll(",", "")));
+    return formatter
+        .format(double.tryParse(toString().replaceAll(",", "")) ?? 0.0);
   }
 
   /// Format text to decimal number system with filling in with zeros.
@@ -150,11 +151,10 @@ extension StringExtension on String {
   ///
   /// Example:
   /// ```dart
-  /// print('2021'.parseToInt()); // 2021
-  /// print('1f'.parseToInt()); // defaultValue ?? 0
+  /// print('2021'.toInt()); // 2021
+  /// print('1f'.toInt()); // defaultValue ?? 0
   /// ```
-  int parseToInt({int? defaultValue}) =>
-      int.tryParse(this) ?? defaultValue ?? 0;
+  int toInt({int? defaultValue}) => int.tryParse(this) ?? defaultValue ?? 0;
 
   /// Parse [source] as a double literal and return its value.
   ///
@@ -163,11 +163,11 @@ extension StringExtension on String {
   ///
   /// Example:
   /// ```dart
-  /// var value = '3.14'.parseToDouble(); // 3.14
-  /// value = '  3.14 \xA0'.parseToDouble(); // 3.14
-  /// value = '0xFF'.parseToDouble(); // defaultValue ?? 0.0
+  /// var value = '3.14'.toDouble(); // 3.14
+  /// value = '  3.14 \xA0'.toDouble(); // 3.14
+  /// value = '0xFF'.toDouble(); // defaultValue ?? 0.0
   /// ```
-  double parseToDouble({double? defaultValue}) =>
+  double toDouble({double? defaultValue}) =>
       double.tryParse(this) ?? defaultValue ?? 0.0;
 
   /// Format text to decimal number system.
@@ -175,7 +175,7 @@ extension StringExtension on String {
   /// by default `locale` has `'en_US'` value and 2 decimals max.
   String amountFormatter({int maxDecimals = 2, String? locale}) {
     final formatter = NumberFormat('#,##0.${"#" * maxDecimals}', locale);
-    return formatter.format(double.parse(replaceAll(",", "")));
+    return formatter.format(double.tryParse(replaceAll(",", "")) ?? 0.0);
   }
 
   /// Format text to decimal number system with filling in with zeros.
