@@ -58,8 +58,8 @@ void changeLanguage(LanguageList value) =>
 /// Will return sortBy sended into function aswell will sort `List` provided
 /// in parameters.
 String? sortData({
-  required List<Map<String, dynamic>> data,
-  required List<Map<String, dynamic>> dataFiltered,
+  required List<dynamic> data,
+  required List<dynamic> dataFiltered,
   required String? currentSort,
   required String sortBy,
   List<String>? exclude,
@@ -68,9 +68,14 @@ String? sortData({
 
   if (currentSort != sortBy) {
     dataFiltered.sort(
-      (a, b) => (a[sortBy] as String)
-          .toLowerCase()
-          .compareTo((b[sortBy] as String).toLowerCase()),
+      (a, b) {
+        final valueA = a is Map ? a : a.toMap();
+        final valueB = b is Map ? b : b.toMap();
+
+        return (valueA[sortBy] as String)
+            .toLowerCase()
+            .compareTo((valueB[sortBy] as String).toLowerCase());
+      },
     );
     return sortBy;
   }
