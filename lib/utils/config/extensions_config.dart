@@ -116,7 +116,7 @@ extension IntExtension on int {
         symbol: symbol,
         decimalDigits: 0,
         customPattern: customPattern,
-      ).format(this);
+      ).format(this).trim();
 
   /// Format `int` to decimal number system.
   ///
@@ -147,7 +147,7 @@ extension DoubleExtension on double {
         symbol: symbol,
         decimalDigits: maxDecimals,
         customPattern: customPattern,
-      ).format(double.tryParse(toString().replaceAll(",", "")) ?? 0.0);
+      ).format(double.tryParse(toString().replaceAll(",", "")) ?? 0.0).trim();
 
   /// Format `double` to decimal number system.
   ///
@@ -232,7 +232,7 @@ extension StringExtension on String {
         symbol: symbol,
         decimalDigits: maxDecimals,
         customPattern: customPattern,
-      ).format(double.tryParse(replaceAll(",", "")) ?? 0.0);
+      ).format(double.tryParse(replaceAll(",", "")) ?? 0.0).trim();
 
   /// Format `String` to decimal number system.
   ///
