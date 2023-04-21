@@ -45,8 +45,19 @@ extension EnumExtension on Enum {
 
 // ? DateTime extension
 extension DateTimeExtension on DateTime {
-  String toDateString({bool spaced = false}) =>
-      '${day.toString().padLeft(2, '0')}${spaced ? ' / ' : '/'}${month.toString().padLeft(2, '0')}${spaced ? ' / ' : '/'}$year';
+  /// Parse to `String` with conventional date format.
+  String toDateString({
+    String separator = '/',
+    bool spaced = false,
+    String? locale,
+  }) {
+    final divider = spaced ? ' $separator ' : separator;
+
+    if (locale?.contains("es") ?? false) {
+      return '${day.toString().padLeft(2, '0')}$divider${month.toString().padLeft(2, '0')}$divider$year';
+    }
+    return '${year.toString().padLeft(2, '0')}$divider${month.toString().padLeft(2, '0')}$divider$day';
+  }
 }
 
 // ? File extension
