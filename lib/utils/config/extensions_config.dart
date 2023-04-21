@@ -45,10 +45,8 @@ extension EnumExtension on Enum {
 
 // ? DateTime extension
 extension DateTimeExtension on DateTime {
-  String parseToString() => toString();
-
-  String toDateString() =>
-      '${day.toString().padLeft(2, '0')}/${month.toString().padLeft(2, '0')}/$year';
+  String toDateString({bool spaced = false}) =>
+      '${day.toString().padLeft(2, '0')}${spaced ? ' / ' : '/'}${month.toString().padLeft(2, '0')}${spaced ? ' / ' : '/'}$year';
 }
 
 // ? File extension
