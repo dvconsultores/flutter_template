@@ -127,10 +127,6 @@ extension IntExtension on int {
 
 // ? Double extension
 extension DoubleExtension on double {
-  /// Remove all trailling zeros and return a `String`.
-  String removeTraillingZeros() =>
-      toStringAsFixed(truncateToDouble() == this ? 0 : 1);
-
   /// Format `double` to decimal number system with nested currency.
   ///
   /// by default [locale] has ['en_US'] value and 2 decimals max.
@@ -140,14 +136,19 @@ extension DoubleExtension on double {
     String? locale,
     int? maxDecimals,
     String? customPattern,
-  }) =>
-      NumberFormat.currency(
-        locale: locale,
-        name: name ?? "",
-        symbol: symbol,
-        decimalDigits: maxDecimals,
-        customPattern: customPattern,
-      ).format(double.tryParse(toString().replaceAll(",", "")) ?? 0.0).trim();
+  }) {
+    final formatter = NumberFormat.currency(
+      locale: locale,
+      name: name ?? "",
+      symbol: symbol,
+      decimalDigits: maxDecimals,
+      customPattern: customPattern,
+    );
+    formatter.minimumFractionDigits = 0;
+    return formatter
+        .format(double.tryParse(toString().replaceAll(",", "")) ?? 0.0)
+        .trim();
+  }
 
   /// Format `double` to decimal number system.
   ///
@@ -217,8 +218,20 @@ extension StringExtension on String {
       double.tryParse(commasToDot()) ?? defaultValue ?? 0.0;
 
   /// Get amount without currency.
-  String getAmountWithoutCurrency(String? currency) =>
-      currency.isExist ? split(currency!).first.trim() : this;
+  String getAmountWithoutCurrency(String? currency, {String? locale}) {
+    final value = currency.isExist
+        ? split(currency!)
+                .singleWhereOrNull((element) => element.isNotEmpty)
+                ?.trim() ??
+            this
+        : this;
+
+    if (locale?.contains("es") ?? false) {
+      return value.split(".").join("").split(",").join(".");
+    }
+
+    return value.split(",").join("");
+  }
 
   /// Format `String` to decimal number system with nested currency.
   ///
@@ -229,14 +242,17 @@ extension StringExtension on String {
     String? locale,
     int? maxDecimals,
     String? customPattern,
-  }) =>
-      NumberFormat.currency(
-        locale: locale,
-        name: name ?? "",
-        symbol: symbol,
-        decimalDigits: maxDecimals,
-        customPattern: customPattern,
-      ).format(double.tryParse(replaceAll(",", "")) ?? 0.0).trim();
+  }) {
+    final formatter = NumberFormat.currency(
+      locale: locale,
+      name: name ?? "",
+      symbol: symbol,
+      decimalDigits: maxDecimals,
+      customPattern: customPattern,
+    );
+    formatter.minimumFractionDigits = 0;
+    return formatter.format(double.tryParse(replaceAll(",", "")) ?? 0.0).trim();
+  }
 
   /// Format `String` to decimal number system.
   ///
