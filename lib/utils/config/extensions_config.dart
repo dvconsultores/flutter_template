@@ -113,7 +113,7 @@ extension DoubleExtension on double {
   }) {
     final formatter = NumberFormat.currency(
       locale: locale,
-      name: name,
+      name: name ?? "",
       symbol: symbol,
       decimalDigits: maxDecimals,
       customPattern: customPattern,
@@ -203,7 +203,7 @@ extension StringExtension on String {
   }) {
     final formatter = NumberFormat.currency(
       locale: locale,
-      name: name,
+      name: name ?? "",
       symbol: symbol,
       decimalDigits: maxDecimals,
       customPattern: customPattern,

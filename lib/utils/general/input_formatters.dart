@@ -118,7 +118,7 @@ class CurrencyInputFormatter extends TextInputFormatter {
   void _formatter(String newText) {
     final NumberFormat format = NumberFormat.currency(
       locale: locale,
-      name: name,
+      name: name ?? "",
       symbol: symbol,
       decimalDigits: decimalDigits,
       customPattern: customPattern,
