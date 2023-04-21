@@ -101,6 +101,27 @@ extension NullableMapExtension on Map? {
 
 // ? Double extension
 extension DoubleExtension on double {
+  /// Format `double` to decimal number system with nested currency.
+  ///
+  /// by default [locale] has ['en_US'] value and 2 decimals max.
+  String amountFormatterCurrency({
+    String? name,
+    String? symbol,
+    String? locale,
+    int? maxDecimals,
+    String? customPattern,
+  }) {
+    final formatter = NumberFormat.currency(
+      locale: locale,
+      name: name,
+      symbol: symbol,
+      decimalDigits: maxDecimals,
+      customPattern: customPattern,
+    );
+    return formatter
+        .format(double.tryParse(toString().replaceAll(",", "")) ?? 0.0);
+  }
+
   /// Format text to decimal number system.
   ///
   /// by default `locale` has `'en_US'` value and 2 decimals max.
@@ -169,6 +190,26 @@ extension StringExtension on String {
   /// ```
   double toDouble({double? defaultValue}) =>
       double.tryParse(this) ?? defaultValue ?? 0.0;
+
+  /// Format `String` to decimal number system with nested currency.
+  ///
+  /// by default [locale] has ['en_US'] value and 2 decimals max.
+  String amountFormatterCurrency({
+    String? name,
+    String? symbol,
+    String? locale,
+    int? maxDecimals,
+    String? customPattern,
+  }) {
+    final formatter = NumberFormat.currency(
+      locale: locale,
+      name: name,
+      symbol: symbol,
+      decimalDigits: maxDecimals,
+      customPattern: customPattern,
+    );
+    return formatter.format(double.tryParse(replaceAll(",", "")) ?? 0.0);
+  }
 
   /// Format text to decimal number system.
   ///
