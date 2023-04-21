@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_detextre4/utils/config/extensions_config.dart';
 import 'package:flutter_detextre4/utils/general/global_functions.dart';
 
 class DoubleBackToCloseWidget extends StatelessWidget {
@@ -8,12 +9,12 @@ class DoubleBackToCloseWidget extends StatelessWidget {
     super.key,
     required this.snackBarMessage,
     required this.child,
-    required this.onDoubleBack,
+    this.onDoubleBack,
     this.doubleBackDuration = const Duration(milliseconds: 1350),
   });
   final Widget child;
   final String snackBarMessage;
-  final VoidCallback onDoubleBack;
+  final VoidCallback? onDoubleBack;
   final Duration doubleBackDuration;
 
   @override
@@ -32,7 +33,7 @@ class DoubleBackToCloseWidget extends StatelessWidget {
         ));
         return Future.value(false);
       }
-      onDoubleBack();
+      onDoubleBack.isExist.inCase(onDoubleBack);
       return Future.value(true);
     }
 
