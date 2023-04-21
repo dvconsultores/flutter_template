@@ -47,11 +47,8 @@ class DoubleBackToCloseWidget extends StatelessWidget {
         : WillPopScope(
             onWillPop: () => Future.value(false),
             child: GestureDetector(
-              onHorizontalDragUpdate: (details) async {
-                if (details.delta.dx > 8) {
-                  onWillPop;
-                }
-              },
+              onHorizontalDragUpdate: (details) =>
+                  (details.delta.dx > 8).inCase(onWillPop),
               child: child,
             ),
           );
