@@ -216,6 +216,10 @@ extension StringExtension on String {
   double toDouble({double? defaultValue}) =>
       double.tryParse(commasToDot()) ?? defaultValue ?? 0.0;
 
+  /// Get amount without currency.
+  String getAmountWithoutCurrency(String? currency) =>
+      currency.isExist ? split(currency!).first.trim() : this;
+
   /// Format `String` to decimal number system with nested currency.
   ///
   /// by default [locale] has ['en_US'] value and 2 decimals max.
