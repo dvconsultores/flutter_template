@@ -99,8 +99,38 @@ extension NullableMapExtension on Map? {
   bool get hasNotValue => this?.isEmpty ?? true;
 }
 
+// ? Int extension
+extension IntExtension on int {
+  /// Format `int` to decimal number system with nested currency.
+  ///
+  /// by default [locale] has ['en_US'] value and 2 decimals max.
+  String amountFormatterCurrency({
+    String? name,
+    String? symbol,
+    String? locale,
+    String? customPattern,
+  }) =>
+      NumberFormat.currency(
+        locale: locale,
+        name: name ?? "",
+        symbol: symbol,
+        decimalDigits: 0,
+        customPattern: customPattern,
+      ).format(this);
+
+  /// Format `int` to decimal number system.
+  ///
+  /// by default [locale] has ['en_US'] value and 2 decimals max.
+  String amountFormatter({String? locale}) =>
+      NumberFormat('#,##0', locale).format(this);
+}
+
 // ? Double extension
 extension DoubleExtension on double {
+  /// Remove all trailling zeros and return a `String`.
+  String removeTraillingZeros() =>
+      toStringAsFixed(truncateToDouble() == this ? 0 : 1);
+
   /// Format `double` to decimal number system with nested currency.
   ///
   /// by default [locale] has ['en_US'] value and 2 decimals max.
@@ -110,28 +140,23 @@ extension DoubleExtension on double {
     String? locale,
     int? maxDecimals,
     String? customPattern,
-  }) {
-    final formatter = NumberFormat.currency(
-      locale: locale,
-      name: name ?? "",
-      symbol: symbol,
-      decimalDigits: maxDecimals,
-      customPattern: customPattern,
-    );
-    return formatter
-        .format(double.tryParse(toString().replaceAll(",", "")) ?? 0.0);
-  }
+  }) =>
+      NumberFormat.currency(
+        locale: locale,
+        name: name ?? "",
+        symbol: symbol,
+        decimalDigits: maxDecimals,
+        customPattern: customPattern,
+      ).format(double.tryParse(toString().replaceAll(",", "")) ?? 0.0);
 
-  /// Format text to decimal number system.
+  /// Format `double` to decimal number system.
   ///
   /// by default `locale` has `'en_US'` value and 2 decimals max.
-  String amountFormatter({int maxDecimals = 2, String? locale}) {
-    final formatter = NumberFormat('#,##0.${"#" * maxDecimals}', locale);
-    return formatter
-        .format(double.tryParse(toString().replaceAll(",", "")) ?? 0.0);
-  }
+  String amountFormatter({int maxDecimals = 2, String? locale}) =>
+      NumberFormat('#,##0.${"#" * maxDecimals}', locale)
+          .format(double.tryParse(toString().replaceAll(",", "")) ?? 0.0);
 
-  /// Format text to decimal number system with filling in with zeros.
+  /// Format `double` to decimal number system with filling in with zeros.
   ///
   /// by default `locale` has `'en_US'` value and 2 decimals max.
   String amountFormatterWithFilledIn({int maxDecimals = 2, String? locale}) {
@@ -189,7 +214,7 @@ extension StringExtension on String {
   /// value = '0xFF'.toDouble(); // defaultValue ?? 0.0
   /// ```
   double toDouble({double? defaultValue}) =>
-      double.tryParse(this) ?? defaultValue ?? 0.0;
+      double.tryParse(commasToDot()) ?? defaultValue ?? 0.0;
 
   /// Format `String` to decimal number system with nested currency.
   ///
@@ -200,26 +225,23 @@ extension StringExtension on String {
     String? locale,
     int? maxDecimals,
     String? customPattern,
-  }) {
-    final formatter = NumberFormat.currency(
-      locale: locale,
-      name: name ?? "",
-      symbol: symbol,
-      decimalDigits: maxDecimals,
-      customPattern: customPattern,
-    );
-    return formatter.format(double.tryParse(replaceAll(",", "")) ?? 0.0);
-  }
+  }) =>
+      NumberFormat.currency(
+        locale: locale,
+        name: name ?? "",
+        symbol: symbol,
+        decimalDigits: maxDecimals,
+        customPattern: customPattern,
+      ).format(double.tryParse(replaceAll(",", "")) ?? 0.0);
 
-  /// Format text to decimal number system.
+  /// Format `String` to decimal number system.
   ///
   /// by default `locale` has `'en_US'` value and 2 decimals max.
-  String amountFormatter({int maxDecimals = 2, String? locale}) {
-    final formatter = NumberFormat('#,##0.${"#" * maxDecimals}', locale);
-    return formatter.format(double.tryParse(replaceAll(",", "")) ?? 0.0);
-  }
+  String amountFormatter({int maxDecimals = 2, String? locale}) =>
+      NumberFormat('#,##0.${"#" * maxDecimals}', locale)
+          .format(double.tryParse(replaceAll(",", "")) ?? 0.0);
 
-  /// Format text to decimal number system with filling in with zeros.
+  /// Format `String` to decimal number system with filling in with zeros.
   ///
   /// by default `locale` has `'en_US'` value and 2 decimals max.
   String amountFormatterWithFilledIn({int maxDecimals = 2, String? locale}) {
