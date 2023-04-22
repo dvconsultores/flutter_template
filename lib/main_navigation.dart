@@ -46,8 +46,8 @@ class _MainNavigationState extends State<MainNavigation> {
                 RouterNavigator.pushNamed(RouterNavigatorNames.home);
                 return false;
               },
-              child: RouterNavigator
-                  .routes[indexTab].routes[indexRoute].routePage),
+              child:
+                  RouterNavigator.routes[indexTab].pages[indexRoute].routePage),
       // * Navigation bar
       bottomNavigationBar: Theme(
         data: Theme.of(context).copyWith(canvasColor: Colors.white),

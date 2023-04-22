@@ -34,7 +34,7 @@ class MainProvider extends ChangeNotifier {
   /// * Set current navigation
   set setCurrentNavigation(Widget page) {
     final int indexTabFinded = RouterNavigator.routes.indexWhere((element) {
-      final navigationRouteFinded = element.routes.firstWhereOrNull(
+      final navigationRouteFinded = element.pages.firstWhereOrNull(
           (element) => element.routePage.toString() == page.toString());
       if (navigationRouteFinded == null) return false;
 
@@ -47,7 +47,7 @@ class MainProvider extends ChangeNotifier {
       return;
     }
 
-    final int indexRouteFinded = RouterNavigator.routes[indexTabFinded].routes
+    final int indexRouteFinded = RouterNavigator.routes[indexTabFinded].pages
         .indexWhere(
             (element) => element.routePage.toString() == page.toString());
 
@@ -68,7 +68,7 @@ class MainProvider extends ChangeNotifier {
   /// * Set current navigation by name
   set setCurrentNavigationByName(RouterNavigatorNames name) {
     final int indexTabFinded = RouterNavigator.routes.indexWhere((element) {
-      final navigationRouteFinded = element.routes
+      final navigationRouteFinded = element.pages
           .firstWhereOrNull((element) => element.routeName == name);
       if (navigationRouteFinded == null) {
         return false;
@@ -76,7 +76,7 @@ class MainProvider extends ChangeNotifier {
 
       return navigationRouteFinded.routeName == name;
     });
-    final int indexRouteFinded = RouterNavigator.routes[indexTabFinded].routes
+    final int indexRouteFinded = RouterNavigator.routes[indexTabFinded].pages
         .indexWhere((element) => element.routeName == name);
 
     if (indexTab == indexTabFinded) {

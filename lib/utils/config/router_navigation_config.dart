@@ -21,19 +21,19 @@ enum RouterNavigatorNames {
 // ? setup your custome routes
 /// Navigator router configuration class from app.
 enum RouterNavigatorRoutes {
-  userRoute(name: "User", icon: Icon(Icons.person), routes: [
+  userRoute(name: "User", icon: Icon(Icons.person), pages: [
     RouterNavigatorPages(
       routeName: RouterNavigatorNames.user,
       routePage: UserScreen(),
     ),
   ]),
-  homeRoute(name: "Home", icon: Icon(Icons.home), routes: [
+  homeRoute(name: "Home", icon: Icon(Icons.home), pages: [
     RouterNavigatorPages(
       routeName: RouterNavigatorNames.home,
       routePage: HomeScreen(),
     ),
   ]),
-  searchRoute(name: "Search", icon: Icon(Icons.search), routes: [
+  searchRoute(name: "Search", icon: Icon(Icons.search), pages: [
     RouterNavigatorPages(
       routeName: RouterNavigatorNames.search,
       routePage: SearchScreen(),
@@ -45,11 +45,11 @@ enum RouterNavigatorRoutes {
   ]);
 
   const RouterNavigatorRoutes({
-    required this.routes,
+    required this.pages,
     required this.icon,
     required this.name,
   });
-  final List<RouterNavigatorPages> routes;
+  final List<RouterNavigatorPages> pages;
   final Icon icon;
   final String name;
 }
@@ -72,16 +72,15 @@ class RouterNavigator {
 
   /// Current name of the route.
   static String get currentName =>
-      routes[indexTab].routes[indexRoute].routeName.name;
+      routes[indexTab].pages[indexRoute].routeName.name;
 
   /// Current widget page of the route.
-  static Widget get currentPage =>
-      routes[indexTab].routes[indexRoute].routePage;
+  static Widget get currentPage => routes[indexTab].pages[indexRoute].routePage;
 
   /// `List` of navigated pages storage in cache.
   static List<RouterNavigatorPages> get cachedNavigation =>
       List.unmodifiable(_getMainProvider.cachedIndexNavigation
-          .map((e) => routes[e.indexTab].routes[e.indexRoute]));
+          .map((e) => routes[e.indexTab].pages[e.indexRoute]));
 
   /// Push any route using router navigator from app.
   ///
