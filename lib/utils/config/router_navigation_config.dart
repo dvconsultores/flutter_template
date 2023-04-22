@@ -7,11 +7,11 @@ import 'package:flutter_detextre4/main.dart';
 import 'package:flutter_detextre4/main_provider.dart';
 import 'package:provider/provider.dart';
 
-// * Router navigation config
+// * ----------------------- Router navigator config ------------------------ //
 ///? Collection of allowed routes from app.
 ///
 /// ? here can setup your custome route names.
-enum NavigationRoutesName {
+enum RouterNavigatorNames {
   user,
   home,
   search,
@@ -20,129 +20,98 @@ enum NavigationRoutesName {
 
 // ? setup your custome routes
 /// Navigator router configuration class from app.
-enum NavigationRoutes {
+enum RouterNavigatorPages {
   userRoute(name: "User", icon: Icon(Icons.person), routes: [
-    NavigationRoutesModel(
-      name: NavigationRoutesName.user,
-      page: UserScreen(),
+    RouterNavigatorModel(
+      routeName: RouterNavigatorNames.user,
+      routePage: UserScreen(),
     ),
   ]),
   homeRoute(name: "Home", icon: Icon(Icons.home), routes: [
-    NavigationRoutesModel(
-      name: NavigationRoutesName.home,
-      page: HomeScreen(),
+    RouterNavigatorModel(
+      routeName: RouterNavigatorNames.home,
+      routePage: HomeScreen(),
     ),
   ]),
   searchRoute(name: "Search", icon: Icon(Icons.search), routes: [
-    NavigationRoutesModel(
-      name: NavigationRoutesName.search,
-      page: SearchScreen(),
+    RouterNavigatorModel(
+      routeName: RouterNavigatorNames.search,
+      routePage: SearchScreen(),
     ),
-    NavigationRoutesModel(
-      name: NavigationRoutesName.searchTwo,
-      page: SearchScreenTwo(),
+    RouterNavigatorModel(
+      routeName: RouterNavigatorNames.searchTwo,
+      routePage: SearchScreenTwo(),
     ),
   ]);
 
-  const NavigationRoutes({
+  const RouterNavigatorPages({
     required this.routes,
     required this.icon,
     required this.name,
   });
-  final List<NavigationRoutesModel> routes;
+  final List<RouterNavigatorModel> routes;
   final Icon icon;
   final String name;
 }
 
-// ? --------------------- Navigator extension ------------------------------ //
-extension NavigatorExtension on Navigator {
-  MainProvider get getMainProvider =>
+// * ---------------------- Router navigator methods ------------------------ //
+
+class RouterNavigator {
+  static MainProvider get _getMainProvider =>
       Provider.of<MainProvider>(globalNavigatorKey.currentContext!,
           listen: false);
 
-  ///* Push any route using router navigator from app.
+  /// All routes registered in app.
+  static List<RouterNavigatorPages> get routes => RouterNavigatorPages.values;
+
+  /// Current `indexTab`.
+  static int get indexTab => _getMainProvider.indexTab;
+
+  /// Current `indexRoute`.
+  static int get indexRoute => _getMainProvider.indexRoute;
+
+  /// Current name of the route.
+  static String get currentName =>
+      routes[indexTab].routes[indexRoute].routeName.name;
+
+  /// Current widget page of the route.
+  static Widget get currentPage =>
+      routes[indexTab].routes[indexRoute].routePage;
+
+  /// `List` of navigated routes storage in cache.
+  static List<RouterNavigatorModel> get cachedNavigation =>
+      List.unmodifiable(_getMainProvider.cachedIndexNavigation
+          .map((e) => routes[e.indexTab].routes[e.indexRoute]));
+
+  /// Push any route using router navigator from app.
   ///
-  /// if widget is not founded into [NavigationRoutes] will pushed using
-  /// [push] method from [Navigator].
-  void routerPush(Widget page) => getMainProvider.setCurrentNavigation = page;
+  /// if widget is not founded into [RouterNavigatorPages] will pushed using
+  /// `push` method from `Navigator`.
+  static void push(Widget page) => _getMainProvider.setCurrentNavigation = page;
 
-  ///* Push any route using router navigator from app.
-  void routerPushByName(NavigationRoutesName name) =>
-      getMainProvider.setCurrentNavigationByName = name;
+  /// Push any route using router navigator from app.
+  static void pushNamed(RouterNavigatorNames name) =>
+      _getMainProvider.setCurrentNavigationByName = name;
 
-  ///* Go back based on router navigator cache.
-  void routerBack() => getMainProvider.setRouteBack();
+  /// Go back based on router navigator cache.
+  static void pop() => _getMainProvider.setRouterBack();
 
-  ///* Go back based on quantity provided.
-  void routerBackBy(int index) => getMainProvider.setRouteBackBy = index;
+  /// Go back based on quantity provided.
+  static void popBy(int index) => _getMainProvider.setRouterBackBy = index;
 
-  ///* Go to the first route from the current router navigator cache.
-  void routerBackUntilFirst() => getMainProvider.setRouteBackUntilFirst();
-
-  ///* Normal [push] method from [Navigator] with custome transition.
-  void pushWithTransition(
-    BuildContext context,
-    Widget page, {
-    Duration transitionDuration = const Duration(milliseconds: 2500),
-    double begin = 0.0,
-    double end = 1.0,
-    Curve curve = Curves.fastLinearToSlowEaseIn,
-  }) =>
-      WidgetsBinding.instance
-          .addPostFrameCallback((timeStamp) => Navigator.push(
-                context,
-                PageRouteBuilder(
-                  transitionDuration: transitionDuration,
-                  pageBuilder: (context, animation, secondaryAnimation) => page,
-                  transitionsBuilder:
-                      (context, animation, secondaryAnimation, child) =>
-                          FadeTransition(
-                              opacity: Tween<double>(begin: begin, end: end)
-                                  .animate(CurvedAnimation(
-                                parent: animation,
-                                curve: curve,
-                              )),
-                              child: child),
-                ),
-              ));
-
-  ///* Normal [pushReplacement] method from [Navigator] with custome transition.
-  void pushReplacementWithTransition(
-    BuildContext context,
-    Widget page, {
-    Duration transitionDuration = const Duration(milliseconds: 2500),
-    double begin = 0.0,
-    double end = 1.0,
-    Curve curve = Curves.fastLinearToSlowEaseIn,
-  }) =>
-      WidgetsBinding.instance
-          .addPostFrameCallback((timeStamp) => Navigator.pushReplacement(
-                context,
-                PageRouteBuilder(
-                  transitionDuration: transitionDuration,
-                  pageBuilder: (context, animation, secondaryAnimation) => page,
-                  transitionsBuilder:
-                      (context, animation, secondaryAnimation, child) =>
-                          FadeTransition(
-                              opacity: Tween<double>(begin: begin, end: end)
-                                  .animate(CurvedAnimation(
-                                parent: animation,
-                                curve: curve,
-                              )),
-                              child: child),
-                ),
-              ));
+  /// Go to the first route from the current router navigator cache.
+  static void popUntilFirst() => _getMainProvider.setRouterBackUntilFirst();
 }
 
-// ? ------------------------ Navigator models ------------------------------ //
+// * ---------------------- Router navigator models ------------------------- //
 
-class NavigationRoutesModel {
-  const NavigationRoutesModel({
-    required this.name,
-    required this.page,
+class RouterNavigatorModel {
+  const RouterNavigatorModel({
+    required this.routeName,
+    required this.routePage,
   });
-  final NavigationRoutesName name;
-  final Widget page;
+  final RouterNavigatorNames routeName;
+  final Widget routePage;
 }
 
 class CachedIndexNavigation {

@@ -464,3 +464,60 @@ class FileConstructor {
         ?.name;
   }
 }
+
+// ? Navigator extension
+extension NavigatorExtension on Navigator {
+  ///* Normal `push` method from `Navigator` with custome transition.
+  void pushWithTransition(
+    BuildContext context,
+    Widget page, {
+    Duration transitionDuration = const Duration(milliseconds: 2500),
+    double begin = 0.0,
+    double end = 1.0,
+    Curve curve = Curves.fastLinearToSlowEaseIn,
+  }) =>
+      WidgetsBinding.instance
+          .addPostFrameCallback((timeStamp) => Navigator.push(
+                context,
+                PageRouteBuilder(
+                  transitionDuration: transitionDuration,
+                  pageBuilder: (context, animation, secondaryAnimation) => page,
+                  transitionsBuilder:
+                      (context, animation, secondaryAnimation, child) =>
+                          FadeTransition(
+                              opacity: Tween<double>(begin: begin, end: end)
+                                  .animate(CurvedAnimation(
+                                parent: animation,
+                                curve: curve,
+                              )),
+                              child: child),
+                ),
+              ));
+
+  ///* Normal `pushReplacement` method from `Navigator` with custome transition.
+  void pushReplacementWithTransition(
+    BuildContext context,
+    Widget page, {
+    Duration transitionDuration = const Duration(milliseconds: 2500),
+    double begin = 0.0,
+    double end = 1.0,
+    Curve curve = Curves.fastLinearToSlowEaseIn,
+  }) =>
+      WidgetsBinding.instance
+          .addPostFrameCallback((timeStamp) => Navigator.pushReplacement(
+                context,
+                PageRouteBuilder(
+                  transitionDuration: transitionDuration,
+                  pageBuilder: (context, animation, secondaryAnimation) => page,
+                  transitionsBuilder:
+                      (context, animation, secondaryAnimation, child) =>
+                          FadeTransition(
+                              opacity: Tween<double>(begin: begin, end: end)
+                                  .animate(CurvedAnimation(
+                                parent: animation,
+                                curve: curve,
+                              )),
+                              child: child),
+                ),
+              ));
+}

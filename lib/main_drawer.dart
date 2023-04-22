@@ -12,7 +12,7 @@ class MainDrawer extends StatelessWidget {
     // * Go to router page
     void goToRouterPage(Widget page) {
       Navigator.pop(context);
-      const Navigator().routerPush(page);
+      RouterNavigator.push(page);
     }
 
     return Drawer(

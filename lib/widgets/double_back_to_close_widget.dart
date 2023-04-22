@@ -21,7 +21,7 @@ class DoubleBackToCloseWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     DateTime? currentBackPressTime;
 
-    Future<bool> onWillPop() {
+    Future<bool> onWillPop() async {
       DateTime now = DateTime.now();
       if (currentBackPressTime.isNotExist ||
           now.difference(currentBackPressTime!) > doubleBackDuration) {
@@ -31,12 +31,12 @@ class DoubleBackToCloseWidget extends StatelessWidget {
           duration: doubleBackDuration,
           backgroundColor: ColorSnackbarState.neutral.color,
         ));
-        return Future.value(false);
+        return false;
       }
 
-      if (onDoubleBack.isExist) return onDoubleBack!();
+      if (onDoubleBack.isExist) return await onDoubleBack!();
 
-      return Future.value(true);
+      return true;
     }
 
     return !Platform.isIOS

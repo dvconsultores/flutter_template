@@ -17,24 +17,6 @@ class MainNavigation extends StatefulWidget {
 }
 
 class _MainNavigationState extends State<MainNavigation> {
-  List<BottomNavigationBarItem> renderBottomNavigationBarItem() {
-    final itemList = <BottomNavigationBarItem>[];
-
-    for (var element in NavigationRoutes.values) {
-      itemList.add(
-        BottomNavigationBarItem(
-            icon: Container(
-              margin: const EdgeInsets.only(top: 20),
-              child: element.icon,
-            ),
-            label: "",
-            tooltip: element.name),
-      );
-    }
-
-    return itemList;
-  }
-
   @override
   Widget build(BuildContext context) {
     final mainProvider = context.watch<MainProvider>();
@@ -47,10 +29,10 @@ class _MainNavigationState extends State<MainNavigation> {
         leading: indexRoute > 0
             ? IconButton(
                 icon: const Icon(Icons.arrow_back),
-                onPressed: () => const Navigator().routerBack(),
+                onPressed: () => RouterNavigator.pop(),
               )
             : null,
-        title: Text(NavigationRoutes.values[indexTab].name),
+        title: Text(RouterNavigator.routes[indexTab].name),
       ),
       // * Routes rendering
       body: indexTab == 1 && indexRoute == 0 // ? if home or not
@@ -60,10 +42,11 @@ class _MainNavigationState extends State<MainNavigation> {
             )
           : WillPopCustom(
               onWillPop: () async {
-                const Navigator().routerPushByName(NavigationRoutesName.home);
+                RouterNavigator.pushNamed(RouterNavigatorNames.home);
                 return false;
               },
-              child: NavigationRoutes.values[indexTab].routes[indexRoute].page),
+              child: RouterNavigator
+                  .routes[indexTab].routes[indexRoute].routePage),
       // * Navigation bar
       bottomNavigationBar: Theme(
         data: Theme.of(context).copyWith(canvasColor: Colors.white),
@@ -72,9 +55,16 @@ class _MainNavigationState extends State<MainNavigation> {
               setState(() => mainProvider.setNavigationTab = index),
           currentIndex: indexTab,
           selectedItemColor: AppColors.getColor(context, ColorType.active),
-          items: [
-            ...renderBottomNavigationBarItem(), // * Icons rendering
-          ],
+          items: RouterNavigator.routes
+              .map((element) => BottomNavigationBarItem(
+                    label: "",
+                    tooltip: element.name,
+                    icon: Container(
+                      margin: const EdgeInsets.only(top: 20),
+                      child: element.icon,
+                    ),
+                  ))
+              .toList(),
         ),
       ),
     );

@@ -23,7 +23,7 @@ class MainProvider extends ChangeNotifier {
   int indexRoute = 0;
   List<CachedIndexNavigation> cachedIndexNavigation = <CachedIndexNavigation>[];
 
-  // * Function just for main navigation tabs
+  /// * Function just for main navigation tabs
   set setNavigationTab(int index) {
     cachedIndexNavigation.clear();
     indexTab = index;
@@ -31,14 +31,15 @@ class MainProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  // * set currentNavigation
+  /// * Set current navigation
   set setCurrentNavigation(Widget page) {
-    final int indexTabFinded = NavigationRoutes.values.indexWhere((element) {
+    final int indexTabFinded =
+        RouterNavigatorPages.values.indexWhere((element) {
       final navigationRouteFinded = element.routes.firstWhereOrNull(
-          (element) => element.page.toString() == page.toString());
+          (element) => element.routePage.toString() == page.toString());
       if (navigationRouteFinded == null) return false;
 
-      return navigationRouteFinded.page.toString() == page.toString();
+      return navigationRouteFinded.routePage.toString() == page.toString();
     });
 
     if (indexTabFinded == -1) {
@@ -47,8 +48,9 @@ class MainProvider extends ChangeNotifier {
       return;
     }
 
-    final int indexRouteFinded = NavigationRoutes.values[indexTabFinded].routes
-        .indexWhere((element) => element.page.toString() == page.toString());
+    final int indexRouteFinded =
+        RouterNavigatorPages.values[indexTabFinded].routes.indexWhere(
+            (element) => element.routePage.toString() == page.toString());
 
     if (indexTab == indexTabFinded) {
       cachedIndexNavigation.add(CachedIndexNavigation(
@@ -64,19 +66,21 @@ class MainProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  // * set currentNavigationByName
-  set setCurrentNavigationByName(NavigationRoutesName name) {
-    final int indexTabFinded = NavigationRoutes.values.indexWhere((element) {
-      final navigationRouteFinded =
-          element.routes.firstWhereOrNull((element) => element.name == name);
+  /// * Set current navigation by name
+  set setCurrentNavigationByName(RouterNavigatorNames name) {
+    final int indexTabFinded =
+        RouterNavigatorPages.values.indexWhere((element) {
+      final navigationRouteFinded = element.routes
+          .firstWhereOrNull((element) => element.routeName == name);
       if (navigationRouteFinded == null) {
         return false;
       }
 
-      return navigationRouteFinded.name == name;
+      return navigationRouteFinded.routeName == name;
     });
-    final int indexRouteFinded = NavigationRoutes.values[indexTabFinded].routes
-        .indexWhere((element) => element.name == name);
+    final int indexRouteFinded = RouterNavigatorPages
+        .values[indexTabFinded].routes
+        .indexWhere((element) => element.routeName == name);
 
     if (indexTab == indexTabFinded) {
       cachedIndexNavigation.add(CachedIndexNavigation(
@@ -92,8 +96,8 @@ class MainProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  // * set route back
-  void setRouteBack() {
+  /// * Set route back
+  void setRouterBack() {
     if (cachedIndexNavigation.isEmpty) {
       indexRoute = 0;
     } else {
@@ -103,8 +107,8 @@ class MainProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  // * set route back by
-  set setRouteBackBy(int index) {
+  /// * Set route back by
+  set setRouterBackBy(int index) {
     if (indexRoute - index < 0) {
       throw Exception("Can't go back!");
     }
@@ -113,8 +117,8 @@ class MainProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  // * set route back until first
-  void setRouteBackUntilFirst() {
+  /// * Set route back until first
+  void setRouterBackUntilFirst() {
     indexRoute = 0;
     notifyListeners();
   }

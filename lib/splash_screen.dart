@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_detextre4/main.dart';
 import 'package:flutter_detextre4/utils/config/app_config.dart';
+import 'package:flutter_detextre4/utils/config/extensions_config.dart';
 import 'dart:math' as math;
-
-import 'package:flutter_detextre4/utils/config/router_navigation_config.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});

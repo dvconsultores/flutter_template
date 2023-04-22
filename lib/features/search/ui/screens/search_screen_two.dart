@@ -1,5 +1,8 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_detextre4/features/search/bloc/search_bloc.dart';
+import 'package:flutter_detextre4/utils/config/router_navigation_config.dart';
 import 'package:generic_bloc_provider/generic_bloc_provider.dart';
 
 class SearchScreenTwo extends StatefulWidget {
@@ -16,10 +19,15 @@ class _SearchScreenTwoState extends State<SearchScreenTwo> {
 
     return ListView(
       children: [
-        Text(
-          "search 2",
-          textAlign: TextAlign.center,
-          style: Theme.of(context).textTheme.displayMedium,
+        GestureDetector(
+          onTap: () {
+            log("${RouterNavigator.cachedNavigation} ⭕");
+          },
+          child: Text(
+            "search 2",
+            textAlign: TextAlign.center,
+            style: Theme.of(context).textTheme.displayMedium,
+          ),
         ),
         for (var i = 0; i < searchBloc.totalTickets.length; i++)
           Text(
