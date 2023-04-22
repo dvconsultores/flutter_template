@@ -35,7 +35,8 @@ class _MainNavigationState extends State<MainNavigation> {
         title: Text(RouterNavigator.routes[indexTab].name),
       ),
       // * Routes rendering
-      body: indexTab == 1 && indexRoute == 0 // ? if home or not
+      body: RouterNavigator.currentName ==
+              RouterNavigatorNames.home.name // ? if home or not
           ? const DoubleBackToCloseWidget(
               snackBarMessage: "Presione de nuevo para salir",
               child: HomeScreen(),

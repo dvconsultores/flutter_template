@@ -20,36 +20,36 @@ enum RouterNavigatorNames {
 
 // ? setup your custome routes
 /// Navigator router configuration class from app.
-enum RouterNavigatorPages {
+enum RouterNavigatorRoutes {
   userRoute(name: "User", icon: Icon(Icons.person), routes: [
-    RouterNavigatorModel(
+    RouterNavigatorPages(
       routeName: RouterNavigatorNames.user,
       routePage: UserScreen(),
     ),
   ]),
   homeRoute(name: "Home", icon: Icon(Icons.home), routes: [
-    RouterNavigatorModel(
+    RouterNavigatorPages(
       routeName: RouterNavigatorNames.home,
       routePage: HomeScreen(),
     ),
   ]),
   searchRoute(name: "Search", icon: Icon(Icons.search), routes: [
-    RouterNavigatorModel(
+    RouterNavigatorPages(
       routeName: RouterNavigatorNames.search,
       routePage: SearchScreen(),
     ),
-    RouterNavigatorModel(
+    RouterNavigatorPages(
       routeName: RouterNavigatorNames.searchTwo,
       routePage: SearchScreenTwo(),
     ),
   ]);
 
-  const RouterNavigatorPages({
+  const RouterNavigatorRoutes({
     required this.routes,
     required this.icon,
     required this.name,
   });
-  final List<RouterNavigatorModel> routes;
+  final List<RouterNavigatorPages> routes;
   final Icon icon;
   final String name;
 }
@@ -62,7 +62,7 @@ class RouterNavigator {
           listen: false);
 
   /// All routes registered in app.
-  static List<RouterNavigatorPages> get routes => RouterNavigatorPages.values;
+  static List<RouterNavigatorRoutes> get routes => RouterNavigatorRoutes.values;
 
   /// Current `indexTab`.
   static int get indexTab => _getMainProvider.indexTab;
@@ -78,14 +78,14 @@ class RouterNavigator {
   static Widget get currentPage =>
       routes[indexTab].routes[indexRoute].routePage;
 
-  /// `List` of navigated routes storage in cache.
-  static List<RouterNavigatorModel> get cachedNavigation =>
+  /// `List` of navigated pages storage in cache.
+  static List<RouterNavigatorPages> get cachedNavigation =>
       List.unmodifiable(_getMainProvider.cachedIndexNavigation
           .map((e) => routes[e.indexTab].routes[e.indexRoute]));
 
   /// Push any route using router navigator from app.
   ///
-  /// if widget is not founded into [RouterNavigatorPages] will pushed using
+  /// if widget is not founded into [RouterNavigatorRoutes] will pushed using
   /// `push` method from `Navigator`.
   static void push(Widget page) => _getMainProvider.setCurrentNavigation = page;
 
@@ -105,8 +105,8 @@ class RouterNavigator {
 
 // * ---------------------- Router navigator models ------------------------- //
 
-class RouterNavigatorModel {
-  const RouterNavigatorModel({
+class RouterNavigatorPages {
+  const RouterNavigatorPages({
     required this.routeName,
     required this.routePage,
   });
