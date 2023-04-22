@@ -70,12 +70,15 @@ class RouterNavigator {
   /// Current `indexRoute`.
   static int get indexRoute => _getMainProvider.indexRoute;
 
-  /// Current name of the route.
+  /// Current name of the route page.
   static String get currentName =>
       routes[indexTab].pages[indexRoute].routeName.name;
 
   /// Current widget page of the route.
   static Widget get currentPage => routes[indexTab].pages[indexRoute].routePage;
+
+  /// Current route name.
+  static String get currentRoute => routes[indexTab].name;
 
   /// `List` of navigated pages storage in cache.
   static List<RouterNavigatorPages> get cachedNavigation =>
