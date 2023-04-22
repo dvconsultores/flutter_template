@@ -14,7 +14,7 @@ class DoubleBackToCloseWidget extends StatelessWidget {
   });
   final Widget child;
   final String snackBarMessage;
-  final VoidCallback? onDoubleBack;
+  final Future<bool> Function()? onDoubleBack;
   final Duration doubleBackDuration;
 
   @override
@@ -23,7 +23,7 @@ class DoubleBackToCloseWidget extends StatelessWidget {
 
     Future<bool> onWillPop() {
       DateTime now = DateTime.now();
-      if (currentBackPressTime == null ||
+      if (currentBackPressTime.isNotExist ||
           now.difference(currentBackPressTime!) > doubleBackDuration) {
         currentBackPressTime = now;
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
@@ -33,7 +33,9 @@ class DoubleBackToCloseWidget extends StatelessWidget {
         ));
         return Future.value(false);
       }
-      onDoubleBack.isExist.inCase(onDoubleBack);
+
+      if (onDoubleBack.isExist) return onDoubleBack!();
+
       return Future.value(true);
     }
 

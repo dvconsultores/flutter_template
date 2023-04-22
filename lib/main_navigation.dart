@@ -54,10 +54,10 @@ class _MainNavigationState extends State<MainNavigation> {
       ),
       // * Routes rendering
       body: indexTab == 1 && indexRoute == 0 // ? if home or not
-          ? DoubleBackToCloseWidget(
+          ? const DoubleBackToCloseWidget(
               snackBarMessage: "Presione de nuevo para salir",
-              child: const HomeScreen(),
-              onDoubleBack: () {})
+              child: HomeScreen(),
+            )
           : WillPopCustom(
               onWillPop: () async {
                 const Navigator().routerPushByName(NavigationRoutesName.home);
