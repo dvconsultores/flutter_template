@@ -2,6 +2,7 @@ import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_detextre4/main.dart';
 import 'package:flutter_detextre4/model/language_list.dart';
+import 'package:flutter_detextre4/splash_screen.dart';
 import 'package:flutter_detextre4/utils/config/app_config.dart';
 import 'package:flutter_detextre4/utils/config/router_navigation_config.dart';
 import 'package:flutter_detextre4/utils/local_data/hive_data.dart';
@@ -18,6 +19,12 @@ class MainProvider extends ChangeNotifier {
   }
 
   // ? -----------------------Navigation Provider---------------------------- //
+
+  final navigatorRoutes = {
+    "/splash": (context) => const SplashScreen(),
+  };
+
+  // ? ---------------------Router Navigation Provider----------------------- //
 
   int indexTab = 1;
   int indexRoute = 0;

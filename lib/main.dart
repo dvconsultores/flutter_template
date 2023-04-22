@@ -7,7 +7,6 @@ import 'package:flutter_detextre4/features/user/bloc/user_bloc.dart';
 import 'package:flutter_detextre4/features/user/model/user_model.dart';
 import 'package:flutter_detextre4/features/user/ui/screens/log_in_screen.dart';
 import 'package:flutter_detextre4/main_navigation.dart';
-import 'package:flutter_detextre4/splash_screen.dart';
 import 'package:flutter_detextre4/widgets/restart_widget.dart';
 import 'package:flutter_detextre4/main_provider.dart';
 import 'package:flutter_detextre4/utils/config/app_config.dart';
@@ -95,9 +94,10 @@ class App extends StatelessWidget {
           debugShowCheckedModeBanner: true,
           title: 'Flutter Demo',
           theme: AppThemes.getTheme(context), // * Theme switcher
-          home: const SplashScreen(),
           localizationsDelegates: AppLocalizations.localizationsDelegates,
           supportedLocales: AppLocalizations.supportedLocales,
+          initialRoute: value.navigatorRoutes.keys.first,
+          routes: value.navigatorRoutes,
           navigatorKey: globalNavigatorKey,
           // * global text scale factorized
           builder: (context, child) => MediaQuery(
