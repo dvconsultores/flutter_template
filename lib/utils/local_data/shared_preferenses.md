@@ -21,7 +21,7 @@ class SharedPrefs {
     final SharedPreferences prefs = await futureInstance;
     final Object? value = prefs.get(key.name);
 
-    debugPrint("$value - readed from shared preferenses 💠");
+    debugPrint("${key.name}: $value - readed from shared preferenses 💠");
     return value;
   }
 

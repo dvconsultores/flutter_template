@@ -31,6 +31,7 @@ class SecureStorage {
       iOptions: getIOSOptions(),
     );
 
+    debugPrint("${key.name}: $value - readed from Secure storage 🛡️");
     return jsonDecode(value ?? "null");
   }
 
@@ -76,7 +77,8 @@ class SecureStorage {
           aOptions: getAndroidOptions(),
           iOptions: getIOSOptions(),
         )
-        .then((_) => debugPrint("$value - written from Secure storage 🛡️"))
+        .then((_) =>
+            debugPrint("${key.name}: $value - written from Secure storage 🛡️"))
         .catchError((onError) => throw onError);
   }
 }
