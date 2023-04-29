@@ -327,6 +327,16 @@ extension StringExtension on String {
         : formattedAmount;
   }
 
+  /// Used to limit decimal characters in `double`
+  String maxDecimals(int max) {
+    final splitted = toString().split(".");
+    final decimalsFiltered = splitted.last
+        .substring(0, splitted.last.length > max ? max : splitted.last.length);
+    splitted.removeLast();
+    splitted.add(decimalsFiltered);
+    return splitted.join(".");
+  }
+
   /// Converts first character from `string` in uppercase.
   String toCapitalize() =>
       "${this[0].toUpperCase()}${substring(1).toLowerCase()}";
