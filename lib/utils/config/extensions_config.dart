@@ -167,16 +167,28 @@ extension DoubleExtension on double {
   /// Format `double` to decimal number system.
   ///
   /// by default `locale` has `'en_US'` value and 2 decimals max.
-  String amountFormatter({int maxDecimals = 2, String? locale}) =>
-      NumberFormat('#,##0.${"#" * maxDecimals}', locale)
+  String amountFormatter({
+    int maxDecimals = 2,
+    String? locale,
+    bool onlyDecimals = false,
+  }) =>
+      NumberFormat(
+              '${onlyDecimals ? "" : "#,##"}0.${"#" * maxDecimals}', locale)
           .format(double.tryParse(toString().replaceAll(",", "")) ?? 0.0);
 
   /// Format `double` to decimal number system with filling in with zeros.
   ///
   /// by default `locale` has `'en_US'` value and 2 decimals max.
-  String amountFormatterWithFilledIn({int maxDecimals = 2, String? locale}) {
-    final formattedAmount =
-        amountFormatter(maxDecimals: maxDecimals, locale: locale);
+  String amountFormatterWithFilledIn({
+    int maxDecimals = 2,
+    String? locale,
+    bool onlyDecimals = false,
+  }) {
+    final formattedAmount = amountFormatter(
+      maxDecimals: maxDecimals,
+      locale: locale,
+      onlyDecimals: onlyDecimals,
+    );
     final dotOrComma = locale == null ? "." : ",";
     final amountSplitted = formattedAmount.split(dotOrComma);
 
@@ -187,6 +199,16 @@ extension DoubleExtension on double {
     return amountSplitted.last.length < maxDecimals
         ? "$formattedAmount${'0' * (maxDecimals - amountSplitted.last.length)}"
         : formattedAmount;
+  }
+
+  /// Used to limit decimal characters in `double`
+  double maxDecimals(int max) {
+    final splitted = toString().split(".");
+    final decimalsFiltered = splitted.last
+        .substring(0, splitted.last.length > max ? max : splitted.last.length);
+    splitted.removeLast();
+    splitted.add(decimalsFiltered);
+    return double.parse(splitted.join("."));
   }
 }
 
@@ -271,16 +293,28 @@ extension StringExtension on String {
   /// Format `String` to decimal number system.
   ///
   /// by default `locale` has `'en_US'` value and 2 decimals max.
-  String amountFormatter({int maxDecimals = 2, String? locale}) =>
-      NumberFormat('#,##0.${"#" * maxDecimals}', locale)
+  String amountFormatter({
+    int maxDecimals = 2,
+    String? locale,
+    bool onlyDecimals = false,
+  }) =>
+      NumberFormat(
+              '${onlyDecimals ? "" : "#,##"}0.${"#" * maxDecimals}', locale)
           .format(double.tryParse(replaceAll(",", "")) ?? 0.0);
 
   /// Format `String` to decimal number system with filling in with zeros.
   ///
   /// by default `locale` has `'en_US'` value and 2 decimals max.
-  String amountFormatterWithFilledIn({int maxDecimals = 2, String? locale}) {
-    final formattedAmount =
-        amountFormatter(maxDecimals: maxDecimals, locale: locale);
+  String amountFormatterWithFilledIn({
+    int maxDecimals = 2,
+    String? locale,
+    bool onlyDecimals = false,
+  }) {
+    final formattedAmount = amountFormatter(
+      maxDecimals: maxDecimals,
+      locale: locale,
+      onlyDecimals: onlyDecimals,
+    );
     final dotOrComma = locale == null ? "." : ",";
     final amountSplitted = formattedAmount.split(dotOrComma);
 
