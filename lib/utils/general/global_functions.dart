@@ -36,13 +36,17 @@ enum ColorSnackbarState {
 /// A global snackbar that can be invoked onto whatever widget.
 void appSnackbar(
   String message, {
-  required ColorSnackbarState type,
+  ColorSnackbarState? type,
   Duration? duration,
 }) {
   Flushbar(
     message: message,
-    backgroundColor: ColorSnackbarState.values.byName(type.name).color,
-    messageColor: ColorSnackbarState.values.byName(type.name).textColor,
+    backgroundColor: ColorSnackbarState.values
+        .byName(type?.name ?? ColorSnackbarState.neutral.name)
+        .color,
+    messageColor: ColorSnackbarState.values
+        .byName(type?.name ?? ColorSnackbarState.neutral.name)
+        .textColor,
     duration: duration ?? const Duration(seconds: 3),
     borderRadius: BorderRadius.circular(6),
     margin: const EdgeInsets.symmetric(horizontal: 10.0),

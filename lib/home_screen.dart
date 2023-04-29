@@ -21,8 +21,7 @@ class _HomePageState extends State<HomeScreen> {
       _counter++;
     });
 
-    appSnackbar("El contador ha incrementado",
-        type: ColorSnackbarState.neutral);
+    appSnackbar("El contador ha incrementado");
   }
 
   @override

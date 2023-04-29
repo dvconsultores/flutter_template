@@ -51,10 +51,10 @@ android {
         // You can update the following values to match your application needs.
         // For more information, see: https://docs.flutter.dev/deployment/android#reviewing-the-build-configuration.
         // ? -- config to firebase 🖊️ --
-        // minSdkVersion 21
+        minSdkVersion 21
         // targetSdkVersion 33
-        // ? -- config to secure storgae 🖊️ --
-        minSdkVersion 18
+        // ? -- config to secure storage 🖊️ --
+        // minSdkVersion 18
         // ? -- default config 🖊️ --
         // minSdkVersion flutter.minSdkVersion
         targetSdkVersion flutter.targetSdkVersion

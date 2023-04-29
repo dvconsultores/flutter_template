@@ -1,16 +1,21 @@
 import 'dart:convert';
+import 'dart:developer' as dev;
 import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_detextre4/model/files_type.dart';
 import 'package:flutter_detextre4/utils/general/global_functions.dart';
+import 'package:gallery_saver/gallery_saver.dart';
 import 'package:http/http.dart' as http;
 // ignore: depend_on_referenced_packages
 import 'package:http_parser/http_parser.dart';
 // ignore: depend_on_referenced_packages
 import 'package:collection/collection.dart';
 import 'package:intl/intl.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:screenshot/screenshot.dart';
+import 'package:share_plus/share_plus.dart';
 
 // ? Dynamic extension
 extension Existence on dynamic {
@@ -392,6 +397,37 @@ extension StringExtension on String {
 //     return this;
 //   }
 // }
+
+// ? screenshot extension
+extension ScreenshotExtension on ScreenshotController {
+  Future<void> captureAndSaveAuto({String? message}) async {
+    Uint8List? imageBytes = await capture(pixelRatio: 1.5);
+
+    final Directory directory = await getApplicationDocumentsDirectory();
+    final String path = directory.path;
+    final String imagePath = '$path/screenshot${DateTime.now()}.png';
+    final File file = File(imagePath);
+    await file.writeAsBytes(imageBytes!, mode: FileMode.write);
+    dev.log(
+        'Image saved to: $imagePath (size: ${file.lengthSync()} bytes) ${file.path} ⭕');
+    await GallerySaver.saveImage(file.path);
+
+    appSnackbar(message ?? "Capture saved on gallery");
+  }
+
+  Future<void> shareCapture() async {
+    Uint8List? imageBytes = await capture(pixelRatio: 1.5);
+
+    final Directory directory = await getApplicationDocumentsDirectory();
+    final String path = directory.path;
+    final String imagePath = '$path/screenshot${DateTime.now()}.png';
+    final File file = File(imagePath);
+    await file.writeAsBytes(imageBytes!, mode: FileMode.write);
+    dev.log(
+        'Image saved to: $imagePath (size: ${file.lengthSync()} bytes) ${file.path} ⭕');
+    Share.shareXFiles([XFile(file.path)]);
+  }
+}
 
 // ? response extension
 extension ResponseExtension on http.Response {
