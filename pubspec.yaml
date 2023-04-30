@@ -135,7 +135,7 @@ flutter:
   # see https://flutter.dev/custom-fonts/#from-packages
 
 # To create app icon run below command #? flutter pub run flutter_launcher_icons
-flutter_icons:
+flutter_launcher_icons:
   android: "launcher_icon"
   ios: true
   image_path: "assets/images/avatar.png"
