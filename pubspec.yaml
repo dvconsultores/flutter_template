@@ -76,6 +76,7 @@ dependencies:
   path_provider: ^2.0.14
   gallery_saver: ^2.3.2
   share_plus: ^6.3.0
+  custom_refresh_indicator: ^2.0.1
 
 
 dev_dependencies:
