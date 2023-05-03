@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_detextre4/features/search/ui/screens/list_screen.dart';
 import 'package:flutter_detextre4/features/search/ui/screens/search_screen_two.dart';
 import 'package:flutter_detextre4/utils/config/app_config.dart';
 import 'package:flutter_detextre4/utils/config/router_navigation_config.dart';
@@ -15,29 +16,25 @@ class MainDrawer extends StatelessWidget {
       RouterNavigator.push(page);
     }
 
+    final items = <String, Widget>{
+      "Test web socket": const TestWebSockets(),
+      "Search Two": const SearchScreenTwo(),
+      "List Screen": const ListScreen(),
+    };
+
     return Drawer(
         child: Column(
       children: [
-        TextButton(
-          onPressed: () => goToRouterPage(const TestWebSockets()),
-          child: Text(
-            "Test web socket",
-            style: TextStyle(
-              fontSize: 20,
-              color: AppColors.getColor(context, ColorType.active),
-            ),
+        for (final element in items.entries) ...[
+          TextButton(
+            onPressed: () => goToRouterPage(element.value),
+            child: Text(element.key,
+                style: TextStyle(
+                  fontSize: 20,
+                  color: AppColors.getColor(context, ColorType.active),
+                )),
           ),
-        ),
-        TextButton(
-          onPressed: () => goToRouterPage(const SearchScreenTwo()),
-          child: Text(
-            "Search Two",
-            style: TextStyle(
-              fontSize: 20,
-              color: AppColors.getColor(context, ColorType.active),
-            ),
-          ),
-        ),
+        ],
       ],
     ));
   }

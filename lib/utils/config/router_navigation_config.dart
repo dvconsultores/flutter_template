@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_detextre4/features/search/ui/screens/list_screen.dart';
 import 'package:flutter_detextre4/features/search/ui/screens/search_screen.dart';
 import 'package:flutter_detextre4/features/search/ui/screens/search_screen_two.dart';
 import 'package:flutter_detextre4/features/user/ui/screens/user_screen.dart';
@@ -16,6 +17,7 @@ enum RouterNavigatorNames {
   home,
   search,
   searchTwo,
+  list,
 }
 
 // ? setup your custome routes
@@ -41,6 +43,10 @@ enum RouterNavigatorRoutes {
     RouterNavigatorPages(
       routeName: RouterNavigatorNames.searchTwo,
       routePage: SearchScreenTwo(),
+    ),
+    RouterNavigatorPages(
+      routeName: RouterNavigatorNames.list,
+      routePage: ListScreen(),
     ),
   ]);
 

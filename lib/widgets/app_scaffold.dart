@@ -20,7 +20,10 @@ class AppScaffold extends StatelessWidget {
     return Scaffold(
       drawer: drawer,
       appBar: appBar,
-      body: body,
+      body: Container(
+        padding: const EdgeInsets.all(12.0),
+        child: body,
+      ),
       bottomNavigationBar: bottomNavigationBar,
       floatingActionButton: floatingActionButton,
     );
