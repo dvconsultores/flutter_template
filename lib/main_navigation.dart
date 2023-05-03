@@ -4,9 +4,9 @@ import 'package:flutter_detextre4/main_drawer.dart';
 import 'package:flutter_detextre4/main_provider.dart';
 import 'package:flutter_detextre4/utils/config/app_config.dart';
 import 'package:flutter_detextre4/utils/config/router_navigation_config.dart';
-import 'package:flutter_detextre4/widgets/app_scaffold.dart';
-import 'package:flutter_detextre4/widgets/double_back_to_close_widget.dart';
-import 'package:flutter_detextre4/widgets/will_pop_custom.dart';
+import 'package:flutter_detextre4/utils/helper_widgets/app_scaffold.dart';
+import 'package:flutter_detextre4/utils/helper_widgets/double_back_to_close_widget.dart';
+import 'package:flutter_detextre4/utils/helper_widgets/will_pop_custom.dart';
 import 'package:provider/provider.dart';
 
 class MainNavigation extends StatefulWidget {

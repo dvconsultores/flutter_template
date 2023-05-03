@@ -2,7 +2,7 @@ import 'package:another_flushbar/flushbar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_detextre4/main.dart';
 import 'package:flutter_detextre4/main_provider.dart';
-import 'package:flutter_detextre4/model/language_list.dart';
+import 'package:flutter_detextre4/global_models/language_list.dart';
 import 'package:flutter_detextre4/utils/config/extensions_config.dart';
 import 'package:provider/provider.dart';
 
