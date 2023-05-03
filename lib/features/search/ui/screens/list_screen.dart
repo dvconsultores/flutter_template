@@ -27,7 +27,7 @@ class _ListScreenState extends State<ListScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return AppRefreshIndicator(
+    return AppRefreshIndicator.envelope(
       onRefresh: onRefresh,
       child: ListView.separated(
         itemBuilder: (context, index) => Text(items[index].toCapitalize()),
