@@ -235,9 +235,9 @@ extension StringExtension on String {
   /// Example:
   /// ```dart
   /// print('2021'.toInt()); // 2021
-  /// print('1f'.toInt()); // defaultValue ?? 0
+  /// print('1f'.toInt()); // fallback ?? 0
   /// ```
-  int toInt({int? defaultValue}) => int.tryParse(this) ?? defaultValue ?? 0;
+  int toInt({int? fallback}) => int.tryParse(this) ?? fallback ?? 0;
 
   /// Parse [source] as a double literal and return its value.
   ///
@@ -248,10 +248,10 @@ extension StringExtension on String {
   /// ```dart
   /// var value = '3.14'.toDouble(); // 3.14
   /// value = '  3.14 \xA0'.toDouble(); // 3.14
-  /// value = '0xFF'.toDouble(); // defaultValue ?? 0.0
+  /// value = '0xFF'.toDouble(); // fallback ?? 0.0
   /// ```
-  double toDouble({double? defaultValue}) =>
-      double.tryParse(commasToDot()) ?? defaultValue ?? 0.0;
+  double toDouble({double? fallback}) =>
+      double.tryParse(commasToDot()) ?? fallback ?? 0.0;
 
   /// Get amount without currency.
   String getAmountWithoutCurrency(String? currency, {String? locale}) {
@@ -480,9 +480,9 @@ extension ResponseExtension on http.Response {
   /// in case not be founded will return a custome default message.
   String catchErrorMessage({
     String searchBy = "message",
-    String defaultMessage = "Error",
+    String fallback = "Error",
   }) =>
-      body.isNotEmpty ? jsonDecode(body)[searchBy] : defaultMessage;
+      body.isNotEmpty ? jsonDecode(body)[searchBy] : fallback;
 }
 
 // ? Multipart request extension
