@@ -35,10 +35,12 @@ enum ColorSnackbarState {
 
 /// A global snackbar that can be invoked onto whatever widget.
 void appSnackbar(
-  String message, {
+  String? message, {
   ColorSnackbarState? type,
   Duration? duration,
 }) {
+  if (message.hasNotValue) return;
+
   Flushbar(
     message: message,
     backgroundColor: ColorSnackbarState.values
