@@ -19,7 +19,7 @@ import 'package:provider/provider.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 final globalNavigatorKey = GlobalKey<NavigatorState>();
-final globalScaffoldSKey = GlobalKey<ScaffoldState>();
+final globalScaffoldMessengerKey = GlobalKey<ScaffoldMessengerState>();
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -90,6 +90,7 @@ class App extends StatelessWidget {
       return SessionTimeoutManager(
         sessionConfig: sessionConfig,
         child: MaterialApp(
+          scaffoldMessengerKey: globalScaffoldMessengerKey,
           locale: value.locale,
           debugShowCheckedModeBanner: true,
           title: 'Flutter Demo',
