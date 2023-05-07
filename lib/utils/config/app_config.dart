@@ -72,8 +72,8 @@ class AppColors {
   };
 
   ///* Getter to colors based on current theme.
-  static Color getColor(BuildContext context, ColorType color) {
-    final theme = context.watch<MainProvider>().appTheme;
-    return colors[theme]![color]!;
+  static Color getColor(BuildContext context, ColorType colorType) {
+    final theme = context.read<MainProvider>().appTheme;
+    return colors[theme]![colorType]!;
   }
 }
