@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_detextre4/utils/config/extensions_config.dart';
 
+/// A `TextFormField` with async validator option.
 class AsyncTextFormField extends StatefulWidget {
   const AsyncTextFormField({
     super.key,

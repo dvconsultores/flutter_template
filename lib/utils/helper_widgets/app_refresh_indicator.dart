@@ -7,8 +7,8 @@ import 'package:flutter/scheduler.dart';
 import 'package:flutter_detextre4/utils/config/app_config.dart';
 import 'package:flutter_detextre4/utils/helper_widgets/painters.dart';
 
+/// A `RefreshIndicator` with Custom app loader on refresh list.
 class AppRefreshIndicator extends StatelessWidget {
-  /// A `RefreshIndicator` with Custom app loader on refresh list.
   const AppRefreshIndicator({
     super.key,
     required this.child,
@@ -37,7 +37,7 @@ class AppRefreshIndicator extends StatelessWidget {
 
         return MaterialIndicatorDelegate(
             builder: (context, controller) => const Icon(
-                  Icons.ac_unit,
+                  Icons.cached,
                   color: Colors.blue,
                   size: 30,
                 ))(context, child, controller);
