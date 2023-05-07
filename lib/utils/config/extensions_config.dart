@@ -601,3 +601,20 @@ extension NavigatorExtension on Navigator {
                 ),
               ));
 }
+
+// ? text extension
+extension TextExtension on Text {
+  Text invertedColor() {
+    final color = style?.color ?? Colors.black;
+    return Text(
+      data ?? "",
+      style: style?.copyWith(
+          color: Color.fromARGB(
+        (color.opacity * 255).round(),
+        255 - color.red,
+        255 - color.green,
+        255 - color.blue,
+      )),
+    );
+  }
+}
