@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_detextre4/main.dart';
 import 'package:flutter_detextre4/utils/config/app_config.dart';
-import 'package:flutter_detextre4/utils/config/extensions_config.dart';
 import 'package:flutter_detextre4/utils/helper_widgets/will_pop_custom.dart';
 import 'package:http/http.dart' as http;
 
@@ -26,14 +25,11 @@ class _GlobalLoader extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    Future<void> init() async {
-      if (request.isExist) {
-        Navigator.pop(context, await request);
-      } else if (multipartRequest.isExist) {
-        Navigator.pop(context,
-            await http.Response.fromStream(await multipartRequest!.send()));
-      }
-    }
+    Future<void> init() async => Navigator.pop(
+        context,
+        request != null
+            ? await request
+            : await http.Response.fromStream(await multipartRequest!.send()));
 
     init();
 

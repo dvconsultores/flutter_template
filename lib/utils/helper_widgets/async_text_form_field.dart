@@ -2,7 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_detextre4/utils/config/extensions_config.dart';
+import 'package:rxdart/rxdart.dart';
 
 /// A `TextFormField` with async validator option.
 class AsyncTextFormField extends StatefulWidget {
@@ -11,6 +11,8 @@ class AsyncTextFormField extends StatefulWidget {
     this.validator,
     this.onChanged,
     this.validationDebounce = const Duration(milliseconds: 200),
+    this.onLoading,
+    this.suffixLoader = true,
     this.autocorrect = true,
     this.autofillHints,
     this.autofocus = false,
@@ -66,6 +68,8 @@ class AsyncTextFormField extends StatefulWidget {
   final Future<String?> Function(String? value)? validator;
   final void Function(String value)? onChanged;
   final Duration validationDebounce;
+  final void Function(bool value)? onLoading;
+  final bool suffixLoader;
   final bool autocorrect;
   final Iterable<String>? autofillHints;
   final bool autofocus;
@@ -129,25 +133,26 @@ class AsyncTextFormField extends StatefulWidget {
 class _AsyncTextFormFieldState extends State<AsyncTextFormField> {
   Timer? _debounce;
   String? validatorMessage;
-  bool isValidating = false;
-  bool isWaiting = false;
+  final StreamController<bool> _validatingController = BehaviorSubject<bool>();
 
-  Future<String?> validate(String value) async {
-    setState(() => isValidating = true);
-    isValidating = false;
-    return widget.validator.isExist ? widget.validator!(value) : null;
+  void initStateWatcher() =>
+      _validatingController.stream.listen((value) => widget.onLoading!(value));
+
+  void cancelTimer() {
+    if (_debounce?.isActive ?? false) _debounce?.cancel();
+  }
+
+  @override
+  void initState() {
+    if (widget.onLoading != null) initStateWatcher();
+    super.initState();
   }
 
   @override
   void dispose() {
     _debounce?.cancel();
+    _validatingController.close();
     super.dispose();
-  }
-
-  void cancelTimer() {
-    if (_debounce?.isActive ?? false) {
-      _debounce?.cancel();
-    }
   }
 
   @override
@@ -156,17 +161,19 @@ class _AsyncTextFormFieldState extends State<AsyncTextFormField> {
       key: widget.key,
       validator: (value) => validatorMessage,
       onChanged: (value) async {
-        isWaiting = true;
+        // ? validator implementation with debounce.
         cancelTimer();
 
         _debounce = Timer(widget.validationDebounce, () async {
-          isWaiting = false;
-          validatorMessage = await validate(value);
-          debugPrint("$validatorMessage");
-          setState(() => isValidating = false);
+          _validatingController.sink.add(true);
+          validatorMessage =
+              widget.validator != null ? await widget.validator!(value) : null;
+          debugPrint("validator message: $validatorMessage");
+          _validatingController.sink.add(false);
         });
 
-        widget.onChanged.isExist ? widget.onChanged!(value) : null;
+        // ? Default onChanged function.
+        widget.onChanged != null ? widget.onChanged!(value) : null;
       },
       autocorrect: widget.autocorrect,
       autofillHints: widget.autofillHints,
@@ -179,7 +186,20 @@ class _AsyncTextFormFieldState extends State<AsyncTextFormField> {
       cursorHeight: widget.cursorHeight,
       cursorRadius: widget.cursorRadius,
       cursorWidth: widget.cursorWidth,
-      decoration: widget.decoration,
+      decoration: widget.decoration?.copyWith(
+        suffix: !widget.suffixLoader
+            ? null
+            : StreamBuilder<bool>(
+                stream: _validatingController.stream,
+                builder: (context, snapshot) {
+                  if (!(snapshot.data ?? false)) return const SizedBox.shrink();
+                  return const SizedBox(
+                    width: 15,
+                    height: 15,
+                    child: CircularProgressIndicator(strokeWidth: 2.5),
+                  );
+                }),
+      ),
       enableIMEPersonalizedLearning: widget.enableIMEPersonalizedLearning,
       enableInteractiveSelection: widget.enableInteractiveSelection,
       enableSuggestions: widget.enableSuggestions,
