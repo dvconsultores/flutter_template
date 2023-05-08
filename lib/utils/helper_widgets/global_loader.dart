@@ -30,11 +30,10 @@ class _GlobalLoader extends StatelessWidget {
         request != null
             ? await request
             : await http.Response.fromStream(await multipartRequest!.send()));
-
     init();
 
     return WillPopCustom(
-      onWillPop: () => Future.value(false),
+      onWillPop: () async => false,
       child: Scaffold(
           backgroundColor: Colors.transparent,
           body: Center(
