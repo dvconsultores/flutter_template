@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_detextre4/utils/config/app_config.dart';
 
 class AppTextButton extends StatelessWidget {
   const AppTextButton({
@@ -49,8 +48,8 @@ class AppTextButton extends StatelessWidget {
                 height: loadingSize,
                 child: CircularProgressIndicator(
                   strokeWidth: 3,
-                  valueColor: AlwaysStoppedAnimation<Color>(loadingColor ??
-                      AppColors.getColor(context, ColorType.primary)),
+                  valueColor: AlwaysStoppedAnimation<Color>(
+                      loadingColor ?? Theme.of(context).colorScheme.primary),
                 ),
               )
             : Text(

@@ -4,7 +4,6 @@ import 'package:custom_refresh_indicator/custom_refresh_indicator.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
-import 'package:flutter_detextre4/utils/config/app_config.dart';
 import 'package:flutter_detextre4/utils/helper_widgets/painters.dart';
 
 /// A `RefreshIndicator` with Custom app loader on refresh list.
@@ -91,8 +90,7 @@ class AppRefreshIndicator extends StatelessWidget {
                               width: 16,
                               height: 16,
                               child: CircularProgressIndicator(
-                                color: AppColors.getColor(
-                                    context, ColorType.primary),
+                                color: Theme.of(context).colorScheme.primary,
                                 strokeWidth: 2,
                               ),
                             )

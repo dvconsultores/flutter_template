@@ -3,8 +3,8 @@ import 'package:flutter_detextre4/main_provider.dart';
 import 'package:flutter_detextre4/utils/config/app_config.dart';
 import 'package:flutter_detextre4/utils/config/extensions_config.dart';
 import 'package:flutter_detextre4/utils/general/global_functions.dart';
-import 'package:flutter_detextre4/utils/general/input_formatters.dart';
 import 'package:provider/provider.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -17,10 +17,7 @@ class _HomePageState extends State<HomeScreen> {
   int _counter = 0;
 
   void _incrementCounter() {
-    setState(() {
-      _counter++;
-    });
-
+    setState(() => _counter++);
     appSnackbar("El contador ha incrementado");
   }
 
@@ -31,6 +28,19 @@ class _HomePageState extends State<HomeScreen> {
         child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
+              TextButton(
+                child: Text(
+                  "Change language: ${AppLocalizations.of(context)!.helloWorld}",
+                  style: Theme.of(context).textTheme.bodyLarge!.copyWith(
+                        color: Theme.of(context).primaryColor,
+                      ),
+                ),
+                onPressed: () {
+                  AppLocale.locale == Locale(LanguageList.en.name)
+                      ? AppLocale.changeLanguage(LanguageList.es)
+                      : AppLocale.changeLanguage(LanguageList.en);
+                },
+              ),
               const Text('You have pushed the button this many times:'),
               Text(
                 '$_counter',
@@ -39,24 +49,13 @@ class _HomePageState extends State<HomeScreen> {
               Container(
                   margin: const EdgeInsets.only(bottom: 50),
                   child: FloatingActionButton(
-                    heroTag: null,
                     onPressed: _incrementCounter,
                     tooltip: 'Increment',
-                    child: const Icon(Icons.add),
+                    child: const Icon(Icons.add).invertedColor(),
                   )),
               Text(
                 context.watch<MainProvider>().appTheme.name,
                 style: Theme.of(context).textTheme.displaySmall,
-              ),
-              Padding(
-                padding: const EdgeInsets.all(20.0),
-                child: TextFormField(
-                  keyboardType:
-                      const TextInputType.numberWithOptions(decimal: true),
-                  inputFormatters: [
-                    DecimalTextInputFormatter(),
-                  ],
-                ),
               ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -67,7 +66,7 @@ class _HomePageState extends State<HomeScreen> {
                           ThemeType.light;
                     },
                     icon: Icon(Icons.light_mode,
-                        color: AppColors.getColor(context, ColorType.primary)),
+                        color: Theme.of(context).colorScheme.primary),
                   ),
                   IconButton(
                     onPressed: () {
@@ -75,7 +74,7 @@ class _HomePageState extends State<HomeScreen> {
                     },
                     icon: Icon(
                       Icons.dark_mode,
-                      color: AppColors.getColor(context, ColorType.secondary),
+                      color: Theme.of(context).colorScheme.secondary,
                     ),
                   ),
                 ],

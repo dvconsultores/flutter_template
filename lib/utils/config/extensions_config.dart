@@ -618,3 +618,19 @@ extension TextExtension on Text {
     );
   }
 }
+
+// ? icon extension
+extension IconExtension on Icon {
+  Icon invertedColor() {
+    final newColor = color ?? Colors.black;
+    return Icon(
+      icon,
+      color: Color.fromARGB(
+        (newColor.opacity * 255).round(),
+        255 - newColor.red,
+        255 - newColor.green,
+        255 - newColor.blue,
+      ),
+    );
+  }
+}

@@ -70,8 +70,8 @@ class _SplashPageState extends State<SplashScreen>
                 decoration: BoxDecoration(
               gradient: LinearGradient(
                 colors: [
-                  AppColors.getColor(context, ColorType.primary),
-                  AppColors.getColor(context, ColorType.secondary),
+                  Theme.of(context).colorScheme.primary,
+                  Theme.of(context).colorScheme.secondary,
                 ],
               ),
             )),
@@ -100,8 +100,9 @@ class _SplashPageState extends State<SplashScreen>
             width: 60,
             height: 60,
             decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(20),
-                color: AppColors.getColor(context, ColorType.accent)),
+              borderRadius: BorderRadius.circular(20),
+              color: Theme.of(context).extension<ThemeDataExtension>()!.accent,
+            ),
           ),
         ),
 
@@ -161,7 +162,7 @@ class _SplashPageState extends State<SplashScreen>
               height: 150,
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(20),
-                color: AppColors.getColor(context, ColorType.active),
+                color: Theme.of(context).focusColor,
               )),
         ),
       ]),

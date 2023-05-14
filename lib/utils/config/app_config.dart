@@ -1,7 +1,11 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
+import 'package:flutter_detextre4/main.dart';
 import 'package:flutter_detextre4/main_provider.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
+import 'package:collection/collection.dart';
 
 // * Themes app
 ///? A Collection of app themes.
@@ -11,69 +15,145 @@ enum ThemeType {
 }
 
 /// Themes configuration class from app.
-class AppThemes {
-  static final themes = <ThemeType, ThemeData>{
-    ThemeType.light: ThemeData(
+mixin AppThemes {
+  static final _themes = <ThemeType, ThemeData>{
+    // ? ligth
+    ThemeType.light: ThemeData.light().copyWith(
       textTheme: GoogleFonts.latoTextTheme(),
-      colorScheme: ColorScheme.fromSwatch(
-        primarySwatch: Colors.amber,
-        accentColor: Colors.red,
-        cardColor: Colors.deepPurpleAccent,
+      primaryColor: Colors.amber,
+      focusColor: const Color.fromARGB(255, 255, 17, 0),
+      disabledColor: const Color.fromARGB(255, 209, 175, 172),
+      colorScheme: const ColorScheme.light(
+        primary: Colors.amber,
+        secondary: Colors.red,
+        tertiary: Colors.deepPurpleAccent,
+        error: Colors.red,
       ),
+      extensions: <ThemeExtension<dynamic>>[
+        const ThemeDataExtension(
+          text: Colors.black,
+          accent: Colors.red,
+          success: Colors.green,
+        ),
+      ],
     ),
+    // ? dark
     ThemeType.dark: ThemeData(
       textTheme: GoogleFonts.latoTextTheme(),
-      primarySwatch: Colors.blue,
+      primaryColor: Colors.pink,
+      focusColor: const Color.fromARGB(255, 0, 32, 215),
+      disabledColor: const Color.fromARGB(255, 138, 146, 191),
+      colorScheme: const ColorScheme.light(
+        primary: Colors.pink,
+        secondary: Colors.red,
+        tertiary: Colors.deepPurpleAccent,
+        error: Colors.red,
+      ),
+      extensions: const <ThemeExtension<dynamic>>[
+        ThemeDataExtension(
+          text: Colors.white,
+          accent: Colors.indigo,
+          success: Colors.green,
+        ),
+      ],
     ),
   };
 
-  ///* Getter to current theme.
-  static ThemeData getTheme(BuildContext context) =>
-      themes[context.watch<MainProvider>().appTheme]!;
+  ///* Getter to current theme name.
+  static ThemeType get theme =>
+      globalNavigatorKey.currentContext!.watch<MainProvider>().appTheme;
+
+  ///* Getter to current theme data.
+  static ThemeData themeData(BuildContext context) =>
+      _themes[context.watch<MainProvider>().appTheme]!;
 
   ///* Getter to current theme assets directory.
-  static String getAssetsTheme(BuildContext context) =>
+  static String assetsPrefix(BuildContext context) =>
       'assets/themes/${context.watch<MainProvider>().appTheme.name}';
 }
 
-// * Colors app
-///? Collection of colors from app.
-enum ColorType {
-  primary,
-  secondary,
-  accent,
-  active,
-  disabled,
-  success,
-  error;
+/// ? A Collection of diverse languages.
+enum LanguageList {
+  en(locale: 'english', lcidString: 'en_US'),
+  es(locale: 'español', lcidString: 'es_ES'),
+  pt(locale: 'português', lcidString: 'pt_BR'),
+  fr(locale: 'français', lcidString: 'fr_FR'),
+  de(locale: 'deutsch', lcidString: 'de_DE'),
+  it(locale: 'italiano', lcidString: 'it_IT'),
+  ru(locale: 'pусский', lcidString: 'ru'),
+  ja(locale: '日本語', lcidString: 'ja'),
+  ko(locale: '한국어', lcidString: 'ko'),
+  zh(locale: '中文', lcidString: 'zh_CN'),
+  ar(locale: 'العربية', lcidString: 'ar_SA'),
+  hi(locale: 'हिंदी', lcidString: 'hi'),
+  vi(locale: 'tiếng Việt', lcidString: 'vi'),
+  th(locale: 'ภาษาไทย', lcidString: 'th'),
+  tr(locale: 'türkçe', lcidString: 'tr'),
+  nl(locale: 'nederlands', lcidString: 'nl_NL');
+
+  const LanguageList({
+    required this.locale,
+    required this.lcidString,
+  });
+  final String locale;
+  final String lcidString;
+
+  static LanguageList deviceLanguage() {
+    return LanguageList.values.firstWhereOrNull(
+            (element) => element.lcidString == Platform.localeName) ??
+        LanguageList.en;
+  }
 }
 
-/// Colors configuration class from app.
-class AppColors {
-  static final colors = <ThemeType, Map<ColorType, Color>>{
-    ThemeType.light: {
-      ColorType.primary: Colors.indigo,
-      ColorType.secondary: Colors.pink,
-      ColorType.accent: Colors.red,
-      ColorType.active: const Color.fromARGB(255, 255, 17, 0),
-      ColorType.disabled: const Color.fromARGB(255, 209, 175, 172),
-      ColorType.success: Colors.green,
-      ColorType.error: Colors.red,
-    },
-    ThemeType.dark: {
-      ColorType.primary: Colors.pink,
-      ColorType.secondary: Colors.red,
-      ColorType.accent: Colors.indigo,
-      ColorType.active: const Color.fromARGB(255, 0, 32, 215),
-      ColorType.disabled: const Color.fromARGB(255, 138, 146, 191),
-      ColorType.success: Colors.green,
-      ColorType.error: Colors.red,
-    },
-  };
+mixin AppLocale {
+  /// Get current locale.
+  static Locale get locale =>
+      globalNavigatorKey.currentContext!.read<MainProvider>().locale;
 
-  ///* Getter to colors based on current theme.
-  static Color getColor(BuildContext context, ColorType colorType) {
-    final theme = context.read<MainProvider>().appTheme;
-    return colors[theme]![colorType]!;
+  /// A global function to change current language.
+  static void changeLanguage(LanguageList value) =>
+      globalNavigatorKey.currentContext!.read<MainProvider>().changeLocale =
+          value;
+}
+
+// ? Theme data extension
+@immutable
+class ThemeDataExtension extends ThemeExtension<ThemeDataExtension> {
+  const ThemeDataExtension({
+    this.text,
+    this.accent,
+    this.success,
+  });
+
+  final Color? text;
+  final Color? accent;
+  final Color? success;
+
+  @override
+  ThemeDataExtension copyWith({
+    Color? text,
+    Color? accent,
+    Color? success,
+  }) {
+    return ThemeDataExtension(
+      text: text ?? this.text,
+      accent: accent ?? this.accent,
+      success: success ?? this.success,
+    );
   }
+
+  @override
+  ThemeDataExtension lerp(ThemeDataExtension? other, double t) {
+    if (other is! ThemeDataExtension) return this;
+
+    return ThemeDataExtension(
+      text: Color.lerp(text, other.text, t),
+      accent: Color.lerp(accent, other.accent, t),
+      success: Color.lerp(success, other.success, t),
+    );
+  }
+
+  @override
+  String toString() =>
+      'ThemeDataExtension(text: $text, accent: $accent, success: $success)';
 }

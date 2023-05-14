@@ -11,6 +11,7 @@ import 'package:flutter_detextre4/utils/helper_widgets/restart_widget.dart';
 import 'package:flutter_detextre4/main_provider.dart';
 import 'package:flutter_detextre4/utils/config/app_config.dart';
 import 'package:flutter_detextre4/utils/services/local_data/hive_data.dart';
+import 'package:flutter_detextre4/utils/services/local_data/secure_storage.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:generic_bloc_provider/generic_bloc_provider.dart';
 import 'package:hive_flutter/adapters.dart';
@@ -36,11 +37,9 @@ void main() async {
   );
   */
 
-  Hive.initFlutter().then((_) {
-    Hive.openBox(HiveData.boxName).then((value) {
-      runApp(const RestartWidget(child: AppState()));
-    });
-  });
+  Hive.initFlutter().then((_) => Hive.openBox(HiveData.boxName).then((value) {
+        runApp(const RestartWidget(child: AppState()));
+      }));
 }
 
 class AppState extends StatelessWidget {
@@ -55,11 +54,9 @@ class AppState extends StatelessWidget {
       bloc: UserBloc(),
       child: BlocProvider<SearchBloc>(
         bloc: SearchBloc(),
-        // * Main provider
-        child: ChangeNotifierProvider(
-          create: (context) => MainProvider(),
-          child: const App(),
-        ),
+        // * Main Bloc
+        child: ChangeNotifierProvider<MainProvider>(
+            create: (context) => MainProvider(), child: const App()),
       ),
     );
   }
@@ -69,52 +66,50 @@ class App extends StatelessWidget {
   const App({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    return Consumer<MainProvider>(builder: (context, value, child) {
-      // * Session timeout manager
-      final sessionConfig = SessionConfig(
-          // invalidateSessionForAppLostFocus: const Duration(seconds: 15),
-          // invalidateSessionForUserInactivity: const Duration(seconds: 30),
-          );
+  Widget build(BuildContext context) =>
+      Consumer<MainProvider>(builder: (context, value, child) {
+        // * Session timeout manager
+        final sessionConfig = SessionConfig(
+            // invalidateSessionForAppLostFocus: const Duration(seconds: 15),
+            // invalidateSessionForUserInactivity: const Duration(seconds: 30),
+            );
 
-      sessionConfig.stream.listen((SessionTimeoutState timeoutEvent) {
-        if (timeoutEvent == SessionTimeoutState.userInactivityTimeout) {
-          // * handle user  inactive timeout
-          // Navigator.of(globalNavigatorKey.currentContext!).pushNamed("/auth");
-        } else if (timeoutEvent == SessionTimeoutState.appFocusTimeout) {
-          // * handle user  app lost focus timeout
-          // Navigator.of(globalNavigatorKey.currentContext!).pushNamed("/auth");
-        }
-      });
+        sessionConfig.stream.listen((SessionTimeoutState timeoutEvent) {
+          if (timeoutEvent == SessionTimeoutState.userInactivityTimeout) {
+            // * handle user  inactive timeout
+            // Navigator.of(globalNavigatorKey.currentContext!).pushNamed("/auth");
+          } else if (timeoutEvent == SessionTimeoutState.appFocusTimeout) {
+            // * handle user  app lost focus timeout
+            // Navigator.of(globalNavigatorKey.currentContext!).pushNamed("/auth");
+          }
+        });
 
-      return SessionTimeoutManager(
-        sessionConfig: sessionConfig,
-        child: MaterialApp(
-          scaffoldMessengerKey: globalScaffoldMessengerKey,
-          locale: value.locale,
-          debugShowCheckedModeBanner: true,
-          title: 'Flutter Demo',
-          theme: AppThemes.getTheme(context), // * Theme switcher
-          localizationsDelegates: AppLocalizations.localizationsDelegates,
-          supportedLocales: AppLocalizations.supportedLocales,
-          initialRoute: value.navigatorRoutes.keys.first,
-          routes: value.navigatorRoutes,
-          navigatorKey: globalNavigatorKey,
-          // * global text scale factorized
-          builder: (context, child) => MediaQuery(
-            data: MediaQuery.of(context).copyWith(textScaleFactor: 1.0),
-            child: child!,
+        return SessionTimeoutManager(
+          sessionConfig: sessionConfig,
+          child: MaterialApp(
+            scaffoldMessengerKey: globalScaffoldMessengerKey,
+            locale: value.locale,
+            debugShowCheckedModeBanner: true,
+            title: 'Flutter Demo',
+            theme: AppThemes.themeData(context), // * Theme switcher
+            localizationsDelegates: AppLocalizations.localizationsDelegates,
+            supportedLocales: AppLocalizations.supportedLocales,
+            initialRoute: value.navigatorRoutes.keys.first,
+            routes: value.navigatorRoutes,
+            navigatorKey: globalNavigatorKey,
+            // * global text scale factorized
+            builder: (context, child) => MediaQuery(
+              data: MediaQuery.of(context).copyWith(textScaleFactor: 1.0),
+              child: child!,
+            ),
           ),
-        ),
-      );
-    });
-  }
+        );
+      });
 }
 
 // * Sesion manager - after splash screen
 class SesionManagerScreen extends StatefulWidget {
   const SesionManagerScreen({super.key});
-
   @override
   State<StatefulWidget> createState() {
     return _SesionManagerScreen();
@@ -122,18 +117,42 @@ class SesionManagerScreen extends StatefulWidget {
 }
 
 class _SesionManagerScreen extends State<SesionManagerScreen> {
+  Future<void> recoverSession() async {
+    final dataSession =
+        await SecureStorage.read(SecureStorageCollection.dataSession);
+
+    if (dataSession != null) {
+      // ignore: use_build_context_synchronously
+      BlocProvider.of<UserBloc>(context).dataUserSink =
+          UserModel.fromJson(dataSession);
+    }
+  }
+
+  @override
+  void initState() {
+    recoverSession();
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     final userBloc = BlocProvider.of<UserBloc>(context);
 
+    userBloc.dataUserStream.listen((event) async {
+      if (event != null) {
+        return await SecureStorage.write(
+            SecureStorageCollection.dataSession, event.toMap());
+      }
+
+      await SecureStorage.delete(SecureStorageCollection.dataSession);
+    });
+
     return StreamBuilder<UserModel?>(
-        stream: userBloc.getDataUserStream,
+        stream: userBloc.dataUserStream,
         builder: (BuildContext context, snapshot) {
-          if (!snapshot.hasData || snapshot.hasError) {
-            return const LogInScreen();
-          } else {
-            return const MainNavigation();
-          }
+          if (!snapshot.hasData) return const LogInScreen();
+
+          return const MainNavigation();
         });
   }
 }

@@ -6,6 +6,7 @@ enum HiveBox { application }
 
 ///? Collection used to know storage elements into hive data.
 enum HiveDataCollection {
+  theme,
   language,
   something,
   somethingMore;

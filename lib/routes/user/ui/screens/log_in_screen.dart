@@ -39,7 +39,7 @@ class LogInScreen extends StatelessWidget {
           child: const Text("Login Button", style: TextStyle(fontSize: 25)),
           onPressed: () async {
             final UserModel result = await AuthApi.authEndpoint();
-            userBloc.setDataUserSink = result;
+            userBloc.dataUserSink = result;
           },
         ),
       ]),

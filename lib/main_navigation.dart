@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_detextre4/home_screen.dart';
 import 'package:flutter_detextre4/main_drawer.dart';
 import 'package:flutter_detextre4/main_provider.dart';
-import 'package:flutter_detextre4/utils/config/app_config.dart';
 import 'package:flutter_detextre4/utils/config/router_navigation_config.dart';
 import 'package:flutter_detextre4/widgets/app_scaffold.dart';
 import 'package:flutter_detextre4/utils/helper_widgets/double_back_to_close_widget.dart';
@@ -11,12 +10,24 @@ import 'package:provider/provider.dart';
 
 class MainNavigation extends StatefulWidget {
   const MainNavigation({super.key});
-
   @override
   State<MainNavigation> createState() => _MainNavigationState();
 }
 
 class _MainNavigationState extends State<MainNavigation> {
+  void routeWhenInit() {
+    // (Home)
+    final mainProvider = context.read<MainProvider>();
+    mainProvider.indexTab = 1;
+    mainProvider.indexRoute = 0;
+  }
+
+  @override
+  void initState() {
+    routeWhenInit();
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     final mainProvider = context.watch<MainProvider>();
@@ -55,7 +66,7 @@ class _MainNavigationState extends State<MainNavigation> {
           onTap: (index) =>
               setState(() => mainProvider.setNavigationTab = index),
           currentIndex: indexTab,
-          selectedItemColor: AppColors.getColor(context, ColorType.active),
+          selectedItemColor: Theme.of(context).focusColor,
           items: RouterNavigator.routes
               .map((element) => BottomNavigationBarItem(
                     label: "",

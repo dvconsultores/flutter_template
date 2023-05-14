@@ -13,14 +13,9 @@ class UserScreen extends StatelessWidget {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Text(
-            "user",
-            style: Theme.of(context).textTheme.displayMedium,
-          ),
+          Text("user", style: Theme.of(context).textTheme.displayMedium),
           TextButton(
-              onPressed: () {
-                userBloc.closeSesion();
-              },
+              onPressed: () => userBloc.closeSesion,
               child: Text(
                 "close sesion",
                 style: Theme.of(context).textTheme.headlineMedium,
