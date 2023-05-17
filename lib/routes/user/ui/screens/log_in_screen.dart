@@ -14,6 +14,7 @@ class LogInScreen extends StatelessWidget {
     final userBloc = BlocProvider.of<UserBloc>(context);
 
     return AppScaffold(
+      sessionTimer: false,
       body: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
         Container(
           margin: const EdgeInsets.only(bottom: 40.0),
