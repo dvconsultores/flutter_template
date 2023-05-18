@@ -11,6 +11,7 @@ class MainProvider extends ChangeNotifier {
 
   final navigatorRoutes = {
     "/splash": (context) => const SplashScreen(),
+    "/session": (context) => const SessionManagerScreen(),
   };
 
   // ? ---------------------Router Navigation Provider----------------------- //

@@ -7,6 +7,27 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'package:collection/collection.dart';
 
+// * Responsive sizes
+/// A list of sizes from device screen resolution
+enum ScreenSizes {
+  mobile(600),
+  tablet(800),
+  desktop(2000),
+  tv(4000);
+
+  const ScreenSizes(this.value);
+  final int value;
+
+  static bool isMobile(BuildContext context) =>
+      MediaQuery.of(context).size.width < mobile.value;
+  static bool isTablet(BuildContext context) =>
+      MediaQuery.of(context).size.width < tablet.value;
+  static bool isDesktop(BuildContext context) =>
+      MediaQuery.of(context).size.width < desktop.value;
+  static bool isTV(BuildContext context) =>
+      MediaQuery.of(context).size.width < tv.value;
+}
+
 // * Themes app
 ///? A Collection of app themes.
 enum ThemeType {

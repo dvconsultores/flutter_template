@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_detextre4/routes/user/bloc/user_bloc.dart';
+import 'package:flutter_detextre4/utils/helper_widgets/responsive_layout.dart';
 import 'package:generic_bloc_provider/generic_bloc_provider.dart';
 import 'package:local_session_timeout/local_session_timeout.dart';
 
@@ -8,14 +9,18 @@ class AppScaffold extends StatelessWidget {
     super.key,
     this.drawer,
     this.appBar,
-    required this.body,
+    this.mobile,
+    this.tablet,
+    this.desktop,
     this.bottomNavigationBar,
     this.floatingActionButton,
     this.sessionTimer = true,
   });
   final Widget? drawer;
   final PreferredSizeWidget? appBar;
-  final Widget body;
+  final Widget? mobile;
+  final Widget? tablet;
+  final Widget? desktop;
   final Widget? bottomNavigationBar;
   final Widget? floatingActionButton;
   final bool sessionTimer;
@@ -50,7 +55,11 @@ class AppScaffold extends StatelessWidget {
         appBar: appBar,
         body: Container(
           padding: const EdgeInsets.all(12.0),
-          child: body,
+          child: ResponsiveLayout(
+            mobile: mobile,
+            tablet: tablet,
+            desktop: desktop,
+          ),
         ),
         bottomNavigationBar: bottomNavigationBar,
         floatingActionButton: floatingActionButton,

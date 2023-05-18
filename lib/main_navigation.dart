@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_detextre4/routes/home_screen.dart';
-import 'package:flutter_detextre4/main_drawer.dart';
+import 'package:flutter_detextre4/routes/home/home_screen.dart';
+import 'package:flutter_detextre4/widgets/app_drawer.dart';
 import 'package:flutter_detextre4/main_provider.dart';
 import 'package:flutter_detextre4/utils/config/router_navigation_config.dart';
 import 'package:flutter_detextre4/widgets/app_scaffold.dart';
@@ -35,7 +35,7 @@ class _MainNavigationState extends State<MainNavigation> {
     final indexRoute = mainProvider.indexRoute;
 
     return AppScaffold(
-      drawer: indexRoute == 0 ? const MainDrawer() : null,
+      drawer: indexRoute == 0 ? const AppDrawer() : null,
       appBar: AppBar(
         leading: indexRoute > 0
             ? IconButton(
@@ -45,8 +45,9 @@ class _MainNavigationState extends State<MainNavigation> {
             : null,
         title: Text(RouterNavigator.routes[indexTab].name),
       ),
+
       // * Routes rendering
-      body: RouterNavigator.currentName ==
+      tablet: RouterNavigator.currentName ==
               RouterNavigatorNames.home.name // ? if home or not
           ? const DoubleBackToCloseWidget(
               snackBarMessage: "Presione de nuevo para salir",
@@ -59,6 +60,7 @@ class _MainNavigationState extends State<MainNavigation> {
               },
               child:
                   RouterNavigator.routes[indexTab].pages[indexRoute].routePage),
+
       // * Navigation bar
       bottomNavigationBar: Theme(
         data: Theme.of(context).copyWith(canvasColor: Colors.white),

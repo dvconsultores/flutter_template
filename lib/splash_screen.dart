@@ -22,7 +22,7 @@ class _SplashPageState extends State<SplashScreen>
   );
 
   void goToNextPage() => const Navigator()
-      .pushReplacementWithTransition(context, const SesionManagerScreen());
+      .pushReplacementWithTransition(context, const SessionManagerScreen());
 
   @override
   void didChangeDependencies() {

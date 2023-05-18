@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_detextre4/main.dart';
 
-mixin ScreenSizes {
+mixin ScreenSizeMixin {
   final Size screenSize =
       MediaQuery.of(globalNavigatorKey.currentContext!).size;
 

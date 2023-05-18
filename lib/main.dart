@@ -89,15 +89,15 @@ class App extends StatelessWidget {
 }
 
 // * Sesion manager - after splash screen
-class SesionManagerScreen extends StatefulWidget {
-  const SesionManagerScreen({super.key});
+class SessionManagerScreen extends StatefulWidget {
+  const SessionManagerScreen({super.key});
   @override
   State<StatefulWidget> createState() {
     return _SesionManagerScreen();
   }
 }
 
-class _SesionManagerScreen extends State<SesionManagerScreen> {
+class _SesionManagerScreen extends State<SessionManagerScreen> {
   Future<void> recoverSession() async {
     final dataSession =
         await SecureStorage.read(SecureStorageCollection.dataSession);

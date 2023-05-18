@@ -15,7 +15,7 @@ class LogInScreen extends StatelessWidget {
 
     return AppScaffold(
       sessionTimer: false,
-      body: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
+      tablet: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
         Container(
           margin: const EdgeInsets.only(bottom: 40.0),
           child: Hero(

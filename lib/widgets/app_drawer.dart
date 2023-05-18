@@ -4,8 +4,8 @@ import 'package:flutter_detextre4/routes/search/ui/screens/search_screen_two.dar
 import 'package:flutter_detextre4/utils/config/router_navigation_config.dart';
 import 'package:flutter_detextre4/widgets/test_web_sockets.dart';
 
-class MainDrawer extends StatelessWidget {
-  const MainDrawer({super.key});
+class AppDrawer extends StatelessWidget {
+  const AppDrawer({super.key});
 
   @override
   Widget build(BuildContext context) {

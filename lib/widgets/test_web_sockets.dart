@@ -29,7 +29,7 @@ class _TestWebSocketsState extends State<TestWebSockets> {
 
     return AppScaffold(
         appBar: AppBar(),
-        body: StreamBuilder(
+        tablet: StreamBuilder(
             stream: getChannelStream,
             builder: (BuildContext context, AsyncSnapshot snapshot) {
               final dataTestWebSocket =
