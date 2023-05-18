@@ -11,6 +11,7 @@ mixin ScreenSizeMixin {
   final double screenHeight =
       MediaQuery.of(globalNavigatorKey.currentContext!).size.height;
 
-  double screenSpaceBetween(double value) =>
-      MediaQuery.of(globalNavigatorKey.currentContext!).size.height * value;
+  double screenSpaceBetween(double value, {vertical = true}) => vertical
+      ? MediaQuery.of(globalNavigatorKey.currentContext!).size.height * value
+      : MediaQuery.of(globalNavigatorKey.currentContext!).size.width * value;
 }
