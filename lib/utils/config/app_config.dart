@@ -11,7 +11,7 @@ import 'package:collection/collection.dart';
 /// A list of sizes from device screen resolution
 enum ScreenSizes {
   mobile(600),
-  tablet(800),
+  tablet(880),
   desktop(2000),
   tv(4000);
 
