@@ -88,10 +88,10 @@ extension DurationExtension on Duration {
       return "${seconds}seg";
       // ? minutes
     } else if (inHours == 0) {
-      return "${minutes}min ${seconds}seg";
+      return "${minutes}min ${seconds == 0 ? '' : '${seconds}seg'}";
     }
     // ? hours
-    return "${inHours}h ${minutes}min ${seconds}seg";
+    return "${inHours}h ${minutes == 0 ? '' : '${minutes}min'} ${seconds == 0 ? '' : '${seconds}seg'}";
   }
 }
 
