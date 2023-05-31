@@ -121,7 +121,7 @@ enum LanguageList {
 
   static LanguageList deviceLanguage() {
     return LanguageList.values.firstWhereOrNull(
-            (element) => element.lcidString == Platform.localeName) ??
+            (element) => Platform.localeName.contains(element.name)) ??
         LanguageList.en;
   }
 }
