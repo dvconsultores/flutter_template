@@ -31,7 +31,7 @@ enum ColorSnackbarState {
 }
 
 /// A global snackbar that can be invoked onto whatever widget.
-void appSnackbar(
+void showSnackbar(
   String? message, {
   ColorSnackbarState? type,
   Duration? duration,
@@ -52,12 +52,49 @@ void appSnackbar(
   ).show(globalNavigatorKey.currentContext!);
 }
 
+/// A global menu that can be invoked onto whatever widget.
+Future<String?> showPopup(
+  Map<String, IconData> items,
+) async {
+  final context = globalNavigatorKey.currentContext!;
+
+  //*get the render box from the context
+  final RenderBox renderBox = context.findRenderObject() as RenderBox;
+  //*get the global position, from the widget local position
+  final offset = renderBox.localToGlobal(Offset.zero);
+
+  //*calculate the start point in this case, below the button
+  final left = offset.dx;
+  final top = offset.dy + renderBox.size.height;
+  //*The right does not indicates the width
+  final right = left + renderBox.size.width;
+
+  return await showMenu<String>(
+      context: context,
+      position: RelativeRect.fromLTRB(left, top, right, 0.0),
+      items: items.entries.map<PopupMenuEntry<String>>((entry) {
+        return PopupMenuItem(
+          value: entry.key,
+          child: SizedBox(
+            // width: 200, //*width of popup
+            child: Row(
+              children: [
+                Icon(entry.value, color: Colors.redAccent),
+                const SizedBox(width: 10.0),
+                Text(entry.key)
+              ],
+            ),
+          ),
+        );
+      }).toList());
+}
+
 // * Sort Data
 /// Will return sortBy sended into function aswell will sort `List` provided
 /// in parameters.
 String? sortData({
   required List<dynamic> data,
-  required List<dynamic> dataFiltered,
+  required Set<dynamic> dataFiltered,
   required String? currentSort,
   required String sortBy,
   List<String>? exclude,

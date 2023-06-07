@@ -349,10 +349,10 @@ extension StringExtension on String {
   void copyToClipboard({String? message, Duration? duration}) {
     Clipboard.setData(ClipboardData(text: this))
         .then((value) => message.isExist
-            ? appSnackbar(message!,
+            ? showSnackbar(message!,
                 type: ColorSnackbarState.success, duration: duration)
             : null)
-        .catchError((onError) => appSnackbar(onError,
+        .catchError((onError) => showSnackbar(onError,
             type: ColorSnackbarState.error, duration: duration));
   }
 
@@ -456,7 +456,7 @@ extension ScreenshotExtension on ScreenshotController {
         'Image saved to: $imagePath (size: ${file.lengthSync()} bytes) ${file.path} ⭕');
     await GallerySaver.saveImage(file.path);
 
-    appSnackbar(message ?? "Capture saved on gallery");
+    showSnackbar(message ?? "Capture saved on gallery");
   }
 
   Future<void> shareCapture() async {

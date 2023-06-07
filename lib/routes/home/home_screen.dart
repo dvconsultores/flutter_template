@@ -18,7 +18,7 @@ class _HomePageState extends State<HomeScreen> {
 
   void _incrementCounter() {
     setState(() => _counter++);
-    appSnackbar("El contador ha incrementado");
+    showSnackbar("El contador ha incrementado");
   }
 
   @override
