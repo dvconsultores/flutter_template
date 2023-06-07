@@ -95,6 +95,24 @@ extension DurationExtension on Duration {
   }
 }
 
+// ? list extension
+extension ListExtension on List {
+  /// Sorts this list according to the order specified by the [compare] function.
+  /// The [compare] `String` value.
+  void sortCompare(String sortBy) => sort((a, b) {
+        final valueA = a is Map ? a : a?.toMap();
+        final valueB = b is Map ? b : b?.toMap();
+
+        if (valueA == null || valueB == null) {
+          throw "`toMap()` method not founded";
+        }
+
+        return (valueA[sortBy] as String)
+            .toLowerCase()
+            .compareTo((valueB[sortBy] as String).toLowerCase());
+      });
+}
+
 // ? Nullable list extension
 extension NullableListExtension on List? {
   /// Getter to know if List is not `null` or is not [Empty].

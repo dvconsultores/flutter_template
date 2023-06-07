@@ -88,34 +88,3 @@ Future<String?> showPopup(
         );
       }).toList());
 }
-
-// * Sort Data
-/// Will return sortBy sended into function aswell will sort `List` provided
-/// in parameters.
-String? sortData({
-  required List<dynamic> data,
-  required Set<dynamic> dataFiltered,
-  required String? currentSort,
-  required String sortBy,
-  List<String>? exclude,
-}) {
-  if (exclude.isExist && exclude!.contains(sortBy)) return null;
-
-  if (currentSort != sortBy) {
-    dataFiltered.sort(
-      (a, b) {
-        final valueA = a is Map ? a : a.toMap();
-        final valueB = b is Map ? b : b.toMap();
-
-        return (valueA[sortBy] as String)
-            .toLowerCase()
-            .compareTo((valueB[sortBy] as String).toLowerCase());
-      },
-    );
-    return sortBy;
-  }
-
-  dataFiltered.clear();
-  dataFiltered.addAll(data);
-  return null;
-}
