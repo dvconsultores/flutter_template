@@ -500,7 +500,7 @@ extension ResponseExtension on http.Response {
     String searchBy = "message",
     String fallback = "Error",
   }) =>
-      body.isNotEmpty ? jsonDecode(body)[searchBy] : fallback;
+      body.contains(searchBy) ? jsonDecode(body)[searchBy] : fallback;
 }
 
 // ? Multipart request extension
