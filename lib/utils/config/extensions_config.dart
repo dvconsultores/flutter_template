@@ -4,8 +4,8 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_detextre4/global_models/files_type.dart';
-import 'package:flutter_detextre4/utils/general/global_functions.dart';
+import 'package:flutterDetextre4/global_models/files_type.dart';
+import 'package:flutterDetextre4/utils/general/global_functions.dart';
 import 'package:gallery_saver/gallery_saver.dart';
 import 'package:http/http.dart' as http;
 // ignore: depend_on_referenced_packages

@@ -4,7 +4,7 @@ import 'package:custom_refresh_indicator/custom_refresh_indicator.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
-import 'package:flutter_detextre4/utils/helper_widgets/painters.dart';
+import 'package:flutterDetextre4/utils/helper_widgets/painters.dart';
 
 /// A `RefreshIndicator` with Custom app loader on refresh list.
 class AppRefreshIndicator extends StatelessWidget {

@@ -1,6 +1,6 @@
 import 'dart:async';
 
-import 'package:flutter_detextre4/routes/user/model/user_model.dart';
+import 'package:flutterDetextre4/routes/user/model/user_model.dart';
 import 'package:generic_bloc_provider/generic_bloc_provider.dart';
 import 'package:rxdart/rxdart.dart';
 

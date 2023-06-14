@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_detextre4/main.dart';
+import 'package:flutterDetextre4/main.dart';
 
 mixin ScreenSizeMixin {
   final Size screenSize =

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_detextre4/main.dart';
-import 'package:flutter_detextre4/utils/helper_widgets/will_pop_custom.dart';
+import 'package:flutterDetextre4/main.dart';
+import 'package:flutterDetextre4/utils/helper_widgets/will_pop_custom.dart';
 import 'package:http/http.dart' as http;
 
 class GlobalLoader {

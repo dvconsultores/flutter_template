@@ -1,9 +1,9 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_detextre4/routes/user/model/user_model.dart';
-import 'package:flutter_detextre4/utils/config/fetch_config.dart';
-import 'package:flutter_detextre4/utils/services/local_data/secure_storage.dart';
+import 'package:flutterDetextre4/routes/user/model/user_model.dart';
+import 'package:flutterDetextre4/utils/config/fetch_config.dart';
+import 'package:flutterDetextre4/utils/services/local_data/secure_storage.dart';
 import 'package:http/http.dart' as http;
 
 class AuthApi {

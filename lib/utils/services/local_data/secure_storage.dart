@@ -1,7 +1,7 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_detextre4/utils/config/extensions_config.dart';
+import 'package:flutterDetextre4/utils/config/extensions_config.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 ///? Collection used to know storage elements into secure storage.

@@ -5,18 +5,18 @@
   "version": "0.2.0",
   "configurations": [
     {
-      "name": "flutter_detextre4",
+      "name": "flutterDetextre4",
       "request": "launch",
       "type": "dart"
     },
     {
-      "name": "flutter_detextre4 (profile mode)",
+      "name": "flutterDetextre4 (profile mode)",
       "request": "launch",
       "type": "dart",
       "flutterMode": "profile"
     },
     {
-      "name": "flutter_detextre4 (release mode)",
+      "name": "flutterDetextre4 (release mode)",
       "request": "launch",
       "type": "dart",
       "flutterMode": "release"

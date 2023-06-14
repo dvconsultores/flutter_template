@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_detextre4/routes/user/bloc/user_bloc.dart';
-import 'package:flutter_detextre4/utils/helper_widgets/responsive_layout.dart';
+import 'package:flutterDetextre4/routes/user/bloc/user_bloc.dart';
+import 'package:flutterDetextre4/utils/helper_widgets/responsive_layout.dart';
 import 'package:generic_bloc_provider/generic_bloc_provider.dart';
 import 'package:local_session_timeout/local_session_timeout.dart';
 

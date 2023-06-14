@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_detextre4/routes/search/ui/screens/list_screen.dart';
-import 'package:flutter_detextre4/routes/search/ui/screens/search_screen_two.dart';
-import 'package:flutter_detextre4/utils/config/router_navigation_config.dart';
-import 'package:flutter_detextre4/widgets/test_web_sockets.dart';
+import 'package:flutterDetextre4/routes/search/ui/screens/list_screen.dart';
+import 'package:flutterDetextre4/routes/search/ui/screens/search_screen_two.dart';
+import 'package:flutterDetextre4/utils/config/router_navigation_config.dart';
+import 'package:flutterDetextre4/widgets/test_web_sockets.dart';
 
 class AppDrawer extends StatelessWidget {
   const AppDrawer({super.key});

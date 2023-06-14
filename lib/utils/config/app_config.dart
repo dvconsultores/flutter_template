@@ -1,8 +1,8 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_detextre4/main.dart';
-import 'package:flutter_detextre4/main_provider.dart';
+import 'package:flutterDetextre4/main.dart';
+import 'package:flutterDetextre4/main_provider.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'package:collection/collection.dart';
