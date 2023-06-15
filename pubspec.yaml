@@ -81,6 +81,8 @@ dependencies:
   gallery_saver: ^2.3.2
   share_plus: ^7.0.0
   custom_refresh_indicator: ^2.0.1
+  vibration: ^1.7.7
+  audioplayers: ^4.1.0
 
 
 
