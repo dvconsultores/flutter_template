@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutterDetextre4/routes/user/bloc/user_bloc.dart';
-import 'package:flutterDetextre4/widgets/app_scaffold.dart';
+import 'package:flutter_detextre4/routes/user/bloc/user_bloc.dart';
+import 'package:flutter_detextre4/widgets/app_scaffold.dart';
 import 'package:generic_bloc_provider/generic_bloc_provider.dart';
 import 'package:web_socket_channel/web_socket_channel.dart';
 

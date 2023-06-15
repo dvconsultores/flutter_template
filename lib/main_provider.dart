@@ -1,10 +1,10 @@
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
-import 'package:flutterDetextre4/main.dart';
-import 'package:flutterDetextre4/splash_screen.dart';
-import 'package:flutterDetextre4/utils/config/app_config.dart';
-import 'package:flutterDetextre4/utils/config/router_navigation_config.dart';
-import 'package:flutterDetextre4/utils/services/local_data/hive_data.dart';
+import 'package:flutter_detextre4/main.dart';
+import 'package:flutter_detextre4/splash_screen.dart';
+import 'package:flutter_detextre4/utils/config/app_config.dart';
+import 'package:flutter_detextre4/utils/config/router_navigation_config.dart';
+import 'package:flutter_detextre4/utils/services/local_data/hive_data.dart';
 
 class MainProvider extends ChangeNotifier {
   // ? -----------------------Navigation Provider---------------------------- //

@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:flutterDetextre4/main_provider.dart';
-import 'package:flutterDetextre4/utils/config/app_config.dart';
-import 'package:flutterDetextre4/utils/config/extensions_config.dart';
-import 'package:flutterDetextre4/utils/general/global_functions.dart';
+import 'package:flutter_detextre4/main_provider.dart';
+import 'package:flutter_detextre4/utils/config/app_config.dart';
+import 'package:flutter_detextre4/utils/config/extensions_config.dart';
+import 'package:flutter_detextre4/utils/general/global_functions.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 

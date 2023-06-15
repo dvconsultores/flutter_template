@@ -1,7 +1,7 @@
 import 'package:another_flushbar/flushbar.dart';
 import 'package:flutter/material.dart';
-import 'package:flutterDetextre4/main.dart';
-import 'package:flutterDetextre4/utils/config/extensions_config.dart';
+import 'package:flutter_detextre4/main.dart';
+import 'package:flutter_detextre4/utils/config/extensions_config.dart';
 
 // * App snackbar
 enum ColorSnackbarState {

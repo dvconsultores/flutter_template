@@ -1,4 +1,4 @@
-import 'package:flutterDetextre4/utils/services/local_data/secure_storage.dart';
+import 'package:flutter_detextre4/utils/services/local_data/secure_storage.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 class FetchConfig {

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutterDetextre4/routes/search/bloc/search_bloc.dart';
+import 'package:flutter_detextre4/routes/search/bloc/search_bloc.dart';
 import 'package:generic_bloc_provider/generic_bloc_provider.dart';
 
 class SearchScreen extends StatefulWidget {

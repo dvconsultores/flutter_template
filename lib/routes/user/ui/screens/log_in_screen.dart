@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:flutterDetextre4/routes/user/bloc/user_bloc.dart';
-import 'package:flutterDetextre4/routes/user/model/user_model.dart';
-import 'package:flutterDetextre4/routes/user/repository/auth_api.dart';
-import 'package:flutterDetextre4/widgets/app_scaffold.dart';
+import 'package:flutter_detextre4/routes/user/bloc/user_bloc.dart';
+import 'package:flutter_detextre4/routes/user/model/user_model.dart';
+import 'package:flutter_detextre4/routes/user/repository/auth_api.dart';
+import 'package:flutter_detextre4/widgets/app_scaffold.dart';
 import 'package:generic_bloc_provider/generic_bloc_provider.dart';
 
 class LogInScreen extends StatelessWidget {
