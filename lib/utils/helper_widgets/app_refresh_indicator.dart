@@ -77,95 +77,90 @@ class AppRefreshIndicator extends StatelessWidget {
         bool isTrailing =
             onPullDown != null && controller.edge == IndicatorEdge.trailing;
 
-        return AnimatedBuilder(
-            animation: controller,
-            builder: (context, _) {
-              //* leading y animation
-              final dyLeading = controller.value.clamp(0.0, 1.25) *
-                      (height - (height * 0.25)) -
-                  (height - (height * 0.70));
+        //* leading y animation
+        final dyLeading =
+            controller.value.clamp(0.0, 1.25) * (height - (height * 0.25)) -
+                (height - (height * 0.70));
 
-              //* trailing y animation
-              final dyTrailing = controller.value.clamp(0.0, 1.25) *
-                  -(height - (height * 0.25));
+        //* trailing y animation
+        final dyTrailing =
+            controller.value.clamp(0.0, 1.25) * -(height - (height * 0.25));
 
-              return Stack(children: [
-                Transform.translate(
-                  offset: Offset(
-                    0.0,
-                    isTrailing ? dyTrailing : 0,
-                  ),
-                  child: child,
+        return Stack(children: [
+          Transform.translate(
+            offset: Offset(
+              0.0,
+              isTrailing ? dyTrailing : 0,
+            ),
+            child: child,
+          ),
+
+          //* leading indicator
+          if (isLeading)
+            Positioned(
+              top: dyLeading,
+              left: 0,
+              right: 0,
+              child: Center(
+                  child: Container(
+                height: 42,
+                width: 42,
+                padding: const EdgeInsets.all(10),
+                decoration: const BoxDecoration(
+                  color: Colors.white,
+                  shape: BoxShape.circle,
                 ),
-
-                //* leading indicator
-                if (isLeading)
-                  Positioned(
-                    top: dyLeading,
-                    left: 0,
-                    right: 0,
-                    child: Center(
-                        child: Container(
-                      height: 42,
-                      width: 42,
-                      padding: const EdgeInsets.all(10),
-                      decoration: const BoxDecoration(
-                        color: Colors.white,
-                        shape: BoxShape.circle,
-                      ),
-                      child: AnimatedOpacity(
-                        duration: const Duration(milliseconds: 500),
-                        opacity: controller.value.clamp(0, 1),
-                        child: CircularProgressIndicator(
-                          strokeWidth: 3,
-                          value: !controller.isLoading
-                              ? controller.value.clamp(0.0, 1.0)
-                              : null,
-                        ),
-                      ),
-                    )),
+                child: AnimatedOpacity(
+                  duration: const Duration(milliseconds: 500),
+                  opacity: controller.value.clamp(0, 1),
+                  child: CircularProgressIndicator(
+                    strokeWidth: 3,
+                    value: !controller.isLoading
+                        ? controller.value.clamp(0.0, 1.0)
+                        : null,
                   ),
+                ),
+              )),
+            ),
 
-                //* trailing indicator
-                if (isTrailing)
-                  Positioned(
-                    bottom: -height,
-                    left: 0,
-                    right: 0,
-                    height: height,
-                    child: Container(
-                      transform:
-                          Matrix4.translationValues(0.0, dyTrailing, 0.0),
-                      padding: const EdgeInsets.only(top: 30.0),
-                      constraints: const BoxConstraints.expand(),
-                      child: Column(children: [
-                        if (controller.isLoading)
-                          Container(
-                            margin: const EdgeInsets.only(bottom: 8.0),
-                            width: 28,
-                            height: 28,
-                            child: CircularProgressIndicator(
-                              color: Theme.of(context).colorScheme.primary,
-                              strokeWidth: 3,
-                            ),
-                          )
-                        else
-                          const Icon(
-                            Icons.keyboard_arrow_up,
-                            color: Colors.black,
-                          ),
-                        Text(
-                            controller.isLoading
-                                ? textOnChargePullDown
-                                : textOnPullDown,
-                            style: const TextStyle(
-                              color: Colors.black,
-                            ))
-                      ]),
+          //* trailing indicator
+          if (isTrailing)
+            Positioned(
+              bottom: -height,
+              left: 0,
+              right: 0,
+              height: height,
+              child: Container(
+                transform: Matrix4.translationValues(0.0, dyTrailing, 0.0),
+                padding: const EdgeInsets.only(top: 30.0),
+                constraints: const BoxConstraints.expand(),
+                child: Column(children: [
+                  if (controller.isLoading)
+                    Container(
+                      margin: const EdgeInsets.only(bottom: 8.0),
+                      width: 28,
+                      height: 28,
+                      child: CircularProgressIndicator(
+                        color: Theme.of(context).colorScheme.primary,
+                        strokeWidth: 3,
+                      ),
+                    )
+                  else
+                    const Icon(
+                      Icons.keyboard_arrow_up,
+                      color: Colors.black,
                     ),
-                  ),
-              ]);
-            });
+                  Text(
+                      controller.isLoading
+                          ? textOnChargePullDown
+                          : textOnPullDown,
+                      style: const TextStyle(
+                        color: Colors.black,
+                      ))
+                ]),
+              ),
+            ),
+        ]);
       },
       trigger: IndicatorTrigger.bothEdges,
       trailingScrollIndicatorVisible: onPullDown == null,
