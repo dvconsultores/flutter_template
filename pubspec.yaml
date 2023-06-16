@@ -83,6 +83,7 @@ dependencies:
   custom_refresh_indicator: ^2.0.1
   vibration: ^1.7.7
   audioplayers: ^4.1.0
+  widget_mask: ^1.0.0+0
 
 
 
