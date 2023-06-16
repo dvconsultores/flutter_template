@@ -19,6 +19,12 @@ class _ListScreenState extends State<ListScreen> {
     dev.log("refreshed");
   }
 
+  Future<void> onPullDown() async {
+    await Future.delayed(const Duration(seconds: 1));
+    setState(() => items.add("random-${math.Random().nextInt(100)}"));
+    dev.log("charged");
+  }
+
   final items = <String>[
     "static-1",
     "static-2",
@@ -29,6 +35,7 @@ class _ListScreenState extends State<ListScreen> {
   Widget build(BuildContext context) {
     return AppRefreshIndicator.envelope(
       onRefresh: onRefresh,
+      onPullDown: onPullDown,
       child: ListView.separated(
         itemBuilder: (context, index) => Text(items[index].toCapitalize()),
         itemCount: items.length,

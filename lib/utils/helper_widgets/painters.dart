@@ -9,14 +9,20 @@ class TrianglePainter extends CustomPainter {
     this.strokeColor = Colors.black,
     this.paintingStyle = PaintingStyle.stroke,
     this.strokeWidth = 1,
+    this.getTrianglePath,
   });
   final Color strokeColor;
   final PaintingStyle paintingStyle;
   final double strokeWidth;
+  Path Function(double x, double y)? getTrianglePath;
 
-  static double convertRadiusToSigma(double radius) {
-    return radius * 0.57735 + 0.5;
-  }
+  static double convertRadiusToSigma(double radius) => radius * 0.57735 + 0.5;
+
+  Path _defaultTrianglePath(double x, double y) => Path()
+    ..moveTo(0, y / 2)
+    ..lineTo(x, 0)
+    ..lineTo(x, y)
+    ..lineTo(0, y / 2);
 
   @override
   void paint(Canvas canvas, Size size) {
@@ -24,30 +30,25 @@ class TrianglePainter extends CustomPainter {
       ..color = strokeColor
       ..strokeWidth = strokeWidth
       ..style = paintingStyle;
-    final path = getTrianglePath(size.width, size.height);
+
     final shadowPaint = Paint()
       ..color = Colors.black.withAlpha(50)
       ..maskFilter =
           MaskFilter.blur(BlurStyle.normal, convertRadiusToSigma(10));
-    canvas.drawPath(path, shadowPaint);
 
+    final path = getTrianglePath != null
+        ? getTrianglePath!(size.width, size.height)
+        : _defaultTrianglePath(size.width, size.height);
+
+    canvas.drawPath(path, shadowPaint);
     canvas.drawPath(path, paint);
   }
 
-  Path getTrianglePath(double x, double y) {
-    return Path()
-      ..moveTo(0, y / 2)
-      ..lineTo(x, 0)
-      ..lineTo(x, y)
-      ..lineTo(0, y / 2);
-  }
-
   @override
-  bool shouldRepaint(TrianglePainter oldDelegate) {
-    return oldDelegate.strokeColor != strokeColor ||
-        oldDelegate.paintingStyle != paintingStyle ||
-        oldDelegate.strokeWidth != strokeWidth;
-  }
+  bool shouldRepaint(TrianglePainter oldDelegate) =>
+      oldDelegate.strokeColor != strokeColor ||
+      oldDelegate.paintingStyle != paintingStyle ||
+      oldDelegate.strokeWidth != strokeWidth;
 }
 
 /// Star.
@@ -164,4 +165,48 @@ class SkyPainter extends CustomPainter {
 
   @override
   bool shouldRebuildSemantics(SkyPainter oldDelegate) => false;
+}
+
+///! Just whowCase widget
+class SmileFacePainter extends CustomPainter {
+  @override
+  void paint(Canvas canvas, Size size) {
+    final radius = math.min(size.width, size.height) / 2;
+    final center = Offset(size.width / 2, size.height / 2);
+
+    // Draw the body
+    canvas.drawCircle(
+      center,
+      radius,
+      Paint()..color = const Color.fromARGB(255, 247, 172, 59),
+    );
+
+    // Draw the mouth
+    canvas.drawArc(
+      Rect.fromCenter(
+          center: Offset(center.dx, center.dy), height: 110, width: 120),
+      .3,
+      2.5,
+      false,
+      Paint()
+        ..style = PaintingStyle.stroke
+        ..strokeWidth = 15
+        ..strokeCap = StrokeCap.round,
+    );
+
+    // Draw the eyes
+    canvas.drawCircle(
+      Offset(center.dx - radius / 3, center.dy - radius / 3),
+      18,
+      Paint(),
+    );
+    canvas.drawCircle(
+      Offset(center.dx + radius / 3, center.dy - radius / 3),
+      18,
+      Paint(),
+    );
+  }
+
+  @override
+  bool shouldRepaint(covariant SmileFacePainter oldDelegate) => true;
 }

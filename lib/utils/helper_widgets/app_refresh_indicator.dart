@@ -11,13 +11,15 @@ class AppRefreshIndicator extends StatelessWidget {
   const AppRefreshIndicator({
     super.key,
     required this.child,
+    this.controller,
     required this.onRefresh,
     this.builder,
     this.trailingScrollIndicatorVisible = true,
-    this.leadingScrollIndicatorVisible = true,
+    this.leadingScrollIndicatorVisible = false,
     this.trigger = IndicatorTrigger.leadingEdge,
   });
   final Widget child;
+  final IndicatorController? controller;
   final RefreshCallback onRefresh;
   final Widget Function(
     BuildContext context,
@@ -31,15 +33,21 @@ class AppRefreshIndicator extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return CustomRefreshIndicator(
+      controller: controller,
       builder: (context, child, controller) {
         if (builder != null) return builder!(context, child, controller);
 
         return MaterialIndicatorDelegate(
-            builder: (context, controller) => const Icon(
-                  Icons.cached,
-                  color: Colors.blue,
-                  size: 30,
-                ))(context, child, controller);
+          builder: (context, controller) => AnimatedOpacity(
+            duration: const Duration(milliseconds: 500),
+            opacity: controller.value.clamp(0, 1),
+            child: const Icon(
+              Icons.cached,
+              color: Colors.blue,
+              size: 30,
+            ),
+          ),
+        )(context, child, controller);
       },
       trailingScrollIndicatorVisible: trailingScrollIndicatorVisible,
       leadingScrollIndicatorVisible: leadingScrollIndicatorVisible,
@@ -52,73 +60,123 @@ class AppRefreshIndicator extends StatelessWidget {
   /// A variant used to fetch data on pull down.
   static Widget pullDown({
     required Widget child,
-    required RefreshCallback onRefresh,
-    bool trailingScrollIndicatorVisible = false,
-    bool leadingScrollIndicatorVisible = true,
+    RefreshCallback? onRefresh,
+    RefreshCallback? onPullDown,
     String textOnPullDown = "Pull to fetch more",
-    String textOnRefresh = "Fetching...",
+    String textOnChargePullDown = "Fetching...",
   }) {
+    var indicatorController = IndicatorController();
     const height = 150.0;
 
     return AppRefreshIndicator(
+      controller: indicatorController,
       builder: (context, child, controller) {
+        indicatorController = controller;
+        bool isLeading =
+            onRefresh != null && controller.edge == IndicatorEdge.leading;
+        bool isTrailing =
+            onPullDown != null && controller.edge == IndicatorEdge.trailing;
+
         return AnimatedBuilder(
             animation: controller,
             builder: (context, _) {
-              final dy = controller.value.clamp(0.0, 1.25) *
+              //* leading y animation
+              final dyLeading = controller.value.clamp(0.0, 1.25) *
+                      (height - (height * 0.25)) -
+                  (height - (height * 0.70));
+
+              //* trailing y animation
+              final dyTrailing = controller.value.clamp(0.0, 1.25) *
                   -(height - (height * 0.25));
-              return Stack(
-                children: [
-                  Transform.translate(
-                    offset: Offset(0.0, dy),
-                    child: child,
+
+              return Stack(children: [
+                Transform.translate(
+                  offset: Offset(
+                    0.0,
+                    isTrailing ? dyTrailing : 0,
                   ),
+                  child: child,
+                ),
+
+                //* leading indicator
+                if (isLeading)
+                  Positioned(
+                    top: dyLeading,
+                    left: 0,
+                    right: 0,
+                    child: Center(
+                        child: Container(
+                      height: 42,
+                      width: 42,
+                      padding: const EdgeInsets.all(10),
+                      decoration: const BoxDecoration(
+                        color: Colors.white,
+                        shape: BoxShape.circle,
+                      ),
+                      child: AnimatedOpacity(
+                        duration: const Duration(milliseconds: 500),
+                        opacity: controller.value.clamp(0, 1),
+                        child: CircularProgressIndicator(
+                          strokeWidth: 3,
+                          value: !controller.isLoading
+                              ? controller.value.clamp(0.0, 1.0)
+                              : null,
+                        ),
+                      ),
+                    )),
+                  ),
+
+                //* trailing indicator
+                if (isTrailing)
                   Positioned(
                     bottom: -height,
                     left: 0,
                     right: 0,
                     height: height,
                     child: Container(
-                      transform: Matrix4.translationValues(0.0, dy, 0.0),
+                      transform:
+                          Matrix4.translationValues(0.0, dyTrailing, 0.0),
                       padding: const EdgeInsets.only(top: 30.0),
                       constraints: const BoxConstraints.expand(),
-                      child: Column(
-                        children: [
-                          if (controller.isLoading)
-                            Container(
-                              margin: const EdgeInsets.only(bottom: 8.0),
-                              width: 16,
-                              height: 16,
-                              child: CircularProgressIndicator(
-                                color: Theme.of(context).colorScheme.primary,
-                                strokeWidth: 2,
-                              ),
-                            )
-                          else
-                            const Icon(
-                              Icons.keyboard_arrow_up,
-                              color: Colors.black,
+                      child: Column(children: [
+                        if (controller.isLoading)
+                          Container(
+                            margin: const EdgeInsets.only(bottom: 8.0),
+                            width: 28,
+                            height: 28,
+                            child: CircularProgressIndicator(
+                              color: Theme.of(context).colorScheme.primary,
+                              strokeWidth: 3,
                             ),
-                          Text(
+                          )
+                        else
+                          const Icon(
+                            Icons.keyboard_arrow_up,
+                            color: Colors.black,
+                          ),
+                        Text(
                             controller.isLoading
-                                ? textOnRefresh
+                                ? textOnChargePullDown
                                 : textOnPullDown,
                             style: const TextStyle(
                               color: Colors.black,
-                            ),
-                          )
-                        ],
-                      ),
+                            ))
+                      ]),
                     ),
                   ),
-                ],
-              );
+              ]);
             });
       },
-      trigger: IndicatorTrigger.trailingEdge,
-      trailingScrollIndicatorVisible: trailingScrollIndicatorVisible,
-      leadingScrollIndicatorVisible: leadingScrollIndicatorVisible,
-      onRefresh: onRefresh,
+      trigger: IndicatorTrigger.bothEdges,
+      trailingScrollIndicatorVisible: onPullDown == null,
+      leadingScrollIndicatorVisible: onRefresh == null,
+      onRefresh: () async {
+        if (indicatorController.edge == IndicatorEdge.leading) {
+          onRefresh != null ? await onRefresh() : null;
+        } else {
+          onPullDown != null ? await onPullDown() : null;
+        }
+      },
       child: child,
     );
   }
@@ -126,17 +184,27 @@ class AppRefreshIndicator extends StatelessWidget {
   /// [Envelope] variant of `RefreshIndicator`.
   static Widget envelope({
     required Widget child,
-    required RefreshCallback onRefresh,
-    bool leadingScrollIndicatorVisible = true,
-    bool trailingScrollIndicatorVisible = false,
+    RefreshCallback? onRefresh,
+    RefreshCallback? onPullDown,
     Color? color,
+    String textOnPullDown = "Pull to fetch more",
+    String textOnChargePullDown = "Fetching...",
   }) {
+    var indicatorController = IndicatorController();
     const circleSize = 70.0;
+    const iconSize = 35.0;
     const defaultShadow = [BoxShadow(blurRadius: 10, color: Colors.black26)];
 
     return AppRefreshIndicator(
       builder: (context, child, controller) =>
           LayoutBuilder(builder: (context, constraints) {
+        indicatorController = controller;
+        bool isLeading =
+            onRefresh != null && controller.edge == IndicatorEdge.leading;
+        bool isTrailing =
+            onPullDown != null && controller.edge == IndicatorEdge.trailing;
+
+        //* Leading values
         final widgetWidth = constraints.maxWidth;
         final widgetHeight = constraints.maxHeight;
         final letterTopWidth = (widgetWidth / 2) + 50;
@@ -149,12 +217,24 @@ class AppRefreshIndicator extends StatelessWidget {
             .clamp(0.0, double.infinity);
 
         final opacity = (controller.value - 1).clamp(0, 0.5) / 0.5;
-        return Stack(
-          children: <Widget>[
-            Transform.scale(
-              scale: 1 - 0.1 * controller.value.clamp(0.0, 1.0),
-              child: child,
-            ),
+
+        //* Trailing values
+        final sideValue = (widgetWidth - (widgetWidth * controller.value / 12))
+            .clamp(0.0, double.infinity);
+
+        final bottomValue = -(widgetHeight - (widgetHeight * controller.value))
+            .clamp(0.0, double.infinity);
+
+        return Stack(children: <Widget>[
+          Transform.scale(
+            scale: isLeading || isTrailing
+                ? 1 - 0.1 * controller.value.clamp(0.0, 1.0)
+                : 1,
+            child: child,
+          ),
+
+          //* Leading animation
+          if (isLeading) ...[
             Positioned(
               right: rightValue,
               child: Container(
@@ -181,51 +261,148 @@ class AppRefreshIndicator extends StatelessWidget {
             ),
             if (controller.value >= 1)
               Container(
+                alignment: Alignment.center,
                 padding: const EdgeInsets.only(right: 100),
                 child: Transform.scale(
                   scale: controller.value,
                   child: Opacity(
                     opacity: controller.isLoading ? 1 : opacity,
-                    child: Align(
-                      alignment: Alignment.center,
-                      child: Container(
-                        width: circleSize,
-                        height: circleSize,
-                        decoration: BoxDecoration(
-                          boxShadow: defaultShadow,
-                          color: color ?? Theme.of(context).colorScheme.primary,
-                          shape: BoxShape.circle,
-                        ),
-                        child: Stack(
-                          alignment: Alignment.center,
-                          children: <Widget>[
-                            SizedBox(
-                              height: double.infinity,
-                              width: double.infinity,
-                              child: CircularProgressIndicator(
-                                valueColor:
-                                    const AlwaysStoppedAnimation(Colors.black),
-                                value: controller.isLoading ? null : 0,
-                              ),
-                            ),
-                            const Icon(
-                              Icons.mail_outline,
-                              color: Colors.white,
-                              size: 35,
-                            ),
-                          ],
-                        ),
+                    child: Container(
+                      width: circleSize,
+                      height: circleSize,
+                      decoration: BoxDecoration(
+                        boxShadow: defaultShadow,
+                        color: color ?? Theme.of(context).colorScheme.primary,
+                        shape: BoxShape.circle,
                       ),
+                      child:
+                          Stack(alignment: Alignment.center, children: <Widget>[
+                        SizedBox(
+                          height: double.infinity,
+                          width: double.infinity,
+                          child: CircularProgressIndicator(
+                            valueColor:
+                                const AlwaysStoppedAnimation(Colors.black),
+                            value: controller.isLoading ? null : 0,
+                          ),
+                        ),
+                        const Icon(
+                          Icons.mail_outline,
+                          color: Colors.white,
+                          size: iconSize,
+                        ),
+                      ]),
                     ),
                   ),
                 ),
               )
           ],
-        );
+
+          //* Trailing animation
+          if (isTrailing) ...[
+            Positioned(
+              right: sideValue,
+              child: Container(
+                height: widgetHeight,
+                width: widgetWidth,
+                decoration: const BoxDecoration(
+                  color: Colors.white,
+                  boxShadow: defaultShadow,
+                ),
+              ),
+            ),
+            Positioned(
+              left: sideValue,
+              child: Container(
+                height: widgetHeight,
+                width: widgetWidth,
+                decoration: const BoxDecoration(
+                  color: Colors.white,
+                  boxShadow: defaultShadow,
+                ),
+              ),
+            ),
+            Positioned(
+              bottom: bottomValue,
+              child: CustomPaint(
+                  painter: TrianglePainter(
+                    strokeColor: Colors.white,
+                    paintingStyle: PaintingStyle.fill,
+                    getTrianglePath: (x, y) => Path()
+                      ..moveTo(x / 2, 0)
+                      ..lineTo(x, y)
+                      ..lineTo(0, y)
+                      ..lineTo(x / 2, 0),
+                  ),
+                  child: SizedBox(
+                    height: widgetWidth / 2.5,
+                    width: widgetWidth,
+                    child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          if (controller.value >= 1) ...[
+                            Transform.scale(
+                              scale: controller.value,
+                              child: Opacity(
+                                opacity: controller.isLoading ? 1 : opacity,
+                                child: Container(
+                                  width: circleSize / 2,
+                                  height: circleSize / 2,
+                                  decoration: BoxDecoration(
+                                    boxShadow: defaultShadow,
+                                    color: color ??
+                                        Theme.of(context).colorScheme.primary,
+                                    shape: BoxShape.circle,
+                                  ),
+                                  child: Stack(
+                                      alignment: Alignment.center,
+                                      children: <Widget>[
+                                        SizedBox(
+                                          height: double.infinity,
+                                          width: double.infinity,
+                                          child: CircularProgressIndicator(
+                                            strokeWidth: 2,
+                                            valueColor:
+                                                const AlwaysStoppedAnimation(
+                                                    Colors.black),
+                                            value:
+                                                controller.isLoading ? null : 0,
+                                          ),
+                                        ),
+                                        const Icon(
+                                          Icons.mail_outline,
+                                          color: Colors.white,
+                                          size: iconSize / 2,
+                                        ),
+                                      ]),
+                                ),
+                              ),
+                            ),
+                            const SizedBox(height: 10),
+                          ],
+                          Text(
+                              controller.isLoading
+                                  ? textOnChargePullDown
+                                  : textOnPullDown,
+                              style: const TextStyle(
+                                color: Colors.black,
+                              )),
+                        ]),
+                  )),
+            ),
+          ],
+        ]);
       }),
-      leadingScrollIndicatorVisible: leadingScrollIndicatorVisible,
-      trailingScrollIndicatorVisible: trailingScrollIndicatorVisible,
-      onRefresh: onRefresh,
+      leadingScrollIndicatorVisible: onRefresh == null,
+      trailingScrollIndicatorVisible: onPullDown == null,
+      trigger: IndicatorTrigger.bothEdges,
+      onRefresh: () async {
+        if (indicatorController.edge == IndicatorEdge.leading) {
+          onRefresh != null ? await onRefresh() : null;
+        } else {
+          onPullDown != null ? await onPullDown() : null;
+        }
+      },
       child: child,
     );
   }
@@ -376,7 +553,7 @@ class _WarpIndicatorState extends State<WarpRefreshIndicator>
       controller: widget.controller,
       offsetToArmed: _indicatorSize,
       leadingScrollIndicatorVisible: false,
-      trailingScrollIndicatorVisible: false,
+      trailingScrollIndicatorVisible: true,
       onRefresh: widget.onRefresh,
       autoRebuild: false,
       onStateChanged: (change) {
@@ -394,53 +571,50 @@ class _WarpIndicatorState extends State<WarpRefreshIndicator>
       ) {
         final animation = Listenable.merge([controller, shakeController]);
 
-        return Stack(
-          children: <Widget>[
-            AnimatedBuilder(
-                animation: shakeController,
-                builder: (_, __) {
-                  return LayoutBuilder(
-                    builder:
-                        (BuildContext context, BoxConstraints constraints) {
-                      return CustomPaint(
-                        painter: SkyPainter(
-                          stars: stars,
-                          color: widget.skyColor,
+        return Stack(children: <Widget>[
+          AnimatedBuilder(
+              animation: shakeController,
+              builder: (_, __) {
+                return LayoutBuilder(
+                  builder: (BuildContext context, BoxConstraints constraints) {
+                    return CustomPaint(
+                      painter: SkyPainter(
+                        stars: stars,
+                        color: widget.skyColor,
+                      ),
+                      child: const SizedBox.expand(),
+                    );
+                  },
+                );
+              }),
+          AnimatedBuilder(
+            animation: animation,
+            builder: (context, _) {
+              return Transform.scale(
+                scale: _scaleTween.transform(controller.value),
+                child: Builder(builder: (context) {
+                  if (shakeController.value == 1.0 &&
+                      _state == WarpAnimationState.playing) {
+                    _ambiguate(SchedulerBinding.instance)!
+                        .addPostFrameCallback((_) => _resetShakeAnimation());
+                  }
+                  return Transform.rotate(
+                    angle: _angleTween.transform(shakeController.value),
+                    child: Transform.translate(
+                      offset: _offsetTween.transform(shakeController.value),
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(
+                          _radiusTween.transform(controller.value),
                         ),
-                        child: const SizedBox.expand(),
-                      );
-                    },
+                        child: child,
+                      ),
+                    ),
                   );
                 }),
-            AnimatedBuilder(
-              animation: animation,
-              builder: (context, _) {
-                return Transform.scale(
-                  scale: _scaleTween.transform(controller.value),
-                  child: Builder(builder: (context) {
-                    if (shakeController.value == 1.0 &&
-                        _state == WarpAnimationState.playing) {
-                      _ambiguate(SchedulerBinding.instance)!
-                          .addPostFrameCallback((_) => _resetShakeAnimation());
-                    }
-                    return Transform.rotate(
-                      angle: _angleTween.transform(shakeController.value),
-                      child: Transform.translate(
-                        offset: _offsetTween.transform(shakeController.value),
-                        child: ClipRRect(
-                          borderRadius: BorderRadius.circular(
-                            _radiusTween.transform(controller.value),
-                          ),
-                          child: child,
-                        ),
-                      ),
-                    );
-                  }),
-                );
-              },
-            ),
-          ],
-        );
+              );
+            },
+          ),
+        ]);
       },
     );
   }
