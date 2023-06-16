@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:developer' as dev;
+import 'dart:developer';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
@@ -499,8 +500,11 @@ extension ResponseExtension on http.Response {
   String catchErrorMessage({
     String searchBy = "message",
     String fallback = "Error",
-  }) =>
-      body.contains(searchBy) ? jsonDecode(body)[searchBy] : fallback;
+  }) {
+    log("$statusCode ⭕");
+    log("$body ⭕");
+    return body.contains(searchBy) ? jsonDecode(body)[searchBy] : fallback;
+  }
 }
 
 // ? Multipart request extension
