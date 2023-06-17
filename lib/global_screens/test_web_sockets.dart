@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_detextre4/routes/user/bloc/user_bloc.dart';
-import 'package:flutter_detextre4/widgets/app_scaffold.dart';
+import 'package:flutter_detextre4/global_widgets/app_scaffold.dart';
 import 'package:generic_bloc_provider/generic_bloc_provider.dart';
 import 'package:web_socket_channel/web_socket_channel.dart';
 
@@ -31,7 +31,7 @@ class _TestWebSocketsState extends State<TestWebSockets> {
         appBar: AppBar(),
         tablet: (context, constraints) => StreamBuilder(
             stream: getChannelStream,
-            builder: (BuildContext context, AsyncSnapshot snapshot) {
+            builder: (BuildContext context, snapshot) {
               final dataTestWebSocket =
                   userBloc.getterOfTestWebSocket(snapshot.data);
 

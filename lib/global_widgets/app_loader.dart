@@ -4,7 +4,7 @@ import 'package:flutter_detextre4/utils/config/app_config.dart';
 import 'package:flutter_detextre4/utils/helper_widgets/will_pop_custom.dart';
 import 'package:http/http.dart' as http;
 
-class GlobalLoader {
+class AppLoader {
   static void close() => Navigator.pop(globalNavigatorKey.currentContext!);
 
   static Future<http.Response> init({
@@ -13,13 +13,13 @@ class GlobalLoader {
   }) async =>
       await showDialog(
         context: globalNavigatorKey.currentContext!,
-        builder: (context) => _GlobalLoader(request, multipartRequest),
+        builder: (context) => _AppLoader(request, multipartRequest),
       ) ??
       http.Response.bytes([], 200);
 }
 
-class _GlobalLoader extends StatelessWidget {
-  const _GlobalLoader(this.request, this.multipartRequest);
+class _AppLoader extends StatelessWidget {
+  const _AppLoader(this.request, this.multipartRequest);
   final Future<http.Response>? request;
   final http.MultipartRequest? multipartRequest;
 

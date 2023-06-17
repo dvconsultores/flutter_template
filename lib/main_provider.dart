@@ -1,7 +1,8 @@
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_detextre4/global_screens/session_manager.dart';
 import 'package:flutter_detextre4/main.dart';
-import 'package:flutter_detextre4/splash_screen.dart';
+import 'package:flutter_detextre4/global_screens/splash_screen.dart';
 import 'package:flutter_detextre4/utils/config/app_config.dart';
 import 'package:flutter_detextre4/utils/config/router_navigation_config.dart';
 import 'package:flutter_detextre4/utils/services/local_data/hive_data.dart';
@@ -141,10 +142,6 @@ class MainProvider extends ChangeNotifier {
     HiveData.write(HiveDataCollection.language, value.name);
     notifyListeners();
   }
-
-  // ? ---------------------Session Timeout Manager-------------------------- //
-
-  // TODO here: hacer logica para establecer cuando usar y cuando no el timeout
 
   // ? ---------------------------------------------------------------------- //
 

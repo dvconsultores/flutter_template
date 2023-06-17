@@ -24,14 +24,8 @@ class UserModel {
         photoURL: photoURL ?? this.photoURL,
       );
 
-  factory UserModel.fromJson(Map<String, dynamic> json) {
-    return UserModel(
-      uid: json["id"],
-      name: json["name"] ?? "",
-      email: json["email"] ?? "",
-      photoURL: json["photo_url"] ?? "",
-    );
-  }
+  static UserModel? fromLocalData(Map<String, dynamic>? json) =>
+      json != null ? UserModel.fromJson(json) : null;
 
   Map<String, dynamic> toMap() => {
         "id": uid,
@@ -39,4 +33,11 @@ class UserModel {
         "email": email,
         "photo_url": photoURL,
       };
+
+  factory UserModel.fromJson(Map<String, dynamic> json) => UserModel(
+        uid: json["id"],
+        name: json["name"] ?? "",
+        email: json["email"] ?? "",
+        photoURL: json["photo_url"] ?? "",
+      );
 }

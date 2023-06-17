@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_detextre4/main.dart';
+import 'package:flutter_detextre4/global_screens/session_manager.dart';
 import 'package:flutter_detextre4/utils/config/app_config.dart';
 import 'package:flutter_detextre4/utils/config/extensions_config.dart';
 import 'dart:math' as math;

@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_detextre4/routes/search/ui/screens/list_screen.dart';
-import 'package:flutter_detextre4/routes/search/ui/screens/search_screen.dart';
-import 'package:flutter_detextre4/routes/search/ui/screens/search_screen_two.dart';
-import 'package:flutter_detextre4/routes/user/ui/screens/user_screen.dart';
+import 'package:flutter_detextre4/routes/search/screens/list_screen.dart';
+import 'package:flutter_detextre4/routes/search/screens/search_screen.dart';
+import 'package:flutter_detextre4/routes/search/screens/search_screen_two.dart';
+import 'package:flutter_detextre4/routes/user/screens/user_screen.dart';
 import 'package:flutter_detextre4/routes/home/home_screen.dart';
 import 'package:flutter_detextre4/main.dart';
 import 'package:flutter_detextre4/main_provider.dart';
