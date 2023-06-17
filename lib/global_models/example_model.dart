@@ -37,6 +37,6 @@ class ExampleModel implements ConvertibleToMap {
   @override
   String toString() => 'ExampleModel(name: $name, value: $value)';
 
-  static ExampleModel? fromNullableJson(Map<String, dynamic>? json) =>
+  static ExampleModel? fromJsonNullable(Map<String, dynamic>? json) =>
       json != null ? ExampleModel.fromJson(json) : null;
 }
