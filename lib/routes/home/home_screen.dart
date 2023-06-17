@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_detextre4/utils/config/app_config.dart';
 import 'package:flutter_detextre4/utils/config/extensions_config.dart';
 import 'package:flutter_detextre4/utils/general/global_functions.dart';
+import 'package:flutter_detextre4/utils/helper_widgets/responsive_layout.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -11,7 +12,7 @@ class HomeScreen extends StatefulWidget {
   State<HomeScreen> createState() => _HomePageState();
 }
 
-class _HomePageState extends State<HomeScreen> {
+class _HomePageState extends State<HomeScreen> with ResponsiveLayoutMixin {
   int _counter = 0;
 
   void _incrementCounter() {
@@ -20,7 +21,7 @@ class _HomePageState extends State<HomeScreen> {
   }
 
   @override
-  Widget build(BuildContext context) {
+  Widget tabletLayout(BuildContext context, BoxConstraints constraints) {
     return SizedBox(
       child: Center(
         child: Column(
@@ -56,29 +57,29 @@ class _HomePageState extends State<HomeScreen> {
                 ThemeApp.theme.name,
                 style: Theme.of(context).textTheme.displaySmall,
               ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  IconButton(
-                    onPressed: () =>
-                        ThemeApp.switchTheme(context, ThemeType.light),
-                    icon: Icon(
-                      Icons.light_mode,
-                      color: ThemeApp.colors(context).primary,
-                    ),
+              Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+                IconButton(
+                  onPressed: () =>
+                      ThemeApp.switchTheme(context, ThemeType.light),
+                  icon: Icon(
+                    Icons.light_mode,
+                    color: ThemeApp.colors(context).primary,
                   ),
-                  IconButton(
-                    onPressed: () =>
-                        ThemeApp.switchTheme(context, ThemeType.dark),
-                    icon: Icon(
-                      Icons.dark_mode,
-                      color: ThemeApp.colors(context).secondary,
-                    ),
+                ),
+                IconButton(
+                  onPressed: () =>
+                      ThemeApp.switchTheme(context, ThemeType.dark),
+                  icon: Icon(
+                    Icons.dark_mode,
+                    color: ThemeApp.colors(context).secondary,
                   ),
-                ],
-              ),
+                ),
+              ]),
             ]),
       ),
     );
   }
+
+  @override
+  Widget build(BuildContext context) => buildResponsiveLayout(context);
 }

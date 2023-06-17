@@ -17,7 +17,7 @@ class MainNavigation extends StatefulWidget {
 
 class _MainNavigationState extends State<MainNavigation> {
   void routeWhenInit() {
-    // (Home)
+    //? (Home)
     final mainProvider = context.read<MainProvider>();
     mainProvider.indexTab = 1;
     mainProvider.indexRoute = 0;
@@ -47,21 +47,6 @@ class _MainNavigationState extends State<MainNavigation> {
         title: Text(RouterNavigator.routes[indexTab].name),
       ),
 
-      // * Routes rendering
-      tablet: RouterNavigator.currentName ==
-              RouterNavigatorNames.home.name // ? if home or not
-          ? const DoubleBackToCloseWidget(
-              snackBarMessage: "Presione de nuevo para salir",
-              child: HomeScreen(),
-            )
-          : WillPopCustom(
-              onWillPop: () async {
-                RouterNavigator.pushNamed(RouterNavigatorNames.home);
-                return false;
-              },
-              child:
-                  RouterNavigator.routes[indexTab].pages[indexRoute].routePage),
-
       // * Navigation bar
       bottomNavigationBar: Theme(
         data: Theme.of(context).copyWith(canvasColor: Colors.white),
@@ -82,6 +67,22 @@ class _MainNavigationState extends State<MainNavigation> {
               .toList(),
         ),
       ),
+
+      // * Routes rendering
+      child: RouterNavigator.currentName ==
+              RouterNavigatorNames.home.name // ? if home or not
+          ? const DoubleBackToCloseWidget(
+              snackBarMessage: "Presione de nuevo para salir",
+              child: HomeScreen(),
+            )
+          : WillPopCustom(
+              onWillPop: () async {
+                RouterNavigator.pushNamed(RouterNavigatorNames.home);
+                return false;
+              },
+              child:
+                  RouterNavigator.routes[indexTab].pages[indexRoute].routePage,
+            ),
     );
   }
 }

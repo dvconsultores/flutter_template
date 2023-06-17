@@ -13,9 +13,10 @@ class LogInScreen extends StatelessWidget {
     final Size size = MediaQuery.of(context).size;
     final userBloc = BlocProvider.of<UserBloc>(context);
 
-    return AppScaffold(
+    return AppScaffold.responsive(
       sessionTimer: false,
-      tablet: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
+      tablet: (context, constraints) =>
+          Column(mainAxisAlignment: MainAxisAlignment.center, children: [
         Container(
           margin: const EdgeInsets.only(bottom: 40.0),
           child: Hero(

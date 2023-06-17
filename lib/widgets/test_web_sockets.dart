@@ -27,9 +27,9 @@ class _TestWebSocketsState extends State<TestWebSockets> {
   Widget build(BuildContext context) {
     final userBloc = BlocProvider.of<UserBloc>(context);
 
-    return AppScaffold(
+    return AppScaffold.responsive(
         appBar: AppBar(),
-        tablet: StreamBuilder(
+        tablet: (context, constraints) => StreamBuilder(
             stream: getChannelStream,
             builder: (BuildContext context, AsyncSnapshot snapshot) {
               final dataTestWebSocket =

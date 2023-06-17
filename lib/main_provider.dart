@@ -142,6 +142,10 @@ class MainProvider extends ChangeNotifier {
     notifyListeners();
   }
 
+  // ? ---------------------Session Timeout Manager-------------------------- //
+
+  // TODO here: hacer logica para establecer cuando usar y cuando no el timeout
+
   // ? ---------------------------------------------------------------------- //
 
   @override

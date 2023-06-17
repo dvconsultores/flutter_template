@@ -1,56 +1,88 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_detextre4/routes/user/bloc/user_bloc.dart';
 import 'package:flutter_detextre4/utils/helper_widgets/responsive_layout.dart';
-import 'package:generic_bloc_provider/generic_bloc_provider.dart';
-import 'package:local_session_timeout/local_session_timeout.dart';
 
+/// ? Custom Application scaffol
 class AppScaffold extends StatelessWidget {
   const AppScaffold({
     super.key,
+    required this.child,
     this.drawer,
     this.appBar,
-    this.mobile,
-    this.tablet,
-    this.desktop,
     this.bottomNavigationBar,
     this.floatingActionButton,
     this.sessionTimer = true,
   });
   final Widget? drawer;
   final PreferredSizeWidget? appBar;
-  final Widget? mobile;
-  final Widget? tablet;
-  final Widget? desktop;
+  final Widget child;
   final Widget? bottomNavigationBar;
   final Widget? floatingActionButton;
   final bool sessionTimer;
 
   @override
-  Widget build(BuildContext context) {
-    final userBloc = BlocProvider.of<UserBloc>(context);
+  Widget build(BuildContext context) => Scaffold(
+        drawer: drawer,
+        appBar: appBar,
+        body: Container(
+          padding: const EdgeInsets.all(12.0),
+          child: child,
+        ),
+        bottomNavigationBar: bottomNavigationBar,
+        floatingActionButton: floatingActionButton,
+      );
 
-    // * Session timeout manager
-    final sessionConfig = SessionConfig(
-        // invalidateSessionForAppLostFocus: const Duration(seconds: 15),
-        // invalidateSessionForUserInactivity: const Duration(seconds: 30),
-        );
+  static Widget responsive({
+    Widget? drawer,
+    PreferredSizeWidget? appBar,
+    Widget? Function(BuildContext context, BoxConstraints constraints)? mobile,
+    Widget? Function(BuildContext context, BoxConstraints constraints)? tablet,
+    Widget? Function(BuildContext context, BoxConstraints constraints)? desktop,
+    Widget? Function(BuildContext context, BoxConstraints constraints)? tv,
+    Widget? bottomNavigationBar,
+    Widget? floatingActionButton,
+    bool sessionTimer = true,
+  }) =>
+      _AppScaffoldResponsive(
+        drawer: drawer,
+        appBar: appBar,
+        mobile: mobile,
+        tablet: tablet,
+        desktop: desktop,
+        tv: tv,
+        bottomNavigationBar: bottomNavigationBar,
+        floatingActionButton: floatingActionButton,
+        sessionTimer: sessionTimer,
+      );
+}
 
-    sessionConfig.stream.listen((SessionTimeoutState timeoutEvent) {
-      switch (timeoutEvent) {
-        case SessionTimeoutState.userInactivityTimeout:
-          // * handle user  inactive timeout
-          userBloc.closeSesion;
-          break;
-        case SessionTimeoutState.appFocusTimeout:
-          // * handle user  app lost focus timeout
-          userBloc.closeSesion;
-          break;
-      }
-    });
+/// ? Responsive variant from `AppScaffold`
+class _AppScaffoldResponsive extends StatelessWidget {
+  const _AppScaffoldResponsive({
+    this.drawer,
+    this.appBar,
+    this.mobile,
+    this.tablet,
+    this.desktop,
+    this.tv,
+    this.bottomNavigationBar,
+    this.floatingActionButton,
+    this.sessionTimer = true,
+  });
+  final Widget? drawer;
+  final PreferredSizeWidget? appBar;
+  final Widget? Function(BuildContext context, BoxConstraints constraints)?
+      mobile;
+  final Widget? Function(BuildContext context, BoxConstraints constraints)?
+      tablet;
+  final Widget? Function(BuildContext context, BoxConstraints constraints)?
+      desktop;
+  final Widget? Function(BuildContext context, BoxConstraints constraints)? tv;
+  final Widget? bottomNavigationBar;
+  final Widget? floatingActionButton;
+  final bool sessionTimer;
 
-    return SessionTimeoutManager(
-      sessionConfig: sessionTimer ? sessionConfig : SessionConfig(),
-      child: Scaffold(
+  @override
+  Widget build(BuildContext context) => Scaffold(
         drawer: drawer,
         appBar: appBar,
         body: Container(
@@ -59,11 +91,10 @@ class AppScaffold extends StatelessWidget {
             mobile: mobile,
             tablet: tablet,
             desktop: desktop,
+            tv: tv,
           ),
         ),
         bottomNavigationBar: bottomNavigationBar,
         floatingActionButton: floatingActionButton,
-      ),
-    );
-  }
+      );
 }

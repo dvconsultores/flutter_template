@@ -9,13 +9,13 @@ import 'package:collection/collection.dart';
 
 // * Responsive sizes
 /// A list of sizes from device screen resolution
-enum ScreenSizes {
+enum ScreenSize {
   mobile(600),
   tablet(880),
   desktop(2000),
   tv(4000);
 
-  const ScreenSizes(this.value);
+  const ScreenSize(this.value);
   final int value;
 
   static bool isMobile(BuildContext context) =>

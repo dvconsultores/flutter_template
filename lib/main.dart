@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_detextre4/routes/search/bloc/search_bloc.dart';
@@ -15,6 +13,7 @@ import 'package:flutter_detextre4/utils/services/local_data/secure_storage.dart'
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:generic_bloc_provider/generic_bloc_provider.dart';
 import 'package:hive_flutter/adapters.dart';
+import 'package:local_session_timeout/local_session_timeout.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
@@ -27,7 +26,7 @@ void main() async {
   // ? -- config to dotenv 🖊️ --
   await dotenv
       .load(fileName: '.env')
-      .catchError((error) => log('Error loading .env file: $error'));
+      .catchError((error) => debugPrint('Error loading .env file: $error ㊗️'));
 
   /*
   ? -- config to firebase 🖊️ --
@@ -67,24 +66,50 @@ class App extends StatelessWidget {
   @override
   Widget build(BuildContext context) =>
       Consumer<MainProvider>(builder: (context, value, child) {
-        return MaterialApp(
-            scaffoldMessengerKey: globalScaffoldMessengerKey,
-            locale: value.locale,
-            debugShowCheckedModeBanner: true,
-            title: 'Flutter Demo',
-            theme: ThemeApp.of(context), // * Theme switcher
-            localizationsDelegates: AppLocalizations.localizationsDelegates,
-            supportedLocales: AppLocalizations.supportedLocales,
-            initialRoute: value.navigatorRoutes.keys.first,
-            routes: value.navigatorRoutes,
-            navigatorKey: globalNavigatorKey,
-            // * global text scale factorized
-            builder: (context, child) {
-              return MediaQuery(
-                data: MediaQuery.of(context).copyWith(textScaleFactor: 1.0),
-                child: child!,
-              );
-            });
+        final userBloc = BlocProvider.of<UserBloc>(context);
+
+        // * Session timeout manager
+        final sessionConfig = SessionConfig(
+          // invalidateSessionForAppLostFocus: const Duration(seconds: 15),
+          invalidateSessionForUserInactivity: const Duration(seconds: 2),
+        );
+
+        sessionConfig.stream.listen((SessionTimeoutState timeoutEvent) {
+          switch (timeoutEvent) {
+            case SessionTimeoutState.userInactivityTimeout:
+              // * handle user  inactive timeout
+              userBloc.closeSesion;
+              break;
+            case SessionTimeoutState.appFocusTimeout:
+              // * handle user  app lost focus timeout
+              userBloc.closeSesion;
+              break;
+          }
+        });
+
+        // TODO here: hacer logica para establecer cuando usar y cuando no el timeout
+
+        return SessionTimeoutManager(
+          sessionConfig: sessionConfig,
+          child: MaterialApp(
+              scaffoldMessengerKey: globalScaffoldMessengerKey,
+              locale: value.locale,
+              debugShowCheckedModeBanner: true,
+              title: 'Flutter Demo',
+              theme: ThemeApp.of(context), // * Theme switcher
+              localizationsDelegates: AppLocalizations.localizationsDelegates,
+              supportedLocales: AppLocalizations.supportedLocales,
+              initialRoute: value.navigatorRoutes.keys.first,
+              routes: value.navigatorRoutes,
+              navigatorKey: globalNavigatorKey,
+              // * global text scale factorized
+              builder: (context, child) {
+                return MediaQuery(
+                  data: MediaQuery.of(context).copyWith(textScaleFactor: 1.0),
+                  child: child!,
+                );
+              }),
+        );
       });
 }
 
