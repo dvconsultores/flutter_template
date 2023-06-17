@@ -72,7 +72,7 @@ class App extends StatelessWidget {
             locale: value.locale,
             debugShowCheckedModeBanner: true,
             title: 'Flutter Demo',
-            theme: AppThemes.themeData(context), // * Theme switcher
+            theme: ThemeApp.of(context), // * Theme switcher
             localizationsDelegates: AppLocalizations.localizationsDelegates,
             supportedLocales: AppLocalizations.supportedLocales,
             initialRoute: value.navigatorRoutes.keys.first,

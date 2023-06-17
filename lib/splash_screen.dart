@@ -21,13 +21,19 @@ class _SplashPageState extends State<SplashScreen>
     duration: Duration(milliseconds: splashDuration),
   );
 
-  void goToNextPage() => const Navigator()
-      .pushReplacementWithTransition(context, const SessionManagerScreen());
+  void initAnimation() {
+    animationController.forward().then((value) {});
+    Future.delayed(
+      Duration(milliseconds: splashDuration),
+      () => const Navigator()
+          .pushReplacementWithTransition(context, const SessionManagerScreen()),
+    );
+  }
 
   @override
-  void didChangeDependencies() {
-    Future.delayed(Duration(milliseconds: splashDuration), goToNextPage);
-    super.didChangeDependencies();
+  void initState() {
+    initAnimation();
+    super.initState();
   }
 
   @override
@@ -56,7 +62,6 @@ class _SplashPageState extends State<SplashScreen>
       begin: 0.0,
       end: 125,
     ).animate(animationController);
-    animationController.forward().then((value) {});
 
     return Scaffold(
       body: Stack(children: [
@@ -70,8 +75,8 @@ class _SplashPageState extends State<SplashScreen>
                 decoration: BoxDecoration(
               gradient: LinearGradient(
                 colors: [
-                  Theme.of(context).colorScheme.primary,
-                  Theme.of(context).colorScheme.secondary,
+                  ThemeApp.colors(context).primary,
+                  ThemeApp.colors(context).secondary,
                 ],
               ),
             )),
@@ -101,7 +106,7 @@ class _SplashPageState extends State<SplashScreen>
             height: 60,
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(20),
-              color: Theme.of(context).extension<ThemeDataExtension>()!.accent,
+              color: ThemeApp.colors(context).accent,
             ),
           ),
         ),
@@ -162,7 +167,7 @@ class _SplashPageState extends State<SplashScreen>
               height: 150,
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(20),
-                color: Theme.of(context).focusColor,
+                color: ThemeApp.colors(context).focusColor,
               )),
         ),
       ]),

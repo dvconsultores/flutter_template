@@ -33,8 +33,10 @@ class LogInScreen extends StatelessWidget {
           ),
         ),
         Center(
-          child: Text("login page",
-              style: Theme.of(context).textTheme.displayMedium),
+          child: Text(
+            "login page",
+            style: Theme.of(context).textTheme.displayMedium,
+          ),
         ),
         TextButton(
           child: const Text("Login Button", style: TextStyle(fontSize: 25)),

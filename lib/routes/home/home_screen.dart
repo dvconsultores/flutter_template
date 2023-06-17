@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_detextre4/main_provider.dart';
 import 'package:flutter_detextre4/utils/config/app_config.dart';
 import 'package:flutter_detextre4/utils/config/extensions_config.dart';
 import 'package:flutter_detextre4/utils/general/global_functions.dart';
-import 'package:provider/provider.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -31,9 +29,10 @@ class _HomePageState extends State<HomeScreen> {
               TextButton(
                 child: Text(
                   "Change language: ${AppLocalizations.of(context)!.helloWorld}",
-                  style: Theme.of(context).textTheme.bodyLarge!.copyWith(
-                        color: Theme.of(context).primaryColor,
-                      ),
+                  style: Theme.of(context)
+                      .textTheme
+                      .bodyLarge!
+                      .copyWith(color: ThemeApp.colors(context).primary),
                 ),
                 onPressed: () {
                   AppLocale.locale == Locale(LanguageList.en.name)
@@ -54,27 +53,26 @@ class _HomePageState extends State<HomeScreen> {
                     child: const Icon(Icons.add).invertedColor(),
                   )),
               Text(
-                context.watch<MainProvider>().appTheme.name,
+                ThemeApp.theme.name,
                 style: Theme.of(context).textTheme.displaySmall,
               ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   IconButton(
-                    onPressed: () {
-                      context.read<MainProvider>().switchTheme =
-                          ThemeType.light;
-                    },
-                    icon: Icon(Icons.light_mode,
-                        color: Theme.of(context).colorScheme.primary),
+                    onPressed: () =>
+                        ThemeApp.switchTheme(context, ThemeType.light),
+                    icon: Icon(
+                      Icons.light_mode,
+                      color: ThemeApp.colors(context).primary,
+                    ),
                   ),
                   IconButton(
-                    onPressed: () {
-                      context.read<MainProvider>().switchTheme = ThemeType.dark;
-                    },
+                    onPressed: () =>
+                        ThemeApp.switchTheme(context, ThemeType.dark),
                     icon: Icon(
                       Icons.dark_mode,
-                      color: Theme.of(context).colorScheme.secondary,
+                      color: ThemeApp.colors(context).secondary,
                     ),
                   ),
                 ],

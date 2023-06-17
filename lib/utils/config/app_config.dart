@@ -36,7 +36,7 @@ enum ThemeType {
 }
 
 /// Themes configuration class from app.
-mixin AppThemes {
+mixin ThemeApp {
   static final _themes = <ThemeType, ThemeData>{
     // ? ligth
     ThemeType.light: ThemeData.light().copyWith(
@@ -84,13 +84,104 @@ mixin AppThemes {
   static ThemeType get theme =>
       globalNavigatorKey.currentContext!.watch<MainProvider>().appTheme;
 
-  ///* Getter to current theme data.
-  static ThemeData themeData(BuildContext context) =>
-      _themes[context.watch<MainProvider>().appTheme]!;
+  ///* Getter to current theme assets directory `assets/themes/${theme}`.
+  static String assetsPrefix(BuildContext? context) =>
+      'assets/themes/${(context ?? globalNavigatorKey.currentContext!).watch<MainProvider>().appTheme.name}';
 
-  ///* Getter to current theme assets directory.
-  static String assetsPrefix(BuildContext context) =>
-      'assets/themes/${context.watch<MainProvider>().appTheme.name}';
+  ///* Getter to current themeData.
+  static ThemeData of(BuildContext? context) =>
+      _themes[(context ?? globalNavigatorKey.currentContext!)
+          .watch<MainProvider>()
+          .appTheme]!;
+
+  ///* Switch between themeData.
+  static void switchTheme(BuildContext? context, ThemeType themeType) =>
+      (context ?? globalNavigatorKey.currentContext!)
+          .read<MainProvider>()
+          .switchTheme = themeType;
+
+  ///* Getter to all custom colors registered in themeData.
+  static ColorsApp colors(BuildContext? context) {
+    final themeData = Theme.of(context ?? globalNavigatorKey.currentContext!);
+
+    return ColorsApp(
+      primary: themeData.colorScheme.primary,
+      secondary: themeData.colorScheme.secondary,
+      tertiary: themeData.colorScheme.tertiary,
+      error: themeData.colorScheme.error,
+      focusColor: themeData.focusColor,
+      disabledColor: themeData.disabledColor,
+      text: themeData.extension<ThemeDataExtension>()!.text!,
+      accent: themeData.extension<ThemeDataExtension>()!.accent!,
+      success: themeData.extension<ThemeDataExtension>()!.success!,
+    );
+  }
+}
+
+///? Collection of all custom colors registered in themeData
+class ColorsApp {
+  const ColorsApp({
+    required this.primary,
+    required this.secondary,
+    required this.tertiary,
+    required this.error,
+    required this.focusColor,
+    required this.disabledColor,
+    required this.text,
+    required this.accent,
+    required this.success,
+  });
+  final Color primary;
+  final Color secondary;
+  final Color tertiary;
+  final Color error;
+  final Color focusColor;
+  final Color disabledColor;
+  final Color text;
+  final Color accent;
+  final Color success;
+}
+
+// ? Theme data extension
+@immutable
+class ThemeDataExtension extends ThemeExtension<ThemeDataExtension> {
+  const ThemeDataExtension({
+    this.text,
+    this.accent,
+    this.success,
+  });
+
+  final Color? text;
+  final Color? accent;
+  final Color? success;
+
+  @override
+  ThemeDataExtension copyWith({
+    Color? text,
+    Color? accent,
+    Color? success,
+  }) {
+    return ThemeDataExtension(
+      text: text ?? this.text,
+      accent: accent ?? this.accent,
+      success: success ?? this.success,
+    );
+  }
+
+  @override
+  ThemeDataExtension lerp(ThemeDataExtension? other, double t) {
+    if (other is! ThemeDataExtension) return this;
+
+    return ThemeDataExtension(
+      text: Color.lerp(text, other.text, t),
+      accent: Color.lerp(accent, other.accent, t),
+      success: Color.lerp(success, other.success, t),
+    );
+  }
+
+  @override
+  String toString() =>
+      'ThemeDataExtension(text: $text, accent: $accent, success: $success)';
 }
 
 /// ? A Collection of diverse languages.
@@ -135,46 +226,4 @@ mixin AppLocale {
   static void changeLanguage(LanguageList value) =>
       globalNavigatorKey.currentContext!.read<MainProvider>().changeLocale =
           value;
-}
-
-// ? Theme data extension
-@immutable
-class ThemeDataExtension extends ThemeExtension<ThemeDataExtension> {
-  const ThemeDataExtension({
-    this.text,
-    this.accent,
-    this.success,
-  });
-
-  final Color? text;
-  final Color? accent;
-  final Color? success;
-
-  @override
-  ThemeDataExtension copyWith({
-    Color? text,
-    Color? accent,
-    Color? success,
-  }) {
-    return ThemeDataExtension(
-      text: text ?? this.text,
-      accent: accent ?? this.accent,
-      success: success ?? this.success,
-    );
-  }
-
-  @override
-  ThemeDataExtension lerp(ThemeDataExtension? other, double t) {
-    if (other is! ThemeDataExtension) return this;
-
-    return ThemeDataExtension(
-      text: Color.lerp(text, other.text, t),
-      accent: Color.lerp(accent, other.accent, t),
-      success: Color.lerp(success, other.success, t),
-    );
-  }
-
-  @override
-  String toString() =>
-      'ThemeDataExtension(text: $text, accent: $accent, success: $success)';
 }

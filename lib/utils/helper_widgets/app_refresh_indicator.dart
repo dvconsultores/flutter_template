@@ -4,6 +4,7 @@ import 'package:custom_refresh_indicator/custom_refresh_indicator.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
+import 'package:flutter_detextre4/utils/config/app_config.dart';
 import 'package:flutter_detextre4/utils/helper_widgets/painters.dart';
 
 /// A `RefreshIndicator` with Custom app loader on refresh list.
@@ -141,7 +142,7 @@ class AppRefreshIndicator extends StatelessWidget {
                       width: 28,
                       height: 28,
                       child: CircularProgressIndicator(
-                        color: Theme.of(context).colorScheme.primary,
+                        color: ThemeApp.colors(context).primary,
                         strokeWidth: 3,
                       ),
                     )
@@ -267,7 +268,7 @@ class AppRefreshIndicator extends StatelessWidget {
                       height: circleSize,
                       decoration: BoxDecoration(
                         boxShadow: defaultShadow,
-                        color: color ?? Theme.of(context).colorScheme.primary,
+                        color: color ?? ThemeApp.colors(context).primary,
                         shape: BoxShape.circle,
                       ),
                       child:
@@ -346,7 +347,7 @@ class AppRefreshIndicator extends StatelessWidget {
                                   decoration: BoxDecoration(
                                     boxShadow: defaultShadow,
                                     color: color ??
-                                        Theme.of(context).colorScheme.primary,
+                                        ThemeApp.colors(context).primary,
                                     shape: BoxShape.circle,
                                   ),
                                   child: Stack(
@@ -432,8 +433,7 @@ class AppRefreshIndicator extends StatelessWidget {
 /// to support older versions of the API as well.
 T? _ambiguate<T>(T? value) => value;
 
-Color _defaultStarColorGetter(int index) =>
-    HSLColor.fromAHSL(1, math.Random().nextDouble() * 360, 1, 0.98).toColor();
+Color _defaultStarColorGetter(int index) => ThemeApp.colors(null).primary;
 
 enum WarpAnimationState {
   stopped,
@@ -476,19 +476,13 @@ class _WarpIndicatorState extends State<WarpRefreshIndicator>
   final _offsetTween = Tween<Offset>(begin: Offset.zero, end: Offset.zero);
   final _angleTween = Tween<double>(begin: 0, end: 0);
 
-  late AnimationController shakeController;
+  late final AnimationController shakeController = AnimationController(
+    vsync: this,
+    duration: const Duration(milliseconds: 100),
+  );
 
   static final _scaleTween = Tween(begin: 1.0, end: 0.75);
   static final _radiusTween = Tween(begin: 0.0, end: 16.0);
-
-  @override
-  void initState() {
-    shakeController = AnimationController(
-      vsync: this,
-      duration: const Duration(milliseconds: 100),
-    );
-    super.initState();
-  }
 
   @override
   void dispose() {

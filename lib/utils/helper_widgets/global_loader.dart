@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_detextre4/main.dart';
+import 'package:flutter_detextre4/utils/config/app_config.dart';
 import 'package:flutter_detextre4/utils/helper_widgets/will_pop_custom.dart';
 import 'package:http/http.dart' as http;
 
@@ -45,8 +46,8 @@ class _GlobalLoader extends StatelessWidget {
                   height: 70,
                   child: CircularProgressIndicator(
                     strokeWidth: 8,
-                    color: Theme.of(context).colorScheme.secondary,
-                    backgroundColor: Theme.of(context).colorScheme.primary,
+                    color: ThemeApp.colors(context).secondary,
+                    backgroundColor: ThemeApp.colors(context).primary,
                   ),
                 ),
                 const SizedBox(height: 8),

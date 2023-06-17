@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_detextre4/routes/home/home_screen.dart';
+import 'package:flutter_detextre4/utils/config/app_config.dart';
 import 'package:flutter_detextre4/widgets/app_drawer.dart';
 import 'package:flutter_detextre4/main_provider.dart';
 import 'package:flutter_detextre4/utils/config/router_navigation_config.dart';
@@ -68,7 +69,7 @@ class _MainNavigationState extends State<MainNavigation> {
           onTap: (index) =>
               setState(() => mainProvider.setNavigationTab = index),
           currentIndex: indexTab,
-          selectedItemColor: Theme.of(context).focusColor,
+          selectedItemColor: ThemeApp.colors(context).focusColor,
           items: RouterNavigator.routes
               .map((element) => BottomNavigationBarItem(
                     label: "",
