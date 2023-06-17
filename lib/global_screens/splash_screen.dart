@@ -21,18 +21,10 @@ class _SplashPageState extends State<SplashScreen>
     duration: Duration(milliseconds: splashDuration),
   );
 
-  void initAnimation() {
-    animationController.forward().then((value) {});
-    Future.delayed(
-      Duration(milliseconds: splashDuration),
-      () => const Navigator()
-          .pushReplacementWithTransition(context, const SessionManagerScreen()),
-    );
-  }
-
   @override
   void initState() {
-    initAnimation();
+    animationController.forward().then((_) => const Navigator()
+        .pushReplacementWithTransition(context, const SessionManagerScreen()));
     super.initState();
   }
 
@@ -73,12 +65,10 @@ class _SplashPageState extends State<SplashScreen>
             quarterTurns: 1,
             child: Container(
                 decoration: BoxDecoration(
-              gradient: LinearGradient(
-                colors: [
-                  ThemeApp.colors(context).primary,
-                  ThemeApp.colors(context).secondary,
-                ],
-              ),
+              gradient: LinearGradient(colors: [
+                ThemeApp.colors(context).primary,
+                ThemeApp.colors(context).secondary,
+              ]),
             )),
           ),
         ),
