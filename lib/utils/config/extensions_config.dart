@@ -6,6 +6,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_detextre4/global_models/files_type.dart';
+import 'package:flutter_detextre4/utils/config/fetch_config.dart';
 import 'package:flutter_detextre4/utils/general/global_functions.dart';
 import 'package:gallery_saver/gallery_saver.dart';
 import 'package:http/http.dart' as http;
@@ -468,19 +469,25 @@ extension StringExtension on String {
   /// Add Custom network base url path to `string`.
   ///
   /// normally must to end without slash `/`.
-  String addNetworkPath(String networkPath) {
-    if (!hasNetworkPath) return "$networkPath$this";
-    debugPrint("$this - already has scheme ⭕");
-    return this;
+  String addNetworkPath({String? path}) {
+    if (hasNetworkPath) {
+      debugPrint("$this - already has scheme ⭕");
+      return this;
+    }
+
+    return "${path ?? FetchConfig.fileBaseUrl}$this";
   }
 
   /// Remove Custom network base url path to `string`.
   ///
   /// normally must to end without slash [/].
-  String removeNetworkPath(String networkPath) {
-    if (hasNetworkPath) return split(networkPath)[1];
-    debugPrint("$this - haven't scheme ⭕");
-    return this;
+  String removeNetworkPath({String? path}) {
+    if (hasNetworkPath) {
+      debugPrint("$this - haven't scheme ⭕");
+      return this;
+    }
+
+    return split(path ?? FetchConfig.fileBaseUrl)[1];
   }
 }
 
