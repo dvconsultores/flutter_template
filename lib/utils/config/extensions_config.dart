@@ -5,7 +5,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_detextre4/global_models/file_constructor.dart';
+import 'package:flutter_detextre4/global_models/files_type.dart';
 import 'package:flutter_detextre4/utils/general/global_functions.dart';
 import 'package:gallery_saver/gallery_saver.dart';
 import 'package:http/http.dart' as http;
@@ -525,7 +525,7 @@ extension ScreenshotExtension on ScreenshotController {
     final File file = File(imagePath);
     await file.writeAsBytes(imageBytes!, mode: FileMode.write);
     dev.log(
-        'Image saved to: $imagePath (size: ${file.lengthSync()} bytes) ${file.path} ⭕');
+        'Image saved to: $imagePath (size: ${file.lengthSync()} bytes) ${file.path} ⭐');
     await GallerySaver.saveImage(file.path);
 
     showSnackbar(message ?? "Capture saved on gallery");
@@ -540,7 +540,7 @@ extension ScreenshotExtension on ScreenshotController {
     final File file = File(imagePath);
     await file.writeAsBytes(imageBytes!, mode: FileMode.write);
     dev.log(
-        'Image saved to: $imagePath (size: ${file.lengthSync()} bytes) ${file.path} ⭕');
+        'Image saved to: $imagePath (size: ${file.lengthSync()} bytes) ${file.path} ⭐');
     Share.shareXFiles([XFile(file.path)]);
   }
 }
@@ -590,6 +590,33 @@ extension MultipartRequestExtension on http.MultipartRequest {
         filename: '${element.name}.$formatFile',
       ));
     }
+  }
+}
+
+/// A constructor used to storage files data.
+///
+/// could be used to add files into `http.MultipartRequest` using `addFiles`
+/// method.
+class FileConstructor {
+  const FileConstructor({
+    required this.uri,
+    required this.name,
+    this.format,
+    this.type,
+  });
+  final Uri uri;
+  final String name;
+  final String? format;
+  final String? type;
+
+  /// Get current format of Uri, if dont match will return null
+  String? getFormat() => uri.path.split(".").last;
+
+  /// Get current type of File, if dont match will return null
+  String? getType() {
+    return FilesType.values
+        .firstWhereOrNull((element) => element.listValues.contains(getFormat()))
+        ?.name;
   }
 }
 
