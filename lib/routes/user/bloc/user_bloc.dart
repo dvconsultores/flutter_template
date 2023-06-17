@@ -36,8 +36,8 @@ class UserBloc implements Bloc {
     final localData =
         await SecureStorage.read(SecureStorageCollection.dataUser);
     setDataUser
-        ? dataUser = UserModel.fromLocalData(localData)
-        : add = UserModel.fromLocalData(localData);
+        ? dataUser = UserModel.fromNullableJson(localData)
+        : add = UserModel.fromNullableJson(localData);
   }
 
   // ------------------------------------------------------------------------ //

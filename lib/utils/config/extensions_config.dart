@@ -5,7 +5,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_detextre4/global_models/files_type.dart';
+import 'package:flutter_detextre4/global_models/file_constructor.dart';
 import 'package:flutter_detextre4/utils/general/global_functions.dart';
 import 'package:gallery_saver/gallery_saver.dart';
 import 'package:http/http.dart' as http;
@@ -17,6 +17,10 @@ import 'package:intl/intl.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:screenshot/screenshot.dart';
 import 'package:share_plus/share_plus.dart';
+
+abstract class ConvertibleToMap {
+  Map<String, dynamic> toMap();
+}
 
 // ? Dynamic extension
 extension Existence on dynamic {
@@ -42,11 +46,6 @@ extension BoolExtension on bool {
       return returnedValue is Function ? returnedValue() : returnedValue;
     }
   }
-}
-
-// ? Enum extension
-extension EnumExtension on Enum {
-  String get name => toString().split('.').last;
 }
 
 // ? DateTime extension
@@ -97,21 +96,75 @@ extension DurationExtension on Duration {
 }
 
 // ? list extension
-extension ListExtension on List {
+extension ListExtension<T> on List<T> {
   /// Sorts this list according to the order specified by the [compare] function.
   /// The [compare] `String` value.
   void sortCompare(String sortBy) => sort((a, b) {
-        final valueA = a is Map ? a : a?.toMap();
-        final valueB = b is Map ? b : b?.toMap();
-
-        if (valueA == null || valueB == null) {
-          throw "`toMap()` method not founded";
-        }
+        final valueA = a is Map ? a : (a as ConvertibleToMap).toMap();
+        final valueB = b is Map ? b : (b as ConvertibleToMap).toMap();
 
         return (valueA[sortBy] as String)
             .toLowerCase()
             .compareTo((valueB[sortBy] as String).toLowerCase());
       });
+
+  /// Removes duplicate elements from a list.
+  /// Elements are considered duplicates if they have the same property values.
+  /// Returns a new list that contains only unique elements, preserving the original order.
+  List<T> removeDuplicates() {
+    final distinctList = [];
+    final uniqueKeys = <String>{};
+
+    for (final item in this) {
+      final key = item.toString();
+
+      if (uniqueKeys.contains(key)) continue;
+
+      uniqueKeys.add(key);
+      distinctList.add(item);
+    }
+
+    return distinctList.cast<T>();
+  }
+}
+
+// ? set extension
+extension SetExtension<T> on Set<T> {
+  /// Sorts this list according to the order specified by the [compare] function.
+  /// The [compare] `String` value.
+  /// Returns a new sorted Set.
+  Set<T> sortedCompare(String sortBy) {
+    final sortedList = toList();
+    sortedList.sort((a, b) {
+      final valueA = a is Map ? a : (a as ConvertibleToMap).toMap();
+      final valueB = b is Map ? b : (b as ConvertibleToMap).toMap();
+
+      return (valueA[sortBy] as String)
+          .toLowerCase()
+          .compareTo((valueB[sortBy] as String).toLowerCase());
+    });
+
+    return sortedList.toSet();
+  }
+
+  /// Removes duplicate elements from a list.
+  /// Elements are considered duplicates if they have the same property values.
+  /// Returns a new Set that contains only unique elements, preserving the original order.
+  Set<T> removeDuplicates() {
+    final distinctList = [];
+    final uniqueKeys = <String>{};
+
+    for (final item in this) {
+      final key = item.toString();
+
+      if (uniqueKeys.contains(key)) continue;
+
+      uniqueKeys.add(key);
+      distinctList.add(item);
+    }
+
+    return distinctList.cast<T>().toSet();
+  }
 }
 
 // ? Nullable list extension
@@ -540,30 +593,36 @@ extension MultipartRequestExtension on http.MultipartRequest {
   }
 }
 
-/// A constructor used to storage files data.
-///
-/// could be used to add files into `http.MultipartRequest` using `addFiles`
-/// method.
-class FileConstructor {
-  const FileConstructor({
-    required this.uri,
-    required this.name,
-    this.format,
-    this.type,
-  });
-  final Uri uri;
-  final String name;
-  final String? format;
-  final String? type;
+// ? text extension
+extension TextExtension on Text {
+  Text invertedColor() {
+    final color = style?.color ?? Colors.black;
+    return Text(
+      data ?? "",
+      style: style?.copyWith(
+          color: Color.fromARGB(
+        (color.opacity * 255).round(),
+        255 - color.red,
+        255 - color.green,
+        255 - color.blue,
+      )),
+    );
+  }
+}
 
-  /// Get current format of Uri, if dont match will return null
-  String? getFormat() => uri.path.split(".").last;
-
-  /// Get current type of File, if dont match will return null
-  String? getType() {
-    return FilesType.values
-        .firstWhereOrNull((element) => element.listValues.contains(getFormat()))
-        ?.name;
+// ? icon extension
+extension IconExtension on Icon {
+  Icon invertedColor() {
+    final newColor = color ?? Colors.black;
+    return Icon(
+      icon,
+      color: Color.fromARGB(
+        (newColor.opacity * 255).round(),
+        255 - newColor.red,
+        255 - newColor.green,
+        255 - newColor.blue,
+      ),
+    );
   }
 }
 
@@ -622,37 +681,4 @@ extension NavigatorExtension on Navigator {
                               child: child),
                 ),
               ));
-}
-
-// ? text extension
-extension TextExtension on Text {
-  Text invertedColor() {
-    final color = style?.color ?? Colors.black;
-    return Text(
-      data ?? "",
-      style: style?.copyWith(
-          color: Color.fromARGB(
-        (color.opacity * 255).round(),
-        255 - color.red,
-        255 - color.green,
-        255 - color.blue,
-      )),
-    );
-  }
-}
-
-// ? icon extension
-extension IconExtension on Icon {
-  Icon invertedColor() {
-    final newColor = color ?? Colors.black;
-    return Icon(
-      icon,
-      color: Color.fromARGB(
-        (newColor.opacity * 255).round(),
-        255 - newColor.red,
-        255 - newColor.green,
-        255 - newColor.blue,
-      ),
-    );
-  }
 }

@@ -5,7 +5,6 @@ class UserModel {
     required this.email,
     required this.photoURL,
   });
-
   final int? uid;
   final String name;
   final String email;
@@ -24,9 +23,6 @@ class UserModel {
         photoURL: photoURL ?? this.photoURL,
       );
 
-  static UserModel? fromLocalData(Map<String, dynamic>? json) =>
-      json != null ? UserModel.fromJson(json) : null;
-
   Map<String, dynamic> toMap() => {
         "id": uid,
         "name": name,
@@ -40,4 +36,7 @@ class UserModel {
         email: json["email"] ?? "",
         photoURL: json["photo_url"] ?? "",
       );
+
+  static UserModel? fromNullableJson(Map<String, dynamic>? json) =>
+      json != null ? UserModel.fromJson(json) : null;
 }
