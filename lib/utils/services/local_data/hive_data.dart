@@ -34,19 +34,33 @@ class HiveData {
   }
 
   /// Delete a value from hive data using [HiveDataCollection] key.
-  static delete(HiveDataCollection key) {
+  static void delete(HiveDataCollection key) {
     storage.delete(key.name).whenComplete(
         () => debugPrint("${key.name} - deleted from hive data is cleared 💦"));
   }
 
   /// Delete all values from hive data.
-  static deleteAll() {
+  static void deleteAll() {
     storage.clear().whenComplete(() => debugPrint("Hive data cleared 💦"));
   }
 
   /// Write/storage a value into hive data using [HiveDataCollection] key.
-  static write(HiveDataCollection key, dynamic value) {
+  static void write(HiveDataCollection key, dynamic value) {
     storage.put(key.name, value).whenComplete(() =>
         debugPrint("${key.name}: $value - written from hive data storage 💦"));
+  }
+
+  /// Read and write modifying key / values into hive data elements using [HiveDataCollection] key.
+  static void updateFields<T>(
+    HiveDataCollection key,
+    void Function(T stored) values,
+  ) {
+    final T storedElement = storage.get(key.name);
+
+    if (storedElement == null) return;
+    values(storedElement);
+
+    storage.put(key.name, storedElement).whenComplete(() => debugPrint(
+        "${key.name}: $storedElement - updated from hive data storage 💦"));
   }
 }

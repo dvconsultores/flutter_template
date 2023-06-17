@@ -81,4 +81,31 @@ class SecureStorage {
             debugPrint("${key.name}: $value - written from Secure storage 🛡️"))
         .catchError((onError) => throw onError);
   }
+
+  /// Read and write modifying key / values into hive data elements using [SecureStorageCollection] key.
+  static Future<void> updateFields<T>(
+    SecureStorageCollection key,
+    void Function(T stored) values,
+  ) async {
+    final T storedElement = jsonDecode((await storage.read(
+          key: key.name,
+          aOptions: getAndroidOptions(),
+          iOptions: getIOSOptions(),
+        )) ??
+        "null");
+
+    if (storedElement == null) return;
+    values(storedElement);
+
+    await storage
+        .write(
+          key: key.name,
+          value: jsonEncode(storedElement),
+          aOptions: getAndroidOptions(),
+          iOptions: getIOSOptions(),
+        )
+        .then((_) => debugPrint(
+            "${key.name}: $storedElement - updated from Secure storage 🛡️"))
+        .catchError((onError) => throw onError);
+  }
 }
