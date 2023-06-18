@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_detextre4/main.dart';
 import 'package:flutter_detextre4/main_provider.dart';
@@ -211,8 +212,8 @@ enum LanguageList {
   final String lcidString;
 
   static LanguageList deviceLanguage() {
-    return LanguageList.values.firstWhereOrNull(
-            (element) => Platform.localeName.contains(element.name)) ??
+    return LanguageList.values.firstWhereOrNull((element) =>
+            !kIsWeb ? Platform.localeName.contains(element.name) : false) ??
         LanguageList.en;
   }
 }

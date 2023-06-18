@@ -11,23 +11,22 @@ class LocalAuth {
   ///
   /// @returns [true] if device has fingerprint/faceID available and registered, [false] otherwise
   static Future<bool> hasBiometrics() async {
-    if (!kIsWeb &&
-        (Platform.isAndroid || Platform.isIOS || Platform.isWindows)) {
-      final bool canCheck = await _localAuth.canCheckBiometrics;
-      if (canCheck) {
-        final List<BiometricType> availableBiometrics =
-            await _localAuth.getAvailableBiometrics();
-        if (availableBiometrics.contains(BiometricType.face) ||
-            availableBiometrics.contains(BiometricType.fingerprint) ||
-            availableBiometrics.contains(BiometricType.strong) ||
-            availableBiometrics.contains(BiometricType.weak)) {
-          return true;
-        }
-      }
-      return false;
-    } else {
-      return false;
+    if (kIsWeb && !(Platform.isAndroid || Platform.isIOS)) return false;
+
+    final bool canCheck = await _localAuth.canCheckBiometrics;
+    if (!canCheck) return false;
+
+    final List<BiometricType> availableBiometrics =
+        await _localAuth.getAvailableBiometrics();
+
+    if (availableBiometrics.contains(BiometricType.face) ||
+        availableBiometrics.contains(BiometricType.fingerprint) ||
+        availableBiometrics.contains(BiometricType.strong) ||
+        availableBiometrics.contains(BiometricType.weak)) {
+      return true;
     }
+
+    return false;
   }
 
   /// authenticateWithBiometrics()
@@ -37,13 +36,15 @@ class LocalAuth {
   static Future<bool> authenticateWithBiometrics() async {
     const String message = 'Favor de autenticarse para acceder';
     final bool hasBiometricsEnrolled = await hasBiometrics();
-    if (hasBiometricsEnrolled) {
-      final LocalAuthentication localAuth = LocalAuthentication();
-      return await localAuth.authenticate(
-          localizedReason: message,
-          options: const AuthenticationOptions(
-              useErrorDialogs: false, biometricOnly: true));
-    }
-    return false;
+
+    if (!hasBiometricsEnrolled) return false;
+
+    final LocalAuthentication localAuth = LocalAuthentication();
+    return await localAuth.authenticate(
+        localizedReason: message,
+        options: const AuthenticationOptions(
+          useErrorDialogs: false,
+          biometricOnly: true,
+        ));
   }
 }

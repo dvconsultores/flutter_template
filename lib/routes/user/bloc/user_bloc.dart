@@ -22,7 +22,7 @@ class UserBloc implements Bloc {
         if (event != null) {
           await SecureStorage.write(
             SecureStorageCollection.dataUser,
-            event.toMap(),
+            event.toJson(),
           );
           return await init(setDataUser: true);
         }
@@ -36,8 +36,8 @@ class UserBloc implements Bloc {
     final localData =
         await SecureStorage.read(SecureStorageCollection.dataUser);
     setDataUser
-        ? dataUser = UserModel.fromNullableJson(localData)
-        : add = UserModel.fromNullableJson(localData);
+        ? dataUser = UserModel.fromJsonNullable(localData)
+        : add = UserModel.fromJsonNullable(localData);
   }
 
   // ------------------------------------------------------------------------ //

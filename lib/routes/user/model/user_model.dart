@@ -23,7 +23,7 @@ class UserModel {
         photoURL: photoURL ?? this.photoURL,
       );
 
-  Map<String, dynamic> toMap() => {
+  Map<String, dynamic> toJson() => {
         "id": uid,
         "name": name,
         "email": email,
@@ -37,6 +37,6 @@ class UserModel {
         photoURL: json["photo_url"] ?? "",
       );
 
-  static UserModel? fromNullableJson(Map<String, dynamic>? json) =>
+  static UserModel? fromJsonNullable(Map<String, dynamic>? json) =>
       json != null ? UserModel.fromJson(json) : null;
 }

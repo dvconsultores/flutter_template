@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_detextre4/utils/config/extensions_config.dart';
 import 'package:flutter_detextre4/utils/general/global_functions.dart';
@@ -19,6 +20,9 @@ class DoubleBackToCloseWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // * Web
+    if (kIsWeb) return child;
+
     DateTime? currentBackPressTime;
 
     Future<bool> onWillPop() async {
@@ -39,20 +43,22 @@ class DoubleBackToCloseWidget extends StatelessWidget {
       return true;
     }
 
-    return !Platform.isIOS
-        // * Android
-        ? WillPopScope(
-            onWillPop: onWillPop,
-            child: child,
-          )
-        // * IOS
-        : WillPopScope(
-            onWillPop: () => Future.value(false),
-            child: GestureDetector(
-              onHorizontalDragUpdate: (details) =>
-                  (details.delta.dx > 8).inCase(onWillPop),
-              child: child,
-            ),
-          );
+    // * Android
+    if (Platform.isIOS) {
+      return WillPopScope(
+        onWillPop: onWillPop,
+        child: child,
+      );
+    }
+
+    // * IOS
+    return WillPopScope(
+      onWillPop: () => Future.value(false),
+      child: GestureDetector(
+        onHorizontalDragUpdate: (details) =>
+            (details.delta.dx > 8).inCase(onWillPop),
+        child: child,
+      ),
+    );
   }
 }

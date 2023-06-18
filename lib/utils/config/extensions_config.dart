@@ -20,7 +20,7 @@ import 'package:screenshot/screenshot.dart';
 import 'package:share_plus/share_plus.dart';
 
 abstract class ConvertibleToMap {
-  Map<String, dynamic> toMap();
+  Map<String, dynamic> toJson();
 }
 
 // ? Dynamic extension
@@ -101,8 +101,8 @@ extension ListExtension<T> on List<T> {
   /// Sorts this list according to the order specified by the [compare] function.
   /// The [compare] `String` value.
   void sortCompare(String sortBy) => sort((a, b) {
-        final valueA = a is Map ? a : (a as ConvertibleToMap).toMap();
-        final valueB = b is Map ? b : (b as ConvertibleToMap).toMap();
+        final valueA = a is Map ? a : (a as ConvertibleToMap).toJson();
+        final valueB = b is Map ? b : (b as ConvertibleToMap).toJson();
 
         return (valueA[sortBy] as String)
             .toLowerCase()
@@ -137,8 +137,8 @@ extension SetExtension<T> on Set<T> {
   Set<T> sortedCompare(String sortBy) {
     final sortedList = toList();
     sortedList.sort((a, b) {
-      final valueA = a is Map ? a : (a as ConvertibleToMap).toMap();
-      final valueB = b is Map ? b : (b as ConvertibleToMap).toMap();
+      final valueA = a is Map ? a : (a as ConvertibleToMap).toJson();
+      final valueB = b is Map ? b : (b as ConvertibleToMap).toJson();
 
       return (valueA[sortBy] as String)
           .toLowerCase()
@@ -671,23 +671,19 @@ extension NavigatorExtension on Navigator {
     double end = 1.0,
     Curve curve = Curves.fastLinearToSlowEaseIn,
   }) =>
-      WidgetsBinding.instance
-          .addPostFrameCallback((timeStamp) => Navigator.push(
-                context,
-                PageRouteBuilder(
-                  transitionDuration: transitionDuration,
-                  pageBuilder: (context, animation, secondaryAnimation) => page,
-                  transitionsBuilder:
-                      (context, animation, secondaryAnimation, child) =>
-                          FadeTransition(
-                              opacity: Tween<double>(begin: begin, end: end)
-                                  .animate(CurvedAnimation(
-                                parent: animation,
-                                curve: curve,
-                              )),
-                              child: child),
-                ),
-              ));
+      Navigator.of(context).push(
+        PageRouteBuilder(
+          transitionDuration: transitionDuration,
+          pageBuilder: (context, animation, secondaryAnimation) => page,
+          transitionsBuilder: (context, animation, secondaryAnimation, child) =>
+              FadeTransition(
+            opacity: Tween<double>(begin: begin, end: end).animate(
+              CurvedAnimation(parent: animation, curve: curve),
+            ),
+            child: child,
+          ),
+        ),
+      );
 
   ///* Normal `pushReplacement` method from `Navigator` with custome transition.
   void pushReplacementWithTransition(
@@ -698,21 +694,17 @@ extension NavigatorExtension on Navigator {
     double end = 1.0,
     Curve curve = Curves.fastLinearToSlowEaseIn,
   }) =>
-      WidgetsBinding.instance
-          .addPostFrameCallback((timeStamp) => Navigator.pushReplacement(
-                context,
-                PageRouteBuilder(
-                  transitionDuration: transitionDuration,
-                  pageBuilder: (context, animation, secondaryAnimation) => page,
-                  transitionsBuilder:
-                      (context, animation, secondaryAnimation, child) =>
-                          FadeTransition(
-                              opacity: Tween<double>(begin: begin, end: end)
-                                  .animate(CurvedAnimation(
-                                parent: animation,
-                                curve: curve,
-                              )),
-                              child: child),
-                ),
-              ));
+      Navigator.of(context).pushReplacement(
+        PageRouteBuilder(
+          transitionDuration: transitionDuration,
+          pageBuilder: (context, animation, secondaryAnimation) => page,
+          transitionsBuilder: (context, animation, secondaryAnimation, child) =>
+              FadeTransition(
+            opacity: Tween<double>(begin: begin, end: end).animate(
+              CurvedAnimation(parent: animation, curve: curve),
+            ),
+            child: child,
+          ),
+        ),
+      );
 }

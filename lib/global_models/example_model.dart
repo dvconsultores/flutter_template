@@ -24,7 +24,7 @@ class ExampleModel implements ConvertibleToMap {
       iterableList.toSet().map((e) => ExampleModel.fromJson(e)).toSet();
 
   @override
-  Map<String, dynamic> toMap() => {
+  Map<String, dynamic> toJson() => {
         "name": name,
         "value": value,
       };

@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 class WillPopCustom extends StatelessWidget {
@@ -12,25 +13,30 @@ class WillPopCustom extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // * Web
+    if (kIsWeb) return child;
+
     Future<bool> onWillPopCallback() async {
       if (onWillPop != null) return await onWillPop!();
       return true;
     }
 
-    return !Platform.isIOS
-        // * Android
-        ? WillPopScope(
-            onWillPop: onWillPopCallback,
-            child: child,
-          )
-        // * IOS
-        : WillPopScope(
-            onWillPop: () async => false,
-            child: GestureDetector(
-              onHorizontalDragUpdate: (details) =>
-                  (details.delta.dx > 8) ? onWillPopCallback() : true,
-              child: child,
-            ),
-          );
+    // * Android
+    if (Platform.isAndroid) {
+      return WillPopScope(
+        onWillPop: onWillPopCallback,
+        child: child,
+      );
+    }
+
+    // * IOS
+    return WillPopScope(
+      onWillPop: () async => false,
+      child: GestureDetector(
+        onHorizontalDragUpdate: (details) =>
+            (details.delta.dx > 8) ? onWillPopCallback() : true,
+        child: child,
+      ),
+    );
   }
 }
