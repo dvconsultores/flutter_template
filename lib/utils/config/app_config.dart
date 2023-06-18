@@ -51,12 +51,16 @@ mixin ThemeApp {
         tertiary: Colors.deepPurpleAccent,
         error: Colors.red,
       ),
-      extensions: <ThemeExtension<dynamic>>[
-        const ThemeDataExtension(
+      extensions: const <ThemeExtension<dynamic>>[
+        ThemeDataColorExtension(
           text: Colors.black,
           accent: Colors.red,
           success: Colors.green,
         ),
+        ThemeDataStyleExtension(
+            textLight: TextStyle(
+          color: Colors.white,
+        )),
       ],
     ),
     // ? dark
@@ -72,11 +76,15 @@ mixin ThemeApp {
         error: Colors.red,
       ),
       extensions: const <ThemeExtension<dynamic>>[
-        ThemeDataExtension(
+        ThemeDataColorExtension(
           text: Colors.white,
           accent: Colors.indigo,
           success: Colors.green,
         ),
+        ThemeDataStyleExtension(
+            textLight: TextStyle(
+          color: Colors.white,
+        )),
       ],
     ),
   };
@@ -112,9 +120,18 @@ mixin ThemeApp {
       error: themeData.colorScheme.error,
       focusColor: themeData.focusColor,
       disabledColor: themeData.disabledColor,
-      text: themeData.extension<ThemeDataExtension>()!.text!,
-      accent: themeData.extension<ThemeDataExtension>()!.accent!,
-      success: themeData.extension<ThemeDataExtension>()!.success!,
+      text: themeData.extension<ThemeDataColorExtension>()!.text!,
+      accent: themeData.extension<ThemeDataColorExtension>()!.accent!,
+      success: themeData.extension<ThemeDataColorExtension>()!.success!,
+    );
+  }
+
+  ///* Getter to all custom styles registered in themeData.
+  static ThemeDataStyleExtension styles(BuildContext? context) {
+    final themeData = Theme.of(context ?? globalNavigatorKey.currentContext!);
+
+    return ThemeDataStyleExtension(
+      textLight: themeData.extension<ThemeDataStyleExtension>()!.textLight,
     );
   }
 }
@@ -143,26 +160,25 @@ class ColorsApp {
   final Color success;
 }
 
-// ? Theme data extension
+// ? Theme data color extension
 @immutable
-class ThemeDataExtension extends ThemeExtension<ThemeDataExtension> {
-  const ThemeDataExtension({
+class ThemeDataColorExtension extends ThemeExtension<ThemeDataColorExtension> {
+  const ThemeDataColorExtension({
     this.text,
     this.accent,
     this.success,
   });
-
   final Color? text;
   final Color? accent;
   final Color? success;
 
   @override
-  ThemeDataExtension copyWith({
+  ThemeDataColorExtension copyWith({
     Color? text,
     Color? accent,
     Color? success,
   }) {
-    return ThemeDataExtension(
+    return ThemeDataColorExtension(
       text: text ?? this.text,
       accent: accent ?? this.accent,
       success: success ?? this.success,
@@ -170,10 +186,10 @@ class ThemeDataExtension extends ThemeExtension<ThemeDataExtension> {
   }
 
   @override
-  ThemeDataExtension lerp(ThemeDataExtension? other, double t) {
-    if (other is! ThemeDataExtension) return this;
+  ThemeDataColorExtension lerp(ThemeDataColorExtension? other, double t) {
+    if (other is! ThemeDataColorExtension) return this;
 
-    return ThemeDataExtension(
+    return ThemeDataColorExtension(
       text: Color.lerp(text, other.text, t),
       accent: Color.lerp(accent, other.accent, t),
       success: Color.lerp(success, other.success, t),
@@ -182,7 +198,37 @@ class ThemeDataExtension extends ThemeExtension<ThemeDataExtension> {
 
   @override
   String toString() =>
-      'ThemeDataExtension(text: $text, accent: $accent, success: $success)';
+      'ThemeDataColorExtension(text: $text, accent: $accent, success: $success)';
+}
+
+// ? Theme data style extension
+@immutable
+class ThemeDataStyleExtension extends ThemeExtension<ThemeDataStyleExtension> {
+  const ThemeDataStyleExtension({
+    required this.textLight,
+  });
+  final TextStyle textLight;
+
+  @override
+  ThemeDataStyleExtension copyWith({
+    TextStyle? textLight,
+  }) {
+    return ThemeDataStyleExtension(
+      textLight: textLight ?? this.textLight,
+    );
+  }
+
+  @override
+  ThemeDataStyleExtension lerp(ThemeDataStyleExtension? other, double t) {
+    if (other is! ThemeDataStyleExtension) return this;
+
+    return const ThemeDataStyleExtension(
+      textLight: TextStyle(),
+    );
+  }
+
+  @override
+  String toString() => 'ThemeDataStyleExtension(textLight: $textLight)';
 }
 
 /// ? A Collection of diverse languages.
