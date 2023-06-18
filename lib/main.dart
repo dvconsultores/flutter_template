@@ -49,7 +49,9 @@ class AppState extends StatelessWidget {
         bloc: SearchBloc(),
         // * Main Bloc
         child: ChangeNotifierProvider<MainProvider>(
-            create: (context) => MainProvider(), child: const App()),
+          create: (context) => MainProvider(),
+          child: const App(),
+        ),
       ),
     );
   }
