@@ -4,6 +4,7 @@ import 'dart:math' as math;
 import 'package:flutter/material.dart';
 import 'package:flutter_detextre4/utils/config/extensions_config.dart';
 import 'package:flutter_detextre4/utils/helper_widgets/app_refresh_indicator.dart';
+import 'package:flutter_detextre4/utils/helper_widgets/responsive_layout.dart';
 
 class ListScreen extends StatefulWidget {
   const ListScreen({super.key});
@@ -12,7 +13,8 @@ class ListScreen extends StatefulWidget {
   State<ListScreen> createState() => _ListScreenState();
 }
 
-class _ListScreenState extends State<ListScreen> {
+class _ListScreenState extends State<ListScreen>
+    with ResponsiveLayoutMixinStatefull {
   Future<void> onRefresh() async {
     await Future.delayed(const Duration(seconds: 1));
     setState(() => items.add("random-${math.Random().nextInt(100)}"));
@@ -32,7 +34,7 @@ class _ListScreenState extends State<ListScreen> {
   ];
 
   @override
-  Widget build(BuildContext context) {
+  Widget? tabletLayout(BuildContext context, BoxConstraints constraints) {
     return AppRefreshIndicator.envelope(
       onRefresh: onRefresh,
       onPullDown: onPullDown,

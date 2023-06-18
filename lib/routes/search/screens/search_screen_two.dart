@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_detextre4/routes/search/bloc/search_bloc.dart';
+import 'package:flutter_detextre4/utils/helper_widgets/responsive_layout.dart';
 import 'package:generic_bloc_provider/generic_bloc_provider.dart';
 
 class SearchScreenTwo extends StatefulWidget {
@@ -9,9 +10,10 @@ class SearchScreenTwo extends StatefulWidget {
   State<SearchScreenTwo> createState() => _SearchScreenTwoState();
 }
 
-class _SearchScreenTwoState extends State<SearchScreenTwo> {
+class _SearchScreenTwoState extends State<SearchScreenTwo>
+    with ResponsiveLayoutMixinStatefull {
   @override
-  Widget build(BuildContext context) {
+  Widget? tabletLayout(BuildContext context, BoxConstraints constraints) {
     final searchBloc = BlocProvider.of<SearchBloc>(context);
 
     return ListView(

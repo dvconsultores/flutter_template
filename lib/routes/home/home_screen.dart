@@ -12,7 +12,8 @@ class HomeScreen extends StatefulWidget {
   State<HomeScreen> createState() => _HomePageState();
 }
 
-class _HomePageState extends State<HomeScreen> with ResponsiveLayoutMixin {
+class _HomePageState extends State<HomeScreen>
+    with ResponsiveLayoutMixinStatefull {
   int _counter = 0;
 
   void _incrementCounter() {
@@ -79,7 +80,4 @@ class _HomePageState extends State<HomeScreen> with ResponsiveLayoutMixin {
       ),
     );
   }
-
-  @override
-  Widget build(BuildContext context) => buildResponsiveLayout(context);
 }
