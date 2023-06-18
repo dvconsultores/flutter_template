@@ -187,35 +187,36 @@ class ThemeDataExtension extends ThemeExtension<ThemeDataExtension> {
 
 /// ? A Collection of diverse languages.
 enum LanguageList {
-  en(locale: 'english', lcidString: 'en_US'),
-  es(locale: 'español', lcidString: 'es_ES'),
-  pt(locale: 'português', lcidString: 'pt_BR'),
-  fr(locale: 'français', lcidString: 'fr_FR'),
-  de(locale: 'deutsch', lcidString: 'de_DE'),
-  it(locale: 'italiano', lcidString: 'it_IT'),
-  ru(locale: 'pусский', lcidString: 'ru'),
-  ja(locale: '日本語', lcidString: 'ja'),
-  ko(locale: '한국어', lcidString: 'ko'),
-  zh(locale: '中文', lcidString: 'zh_CN'),
-  ar(locale: 'العربية', lcidString: 'ar_SA'),
-  hi(locale: 'हिंदी', lcidString: 'hi'),
-  vi(locale: 'tiếng Việt', lcidString: 'vi'),
-  th(locale: 'ภาษาไทย', lcidString: 'th'),
-  tr(locale: 'türkçe', lcidString: 'tr'),
-  nl(locale: 'nederlands', lcidString: 'nl_NL');
+  en(value: 'english', lcidString: 'en_US', locale: Locale("en")),
+  es(value: 'español', lcidString: 'es_ES', locale: Locale("es")),
+  pt(value: 'português', lcidString: 'pt_BR', locale: Locale("pt")),
+  fr(value: 'français', lcidString: 'fr_FR', locale: Locale("fr")),
+  de(value: 'deutsch', lcidString: 'de_DE', locale: Locale("de")),
+  it(value: 'italiano', lcidString: 'it_IT', locale: Locale("it")),
+  ru(value: 'pусский', lcidString: 'ru', locale: Locale("ru")),
+  ja(value: '日本語', lcidString: 'ja', locale: Locale("ja")),
+  ko(value: '한국어', lcidString: 'ko', locale: Locale("ko")),
+  zh(value: '中文', lcidString: 'zh_CN', locale: Locale("zh")),
+  ar(value: 'العربية', lcidString: 'ar_SA', locale: Locale("ar")),
+  hi(value: 'हिंदी', lcidString: 'hi', locale: Locale("hi")),
+  vi(value: 'tiếng Việt', lcidString: 'vi', locale: Locale("vi")),
+  th(value: 'ภาษาไทย', lcidString: 'th', locale: Locale("th")),
+  tr(value: 'türkçe', lcidString: 'tr', locale: Locale("tr")),
+  nl(value: 'nederlands', lcidString: 'nl_NL', locale: Locale("nl"));
 
   const LanguageList({
-    required this.locale,
+    required this.value,
     required this.lcidString,
+    required this.locale,
   });
-  final String locale;
+  final String value;
   final String lcidString;
+  final Locale locale;
 
-  static LanguageList deviceLanguage() {
-    return LanguageList.values.firstWhereOrNull((element) =>
-            !kIsWeb ? Platform.localeName.contains(element.name) : false) ??
-        LanguageList.en;
-  }
+  static LanguageList deviceLanguage() =>
+      LanguageList.values.firstWhereOrNull((element) =>
+          !kIsWeb ? Platform.localeName.contains(element.name) : false) ??
+      LanguageList.en;
 }
 
 mixin AppLocale {

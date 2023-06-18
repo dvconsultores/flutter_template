@@ -37,7 +37,7 @@ class _HomePageState extends State<HomeScreen>
                       .copyWith(color: ThemeApp.colors(context).primary),
                 ),
                 onPressed: () {
-                  AppLocale.locale == Locale(LanguageList.en.name)
+                  AppLocale.locale == LanguageList.en.locale
                       ? AppLocale.changeLanguage(LanguageList.es)
                       : AppLocale.changeLanguage(LanguageList.en);
                 },
