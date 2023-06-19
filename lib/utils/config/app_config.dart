@@ -41,11 +41,15 @@ mixin ThemeApp {
   static final _themes = <ThemeType, ThemeData>{
     // ? ligth
     ThemeType.light: ThemeData.light().copyWith(
-      textTheme: GoogleFonts.latoTextTheme(),
+      textTheme: GoogleFonts.latoTextTheme().merge(ThemeData.light().textTheme),
       primaryColor: Colors.amber,
       focusColor: const Color.fromARGB(255, 255, 17, 0),
       disabledColor: const Color.fromARGB(255, 209, 175, 172),
+      bottomNavigationBarTheme: const BottomNavigationBarThemeData(
+        backgroundColor: Color.fromARGB(255, 231, 225, 225),
+      ),
       colorScheme: const ColorScheme.light(
+        background: Colors.white,
         primary: Colors.amber,
         secondary: Colors.red,
         tertiary: Colors.deepPurpleAccent,
@@ -58,18 +62,21 @@ mixin ThemeApp {
           success: Colors.green,
         ),
         ThemeDataStyleExtension(
-            textLight: TextStyle(
-          color: Colors.white,
-        )),
+          customText: TextStyle(),
+        ),
       ],
     ),
+
     // ? dark
-    ThemeType.dark: ThemeData(
-      textTheme: GoogleFonts.latoTextTheme(),
+    ThemeType.dark: ThemeData.dark().copyWith(
+      textTheme: GoogleFonts.latoTextTheme().merge(ThemeData.dark().textTheme),
       primaryColor: Colors.pink,
       focusColor: const Color.fromARGB(255, 0, 32, 215),
       disabledColor: const Color.fromARGB(255, 138, 146, 191),
-      colorScheme: const ColorScheme.light(
+      bottomNavigationBarTheme: const BottomNavigationBarThemeData(
+        backgroundColor: Color.fromARGB(255, 39, 37, 37),
+      ),
+      colorScheme: const ColorScheme.dark(
         primary: Colors.pink,
         secondary: Colors.red,
         tertiary: Colors.deepPurpleAccent,
@@ -82,9 +89,8 @@ mixin ThemeApp {
           success: Colors.green,
         ),
         ThemeDataStyleExtension(
-            textLight: TextStyle(
-          color: Colors.white,
-        )),
+          customText: TextStyle(),
+        ),
       ],
     ),
   };
@@ -114,6 +120,7 @@ mixin ThemeApp {
     final themeData = Theme.of(context ?? globalNavigatorKey.currentContext!);
 
     return ColorsApp(
+      background: themeData.colorScheme.background,
       primary: themeData.colorScheme.primary,
       secondary: themeData.colorScheme.secondary,
       tertiary: themeData.colorScheme.tertiary,
@@ -131,7 +138,7 @@ mixin ThemeApp {
     final themeData = Theme.of(context ?? globalNavigatorKey.currentContext!);
 
     return ThemeDataStyleExtension(
-      textLight: themeData.extension<ThemeDataStyleExtension>()!.textLight,
+      customText: themeData.extension<ThemeDataStyleExtension>()!.customText,
     );
   }
 }
@@ -139,6 +146,7 @@ mixin ThemeApp {
 ///? Collection of all custom colors registered in themeData
 class ColorsApp {
   const ColorsApp({
+    required this.background,
     required this.primary,
     required this.secondary,
     required this.tertiary,
@@ -149,6 +157,7 @@ class ColorsApp {
     required this.accent,
     required this.success,
   });
+  final Color background;
   final Color primary;
   final Color secondary;
   final Color tertiary;
@@ -205,16 +214,16 @@ class ThemeDataColorExtension extends ThemeExtension<ThemeDataColorExtension> {
 @immutable
 class ThemeDataStyleExtension extends ThemeExtension<ThemeDataStyleExtension> {
   const ThemeDataStyleExtension({
-    required this.textLight,
+    required this.customText,
   });
-  final TextStyle textLight;
+  final TextStyle customText;
 
   @override
   ThemeDataStyleExtension copyWith({
-    TextStyle? textLight,
+    TextStyle? customText,
   }) {
     return ThemeDataStyleExtension(
-      textLight: textLight ?? this.textLight,
+      customText: customText ?? this.customText,
     );
   }
 
@@ -223,12 +232,12 @@ class ThemeDataStyleExtension extends ThemeExtension<ThemeDataStyleExtension> {
     if (other is! ThemeDataStyleExtension) return this;
 
     return const ThemeDataStyleExtension(
-      textLight: TextStyle(),
+      customText: TextStyle(),
     );
   }
 
   @override
-  String toString() => 'ThemeDataStyleExtension(textLight: $textLight)';
+  String toString() => 'ThemeDataStyleExtension(customText: $customText)';
 }
 
 /// ? A Collection of diverse languages.

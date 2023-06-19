@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_detextre4/global_screens/session_manager.dart';
+import 'package:flutter_detextre4/main_router.dart';
 import 'package:flutter_detextre4/utils/config/app_config.dart';
-import 'package:flutter_detextre4/utils/config/extensions_config.dart';
 import 'dart:math' as math;
 
 class SplashScreen extends StatefulWidget {
@@ -23,8 +22,7 @@ class _SplashPageState extends State<SplashScreen>
 
   @override
   void initState() {
-    animationController.forward().then((_) => const Navigator()
-        .pushReplacementWithTransition(context, const SessionManagerScreen()));
+    animationController.forward().then((_) => routerConfig.go("/"));
     super.initState();
   }
 

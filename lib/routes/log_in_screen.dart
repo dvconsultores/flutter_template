@@ -3,7 +3,6 @@ import 'package:flutter_detextre4/routes/user/bloc/user_bloc.dart';
 import 'package:flutter_detextre4/routes/user/repository/auth_api.dart';
 import 'package:flutter_detextre4/global_widgets/app_scaffold.dart';
 import 'package:flutter_detextre4/utils/helper_widgets/responsive_layout.dart';
-import 'package:generic_bloc_provider/generic_bloc_provider.dart';
 
 class LogInScreen extends StatelessWidget with ResponsiveLayoutMixin {
   const LogInScreen({super.key});
@@ -11,10 +10,8 @@ class LogInScreen extends StatelessWidget with ResponsiveLayoutMixin {
   @override
   Widget? tabletLayout(BuildContext context, BoxConstraints constraints) {
     final Size size = MediaQuery.of(context).size;
-    final userBloc = BlocProvider.of<UserBloc>(context);
 
     return AppScaffold.responsive(
-      sessionTimer: false,
       tablet: (context, constraints) =>
           Column(mainAxisAlignment: MainAxisAlignment.center, children: [
         Container(
@@ -41,9 +38,9 @@ class LogInScreen extends StatelessWidget with ResponsiveLayoutMixin {
         ),
         TextButton(
           child: const Text("Login Button", style: TextStyle(fontSize: 25)),
-          onPressed: () => AuthApi.authEndpoint().then(
-            (value) => userBloc.add = value,
-          ),
+          onPressed: () => AuthApi.authEndpoint().then((value) {
+            UserBloc.of(context).addData = value;
+          }),
         ),
       ]),
     );

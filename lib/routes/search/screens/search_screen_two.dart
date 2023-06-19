@@ -16,19 +16,17 @@ class _SearchScreenTwoState extends State<SearchScreenTwo>
   Widget? tabletLayout(BuildContext context, BoxConstraints constraints) {
     final searchBloc = BlocProvider.of<SearchBloc>(context);
 
-    return ListView(
-      children: [
+    return ListView(children: [
+      Text(
+        "search 2",
+        textAlign: TextAlign.center,
+        style: Theme.of(context).textTheme.displayMedium,
+      ),
+      for (var i = 0; i < searchBloc.totalTickets.length; i++)
         Text(
-          "search 2",
+          searchBloc.totalTickets[i].name,
           textAlign: TextAlign.center,
-          style: Theme.of(context).textTheme.displayMedium,
         ),
-        for (var i = 0; i < searchBloc.totalTickets.length; i++)
-          Text(
-            searchBloc.totalTickets[i].name,
-            textAlign: TextAlign.center,
-          ),
-      ],
-    );
+    ]);
   }
 }

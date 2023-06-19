@@ -23,61 +23,55 @@ class _HomePageState extends State<HomeScreen>
 
   @override
   Widget tabletLayout(BuildContext context, BoxConstraints constraints) {
-    return SizedBox(
-      child: Center(
-        child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              TextButton(
-                child: Text(
-                  "Change language: ${AppLocalizations.of(context)!.helloWorld}",
-                  style: Theme.of(context)
-                      .textTheme
-                      .bodyLarge!
-                      .copyWith(color: ThemeApp.colors(context).primary),
-                ),
-                onPressed: () {
-                  AppLocale.locale == LanguageList.en.locale
-                      ? AppLocale.changeLanguage(LanguageList.es)
-                      : AppLocale.changeLanguage(LanguageList.en);
-                },
+    return Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: <Widget>[
+          TextButton(
+            child: Text(
+              "Change language: ${AppLocalizations.of(context)!.helloWorld}",
+              style: Theme.of(context)
+                  .textTheme
+                  .bodyLarge!
+                  .copyWith(color: ThemeApp.colors(context).primary),
+            ),
+            onPressed: () {
+              AppLocale.locale == LanguageList.en.locale
+                  ? AppLocale.changeLanguage(LanguageList.es)
+                  : AppLocale.changeLanguage(LanguageList.en);
+            },
+          ),
+          const Text('You have pushed the button this many times:'),
+          Text(
+            '$_counter',
+            style: Theme.of(context).textTheme.headlineMedium,
+          ),
+          Container(
+              margin: const EdgeInsets.only(bottom: 50),
+              child: FloatingActionButton(
+                onPressed: _incrementCounter,
+                tooltip: 'Increment',
+                child: const Icon(Icons.add).invertedColor(),
+              )),
+          Text(
+            ThemeApp.theme.name,
+            style: Theme.of(context).textTheme.displaySmall,
+          ),
+          Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+            IconButton(
+              onPressed: () => ThemeApp.switchTheme(context, ThemeType.light),
+              icon: Icon(
+                Icons.light_mode,
+                color: ThemeApp.colors(context).primary,
               ),
-              const Text('You have pushed the button this many times:'),
-              Text(
-                '$_counter',
-                style: Theme.of(context).textTheme.headlineMedium,
+            ),
+            IconButton(
+              onPressed: () => ThemeApp.switchTheme(context, ThemeType.dark),
+              icon: Icon(
+                Icons.dark_mode,
+                color: ThemeApp.colors(context).secondary,
               ),
-              Container(
-                  margin: const EdgeInsets.only(bottom: 50),
-                  child: FloatingActionButton(
-                    onPressed: _incrementCounter,
-                    tooltip: 'Increment',
-                    child: const Icon(Icons.add).invertedColor(),
-                  )),
-              Text(
-                ThemeApp.theme.name,
-                style: Theme.of(context).textTheme.displaySmall,
-              ),
-              Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-                IconButton(
-                  onPressed: () =>
-                      ThemeApp.switchTheme(context, ThemeType.light),
-                  icon: Icon(
-                    Icons.light_mode,
-                    color: ThemeApp.colors(context).primary,
-                  ),
-                ),
-                IconButton(
-                  onPressed: () =>
-                      ThemeApp.switchTheme(context, ThemeType.dark),
-                  icon: Icon(
-                    Icons.dark_mode,
-                    color: ThemeApp.colors(context).secondary,
-                  ),
-                ),
-              ]),
-            ]),
-      ),
-    );
+            ),
+          ]),
+        ]);
   }
 }

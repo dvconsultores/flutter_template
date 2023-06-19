@@ -20,26 +20,24 @@ class _SearchScreenState extends State<SearchScreen>
   Widget? tabletLayout(BuildContext context, BoxConstraints constraints) {
     final searchBloc = BlocProvider.of<SearchBloc>(context);
 
-    return ListView(
-      children: [
+    return ListView(children: [
+      Text(
+        "search",
+        textAlign: TextAlign.center,
+        style: Theme.of(context).textTheme.displayMedium,
+      ),
+      TextButton(
+        child: const Text(
+          "Press button to search",
+          style: TextStyle(fontSize: 18),
+        ),
+        onPressed: () => setState(() => testFunction(searchBloc)),
+      ),
+      for (var i = 0; i < searchBloc.totalTickets.length; i++)
         Text(
-          "search",
+          searchBloc.totalTickets[i].name,
           textAlign: TextAlign.center,
-          style: Theme.of(context).textTheme.displayMedium,
         ),
-        TextButton(
-          child: const Text(
-            "Press button to search",
-            style: TextStyle(fontSize: 18),
-          ),
-          onPressed: () => setState(() => testFunction(searchBloc)),
-        ),
-        for (var i = 0; i < searchBloc.totalTickets.length; i++)
-          Text(
-            searchBloc.totalTickets[i].name,
-            textAlign: TextAlign.center,
-          ),
-      ],
-    );
+    ]);
   }
 }

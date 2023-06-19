@@ -19,6 +19,7 @@ class SecureStorage {
       );
   static IOSOptions getIOSOptions() =>
       const IOSOptions(accessibility: KeychainAccessibility.first_unlock);
+  static WebOptions getWebOptions() => const WebOptions();
 
   ///? Create storage
   static const storage = FlutterSecureStorage();
@@ -29,6 +30,7 @@ class SecureStorage {
       key: key.name,
       aOptions: getAndroidOptions(),
       iOptions: getIOSOptions(),
+      webOptions: getWebOptions(),
     );
 
     debugPrint("${key.name}: $value - readed from Secure storage 🛡️");
@@ -40,6 +42,7 @@ class SecureStorage {
     final Map<String, String> allValues = await storage.readAll(
       aOptions: getAndroidOptions(),
       iOptions: getIOSOptions(),
+      webOptions: getWebOptions(),
     );
 
     debugPrint("$allValues - all readed from Secure storage 🛡️");
@@ -53,9 +56,10 @@ class SecureStorage {
           key: key.name,
           aOptions: getAndroidOptions(),
           iOptions: getIOSOptions(),
+          webOptions: getWebOptions(),
         )
-        .whenComplete(() => debugPrint(
-            "${key.name} - deleted from Secure storage is cleared 🛡️"));
+        .whenComplete(
+            () => debugPrint("${key.name} - deleted from Secure storage 🛡️"));
   }
 
   /// Delete all values from secure storage.
@@ -64,6 +68,7 @@ class SecureStorage {
         .deleteAll(
           aOptions: getAndroidOptions(),
           iOptions: getIOSOptions(),
+          webOptions: getWebOptions(),
         )
         .whenComplete(() => debugPrint("Secure storage cleared 🛡️"));
   }
@@ -76,6 +81,7 @@ class SecureStorage {
           value: jsonEncode(value),
           aOptions: getAndroidOptions(),
           iOptions: getIOSOptions(),
+          webOptions: getWebOptions(),
         )
         .then((_) =>
             debugPrint("${key.name}: $value - written from Secure storage 🛡️"))
@@ -91,6 +97,7 @@ class SecureStorage {
           key: key.name,
           aOptions: getAndroidOptions(),
           iOptions: getIOSOptions(),
+          webOptions: getWebOptions(),
         )) ??
         "null");
 
@@ -103,6 +110,7 @@ class SecureStorage {
           value: jsonEncode(storedElement),
           aOptions: getAndroidOptions(),
           iOptions: getIOSOptions(),
+          webOptions: getWebOptions(),
         )
         .then((_) => debugPrint(
             "${key.name}: $storedElement - updated from Secure storage 🛡️"))

@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_detextre4/routes/user/bloc/user_bloc.dart';
 import 'package:flutter_detextre4/global_widgets/app_scaffold.dart';
-import 'package:generic_bloc_provider/generic_bloc_provider.dart';
 import 'package:web_socket_channel/web_socket_channel.dart';
 
 class TestWebSockets extends StatefulWidget {
@@ -25,15 +24,13 @@ class _TestWebSocketsState extends State<TestWebSockets> {
 
   @override
   Widget build(BuildContext context) {
-    final userBloc = BlocProvider.of<UserBloc>(context);
-
     return AppScaffold.responsive(
         appBar: AppBar(),
         tablet: (context, constraints) => StreamBuilder(
             stream: getChannelStream,
             builder: (BuildContext context, snapshot) {
               final dataTestWebSocket =
-                  userBloc.getterOfTestWebSocket(snapshot.data);
+                  UserBloc.of(context).getterOfTestWebSocket(snapshot.data);
 
               return Column(
                 mainAxisAlignment: MainAxisAlignment.center,

@@ -10,21 +10,21 @@ class AppScaffold extends StatelessWidget {
     this.appBar,
     this.bottomNavigationBar,
     this.floatingActionButton,
-    this.sessionTimer = true,
+    this.paddless = false,
   });
   final Widget? drawer;
   final PreferredSizeWidget? appBar;
   final Widget child;
   final Widget? bottomNavigationBar;
   final Widget? floatingActionButton;
-  final bool sessionTimer;
+  final bool paddless;
 
   @override
   Widget build(BuildContext context) => Scaffold(
         drawer: drawer,
         appBar: appBar,
         body: Container(
-          padding: const EdgeInsets.all(12.0),
+          padding: paddless ? null : const EdgeInsets.all(12.0),
           child: child,
         ),
         bottomNavigationBar: bottomNavigationBar,
@@ -40,9 +40,8 @@ class AppScaffold extends StatelessWidget {
     Widget? Function(BuildContext context, BoxConstraints constraints)? tv,
     Widget? bottomNavigationBar,
     Widget? floatingActionButton,
-    bool sessionTimer = true,
   }) =>
-      _AppScaffoldResponsive(
+      AppScaffoldResponsive(
         drawer: drawer,
         appBar: appBar,
         mobile: mobile,
@@ -51,13 +50,13 @@ class AppScaffold extends StatelessWidget {
         tv: tv,
         bottomNavigationBar: bottomNavigationBar,
         floatingActionButton: floatingActionButton,
-        sessionTimer: sessionTimer,
       );
 }
 
 /// ? Responsive variant from `AppScaffold`
-class _AppScaffoldResponsive extends StatelessWidget {
-  const _AppScaffoldResponsive({
+class AppScaffoldResponsive extends StatelessWidget {
+  const AppScaffoldResponsive({
+    super.key,
     this.drawer,
     this.appBar,
     this.mobile,
@@ -66,7 +65,7 @@ class _AppScaffoldResponsive extends StatelessWidget {
     this.tv,
     this.bottomNavigationBar,
     this.floatingActionButton,
-    this.sessionTimer = true,
+    this.paddless = false,
   });
   final Widget? drawer;
   final PreferredSizeWidget? appBar;
@@ -79,14 +78,14 @@ class _AppScaffoldResponsive extends StatelessWidget {
   final Widget? Function(BuildContext context, BoxConstraints constraints)? tv;
   final Widget? bottomNavigationBar;
   final Widget? floatingActionButton;
-  final bool sessionTimer;
+  final bool paddless;
 
   @override
   Widget build(BuildContext context) => Scaffold(
         drawer: drawer,
         appBar: appBar,
         body: Container(
-          padding: const EdgeInsets.all(12.0),
+          padding: paddless ? null : const EdgeInsets.all(12.0),
           child: ResponsiveLayout(
             mobile: mobile,
             tablet: tablet,
