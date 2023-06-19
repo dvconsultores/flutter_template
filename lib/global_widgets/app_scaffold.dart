@@ -103,10 +103,8 @@ class ScaffoldBody extends StatelessWidget {
   final Widget child;
 
   @override
-  Widget build(BuildContext context) {
-    return Container(
-      color: Theme.of(context).scaffoldBackgroundColor,
-      child: child,
-    );
-  }
+  Widget build(BuildContext context) => Container(
+        color: Theme.of(context).scaffoldBackgroundColor,
+        child: child,
+      );
 }
