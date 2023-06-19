@@ -35,7 +35,7 @@ class ResponsiveLayout extends StatelessWidget {
       );
 }
 
-mixin ResponsiveLayoutMixinStatefull<T extends StatefulWidget> on State<T> {
+mixin ResponsiveLayoutMixinStateful<T extends StatefulWidget> on State<T> {
   Widget? mobileLayout(BuildContext context, BoxConstraints constraints) =>
       null;
   Widget? tabletLayout(BuildContext context, BoxConstraints constraints) =>

@@ -14,7 +14,7 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomeScreen>
-    with ResponsiveLayoutMixinStatefull {
+    with ResponsiveLayoutMixinStateful {
   int _counter = 0;
 
   void _incrementCounter() {

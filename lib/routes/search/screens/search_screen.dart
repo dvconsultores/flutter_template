@@ -12,7 +12,7 @@ class SearchScreen extends StatefulWidget {
 }
 
 class _SearchScreenState extends State<SearchScreen>
-    with ResponsiveLayoutMixinStatefull {
+    with ResponsiveLayoutMixinStateful {
   void testFunction(SearchBloc bloc) {
     bloc.addTicket();
   }

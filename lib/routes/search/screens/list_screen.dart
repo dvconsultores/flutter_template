@@ -15,7 +15,7 @@ class ListScreen extends StatefulWidget {
 }
 
 class _ListScreenState extends State<ListScreen>
-    with ResponsiveLayoutMixinStatefull {
+    with ResponsiveLayoutMixinStateful {
   Future<void> onRefresh() async {
     await Future.delayed(const Duration(seconds: 1));
     setState(() => items.add("random-${math.Random().nextInt(100)}"));

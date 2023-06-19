@@ -12,7 +12,7 @@ class SearchScreenTwo extends StatefulWidget {
 }
 
 class _SearchScreenTwoState extends State<SearchScreenTwo>
-    with ResponsiveLayoutMixinStatefull {
+    with ResponsiveLayoutMixinStateful {
   @override
   Widget? tabletLayout(BuildContext context, BoxConstraints constraints) {
     final searchBloc = BlocProvider.of<SearchBloc>(context);
