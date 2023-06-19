@@ -12,21 +12,21 @@ class AppScaffold extends StatelessWidget {
     this.appBar,
     this.bottomNavigationBar,
     this.floatingActionButton,
-    this.paddless = false,
+    this.padding,
   });
   final Widget? drawer;
   final PreferredSizeWidget? appBar;
   final Widget child;
   final Widget? bottomNavigationBar;
   final Widget? floatingActionButton;
-  final bool paddless;
+  final EdgeInsetsGeometry? padding;
 
   @override
   Widget build(BuildContext context) => Scaffold(
         drawer: drawer,
         appBar: appBar,
         body: Container(
-          padding: paddless ? null : paddingScaffold,
+          padding: padding ?? paddingScaffold,
           child: child,
         ),
         bottomNavigationBar: bottomNavigationBar,
@@ -43,7 +43,7 @@ class AppScaffold extends StatelessWidget {
     PreferredSizeWidget? appBar,
     Widget? bottomNavigationBar,
     Widget? floatingActionButton,
-    bool paddless = false,
+    EdgeInsetsGeometry? padding,
   }) =>
       _AppScaffoldResponsive(
         drawer: drawer,
@@ -54,7 +54,7 @@ class AppScaffold extends StatelessWidget {
         tv: tv,
         bottomNavigationBar: bottomNavigationBar,
         floatingActionButton: floatingActionButton,
-        paddless: paddless,
+        padding: padding,
       );
 }
 
@@ -69,7 +69,7 @@ class _AppScaffoldResponsive extends StatelessWidget {
     this.tv,
     this.bottomNavigationBar,
     this.floatingActionButton,
-    this.paddless = false,
+    this.padding,
   });
   final Widget? Function(BuildContext context, BoxConstraints constraints)?
       mobile;
@@ -82,14 +82,14 @@ class _AppScaffoldResponsive extends StatelessWidget {
   final PreferredSizeWidget? appBar;
   final Widget? bottomNavigationBar;
   final Widget? floatingActionButton;
-  final bool paddless;
+  final EdgeInsetsGeometry? padding;
 
   @override
   Widget build(BuildContext context) => Scaffold(
         drawer: drawer,
         appBar: appBar,
         body: Container(
-          padding: paddless ? null : paddingScaffold,
+          padding: padding ?? paddingScaffold,
           child: ResponsiveLayout(
             mobile: mobile,
             tablet: tablet,
@@ -107,17 +107,17 @@ class ScaffoldBody extends StatelessWidget {
   const ScaffoldBody({
     super.key,
     required this.body,
-    this.paddless = false,
+    this.padding,
     this.color,
   });
   final Widget body;
-  final bool paddless;
+  final EdgeInsetsGeometry? padding;
   final Color? color;
 
   @override
   Widget build(BuildContext context) => Container(
         color: color ?? Theme.of(context).scaffoldBackgroundColor,
-        padding: paddless ? null : paddingScaffold,
+        padding: padding ?? paddingScaffold,
         child: body,
       );
 
@@ -127,12 +127,12 @@ class ScaffoldBody extends StatelessWidget {
     Widget? Function(BuildContext context, BoxConstraints constraints)? tablet,
     Widget? Function(BuildContext context, BoxConstraints constraints)? desktop,
     Widget? Function(BuildContext context, BoxConstraints constraints)? tv,
-    bool paddless = false,
+    EdgeInsetsGeometry? padding,
     Color? color,
   }) =>
       _ScaffoldBodyResponsive(
         color: color,
-        paddless: paddless,
+        padding: padding,
         mobile: mobile,
         desktop: desktop,
         tablet: tablet,
@@ -143,7 +143,7 @@ class ScaffoldBody extends StatelessWidget {
 /// ? Responsive variant from `ScaffoldBody`
 class _ScaffoldBodyResponsive extends StatelessWidget {
   const _ScaffoldBodyResponsive({
-    this.paddless = false,
+    this.padding,
     this.color,
     this.mobile,
     this.tablet,
@@ -157,13 +157,13 @@ class _ScaffoldBodyResponsive extends StatelessWidget {
   final Widget? Function(BuildContext context, BoxConstraints constraints)?
       desktop;
   final Widget? Function(BuildContext context, BoxConstraints constraints)? tv;
-  final bool paddless;
+  final EdgeInsetsGeometry? padding;
   final Color? color;
 
   @override
   Widget build(BuildContext context) => Container(
         color: color ?? Theme.of(context).scaffoldBackgroundColor,
-        padding: paddless ? null : paddingScaffold,
+        padding: padding ?? paddingScaffold,
         child: ResponsiveLayout(
           mobile: mobile,
           tablet: tablet,

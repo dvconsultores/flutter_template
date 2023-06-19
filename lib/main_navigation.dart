@@ -32,7 +32,7 @@ class MainNavigation extends StatelessWidget {
         ?.any((element) => (element as GoRoute).path.contains(state.location));
 
     return AppScaffold(
-      paddless: true,
+      padding: const EdgeInsets.all(0),
       drawer: currentSubRoute != null ? const AppDrawer() : null,
       appBar: AppBar(
         leading: currentSubRoute == null

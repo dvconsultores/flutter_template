@@ -3,6 +3,7 @@ import 'package:flutter_detextre4/global_widgets/app_scaffold.dart';
 import 'package:flutter_detextre4/utils/config/app_config.dart';
 import 'package:flutter_detextre4/utils/config/extensions_config.dart';
 import 'package:flutter_detextre4/utils/general/global_functions.dart';
+import 'package:flutter_detextre4/utils/helper_widgets/gap.dart';
 import 'package:flutter_detextre4/utils/helper_widgets/responsive_layout.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
@@ -41,11 +42,13 @@ class _HomePageState extends State<HomeScreen>
                     : AppLocale.changeLanguage(LanguageList.en);
               },
             ),
+            const Gap(20).column,
             const Text('You have pushed the button this many times:'),
             Text(
               '$_counter',
               style: Theme.of(context).textTheme.headlineMedium,
             ),
+            const Gap(20).column,
             Container(
                 margin: const EdgeInsets.only(bottom: 50),
                 child: FloatingActionButton(
@@ -65,6 +68,7 @@ class _HomePageState extends State<HomeScreen>
                   color: ThemeApp.colors(context).primary,
                 ),
               ),
+              const Gap(20).row,
               IconButton(
                 onPressed: () => ThemeApp.switchTheme(context, ThemeType.dark),
                 icon: Icon(
