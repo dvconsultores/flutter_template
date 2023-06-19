@@ -97,3 +97,16 @@ class AppScaffoldResponsive extends StatelessWidget {
         floatingActionButton: floatingActionButton,
       );
 }
+
+class ScaffoldBody extends StatelessWidget {
+  const ScaffoldBody({super.key, required this.child});
+  final Widget child;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      color: Theme.of(context).scaffoldBackgroundColor,
+      child: child,
+    );
+  }
+}
