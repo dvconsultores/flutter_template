@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_detextre4/utils/config/app_config.dart';
 
+/// Custom responsive layout widget
 class ResponsiveLayout extends StatelessWidget {
   const ResponsiveLayout({
     super.key,
@@ -29,12 +30,45 @@ class ResponsiveLayout extends StatelessWidget {
           } else if (desktop != null &&
               constraints.maxWidth < ScreenSize.desktop.value) {
             return desktop!(context, constraints) ?? const Placeholder();
+          } else if (tv != null && constraints.maxWidth < ScreenSize.tv.value) {
+            return desktop!(context, constraints) ?? const Placeholder();
           }
-          return tv!(context, constraints) ?? const Placeholder();
+
+          return const Placeholder();
         },
       );
 }
 
+/// Custom responsive layout mixin
+mixin ResponsiveLayoutMixin<T extends Widget> on Widget {
+  Widget? mobileLayout(BuildContext context, BoxConstraints constraints) =>
+      null;
+  Widget? tabletLayout(BuildContext context, BoxConstraints constraints) =>
+      null;
+  Widget? desktopLayout(BuildContext context, BoxConstraints constraints) =>
+      null;
+  Widget? tvLayout(BuildContext context, BoxConstraints constraints) => null;
+
+  Widget buildResponsiveLayout(BuildContext context) => LayoutBuilder(
+        builder: (context, constraints) {
+          if (mobileLayout(context, constraints) != null &&
+              constraints.maxWidth < ScreenSize.mobile.value) {
+            return mobileLayout(context, constraints) ?? const Placeholder();
+          } else if (tabletLayout(context, constraints) != null &&
+              constraints.maxWidth < ScreenSize.tablet.value) {
+            return tabletLayout(context, constraints) ?? const Placeholder();
+          } else if (desktopLayout(context, constraints) != null &&
+              constraints.maxWidth < ScreenSize.desktop.value) {
+            return desktopLayout(context, constraints) ?? const Placeholder();
+          }
+          return tvLayout(context, constraints) ?? const Placeholder();
+        },
+      );
+
+  Widget build(BuildContext context) => buildResponsiveLayout(context);
+}
+
+/// Custom responsive layout mixin to `StatefullWidget`
 mixin ResponsiveLayoutMixinStateful<T extends StatefulWidget> on State<T> {
   Widget? mobileLayout(BuildContext context, BoxConstraints constraints) =>
       null;
@@ -61,33 +95,5 @@ mixin ResponsiveLayoutMixinStateful<T extends StatefulWidget> on State<T> {
       );
 
   @override
-  Widget build(BuildContext context) => buildResponsiveLayout(context);
-}
-
-mixin ResponsiveLayoutMixin<T extends Widget> on Widget {
-  Widget? mobileLayout(BuildContext context, BoxConstraints constraints) =>
-      null;
-  Widget? tabletLayout(BuildContext context, BoxConstraints constraints) =>
-      null;
-  Widget? desktopLayout(BuildContext context, BoxConstraints constraints) =>
-      null;
-  Widget? tvLayout(BuildContext context, BoxConstraints constraints) => null;
-
-  Widget buildResponsiveLayout(BuildContext context) => LayoutBuilder(
-        builder: (context, constraints) {
-          if (mobileLayout(context, constraints) != null &&
-              constraints.maxWidth < ScreenSize.mobile.value) {
-            return mobileLayout(context, constraints) ?? const Placeholder();
-          } else if (tabletLayout(context, constraints) != null &&
-              constraints.maxWidth < ScreenSize.tablet.value) {
-            return tabletLayout(context, constraints) ?? const Placeholder();
-          } else if (desktopLayout(context, constraints) != null &&
-              constraints.maxWidth < ScreenSize.desktop.value) {
-            return desktopLayout(context, constraints) ?? const Placeholder();
-          }
-          return tvLayout(context, constraints) ?? const Placeholder();
-        },
-      );
-
   Widget build(BuildContext context) => buildResponsiveLayout(context);
 }

@@ -8,7 +8,6 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
-
   @override
   State<HomeScreen> createState() => _HomePageState();
 }
@@ -25,7 +24,7 @@ class _HomePageState extends State<HomeScreen>
   @override
   Widget tabletLayout(BuildContext context, BoxConstraints constraints) {
     return ScaffoldBody(
-      child: Column(
+      body: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             TextButton(

@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_detextre4/global_widgets/app_scaffold.dart';
 import 'package:flutter_detextre4/routes/search/bloc/search_bloc.dart';
-import 'package:flutter_detextre4/utils/helper_widgets/responsive_layout.dart';
 import 'package:generic_bloc_provider/generic_bloc_provider.dart';
 
 class SearchScreen extends StatefulWidget {
@@ -11,18 +10,17 @@ class SearchScreen extends StatefulWidget {
   State<SearchScreen> createState() => _SearchScreenState();
 }
 
-class _SearchScreenState extends State<SearchScreen>
-    with ResponsiveLayoutMixinStateful {
+class _SearchScreenState extends State<SearchScreen> {
   void testFunction(SearchBloc bloc) {
     bloc.addTicket();
   }
 
   @override
-  Widget? tabletLayout(BuildContext context, BoxConstraints constraints) {
+  Widget build(BuildContext context) {
     final searchBloc = BlocProvider.of<SearchBloc>(context);
 
-    return ScaffoldBody(
-      child: ListView(children: [
+    return ScaffoldBody.responsive(
+      tablet: (context, constraints) => ListView(children: [
         Text(
           "search",
           textAlign: TextAlign.center,

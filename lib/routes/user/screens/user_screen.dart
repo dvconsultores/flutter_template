@@ -1,18 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_detextre4/global_widgets/app_scaffold.dart';
 import 'package:flutter_detextre4/routes/user/bloc/user_bloc.dart';
-import 'package:flutter_detextre4/utils/helper_widgets/responsive_layout.dart';
 import 'package:generic_bloc_provider/generic_bloc_provider.dart';
 
-class UserScreen extends StatelessWidget with ResponsiveLayoutMixin {
+class UserScreen extends StatelessWidget {
   const UserScreen({super.key});
-
   @override
-  Widget? tabletLayout(BuildContext context, BoxConstraints constraints) {
+  Widget build(BuildContext context) {
     final userBloc = BlocProvider.of<UserBloc>(context);
 
-    return ScaffoldBody(
-      child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
+    return ScaffoldBody.responsive(
+      tablet: (context, constraints) =>
+          Column(mainAxisAlignment: MainAxisAlignment.center, children: [
         Text("user", style: Theme.of(context).textTheme.displayMedium),
         TextButton(
             onPressed: () => userBloc.closeSession,
