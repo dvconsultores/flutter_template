@@ -1,4 +1,5 @@
 import 'package:collection/collection.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_detextre4/routes/splash_screen.dart';
 import 'package:flutter_detextre4/global_widgets/app_drawer.dart';
@@ -44,7 +45,7 @@ Page pageBuilder(context, state, Widget child) {
 }
 
 final GoRouter routerConfig = GoRouter(
-    initialLocation: "/splash",
+    initialLocation: kIsWeb ? "/" : "/splash",
     // errorBuilder: (context, state) {
     //   return const ErrorScreen();
     // },
