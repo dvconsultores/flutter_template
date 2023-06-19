@@ -1,43 +1,60 @@
 import 'package:flutter/material.dart';
 
+Animation<double> _animation(BuildContext context) =>
+    ModalRoute.of(context)!.animation!;
+
 class CustomTransitionWrapper extends StatelessWidget {
-  const CustomTransitionWrapper({super.key, required this.child});
+  const CustomTransitionWrapper({
+    super.key,
+    required this.child,
+    this.animation,
+  });
   final Widget child;
+  final Animation<double>? animation;
 
   @override
   Widget build(BuildContext context) {
-    return AnimatedSwitcher(
-      duration: const Duration(milliseconds: 500),
-      transitionBuilder: (child, animation) {
-        return SlideTransition(
-          position: Tween<Offset>(
-            begin: const Offset(1, 0),
-            end: Offset.zero,
-          ).animate(animation),
-          child: FadeTransition(
-            opacity: animation,
-            child: child,
-          ),
-        );
-      },
-      child: child,
+    final curvedAnimation = CurvedAnimation(
+      parent: animation ?? _animation(context),
+      curve: Curves.easeInOut,
+    );
+
+    return SlideTransition(
+      position: Tween<Offset>(
+        begin: const Offset(-1.0, 0),
+        end: Offset.zero,
+      ).animate(curvedAnimation),
+      child: FadeTransition(
+        opacity: curvedAnimation,
+        child: child,
+      ),
     );
   }
 
-  static Widget rotate({required Widget child}) =>
-      _RotateTransition(child: child);
+  static Widget rotate({
+    required Widget child,
+    Animation<double>? animation,
+  }) =>
+      _RotateTransition(
+        animation: animation,
+        child: child,
+      );
 }
 
 class _RotateTransition extends StatelessWidget {
-  const _RotateTransition({required this.child});
+  const _RotateTransition({
+    required this.child,
+    this.animation,
+  });
   final Widget child;
+  final Animation<double>? animation;
 
   @override
   Widget build(BuildContext context) {
     return RotationTransition(
       turns: Tween(begin: 0.0, end: 1.0).animate(
         CurvedAnimation(
-          parent: ModalRoute.of(context)!.animation!,
+          parent: animation ?? _animation(context),
           curve: Curves.easeInOut,
         ),
       ),

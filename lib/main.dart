@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_detextre4/routes/search/bloc/search_bloc.dart';
 import 'package:flutter_detextre4/routes/user/bloc/user_bloc.dart';
-import 'package:flutter_detextre4/main_router.dart';
+import 'package:flutter_detextre4/utils/config/router_config.dart';
 import 'package:flutter_detextre4/utils/config/session_timeout_config.dart';
 import 'package:flutter_detextre4/utils/helper_widgets/restart_widget.dart';
 import 'package:flutter_detextre4/main_provider.dart';
