@@ -1,6 +1,5 @@
 import 'dart:async';
 
-import 'package:flutter/material.dart';
 import 'package:flutter_detextre4/routes/user/model/user_model.dart';
 import 'package:flutter_detextre4/main_router.dart';
 import 'package:flutter_detextre4/utils/services/local_data/secure_storage.dart';
@@ -8,22 +7,22 @@ import 'package:generic_bloc_provider/generic_bloc_provider.dart';
 
 class UserBloc implements Bloc {
   // * user data
-  UserModel? dataUser;
+  Future<UserModel?> get dataUser async => UserModel.fromJsonNullable(
+      await SecureStorage.read(SecureStorageCollection.dataUser));
 
-  bool get isLogged => dataUser != null;
+  Future<bool> get isLogged async =>
+      await SecureStorage.read(SecureStorageCollection.dataUser) != null;
 
   set addData(UserModel? event) =>
       SecureStorage.write(SecureStorageCollection.dataUser, event?.toJson())
           .then((_) {
-        dataUser = event;
-        if (routerConfig.location == "/login") routerConfig.go("/login");
+        if (event != null && routerConfig.location == "/login") {
+          routerConfig.go("/");
+        }
       });
 
-  get closeSession =>
-      SecureStorage.delete(SecureStorageCollection.dataUser).then((_) {
-        dataUser = null;
-        routerConfig.go("/login");
-      });
+  get closeSession => SecureStorage.delete(SecureStorageCollection.dataUser)
+      .then((_) => routerConfig.go("/login"));
 
   Future<void> init() async => addData = UserModel.fromJsonNullable(
       await SecureStorage.read(SecureStorageCollection.dataUser));
@@ -38,9 +37,6 @@ class UserBloc implements Bloc {
   }
 
   // ------------------------------------------------------------------------ //
-
-  static UserBloc of(BuildContext context) =>
-      BlocProvider.of<UserBloc>(context);
 
   @override
   void dispose() {}

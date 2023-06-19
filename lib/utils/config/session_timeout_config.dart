@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_detextre4/main_router.dart';
 import 'package:flutter_detextre4/routes/user/bloc/user_bloc.dart';
+import 'package:generic_bloc_provider/generic_bloc_provider.dart';
 import 'package:local_session_timeout/local_session_timeout.dart';
 
 mixin SessionTimeoutConfig {
@@ -11,6 +12,8 @@ mixin SessionTimeoutConfig {
 
   static void listen(BuildContext context) =>
       instance.stream.listen((timeoutEvent) {
+        final userBloc = BlocProvider.of<UserBloc>(context);
+
         //? Exception routes
         if (routerConfig.location == "/login" ||
             routerConfig.location == "/splash") {
@@ -20,12 +23,12 @@ mixin SessionTimeoutConfig {
         switch (timeoutEvent) {
           case SessionTimeoutState.userInactivityTimeout:
             // * handle user  inactive timeout
-            UserBloc.of(context).closeSession;
+            userBloc.closeSession;
             break;
 
           case SessionTimeoutState.appFocusTimeout:
             // * handle user  app lost focus timeout
-            UserBloc.of(context).closeSession;
+            userBloc.closeSession;
             break;
         }
       });

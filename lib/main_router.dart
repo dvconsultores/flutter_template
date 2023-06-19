@@ -13,6 +13,9 @@ import 'package:flutter_detextre4/routes/log_in_screen.dart';
 import 'package:flutter_detextre4/routes/user/screens/user_screen.dart';
 import 'package:flutter_detextre4/utils/config/app_config.dart';
 import 'package:flutter_detextre4/utils/config/extensions_config.dart';
+import 'package:flutter_detextre4/utils/helper_widgets/double_back_to_close_widget.dart';
+import 'package:flutter_detextre4/utils/helper_widgets/will_pop_custom.dart';
+import 'package:generic_bloc_provider/generic_bloc_provider.dart';
 import 'package:go_router/go_router.dart';
 
 final locationExceptions = ["/splash", "/login"];
@@ -46,12 +49,13 @@ final GoRouter routerConfig = GoRouter(
     //   return const ErrorScreen();
     // },
     redirect: (context, state) async {
+      final isLogged = await BlocProvider.of<UserBloc>(context).isLogged;
+
       if (state.location == "/splash") {
         return null;
-      } else if (!UserBloc.of(context).isLogged) {
+      } else if (!isLogged) {
         return "/login";
-      } else if (locationExceptions.contains(state.location) &&
-          UserBloc.of(context).isLogged) {
+      } else if (locationExceptions.contains(state.location) && isLogged) {
         return "/";
       }
 
@@ -159,7 +163,18 @@ final GoRouter routerConfig = GoRouter(
                     .toList(),
               ),
             ),
-            child: child,
+            child: state.location == "/"
+                ? DoubleBackToCloseWidget(
+                    snackBarMessage: "Press again to leave",
+                    child: child,
+                  )
+                : WillPopCustom(
+                    onWillPop: () async {
+                      context.go("/");
+                      return false;
+                    },
+                    child: child,
+                  ),
           );
         },
       ),

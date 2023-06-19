@@ -35,7 +35,7 @@ class _HomePageState extends State<HomeScreen>
                   .copyWith(color: ThemeApp.colors(context).primary),
             ),
             onPressed: () {
-              AppLocale.locale == LanguageList.en.locale
+              AppLocale.locale(context) == LanguageList.en.locale
                   ? AppLocale.changeLanguage(LanguageList.es)
                   : AppLocale.changeLanguage(LanguageList.en);
             },
@@ -53,7 +53,7 @@ class _HomePageState extends State<HomeScreen>
                 child: const Icon(Icons.add).invertedColor(),
               )),
           Text(
-            ThemeApp.theme.name,
+            ThemeApp.theme(context).name,
             style: Theme.of(context).textTheme.displaySmall,
           ),
           Row(mainAxisAlignment: MainAxisAlignment.center, children: [

@@ -70,11 +70,7 @@ class App extends StatefulWidget {
 }
 
 class _AppState extends State<App> {
-  @override
-  void didChangeDependencies() {
-    UserBloc.of(context).init();
-    super.didChangeDependencies();
-  }
+  late final userBloc = BlocProvider.of<UserBloc>(context);
 
   @override
   void initState() {
@@ -91,6 +87,8 @@ class _AppState extends State<App> {
   @override
   Widget build(BuildContext context) =>
       Consumer<MainProvider>(builder: (context, value, child) {
+        userBloc.init();
+
         return SessionTimeoutManager(
           sessionConfig: SessionTimeoutConfig.instance,
           child: MaterialApp.router(

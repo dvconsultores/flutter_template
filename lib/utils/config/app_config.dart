@@ -96,8 +96,10 @@ mixin ThemeApp {
   };
 
   ///* Getter to current theme name.
-  static ThemeType get theme =>
-      globalNavigatorKey.currentContext!.watch<MainProvider>().appTheme;
+  static ThemeType theme(BuildContext? context) =>
+      (context ?? globalNavigatorKey.currentContext!)
+          .watch<MainProvider>()
+          .appTheme;
 
   ///* Getter to current theme assets directory `assets/themes/${theme}`.
   static String assetsPrefix(BuildContext? context) =>
@@ -276,8 +278,10 @@ enum LanguageList {
 
 mixin AppLocale {
   /// Get current locale.
-  static Locale get locale =>
-      globalNavigatorKey.currentContext!.read<MainProvider>().locale;
+  static Locale locale(BuildContext? context) =>
+      (context ?? globalNavigatorKey.currentContext!)
+          .read<MainProvider>()
+          .locale;
 
   /// A global function to change current language.
   static void changeLanguage(LanguageList value) =>

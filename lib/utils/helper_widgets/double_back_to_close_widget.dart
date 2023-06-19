@@ -44,7 +44,7 @@ class DoubleBackToCloseWidget extends StatelessWidget {
     }
 
     // * Android
-    if (Platform.isIOS) {
+    if (Platform.isAndroid) {
       return WillPopScope(
         onWillPop: onWillPop,
         child: child,
