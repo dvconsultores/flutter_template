@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_detextre4/utils/helper_widgets/responsive_layout.dart';
 
+const paddingScaffold = EdgeInsets.all(12.0);
+
 /// ? Custom Application scaffol
 class AppScaffold extends StatelessWidget {
   const AppScaffold({
@@ -24,7 +26,7 @@ class AppScaffold extends StatelessWidget {
         drawer: drawer,
         appBar: appBar,
         body: Container(
-          padding: paddless ? null : const EdgeInsets.all(12.0),
+          padding: paddless ? null : paddingScaffold,
           child: child,
         ),
         bottomNavigationBar: bottomNavigationBar,
@@ -85,7 +87,7 @@ class AppScaffoldResponsive extends StatelessWidget {
         drawer: drawer,
         appBar: appBar,
         body: Container(
-          padding: paddless ? null : const EdgeInsets.all(12.0),
+          padding: paddless ? null : paddingScaffold,
           child: ResponsiveLayout(
             mobile: mobile,
             tablet: tablet,
@@ -99,12 +101,20 @@ class AppScaffoldResponsive extends StatelessWidget {
 }
 
 class ScaffoldBody extends StatelessWidget {
-  const ScaffoldBody({super.key, required this.child});
+  const ScaffoldBody({
+    super.key,
+    required this.child,
+    this.paddless = false,
+    this.color,
+  });
   final Widget child;
+  final bool paddless;
+  final Color? color;
 
   @override
   Widget build(BuildContext context) => Container(
-        color: Theme.of(context).scaffoldBackgroundColor,
+        color: color ?? Theme.of(context).scaffoldBackgroundColor,
+        padding: paddless ? null : paddingScaffold,
         child: child,
       );
 }

@@ -19,16 +19,20 @@ class MainNavigation extends StatelessWidget {
     final routes = routerConfig.configuration.routes
         .firstWhere((element) => element is ShellRoute)
         .routes;
+
     final indexTab = routes.indexWhere((element) =>
         (element as GoRoute).path == "/${state.location.split('/')[1]}");
+
     final subRoutes = routes
         .firstWhereOrNull(
             (element) => (element as GoRoute).path.startsWith(state.location))
         ?.routes;
+
     final currentSubRoute = subRoutes
         ?.any((element) => (element as GoRoute).path.contains(state.location));
 
     return AppScaffold(
+      paddless: true,
       drawer: currentSubRoute != null ? const AppDrawer() : null,
       appBar: AppBar(
         leading: currentSubRoute == null
@@ -45,20 +49,28 @@ class MainNavigation extends StatelessWidget {
           currentIndex: indexTab,
           onTap: (index) => context.go((routes[index] as GoRoute).path),
           selectedItemColor: ThemeApp.colors(context).focusColor,
-          items: routes
-              .map((element) => BottomNavigationBarItem(
-                    label: "",
-                    tooltip: (element as GoRoute).name?.toCapitalize(),
-                    icon: Container(
-                      margin: const EdgeInsets.only(top: 20),
-                      child: element.name == "user"
-                          ? const Icon(Icons.person)
-                          : element.name == "home"
-                              ? const Icon(Icons.home)
-                              : const Icon(Icons.search),
-                    ),
-                  ))
-              .toList(),
+          items: routes.map((element) {
+            Icon getIcon(String? value) {
+              switch (value) {
+                case "user":
+                  return const Icon(Icons.person);
+                case "home":
+                  return const Icon(Icons.home);
+                case "search":
+                default:
+                  return const Icon(Icons.search);
+              }
+            }
+
+            return BottomNavigationBarItem(
+              label: "",
+              tooltip: (element as GoRoute).name?.toCapitalize(),
+              icon: Container(
+                margin: const EdgeInsets.only(top: 20),
+                child: getIcon(element.name),
+              ),
+            );
+          }).toList(),
         ),
       ),
       child: state.location == "/"
