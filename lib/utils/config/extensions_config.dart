@@ -558,12 +558,17 @@ extension ResponseExtension on http.Response {
   ///
   /// in case not be founded will return a custome default message.
   String catchErrorMessage({
-    String searchBy = "message",
-    String fallback = "Error",
+    String searchBy = '"message":',
+    String fallback = 'Error',
   }) {
     log("$statusCode ⭕");
     log("$body ⭕");
-    return body.contains(searchBy) ? jsonDecode(body)[searchBy] : fallback;
+
+    return body.contains(searchBy)
+        ? jsonDecode(body)[searchBy]
+        : body != ""
+            ? body
+            : fallback;
   }
 }
 
