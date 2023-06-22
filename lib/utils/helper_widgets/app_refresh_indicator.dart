@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter_detextre4/utils/config/app_config.dart';
 import 'package:flutter_detextre4/utils/helper_widgets/painters.dart';
+import 'package:liquid_pull_to_refresh/liquid_pull_to_refresh.dart' as liq;
 
 /// A `RefreshIndicator` with Custom app loader on refresh list.
 class AppRefreshIndicator extends StatelessWidget {
@@ -423,6 +424,30 @@ class AppRefreshIndicator extends StatelessWidget {
       child: child,
     );
   }
+
+  static Widget liquid({
+    required Future<void> Function() onRefresh,
+    required Widget child,
+    double animSpeedFactor = 1.0,
+    Color? backgroundColor,
+    double borderWidth = 2.0,
+    Color? color,
+    double? height,
+    bool showChildOpacityTransition = true,
+    int springAnimationDurationInMilliseconds = 1000,
+  }) =>
+      liq.LiquidPullToRefresh(
+        onRefresh: onRefresh,
+        animSpeedFactor: animSpeedFactor,
+        backgroundColor: backgroundColor,
+        borderWidth: borderWidth,
+        color: color,
+        height: height,
+        showChildOpacityTransition: showChildOpacityTransition,
+        springAnimationDurationInMilliseconds:
+            springAnimationDurationInMilliseconds,
+        child: child,
+      );
 }
 
 /// This allows a value of type T or T?

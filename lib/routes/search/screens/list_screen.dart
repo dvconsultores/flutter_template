@@ -35,9 +35,8 @@ class _ListScreenState extends State<ListScreen> {
   @override
   Widget build(BuildContext context) {
     return ScaffoldBody.responsive(
-      tablet: (context, constraints) => AppRefreshIndicator.envelope(
+      tablet: (context, constraints) => AppRefreshIndicator.liquid(
         onRefresh: onRefresh,
-        onPullDown: onPullDown,
         child: ListView.separated(
           itemBuilder: (context, index) => Text(items[index].toCapitalize()),
           itemCount: items.length,
