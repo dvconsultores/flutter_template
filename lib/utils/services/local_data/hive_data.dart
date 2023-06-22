@@ -18,8 +18,8 @@ class HiveData {
   static final Box storage = Hive.box(boxName);
 
   /// Get any value from hive data using [HiveDataCollection] key.
-  static dynamic read(HiveDataCollection key) {
-    final dynamic value = storage.get(key.name);
+  static T read<T>(HiveDataCollection key) {
+    final T value = storage.get(key.name);
 
     debugPrint("${key.name}: $value - readed from hive data 💦");
     return value;

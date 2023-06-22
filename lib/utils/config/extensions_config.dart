@@ -23,6 +23,13 @@ abstract class ConvertibleToMap {
   Map<String, dynamic> toJson();
 }
 
+// ? AssetBundle extension
+extension AssetBundleExtension on AssetBundle {
+  /// Read JSON asset file
+  Future<T> readJson<T>(String path) async =>
+      jsonDecode(await rootBundle.loadString(path)) as T;
+}
+
 // ? Dynamic extension
 extension Existence on dynamic {
   /// Getter to know if value is not `null`.

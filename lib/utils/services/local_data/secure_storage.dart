@@ -25,7 +25,7 @@ class SecureStorage {
   static const storage = FlutterSecureStorage();
 
   /// Get any value from secure storage using [SecureStorageCollection] key.
-  static Future<dynamic> read(SecureStorageCollection key) async {
+  static Future<T> read<T>(SecureStorageCollection key) async {
     final String? value = await storage.read(
       key: key.name,
       aOptions: getAndroidOptions(),
@@ -34,7 +34,7 @@ class SecureStorage {
     );
 
     debugPrint("${key.name}: $value - readed from Secure storage 🛡️");
-    return jsonDecode(value ?? "null");
+    return jsonDecode(value ?? "null") as T;
   }
 
   /// Get all values storaged into secure storage.
