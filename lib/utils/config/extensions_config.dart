@@ -109,7 +109,7 @@ extension DurationExtension on Duration {
 extension ListExtension<T> on List<T> {
   /// Sorts this list according to the order specified by the [compare] function.
   /// The [compare] `String` value.
-  void sortCompare(String sortBy) => sort((a, b) {
+  void sortMap(String sortBy) => sort((a, b) {
         final valueA = a is Map ? a : (a as DefaultModel).toJson();
         final valueB = b is Map ? b : (b as DefaultModel).toJson();
 
