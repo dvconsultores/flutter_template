@@ -4,6 +4,7 @@ import 'dart:math' as math;
 import 'package:flutter/material.dart';
 import 'package:flutter_detextre4/global_widgets/app_scaffold.dart';
 import 'package:flutter_detextre4/utils/config/extensions_config.dart';
+import 'package:flutter_detextre4/utils/general/list_filterable.dart';
 import 'package:flutter_detextre4/utils/helper_widgets/app_refresh_indicator.dart';
 
 class ListScreen extends StatefulWidget {
@@ -26,20 +27,22 @@ class _ListScreenState extends State<ListScreen> {
     dev.log("charged");
   }
 
-  final items = <String>[
+  final items = ListFilterable([
     "static-1",
     "static-2",
     "static-3",
-  ];
+  ]);
 
   @override
   Widget build(BuildContext context) {
     return ScaffoldBody.responsive(
-      tablet: (context, constraints) => AppRefreshIndicator.liquid(
+      tablet: (context, constraints) => AppRefreshIndicator.pullDown(
         onRefresh: onRefresh,
+        onPullDown: onPullDown,
         child: ListView.separated(
-          itemBuilder: (context, index) => Text(items[index].toCapitalize()),
-          itemCount: items.length,
+          itemBuilder: (context, index) =>
+              Text(items.filtered[index].toCapitalize()),
+          itemCount: items.filtered.length,
           separatorBuilder: (context, index) => const Divider(height: 20),
         ),
       ),
