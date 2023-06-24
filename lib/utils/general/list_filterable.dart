@@ -5,14 +5,7 @@ class ListFilterable<T> {
   final List<T> data;
 
   late final List<T> filtered = List.of(data);
-
-  // ? --------------------------Custom Methods------------------------------ //
-
-  /// Sorts this list according to the order specified by the [compare] function. The [compare] String value.
-  List<T> sortMap(String sortBy) {
-    filtered.sortMap(sortBy);
-    return filtered;
-  }
+  late final filter = _Filter(filtered);
 
   // ? --------------------------Default Methods----------------------------- //
 
@@ -156,5 +149,17 @@ class ListFilterable<T> {
   void reset() {
     filtered.clear();
     filtered.addAll(data);
+  }
+}
+
+// ? --------------------------Custom Methods------------------------------ //
+class _Filter<T> {
+  _Filter(this.filtered);
+  final List<T> filtered;
+
+  /// Sorts this list according to the order specified by the [compare] function. The [compare] String value.
+  List<T> sortMap(String sortBy) {
+    filtered.sortMap(sortBy);
+    return filtered;
   }
 }

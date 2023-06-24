@@ -15,6 +15,12 @@ class ListScreen extends StatefulWidget {
 }
 
 class _ListScreenState extends State<ListScreen> {
+  final items = ListFilterable([
+    "static-1",
+    "static-2",
+    "static-3",
+  ]);
+
   Future<void> onRefresh() async {
     await Future.delayed(const Duration(seconds: 1));
     setState(() => items.add("random-${math.Random().nextInt(100)}"));
@@ -27,18 +33,11 @@ class _ListScreenState extends State<ListScreen> {
     dev.log("charged");
   }
 
-  final items = ListFilterable([
-    "static-1",
-    "static-2",
-    "static-3",
-  ]);
-
   @override
   Widget build(BuildContext context) {
     return ScaffoldBody.responsive(
-      tablet: (context, constraints) => AppRefreshIndicator.pullDown(
+      tablet: (context, constraints) => AppRefreshIndicator.liquid(
         onRefresh: onRefresh,
-        onPullDown: onPullDown,
         child: ListView.separated(
           itemBuilder: (context, index) =>
               Text(items.filtered[index].toCapitalize()),
