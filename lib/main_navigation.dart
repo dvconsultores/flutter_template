@@ -1,4 +1,3 @@
-import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_detextre4/global_widgets/app_drawer.dart';
 import 'package:flutter_detextre4/global_widgets/app_scaffold.dart';
@@ -16,19 +15,11 @@ class MainNavigation extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final routes = routerConfig.configuration.routes
-        .firstWhere((element) => element is ShellRoute)
-        .routes;
+    if (router.indexShellRoute == -1) {
+      return const ScaffoldBody(body: SizedBox.shrink());
+    }
 
-    final indexTab = routes.indexWhere((element) =>
-        (element as GoRoute).path == "/${state.location.split('/')[1]}");
-
-    final subRoutes = routes
-        .firstWhereOrNull(
-            (element) => (element as GoRoute).path.startsWith(state.location))
-        ?.routes;
-
-    final currentSubRoute = subRoutes
+    final currentSubRoute = router.subShellRoutes
         ?.any((element) => (element as GoRoute).path.contains(state.location));
 
     return AppScaffold(
@@ -41,15 +32,16 @@ class MainNavigation extends StatelessWidget {
                 onPressed: context.pop,
               )
             : null,
-        title: Text((routes[indexTab] as GoRoute).name ?? ""),
+        title: Text((router.shellRoute as GoRoute?)?.name ?? ""),
       ),
       bottomNavigationBar: Theme(
         data: Theme.of(context),
         child: BottomNavigationBar(
-          currentIndex: indexTab,
-          onTap: (index) => context.go((routes[index] as GoRoute).path),
+          currentIndex: router.indexShellRoute,
+          onTap: (index) =>
+              context.go((router.shellRoutes[index] as GoRoute).path),
           selectedItemColor: ThemeApp.colors(context).focusColor,
-          items: routes.map((element) {
+          items: router.shellRoutes.map((element) {
             Icon getIcon(String? value) {
               switch (value) {
                 case "user":
@@ -73,18 +65,41 @@ class MainNavigation extends StatelessWidget {
           }).toList(),
         ),
       ),
-      child: state.location == "/"
-          ? DoubleBackToCloseWidget(
-              snackBarMessage: "Press again to leave",
-              child: child,
-            )
-          : WillPopCustom(
-              onWillPop: () async {
-                context.go("/");
-                return false;
-              },
-              child: child,
-            ),
+      child: GestureDetector(
+        onHorizontalDragUpdate: (details) {
+          // Note: Sensitivity is integer used when you don't want to mess up vertical drag
+          int sensitivity = 8;
+
+          // Right Swipe
+          if (details.delta.dx > sensitivity) {
+            final index =
+                router.indexShellRoute == 0 ? 0 : router.indexShellRoute - 1;
+            final previousRoute =
+                router.shellRoutes.elementAtOrNull(index) as GoRoute?;
+
+            if (previousRoute != null) router.go((previousRoute).path);
+
+            // Left Swipe
+          } else if (details.delta.dx < -sensitivity) {
+            final nextRoute = router.shellRoutes
+                .elementAtOrNull(router.indexShellRoute + 1) as GoRoute?;
+
+            if (nextRoute != null) router.go((nextRoute).path);
+          }
+        },
+        child: state.location == "/"
+            ? DoubleBackToCloseWidget(
+                snackBarMessage: "Press again to leave",
+                child: child,
+              )
+            : WillPopCustom(
+                onWillPop: () {
+                  context.go("/");
+                  return false;
+                },
+                child: child,
+              ),
+      ),
     );
   }
 }

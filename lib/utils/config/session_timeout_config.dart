@@ -15,7 +15,7 @@ mixin SessionTimeoutConfig {
         final userBloc = BlocProvider.of<UserBloc>(context);
 
         //? Exception routes
-        if (locationExceptions.contains(routerConfig.location)) return;
+        if (locationExceptions.contains(router.location)) return;
 
         switch (timeoutEvent) {
           case SessionTimeoutState.userInactivityTimeout:

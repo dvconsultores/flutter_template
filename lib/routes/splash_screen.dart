@@ -22,7 +22,7 @@ class _SplashPageState extends State<SplashScreen>
 
   @override
   void initState() {
-    animationController.forward().then((_) => routerConfig.go("/"));
+    animationController.forward().then((_) => router.go("/"));
     super.initState();
   }
 

@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:io';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -9,7 +10,7 @@ class WillPopCustom extends StatelessWidget {
     this.onWillPop,
   });
   final Widget child;
-  final Future<bool> Function()? onWillPop;
+  final FutureOr<bool> Function()? onWillPop;
 
   @override
   Widget build(BuildContext context) {

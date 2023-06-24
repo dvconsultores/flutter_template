@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:io';
 
 import 'package:flutter/foundation.dart';
@@ -15,7 +16,7 @@ class DoubleBackToCloseWidget extends StatefulWidget {
   });
   final Widget child;
   final String snackBarMessage;
-  final Future<bool> Function()? onDoubleBack;
+  final FutureOr<bool> Function()? onDoubleBack;
   final Duration doubleBackDuration;
 
   @override
