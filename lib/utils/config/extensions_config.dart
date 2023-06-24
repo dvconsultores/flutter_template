@@ -19,7 +19,9 @@ import 'package:path_provider/path_provider.dart';
 import 'package:screenshot/screenshot.dart';
 import 'package:share_plus/share_plus.dart';
 
-abstract class ConvertibleToMap {
+abstract class DefaultModel<T> {
+  Iterable get values;
+  T copyWith();
   Map<String, dynamic> toJson();
 }
 
@@ -108,8 +110,8 @@ extension ListExtension<T> on List<T> {
   /// Sorts this list according to the order specified by the [compare] function.
   /// The [compare] `String` value.
   void sortCompare(String sortBy) => sort((a, b) {
-        final valueA = a is Map ? a : (a as ConvertibleToMap).toJson();
-        final valueB = b is Map ? b : (b as ConvertibleToMap).toJson();
+        final valueA = a is Map ? a : (a as DefaultModel).toJson();
+        final valueB = b is Map ? b : (b as DefaultModel).toJson();
 
         return (valueA[sortBy] as String)
             .toLowerCase()
@@ -144,8 +146,8 @@ extension SetExtension<T> on Set<T> {
   Set<T> sortedCompare(String sortBy) {
     final sortedList = toList();
     sortedList.sort((a, b) {
-      final valueA = a is Map ? a : (a as ConvertibleToMap).toJson();
-      final valueB = b is Map ? b : (b as ConvertibleToMap).toJson();
+      final valueA = a is Map ? a : (a as DefaultModel).toJson();
+      final valueB = b is Map ? b : (b as DefaultModel).toJson();
 
       return (valueA[sortBy] as String)
           .toLowerCase()

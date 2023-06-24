@@ -1,6 +1,6 @@
 import 'package:flutter_detextre4/utils/config/extensions_config.dart';
 
-class ExampleModel implements ConvertibleToMap {
+class ExampleModel implements DefaultModel<ExampleModel> {
   ExampleModel({
     required this.name,
     required this.value,
@@ -8,6 +8,10 @@ class ExampleModel implements ConvertibleToMap {
   final String name;
   final int value;
 
+  @override
+  Iterable get values => toJson().values;
+
+  @override
   ExampleModel copyWith({
     String? name,
     int? value,
