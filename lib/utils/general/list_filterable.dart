@@ -4,6 +4,8 @@ class ListFilterable<T> {
   ListFilterable(this.data);
   final List<T> data;
 
+  static ListFilterable<T> empty<T>() => ListFilterable(<T>[]);
+
   late final List<T> filtered = List.of(data);
   late final filter = _Filter(filtered);
 
