@@ -160,8 +160,8 @@ class _Filter<T> {
   final List<T> filtered;
 
   /// Sorts this list according to the order specified by the [compare] function. The [compare] String value.
-  List<T> sortMap(String sortBy) {
-    filtered.sortMap(sortBy);
+  List<T> sortMap(String sortBy, {bool ascending = true}) {
+    filtered.sortMap(sortBy, ascending: ascending);
     return filtered;
   }
 }

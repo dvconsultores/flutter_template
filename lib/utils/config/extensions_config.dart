@@ -109,13 +109,21 @@ extension DurationExtension on Duration {
 extension ListExtension<T> on List<T> {
   /// Sorts this list according to the order specified by the [compare] function.
   /// The [compare] `String` value.
-  void sortMap(String sortBy) => sort((a, b) {
-        final valueA = a is Map ? a : (a as DefaultModel).toJson();
-        final valueB = b is Map ? b : (b as DefaultModel).toJson();
+  void sortMap(String sortBy, {bool ascending = true}) => sort((a, b) {
+        final valueA =
+            a is Map ? a[sortBy] : (a as DefaultModel).toJson()[sortBy];
+        final valueB =
+            b is Map ? b[sortBy] : (b as DefaultModel).toJson()[sortBy];
 
-        return (valueA[sortBy] as String)
-            .toLowerCase()
-            .compareTo((valueB[sortBy] as String).toLowerCase());
+        return ascending
+            ? valueA
+                .toString()
+                .toLowerCase()
+                .compareTo(valueB.toString().toLowerCase())
+            : valueB
+                .toString()
+                .toLowerCase()
+                .compareTo(valueA.toString().toLowerCase());
       });
 
   /// Removes duplicate elements from a list.
