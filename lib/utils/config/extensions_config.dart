@@ -39,42 +39,6 @@ extension DynamicExtension on dynamic {
 
   /// Getter to know if value is `null`.
   bool get isNotExist => this == null;
-
-  /// Emit a log event.
-  ///
-  /// This function was designed to map closely to the logging information
-  /// collected by `package:logging`.
-  ///
-  /// - [message] is the log message
-  /// - [time] (optional) is the timestamp
-  /// - [sequenceNumber] (optional) is a monotonically increasing sequence number
-  /// - [level] (optional) is the severity level (a value between 0 and 2000); see
-  ///   the `package:logging` `Level` class for an overview of the possible values
-  /// - [name] (optional) is the name of the source of the log message
-  /// - [zone] (optional) the zone where the log was emitted
-  /// - [error] (optional) an error object associated with this log event
-  /// - [stackTrace] (optional) a stack trace associated with this log event
-  String log({
-    DateTime? time,
-    int? sequenceNumber,
-    int level = 0,
-    String name = '',
-    Zone? zone,
-    Object? error,
-    StackTrace? stackTrace,
-  }) {
-    dev.log(
-      "$this 🔍",
-      time: time,
-      sequenceNumber: sequenceNumber,
-      level: level,
-      name: name,
-      zone: zone,
-      error: error,
-      stackTrace: stackTrace,
-    );
-    return this;
-  }
 }
 
 // ? Bool extension

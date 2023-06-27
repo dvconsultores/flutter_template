@@ -7,7 +7,7 @@ class ListFilterable<T> {
   static ListFilterable<T> empty<T>() => ListFilterable(<T>[]);
 
   late final List<T> filtered = List.of(data);
-  late final filter = _Filter(filtered);
+  late final methods = _Filter(filtered);
 
   // ? --------------------------Default Methods----------------------------- //
 
