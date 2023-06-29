@@ -639,13 +639,13 @@ extension ResponseExtension on http.Response {
   ///
   /// in case not be founded will return a custome default message.
   String catchErrorMessage({
-    String searchBy = '"message":',
-    String fallback = 'Error',
+    String searchBy = "message",
+    String fallback = "Error",
   }) {
     dev.log("$statusCode ⭕");
     dev.log("$body ⭕");
 
-    return body.contains(searchBy)
+    return body.contains('"$searchBy":')
         ? jsonDecode(body)[searchBy]
         : body != ""
             ? body
