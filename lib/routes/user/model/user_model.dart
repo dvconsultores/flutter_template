@@ -1,4 +1,6 @@
-class UserModel {
+import 'package:flutter_detextre4/utils/config/extensions_config.dart';
+
+class UserModel implements DefaultModel {
   UserModel({
     required this.uid,
     required this.name,
@@ -10,6 +12,10 @@ class UserModel {
   final String email;
   final String photoURL;
 
+  @override
+  Iterable get values => toJson().values;
+
+  @override
   UserModel copyWith({
     int? uid,
     String? name,
@@ -23,6 +29,7 @@ class UserModel {
         photoURL: photoURL ?? this.photoURL,
       );
 
+  @override
   Map<String, dynamic> toJson() => {
         "id": uid,
         "name": name,

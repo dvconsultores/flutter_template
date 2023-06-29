@@ -13,10 +13,13 @@ class UserBloc implements Bloc {
   Future<bool> get isLogged async =>
       await SecureStorage.read(SecureStorageCollection.dataUser) != null;
 
-  set addData(UserModel? event) =>
-      SecureStorage.write(SecureStorageCollection.dataUser, event?.toJson())
-          .then((_) {
-        if (event != null && router.location == "/login") {
+  set addData(UserModel? event) => SecureStorage.write(
+        SecureStorageCollection.dataUser,
+        event?.toJson(),
+      ).then((_) {
+        if (event == null) {
+          closeSession;
+        } else if (router.location == "/login") {
           router.go("/");
         }
       });
