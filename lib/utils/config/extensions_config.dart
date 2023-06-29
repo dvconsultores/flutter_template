@@ -7,7 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_detextre4/global_models/files_type.dart';
 import 'package:flutter_detextre4/utils/config/fetch_config.dart';
-import 'package:flutter_detextre4/utils/general/global_functions.dart';
+import 'package:flutter_detextre4/utils/general/functions.dart';
 import 'package:gallery_saver/gallery_saver.dart';
 import 'package:http/http.dart' as http;
 // ignore: depend_on_referenced_packages

@@ -4,7 +4,7 @@ import 'dart:io';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_detextre4/utils/config/extensions_config.dart';
-import 'package:flutter_detextre4/utils/general/global_functions.dart';
+import 'package:flutter_detextre4/utils/general/functions.dart';
 
 class DoubleBackToCloseWidget extends StatefulWidget {
   const DoubleBackToCloseWidget({
