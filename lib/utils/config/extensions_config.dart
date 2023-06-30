@@ -116,14 +116,14 @@ extension ListExtension<T> on List<T> {
             b is Map ? b[sortBy] : (b as DefaultModel).toJson()[sortBy];
 
         return ascending
-            ? valueA
+            ? valueB
                 .toString()
                 .toLowerCase()
-                .compareTo(valueB.toString().toLowerCase())
-            : valueB
+                .compareTo(valueA.toString().toLowerCase())
+            : valueA
                 .toString()
                 .toLowerCase()
-                .compareTo(valueA.toString().toLowerCase());
+                .compareTo(valueB.toString().toLowerCase());
       });
 
   /// Removes duplicate elements from a list.
