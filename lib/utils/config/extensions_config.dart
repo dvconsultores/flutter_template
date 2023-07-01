@@ -511,6 +511,43 @@ extension StringExtension on String {
   }
 
   /// Converts all commas inside `string` to dots
+  /// and vice versa
+  ///
+  /// if has multiple commas / dots will be removes and just stay the first.
+  String invertDecimal() {
+    switch (contains(",")) {
+      case true:
+        {
+          final splitted = split(",");
+
+          if (splitted.length > 2) {
+            final intire = splitted.first;
+            splitted
+                .removeWhere((element) => element.isEmpty || element == intire);
+            return "$intire,${splitted.join("")}";
+          } else {
+            return splitted.join(".");
+          }
+        }
+      case false:
+        {
+          final splitted = split(".");
+
+          if (splitted.length > 2) {
+            final intire = splitted.first;
+            splitted
+                .removeWhere((element) => element.isEmpty || element == intire);
+            return "$intire.${splitted.join("")}";
+          } else {
+            return splitted.join(",");
+          }
+        }
+      default:
+        return this;
+    }
+  }
+
+  /// Converts all commas inside `string` to dots
   ///
   /// if has multiple commas will be removes and just stay the first.
   String commasToDot() {
