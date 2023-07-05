@@ -408,7 +408,7 @@ extension StringExtension on String {
       double.tryParse(commasToDot()) ?? fallback ?? 0.0;
 
   /// Get amount without currency.
-  String getAmountWithoutCurrency(String? currency, {String? locale}) {
+  String amountUnformatterCurrency(String? currency, {String? locale}) {
     final value = currency.isExist
         ? split(currency!)
                 .singleWhereOrNull((element) => element.isNotEmpty)
@@ -442,6 +442,15 @@ extension StringExtension on String {
     );
     formatter.minimumFractionDigits = 0;
     return formatter.format(double.tryParse(replaceAll(",", "")) ?? 0.0).trim();
+  }
+
+  /// Get amount without formatter.
+  String amountUnformatter({String? locale}) {
+    if (locale?.contains("es") ?? false) {
+      return split(".").join("").split(",").join(".");
+    }
+
+    return split(",").join("");
   }
 
   /// Format `String` to decimal number system.
