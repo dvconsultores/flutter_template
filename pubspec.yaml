@@ -87,6 +87,7 @@ dependencies:
   go_router: ^8.0.5
   liquid_pull_to_refresh: ^3.0.1
   flutter_animate: ^4.2.0
+  flutter_keyboard_visibility: ^5.4.1
 
 
 
