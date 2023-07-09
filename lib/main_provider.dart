@@ -1,7 +1,7 @@
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_detextre4/utils/config/app_config.dart';
-import 'package:flutter_detextre4/utils/services/local_data/hive_data.dart';
+import 'package:flutter_detextre4/utils/services/local_data/hive_data_service.dart';
 
 class MainProvider extends ChangeNotifier {
   // ? ----------------------Theme switcher Provider------------------------- //

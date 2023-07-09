@@ -46,6 +46,8 @@ dependencies:
   # google_sign_in: ^5.4.2
   # firebase_storage: ^11.0.8
   # cloud_firestore: ^4.2.0
+  # flutter_firebase_chat_core: ^1.6.7
+  # flutter_chat_types: ^3.6.1
   generic_bloc_provider: ^2.1.1
   image_picker: ^0.8.7+5
   image_cropper: ^3.0.3
@@ -88,7 +90,7 @@ dependencies:
   liquid_pull_to_refresh: ^3.0.1
   flutter_animate: ^4.2.0
   flutter_keyboard_visibility: ^5.4.1
-
+  device_info_plus: ^9.0.2
 
 
 dev_dependencies:

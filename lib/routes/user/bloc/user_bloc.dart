@@ -2,7 +2,7 @@ import 'dart:async';
 
 import 'package:flutter_detextre4/routes/user/model/user_model.dart';
 import 'package:flutter_detextre4/utils/config/router_config.dart';
-import 'package:flutter_detextre4/utils/services/local_data/secure_storage.dart';
+import 'package:flutter_detextre4/utils/services/local_data/secure_storage_service.dart';
 import 'package:generic_bloc_provider/generic_bloc_provider.dart';
 
 class UserBloc implements Bloc {

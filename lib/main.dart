@@ -8,7 +8,7 @@ import 'package:flutter_detextre4/utils/config/session_timeout_config.dart';
 import 'package:flutter_detextre4/utils/helper_widgets/restart_widget.dart';
 import 'package:flutter_detextre4/main_provider.dart';
 import 'package:flutter_detextre4/utils/config/app_config.dart';
-import 'package:flutter_detextre4/utils/services/local_data/hive_data.dart';
+import 'package:flutter_detextre4/utils/services/local_data/hive_data_service.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:generic_bloc_provider/generic_bloc_provider.dart';
 import 'package:hive_flutter/adapters.dart';
