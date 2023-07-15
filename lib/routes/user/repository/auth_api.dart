@@ -22,20 +22,15 @@ class AuthApi implements AuthApiInterface {
     });
     _userBloc.addData = value;
 
-    // final response = await http.get(
+    // final response = await FetchConfig.get(
     //   Uri.parse('${FetchConfig.baseUrl}/endpoint/'),
     //   headers: FetchConfig.headersWithoutAuth,
+    //   showRequest: true,
+    //   showResponse: true,
+    //   requestRef: "endpoint",
     // );
 
-    // if (response.statusCode == 200 || response.statusCode == 201) {
-    //   debugPrint("login: ${jsonDecode(response.body)} ✅");
-    //   _userBloc.addData = UserModel.fromJson(jsonDecode(response.body));
-    // } else {
-    //   _userBloc.addData = UserModel.fromJsonNullable(
-    //       await SecureStorage.read(SecureStorageCollection.dataUser));
-
-    //   throw response.catchErrorMessage(fallback: "error to load data");
-    // }
+    // _userBloc.addData = UserModel.fromJson(jsonDecode(response.body));
   }
 
   @override
