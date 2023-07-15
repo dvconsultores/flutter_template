@@ -4,7 +4,7 @@ import 'package:flutter_detextre4/main.dart';
 import 'package:flutter_detextre4/utils/config/app_config.dart';
 import 'package:flutter_detextre4/utils/helper_widgets/will_pop_custom.dart';
 import 'package:http/http.dart' as http;
-import 'package:shimmer/shimmer.dart';
+import 'package:skeletons/skeletons.dart';
 
 class AppLoader {
   static void close() => Navigator.pop(globalNavigatorKey.currentContext!);
@@ -107,7 +107,8 @@ extension ImagePrebuilder on Image {
   Widget prebuilder({
     BorderRadius? borderRadius,
     Clip clipBehavior = Clip.antiAlias,
-    (Color, Color)? loadingColors,
+    Duration shimmerDuration = const Duration(milliseconds: 1500),
+    LinearGradient? shimmerGradient,
   }) =>
       ClipRRect(
         borderRadius: borderRadius ?? BorderRadius.circular(200),
@@ -131,20 +132,18 @@ extension ImagePrebuilder on Image {
           repeat: repeat,
           semanticLabel: semanticLabel,
           width: width,
-          loadingBuilder: (context, child, loadingProgress) {
-            if (loadingProgress?.cumulativeBytesLoaded ==
-                loadingProgress?.expectedTotalBytes) {
-              // La carga de la imagen se ha completado
-              return child;
-            }
-
-            // La imagen se está cargando
-            return Shimmer.fromColors(
-              baseColor: loadingColors?.$1 ?? Colors.grey[400]!,
-              highlightColor: loadingColors?.$2 ?? Colors.grey[300]!,
-              child: child,
-            );
-          },
+          loadingBuilder: (context, child, loadingProgress) => Skeleton(
+            isLoading: loadingProgress?.cumulativeBytesLoaded !=
+                loadingProgress?.expectedTotalBytes,
+            duration: shimmerDuration,
+            shimmerGradient: shimmerGradient ??
+                LinearGradient(colors: [
+                  ThemeApp.colors(context).primary.withOpacity(.5),
+                  ThemeApp.colors(context).secondary.withOpacity(.5),
+                ]),
+            skeleton: const SkeletonAvatar(),
+            child: child,
+          ),
           errorBuilder: (context, error, stackTrace) => SizedBox(
             width: (width ?? 40) / 2,
             height: (height ?? 40) / 2,
@@ -160,7 +159,8 @@ extension CachedNetworkImagePrebuilder on CachedNetworkImage {
   Widget prebuilder({
     BorderRadius? borderRadius,
     Clip clipBehavior = Clip.antiAlias,
-    (Color, Color)? loadingColors,
+    Duration shimmerDuration = const Duration(milliseconds: 1500),
+    LinearGradient? shimmerGradient,
   }) =>
       ClipRRect(
         borderRadius: borderRadius ?? BorderRadius.circular(200),
@@ -192,19 +192,18 @@ extension CachedNetworkImagePrebuilder on CachedNetworkImage {
           placeholder: placeholder,
           placeholderFadeInDuration: placeholderFadeInDuration,
           useOldImageOnUrlChange: useOldImageOnUrlChange,
-          progressIndicatorBuilder: (context, child, loadingProgress) {
-            if (loadingProgress.downloaded == loadingProgress.totalSize) {
-              // La carga de la imagen se ha completado
-              return this;
-            }
-
-            // La imagen se está cargando
-            return Shimmer.fromColors(
-              baseColor: loadingColors?.$1 ?? Colors.grey[400]!,
-              highlightColor: loadingColors?.$2 ?? Colors.grey[300]!,
-              child: this,
-            );
-          },
+          progressIndicatorBuilder: (context, child, loadingProgress) =>
+              Skeleton(
+            isLoading: loadingProgress.downloaded != loadingProgress.totalSize,
+            duration: shimmerDuration,
+            shimmerGradient: shimmerGradient ??
+                LinearGradient(colors: [
+                  ThemeApp.colors(context).primary.withOpacity(.5),
+                  ThemeApp.colors(context).secondary.withOpacity(.5),
+                ]),
+            skeleton: const SkeletonAvatar(),
+            child: this,
+          ),
           errorWidget: (context, error, stackTrace) => SizedBox(
             width: (width ?? 40) / 2,
             height: (height ?? 40) / 2,
