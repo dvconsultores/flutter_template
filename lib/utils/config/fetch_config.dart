@@ -59,7 +59,7 @@ mixin FetchConfig {
     bool showRequest = false,
     bool showResponse = false,
   }) async {
-    if (requestRef != null) dev.log("$requestRef ⬅️");
+    if (requestRef != null) dev.log("$requestRef⬅️");
 
     try {
       final response = await http.get(url, headers: headers);
@@ -107,7 +107,7 @@ mixin FetchConfig {
     bool showRequest = false,
     bool showResponse = false,
   }) async {
-    if (requestRef != null) dev.log("$requestRef ⬅️");
+    if (requestRef != null) dev.log("$requestRef⬅️");
 
     if (showRequest) dev.log("$body ⭐");
 
