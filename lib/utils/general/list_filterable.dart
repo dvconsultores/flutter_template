@@ -1,4 +1,4 @@
-import 'package:flutter_detextre4/utils/config/extensions_config.dart';
+import 'package:flutter_detextre4/utils/extensions/type_extensions.dart';
 
 class ListFilterable<T> {
   ListFilterable(this.data);

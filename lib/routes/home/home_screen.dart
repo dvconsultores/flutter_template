@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_detextre4/global_widgets/app_scaffold.dart';
 import 'package:flutter_detextre4/utils/config/app_config.dart';
-import 'package:flutter_detextre4/utils/config/extensions_config.dart';
+import 'package:flutter_detextre4/utils/extensions/widget_extensions.dart';
 import 'package:flutter_detextre4/utils/general/functions.dart';
 import 'package:flutter_detextre4/utils/helper_widgets/gap.dart';
 import 'package:flutter_detextre4/utils/helper_widgets/responsive_layout.dart';

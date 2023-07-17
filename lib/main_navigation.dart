@@ -3,7 +3,7 @@ import 'package:flutter_detextre4/global_widgets/app_drawer.dart';
 import 'package:flutter_detextre4/global_widgets/app_scaffold.dart';
 import 'package:flutter_detextre4/utils/config/router_config.dart';
 import 'package:flutter_detextre4/utils/config/app_config.dart';
-import 'package:flutter_detextre4/utils/config/extensions_config.dart';
+import 'package:flutter_detextre4/utils/extensions/type_extensions.dart';
 import 'package:flutter_detextre4/utils/helper_widgets/double_back_to_close_widget.dart';
 import 'package:flutter_detextre4/utils/helper_widgets/will_pop_custom.dart';
 import 'package:go_router/go_router.dart';

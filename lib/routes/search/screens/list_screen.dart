@@ -3,9 +3,9 @@ import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
 import 'package:flutter_detextre4/global_widgets/app_scaffold.dart';
-import 'package:flutter_detextre4/utils/config/extensions_config.dart';
+import 'package:flutter_detextre4/utils/extensions/type_extensions.dart';
 import 'package:flutter_detextre4/utils/general/list_filterable.dart';
-import 'package:flutter_detextre4/utils/helper_widgets/app_refresh_indicator.dart';
+import 'package:flutter_detextre4/global_widgets/loaders/app_refresh_indicator.dart';
 
 class ListScreen extends StatefulWidget {
   const ListScreen({super.key});
