@@ -4,7 +4,7 @@ import 'package:flutter_detextre4/routes/user/bloc/user_bloc.dart';
 import 'package:generic_bloc_provider/generic_bloc_provider.dart';
 import 'package:local_session_timeout/local_session_timeout.dart';
 
-mixin SessionTimeoutConfig {
+class SessionTimeoutConfig {
   static final instance = SessionConfig(
       // invalidateSessionForAppLostFocus: const Duration(seconds: 15),
       // invalidateSessionForUserInactivity: const Duration(seconds: 30),

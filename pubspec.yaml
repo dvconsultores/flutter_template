@@ -55,6 +55,7 @@ dependencies:
   flutter_rating_bar: ^4.0.1
   provider: ^6.0.5
   http: ^0.13.6
+  http_parser: ^4.0.2
   rxdart: ^0.27.7
   another_flushbar: ^1.12.30
   local_auth: ^2.1.6

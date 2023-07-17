@@ -37,7 +37,7 @@ enum ThemeType {
 }
 
 /// Themes configuration class from app.
-mixin ThemeApp {
+class ThemeApp {
   static final _themes = <ThemeType, ThemeData>{
     // ? ligth
     ThemeType.light: ThemeData.light().copyWith(
@@ -274,7 +274,7 @@ enum LanguageList {
       LanguageList.en;
 }
 
-mixin AppLocale {
+class AppLocale {
   /// Get current locale.
   static Locale get locale =>
       globalNavigatorKey.currentContext!.read<MainProvider>().locale;
