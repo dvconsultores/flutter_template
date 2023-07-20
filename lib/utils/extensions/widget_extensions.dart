@@ -75,7 +75,9 @@ extension ImageExtension on Image {
                   ThemeApp.colors(context).primary.withOpacity(.5),
                   ThemeApp.colors(context).secondary.withOpacity(.5),
                 ]),
-            skeleton: const SkeletonAvatar(),
+            skeleton: SkeletonAvatar(
+              style: SkeletonAvatarStyle(width: width, height: height),
+            ),
             child: child,
           ),
           errorBuilder: (context, error, stackTrace) => SizedBox(
@@ -136,7 +138,9 @@ extension CachedNetworkImageExtension on CachedNetworkImage {
                   ThemeApp.colors(context).primary.withOpacity(.5),
                   ThemeApp.colors(context).secondary.withOpacity(.5),
                 ]),
-            skeleton: const SkeletonAvatar(),
+            skeleton: SkeletonAvatar(
+              style: SkeletonAvatarStyle(width: width, height: height),
+            ),
             child: this,
           ),
           errorWidget: (context, error, stackTrace) => SizedBox(
