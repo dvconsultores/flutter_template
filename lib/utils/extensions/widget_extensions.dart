@@ -66,20 +66,26 @@ extension ImageExtension on Image {
           repeat: repeat,
           semanticLabel: semanticLabel,
           width: width,
-          loadingBuilder: (context, child, loadingProgress) => Skeleton(
-            isLoading: loadingProgress?.cumulativeBytesLoaded !=
-                loadingProgress?.expectedTotalBytes,
-            duration: shimmerDuration,
-            shimmerGradient: shimmerGradient ??
-                LinearGradient(colors: [
-                  ThemeApp.colors(context).primary.withOpacity(.5),
-                  ThemeApp.colors(context).secondary.withOpacity(.5),
-                ]),
-            skeleton: SkeletonAvatar(
-              style: SkeletonAvatarStyle(width: width, height: height),
-            ),
-            child: child,
-          ),
+          loadingBuilder: loadingBuilder ??
+              (context, child, loadingProgress) => SizedBox(
+                    width: width,
+                    height: height,
+                    child: Skeleton(
+                      isLoading: loadingProgress?.cumulativeBytesLoaded !=
+                          loadingProgress?.expectedTotalBytes,
+                      duration: shimmerDuration,
+                      shimmerGradient: shimmerGradient ??
+                          LinearGradient(colors: [
+                            ThemeApp.colors(context).primary.withOpacity(.5),
+                            ThemeApp.colors(context).secondary.withOpacity(.5),
+                          ]),
+                      skeleton: SkeletonAvatar(
+                        style:
+                            SkeletonAvatarStyle(width: width, height: height),
+                      ),
+                      child: child,
+                    ),
+                  ),
           errorBuilder: (context, error, stackTrace) => SizedBox(
             width: (width ?? 40) / 2,
             height: (height ?? 40) / 2,
@@ -129,20 +135,26 @@ extension CachedNetworkImageExtension on CachedNetworkImage {
           placeholder: placeholder,
           placeholderFadeInDuration: placeholderFadeInDuration,
           useOldImageOnUrlChange: useOldImageOnUrlChange,
-          progressIndicatorBuilder: (context, child, loadingProgress) =>
-              Skeleton(
-            isLoading: loadingProgress.downloaded != loadingProgress.totalSize,
-            duration: shimmerDuration,
-            shimmerGradient: shimmerGradient ??
-                LinearGradient(colors: [
-                  ThemeApp.colors(context).primary.withOpacity(.5),
-                  ThemeApp.colors(context).secondary.withOpacity(.5),
-                ]),
-            skeleton: SkeletonAvatar(
-              style: SkeletonAvatarStyle(width: width, height: height),
-            ),
-            child: this,
-          ),
+          progressIndicatorBuilder: progressIndicatorBuilder ??
+              (context, child, loadingProgress) => SizedBox(
+                    width: width,
+                    height: height,
+                    child: Skeleton(
+                      isLoading: loadingProgress.downloaded !=
+                          loadingProgress.totalSize,
+                      duration: shimmerDuration,
+                      shimmerGradient: shimmerGradient ??
+                          LinearGradient(colors: [
+                            ThemeApp.colors(context).primary.withOpacity(.5),
+                            ThemeApp.colors(context).secondary.withOpacity(.5),
+                          ]),
+                      skeleton: SkeletonAvatar(
+                        style:
+                            SkeletonAvatarStyle(width: width, height: height),
+                      ),
+                      child: this,
+                    ),
+                  ),
           errorWidget: (context, error, stackTrace) => SizedBox(
             width: (width ?? 40) / 2,
             height: (height ?? 40) / 2,
