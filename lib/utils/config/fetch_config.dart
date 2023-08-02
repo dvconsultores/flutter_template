@@ -4,6 +4,7 @@ import 'dart:io';
 
 import 'package:flutter_detextre4/global_models/files_type.dart';
 import 'package:collection/collection.dart';
+import 'package:flutter_detextre4/utils/general/functions.dart' as fun;
 import 'package:flutter_detextre4/utils/services/local_data/secure_storage_service.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:http/http.dart' as http;
@@ -59,6 +60,7 @@ class FetchConfig {
     String connectionFallback = "Connection Failed",
     String? requestRef,
     bool showResponse = false,
+    bool showSnackbar = false,
   }) async {
     if (requestRef != null) dev.log("$requestRef⬅️");
 
@@ -66,13 +68,19 @@ class FetchConfig {
       final response = await http.get(url, headers: headers);
 
       if (!acceptedStatus.contains(response.statusCode)) {
-        throw response.catchErrorMessage(fallback: fallback);
+        throw response.catchErrorMessage(
+          fallback: fallback,
+          showSnackbar: showSnackbar,
+        );
       }
 
       if (showResponse) dev.log("${requestRef ?? ""} ${response.body} ✅");
       return response;
     } on SocketException catch (error) {
       dev.log("$error ⭕");
+      if (showSnackbar) {
+        fun.showSnackbar(error.toString(), type: fun.ColorSnackbarState.error);
+      }
       throw connectionFallback;
     }
   }
@@ -107,6 +115,7 @@ class FetchConfig {
     String? requestRef,
     bool showRequest = false,
     bool showResponse = false,
+    bool showSnackbar = false,
   }) async {
     if (requestRef != null) dev.log("$requestRef⬅️");
 
@@ -117,13 +126,19 @@ class FetchConfig {
           headers: headers, body: body, encoding: encoding);
 
       if (!acceptedStatus.contains(response.statusCode)) {
-        throw response.catchErrorMessage(fallback: fallback);
+        throw response.catchErrorMessage(
+          fallback: fallback,
+          showSnackbar: showSnackbar,
+        );
       }
 
       if (showResponse) dev.log("${requestRef ?? ""} ${response.body} ✅");
       return response;
     } on SocketException catch (error) {
       dev.log("$error ⭕");
+      if (showSnackbar) {
+        fun.showSnackbar(error.toString(), type: fun.ColorSnackbarState.error);
+      }
       throw connectionFallback;
     }
   }
@@ -137,9 +152,13 @@ extension ResponseExtension on http.Response {
   String catchErrorMessage({
     String searchBy = "message",
     String fallback = "Error",
+    bool showSnackbar = false,
   }) {
     dev.log("$statusCode ⭕");
     dev.log("$body ⭕");
+    if (showSnackbar) {
+      fun.showSnackbar(body.toString(), type: fun.ColorSnackbarState.error);
+    }
 
     return body.contains('"$searchBy":')
         ? jsonDecode(body)[searchBy]
@@ -175,6 +194,7 @@ extension MultipartRequestExtension on http.MultipartRequest {
     String? requestRef,
     bool showRequest = false,
     bool showResponse = false,
+    bool showSnackbar = false,
   }) async {
     if (requestRef != null) dev.log("$requestRef⬅️");
 
@@ -194,13 +214,19 @@ extension MultipartRequestExtension on http.MultipartRequest {
       final response = await http.Response.fromStream(await send());
 
       if (!acceptedStatus.contains(response.statusCode)) {
-        throw response.catchErrorMessage(fallback: fallback);
+        throw response.catchErrorMessage(
+          fallback: fallback,
+          showSnackbar: showSnackbar,
+        );
       }
 
       if (showResponse) dev.log("${requestRef ?? ""} ${response.body} ✅");
       return response;
     } on SocketException catch (error) {
       dev.log("$error ⭕");
+      if (showSnackbar) {
+        fun.showSnackbar(error.toString(), type: fun.ColorSnackbarState.error);
+      }
       throw connectionFallback;
     }
   }
