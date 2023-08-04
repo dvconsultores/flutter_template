@@ -3,6 +3,9 @@ import 'package:flutter_detextre4/main.dart';
 import 'package:flutter_detextre4/utils/config/app_config.dart';
 import 'package:flutter_detextre4/utils/helper_widgets/will_pop_custom.dart';
 
+/// Global loader used for asyncronous process.
+/// if should be used on initState, need to call with
+/// [SchedulerBinding.instance.addPostFrameCallback((_) {})] method.
 class AppLoader<T> {
   AppLoader([this.context]);
   final BuildContext? context;
