@@ -2,35 +2,31 @@ import 'package:flutter/material.dart';
 import 'package:flutter_detextre4/main.dart';
 import 'package:flutter_detextre4/utils/config/app_config.dart';
 import 'package:flutter_detextre4/utils/helper_widgets/will_pop_custom.dart';
-import 'package:http/http.dart' as http;
 
-class AppLoader {
-  static void close() => Navigator.pop(globalNavigatorKey.currentContext!);
+class AppLoader<T> {
+  AppLoader([this.context]);
+  final BuildContext? context;
 
-  static Future<http.Response> init({
-    Future<http.Response>? request,
-    http.MultipartRequest? multipartRequest,
-  }) async =>
-      await showDialog(
-        context: globalNavigatorKey.currentContext!,
-        builder: (context) => _AppLoader(request, multipartRequest),
-      ) ??
-      http.Response.bytes([], 200);
+  static AppLoader<T> of<T>(BuildContext context) => AppLoader<T>(context);
+
+  void close() => Navigator.pop(context ?? globalNavigatorKey.currentContext!);
+
+  Future<T?> init([Future<T> Function()? callback]) async => await showDialog(
+        context: context ?? globalNavigatorKey.currentContext!,
+        builder: (context) => _AppLoader<T>(callback),
+      );
 }
 
-class _AppLoader extends StatelessWidget {
-  const _AppLoader(this.request, this.multipartRequest);
-  final Future<http.Response>? request;
-  final http.MultipartRequest? multipartRequest;
+class _AppLoader<T> extends StatelessWidget {
+  const _AppLoader(this.callback);
+  final Future<T?> Function()? callback;
 
   @override
   Widget build(BuildContext context) {
-    Future<void> init() async => Navigator.pop(
-        context,
-        request != null
-            ? await request
-            : await http.Response.fromStream(await multipartRequest!.send()));
-    if (request != null || multipartRequest != null) init();
+    Future<void> onCallback() async => callback!()
+        .then((value) => Navigator.pop(context, value))
+        .catchError((_) => Navigator.pop(context));
+    if (callback != null) onCallback();
 
     return WillPopCustom(
       onWillPop: () async => false,
