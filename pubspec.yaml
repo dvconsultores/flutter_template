@@ -1,4 +1,5 @@
 # ? guide about to generate .aab file https://dev.to/teerasej/step-by-step-to-publish-your-flutter-project-as-andriod-app-bundle-1bpe
+# ? package to rename applicationId https://pub.dev/packages/rename
 
 name: flutter_detextre4
 description: A new Flutter project.
