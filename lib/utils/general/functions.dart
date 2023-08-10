@@ -2,6 +2,15 @@ import 'package:another_flushbar/flushbar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_detextre4/main.dart';
 import 'package:flutter_detextre4/utils/extensions/type_extensions.dart';
+import 'package:url_launcher/url_launcher.dart';
+
+/// * Launch external url from the app
+Future<void> openUrl(String url) async {
+  final urlParsed = Uri.parse(url);
+  if (!await launchUrl(urlParsed, mode: LaunchMode.externalApplication)) {
+    throw Exception('Could not launch $urlParsed');
+  }
+}
 
 // * App snackbar
 enum ColorSnackbarState {
