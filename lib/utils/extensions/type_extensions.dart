@@ -55,19 +55,15 @@ extension BoolExtension on bool {
 
 // ? DateTime extension
 extension DateTimeExtension on DateTime {
-  /// Parse to `String` with conventional date format.
-  String toDateString({
-    String separator = '/',
-    bool spaced = false,
+  /// Return a string representing [date] formatted according to our locale and internal format.
+  String formatTime({
+    String? pattern = 'dd/MM/yyyy HH:mm',
+    bool toLocal = false,
     String? locale,
-  }) {
-    final divider = spaced ? ' $separator ' : separator;
-
-    if (locale?.contains("es") ?? false) {
-      return '${day.toString().padLeft(2, '0')}$divider${month.toString().padLeft(2, '0')}$divider$year';
-    }
-    return '${year.toString().padLeft(2, '0')}$divider${month.toString().padLeft(2, '0')}$divider$day';
-  }
+  }) =>
+      toLocal
+          ? DateFormat(pattern, locale).format(this.toLocal())
+          : DateFormat(pattern, locale).format(this);
 }
 
 // ? File extension
