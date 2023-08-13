@@ -10,6 +10,7 @@ import 'package:flutter_detextre4/main_provider.dart';
 import 'package:flutter_detextre4/utils/config/app_config.dart';
 import 'package:flutter_detextre4/utils/services/local_data/hive_data_service.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:generic_bloc_provider/generic_bloc_provider.dart';
 import 'package:hive_flutter/adapters.dart';
 import 'package:local_session_timeout/local_session_timeout.dart';
@@ -91,22 +92,30 @@ class _AppState extends State<App> {
 
         return SessionTimeoutManager(
           sessionConfig: SessionTimeoutConfig.instance,
-          child: MaterialApp.router(
-              scaffoldMessengerKey: globalScaffoldMessengerKey,
-              locale: value.locale,
-              debugShowCheckedModeBanner: true,
-              title: 'Flutter Demo',
-              theme: ThemeApp.of(context), // * Theme switcher
-              localizationsDelegates: AppLocalizations.localizationsDelegates,
-              supportedLocales: AppLocalizations.supportedLocales,
-              routerConfig: router,
-              // * global text scale factorized
-              builder: (context, child) {
-                return MediaQuery(
-                  data: MediaQuery.of(context).copyWith(textScaleFactor: 1.0),
-                  child: child!,
-                );
-              }),
+          // TODO! UNDER TESTING
+          child: ScreenUtilInit(
+            designSize: const Size(360, 690),
+            builder: (context, child) {
+              return MaterialApp.router(
+                  scaffoldMessengerKey: globalScaffoldMessengerKey,
+                  locale: value.locale,
+                  debugShowCheckedModeBanner: true,
+                  title: 'Flutter Demo',
+                  theme: ThemeApp.of(context), // * Theme switcher
+                  localizationsDelegates:
+                      AppLocalizations.localizationsDelegates,
+                  supportedLocales: AppLocalizations.supportedLocales,
+                  routerConfig: router,
+                  // TODO! UNDER TESTING
+                  // * global text scale factorized
+                  builder: (context, child) {
+                    return MediaQuery(
+                      data: MediaQuery.of(context).copyWith(textScaleFactor: 1),
+                      child: child!,
+                    );
+                  });
+            },
+          ),
         );
       });
 }
