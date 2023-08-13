@@ -97,6 +97,7 @@ dependencies:
   skeletons: ^0.0.3
   lottie: ^2.5.0 # ? official animation site https://lottiefiles.com/es/animation/flutter
   url_launcher: ^6.1.12
+  async: ^2.11.0
 
 
 dev_dependencies:
