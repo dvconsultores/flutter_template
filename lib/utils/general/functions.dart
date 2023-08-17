@@ -4,6 +4,14 @@ import 'package:flutter_detextre4/main.dart';
 import 'package:flutter_detextre4/utils/extensions/type_extensions.dart';
 import 'package:url_launcher/url_launcher.dart';
 
+/// * Helper to multiple pop callbacks
+void popMultiple(BuildContext context, [int count = 1]) {
+  if (count <= 0) return;
+
+  Navigator.pop(context);
+  popMultiple(context, count - 1);
+}
+
 /// * Launch external url from the app
 Future<void> openUrl(String url) async {
   final urlParsed = Uri.parse(url);
