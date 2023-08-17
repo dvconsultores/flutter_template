@@ -8,6 +8,17 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'package:collection/collection.dart';
 
+/// * A collection about application name formats
+enum AppName {
+  camelcase('apoloPay'),
+  kedabcase('apolo-pay'),
+  snakecase('apolo_pay'),
+  capitalize('Apolo Pay');
+
+  const AppName(this.value);
+  final String value;
+}
+
 // * Responsive sizes
 /// A list of sizes from device screen resolution
 enum ScreenSize {
