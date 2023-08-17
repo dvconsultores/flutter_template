@@ -86,7 +86,9 @@ dependencies:
   easy_debounce: ^2.0.3
   screenshot: ^2.0.0
   path_provider: ^2.0.15
+  permission_handler: ^10.4.3
   gallery_saver: ^2.3.2
+  csv: ^5.0.2
   share_plus: ^7.0.0
   vibration: ^1.7.7
   flutter_keyboard_visibility: ^5.4.1

@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'dart:developer' as dev;
 import 'dart:io';
 
+import 'package:csv/csv.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_detextre4/utils/config/fetch_config.dart';
@@ -11,6 +12,7 @@ import 'package:gallery_saver/gallery_saver.dart';
 import 'package:collection/collection.dart';
 import 'package:intl/intl.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:screenshot/screenshot.dart';
 import 'package:share_plus/share_plus.dart';
 
@@ -134,6 +136,41 @@ extension ListExtension<T> on List<T> {
     }
 
     return distinctList.cast<T>();
+  }
+
+  Future<void> saveAsCsvFile({
+    String? dirName,
+    String Function(String dir)? message,
+    Duration? messageDuration,
+  }) async {
+    final permission = (await Permission.storage.request()).isGranted;
+
+    if (permission) {
+      //store file in documents folder
+      String dir =
+          "${(await getExternalStorageDirectory())!.path}/${dirName ?? 'appName'}.csv";
+      File file = File(dir);
+
+      // convert rows to String and write as csv file
+      String csv =
+          const ListToCsvConverter().convert(this as List<List<dynamic>>);
+      await file.writeAsString(csv);
+      debugPrint("$csv ⭐");
+
+      if (message != null) {
+        showSnackbar(
+          message(dir),
+          type: ColorSnackbarState.success,
+          duration: messageDuration,
+        );
+      }
+    } else {
+      Map<Permission, PermissionStatus> statuses = await [
+        Permission.storage,
+      ].request();
+
+      debugPrint("$statuses ⭕");
+    }
   }
 }
 
@@ -500,14 +537,14 @@ extension StringExtension on String {
       split(" ").map((str) => str.toCapitalize()).join(" ");
 
   /// Copy text from `string` to clipboard.
-  void copyToClipboard({String? message, Duration? duration}) {
+  void copyToClipboard({String? message, Duration? messageDuration}) {
     Clipboard.setData(ClipboardData(text: this))
         .then((value) => message.isExist
             ? showSnackbar(message!,
-                type: ColorSnackbarState.success, duration: duration)
+                type: ColorSnackbarState.success, duration: messageDuration)
             : null)
         .catchError((onError) => showSnackbar(onError,
-            type: ColorSnackbarState.error, duration: duration));
+            type: ColorSnackbarState.error, duration: messageDuration));
   }
 
   /// Converts all commas inside `string` to dots
@@ -641,7 +678,10 @@ extension StringExtension on String {
 
 // ? screenshot extension
 extension ScreenshotExtension on ScreenshotController {
-  Future<void> captureAndSaveAuto({String? message}) async {
+  Future<void> captureAndSaveAuto({
+    String? message,
+    Duration? messageDuration,
+  }) async {
     Uint8List? imageBytes = await capture(pixelRatio: 1.5);
 
     final Directory directory = await getApplicationDocumentsDirectory();
@@ -653,7 +693,13 @@ extension ScreenshotExtension on ScreenshotController {
         'Image saved to: $imagePath (size: ${file.lengthSync()} bytes) ${file.path} ⭐');
     await GallerySaver.saveImage(file.path);
 
-    if (message != null) showSnackbar(message);
+    if (message != null) {
+      showSnackbar(
+        message,
+        type: ColorSnackbarState.success,
+        duration: messageDuration,
+      );
+    }
   }
 
   Future<void> shareCapture() async {
