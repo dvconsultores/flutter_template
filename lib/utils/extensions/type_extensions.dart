@@ -653,7 +653,7 @@ extension ScreenshotExtension on ScreenshotController {
         'Image saved to: $imagePath (size: ${file.lengthSync()} bytes) ${file.path} ⭐');
     await GallerySaver.saveImage(file.path);
 
-    showSnackbar(message ?? "Capture saved on gallery");
+    if (message != null) showSnackbar(message);
   }
 
   Future<void> shareCapture() async {
