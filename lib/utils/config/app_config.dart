@@ -10,10 +10,10 @@ import 'package:collection/collection.dart';
 
 /// * A collection about application name formats
 enum AppName {
-  camelcase('apoloPay'),
-  kedabcase('apolo-pay'),
-  snakecase('apolo_pay'),
-  capitalize('Apolo Pay');
+  camelcase('flutterDetextre4'),
+  kedabcase('flutter-detextre4'),
+  snakecase('flutter_detextre4'),
+  capitalize('Flutter Detextre4');
 
   const AppName(this.value);
   final String value;
