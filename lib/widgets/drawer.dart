@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_detextre4/utils/config/app_config.dart';
-import 'package:flutter_detextre4/global_screens/test_web_sockets.dart';
+import 'package:flutter_detextre4/utils/config/config.dart';
+import 'package:flutter_detextre4/routes/test_web_sockets_page.dart';
 import 'package:go_router/go_router.dart';
 
 class AppDrawer extends StatelessWidget {
@@ -23,7 +23,7 @@ class AppDrawer extends StatelessWidget {
     }
 
     final items = <String, dynamic>{
-      "Test web socket": const TestWebSockets(),
+      "Test web socket": const TestWebSocketsPage(),
       "Search Two": "/search/search-two",
       "List Screen": "/search/list",
     };

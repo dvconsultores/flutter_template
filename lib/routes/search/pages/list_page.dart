@@ -2,19 +2,19 @@ import 'dart:developer' as dev;
 import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
-import 'package:flutter_detextre4/global_widgets/app_scaffold.dart';
+import 'package:flutter_detextre4/widgets/scaffold.dart';
 import 'package:flutter_detextre4/utils/extensions/type_extensions.dart';
 import 'package:flutter_detextre4/utils/general/list_filterable.dart';
-import 'package:flutter_detextre4/global_widgets/loaders/app_refresh_indicator.dart';
+import 'package:flutter_detextre4/widgets/loaders/refresh_indicator.dart';
 
-class ListScreen extends StatefulWidget {
-  const ListScreen({super.key});
+class ListPage extends StatefulWidget {
+  const ListPage({super.key});
 
   @override
-  State<ListScreen> createState() => _ListScreenState();
+  State<ListPage> createState() => _ListViewExampleState();
 }
 
-class _ListScreenState extends State<ListScreen> {
+class _ListViewExampleState extends State<ListPage> {
   final items = ListFilterable([
     "static-1",
     "static-2",

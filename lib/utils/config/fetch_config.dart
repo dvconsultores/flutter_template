@@ -2,7 +2,7 @@ import 'dart:convert';
 import 'dart:developer' as dev;
 import 'dart:io';
 
-import 'package:flutter_detextre4/global_models/files_type.dart';
+import 'package:flutter_detextre4/models/files_type.dart';
 import 'package:collection/collection.dart';
 import 'package:flutter_detextre4/utils/general/functions.dart' as fun;
 import 'package:flutter_detextre4/utils/services/local_data/secure_storage_service.dart';

@@ -7,7 +7,7 @@ import 'package:flutter_detextre4/utils/config/router_config.dart';
 import 'package:flutter_detextre4/utils/config/session_timeout_config.dart';
 import 'package:flutter_detextre4/utils/helper_widgets/restart_widget.dart';
 import 'package:flutter_detextre4/main_provider.dart';
-import 'package:flutter_detextre4/utils/config/app_config.dart';
+import 'package:flutter_detextre4/utils/config/config.dart';
 import 'package:flutter_detextre4/utils/services/local_data/hive_data_service.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -92,11 +92,10 @@ class _AppState extends State<App> {
 
         return SessionTimeoutManager(
           sessionConfig: SessionTimeoutConfig.instance,
-          // TODO! UNDER TESTING
           child: ScreenUtilInit(
-            designSize: const Size(360, 690),
-            builder: (context, child) {
-              return MaterialApp.router(
+              designSize: const Size(360, 690),
+              builder: (context, child) {
+                return MaterialApp.router(
                   scaffoldMessengerKey: globalScaffoldMessengerKey,
                   locale: value.locale,
                   debugShowCheckedModeBanner: true,
@@ -106,16 +105,15 @@ class _AppState extends State<App> {
                       AppLocalizations.localizationsDelegates,
                   supportedLocales: AppLocalizations.supportedLocales,
                   routerConfig: router,
-                  // TODO! UNDER TESTING
-                  // * global text scale factorized
-                  builder: (context, child) {
-                    return MediaQuery(
-                      data: MediaQuery.of(context).copyWith(textScaleFactor: 1),
-                      child: child!,
-                    );
-                  });
-            },
-          ),
+                  // // * global text scale factorized
+                  // builder: (context, child) {
+                  //   return MediaQuery(
+                  //     data: MediaQuery.of(context).copyWith(textScaleFactor: 1),
+                  //     child: child!,
+                  //   );
+                  // },
+                );
+              }),
         );
       });
 }

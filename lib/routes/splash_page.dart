@@ -1,16 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_detextre4/utils/config/router_config.dart';
-import 'package:flutter_detextre4/utils/config/app_config.dart';
+import 'package:flutter_detextre4/utils/config/config.dart';
 import 'dart:math' as math;
 
-class SplashScreen extends StatefulWidget {
-  const SplashScreen({super.key});
+class SplashPage extends StatefulWidget {
+  const SplashPage({super.key});
 
   @override
-  State<SplashScreen> createState() => _SplashPageState();
+  State<SplashPage> createState() => _SplashPageState();
 }
 
-class _SplashPageState extends State<SplashScreen>
+class _SplashPageState extends State<SplashPage>
     with SingleTickerProviderStateMixin {
   final int splashDuration = 1500;
   late final AnimationController animationController = AnimationController(

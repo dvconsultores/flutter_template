@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_detextre4/routes/user/repository/auth_api.dart';
-import 'package:flutter_detextre4/global_widgets/app_scaffold.dart';
+import 'package:flutter_detextre4/widgets/scaffold.dart';
 import 'package:flutter_detextre4/utils/helper_widgets/responsive_layout.dart';
 
-class LogInScreen extends StatelessWidget with ResponsiveLayoutMixin {
-  const LogInScreen({super.key});
+class LogInPage extends StatelessWidget with ResponsiveLayoutMixin {
+  const LogInPage({super.key});
 
   @override
   Widget? tabletLayout(BuildContext context, BoxConstraints constraints) {

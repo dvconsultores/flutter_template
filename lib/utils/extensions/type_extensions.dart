@@ -6,7 +6,7 @@ import 'dart:io';
 import 'package:csv/csv.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_detextre4/utils/config/app_config.dart';
+import 'package:flutter_detextre4/utils/config/config.dart';
 import 'package:flutter_detextre4/utils/config/fetch_config.dart';
 import 'package:flutter_detextre4/utils/general/functions.dart';
 import 'package:gallery_saver/gallery_saver.dart';

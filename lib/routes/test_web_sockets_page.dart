@@ -1,16 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_detextre4/routes/user/bloc/user_bloc.dart';
-import 'package:flutter_detextre4/global_widgets/app_scaffold.dart';
+import 'package:flutter_detextre4/widgets/scaffold.dart';
 import 'package:generic_bloc_provider/generic_bloc_provider.dart';
 import 'package:web_socket_channel/web_socket_channel.dart';
 
-class TestWebSockets extends StatefulWidget {
-  const TestWebSockets({super.key});
+class TestWebSocketsPage extends StatefulWidget {
+  const TestWebSocketsPage({super.key});
   @override
-  State<TestWebSockets> createState() => _TestWebSocketsState();
+  State<TestWebSocketsPage> createState() => _TestWebSocketsPageState();
 }
 
-class _TestWebSocketsState extends State<TestWebSockets> {
+class _TestWebSocketsPageState extends State<TestWebSocketsPage> {
   final channel =
       WebSocketChannel.connect(Uri.parse('wss://echo.websocket.events'));
   Stream get getChannelStream => channel.stream;

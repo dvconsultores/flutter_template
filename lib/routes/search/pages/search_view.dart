@@ -1,16 +1,20 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_detextre4/global_widgets/app_scaffold.dart';
+import 'package:flutter_detextre4/widgets/scaffold.dart';
 import 'package:flutter_detextre4/routes/search/bloc/search_bloc.dart';
 import 'package:generic_bloc_provider/generic_bloc_provider.dart';
 
-class SearchScreenTwo extends StatefulWidget {
-  const SearchScreenTwo({super.key});
+class SearchView extends StatefulWidget {
+  const SearchView({super.key});
 
   @override
-  State<SearchScreenTwo> createState() => _SearchScreenTwoState();
+  State<SearchView> createState() => _SearchScreenState();
 }
 
-class _SearchScreenTwoState extends State<SearchScreenTwo> {
+class _SearchScreenState extends State<SearchView> {
+  void testFunction(SearchBloc bloc) {
+    bloc.addTicket();
+  }
+
   @override
   Widget build(BuildContext context) {
     final searchBloc = BlocProvider.of<SearchBloc>(context);
@@ -18,9 +22,16 @@ class _SearchScreenTwoState extends State<SearchScreenTwo> {
     return ScaffoldBody.responsive(
       tablet: (context, constraints) => ListView(children: [
         Text(
-          "search 2",
+          "search",
           textAlign: TextAlign.center,
           style: Theme.of(context).textTheme.displayMedium,
+        ),
+        TextButton(
+          child: const Text(
+            "Press button to search",
+            style: TextStyle(fontSize: 18),
+          ),
+          onPressed: () => setState(() => testFunction(searchBloc)),
         ),
         for (var i = 0; i < searchBloc.totalTickets.length; i++)
           Text(

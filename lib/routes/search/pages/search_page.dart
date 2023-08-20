@@ -1,16 +1,16 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_detextre4/global_widgets/app_scaffold.dart';
+import 'package:flutter_detextre4/widgets/scaffold.dart';
 import 'package:flutter_detextre4/routes/search/bloc/search_bloc.dart';
 import 'package:generic_bloc_provider/generic_bloc_provider.dart';
 
-class SearchScreen extends StatefulWidget {
-  const SearchScreen({super.key});
+class SearchPage extends StatefulWidget {
+  const SearchPage({super.key});
 
   @override
-  State<SearchScreen> createState() => _SearchScreenState();
+  State<SearchPage> createState() => _SearchScreenState();
 }
 
-class _SearchScreenState extends State<SearchScreen> {
+class _SearchScreenState extends State<SearchPage> {
   void testFunction(SearchBloc bloc) {
     bloc.addTicket();
   }

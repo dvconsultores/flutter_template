@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_detextre4/utils/config/app_config.dart';
+import 'package:flutter_detextre4/utils/config/config.dart';
 
 /// Custom responsive layout widget
 class ResponsiveLayout extends StatelessWidget {

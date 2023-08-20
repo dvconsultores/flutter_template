@@ -2,15 +2,15 @@ import 'package:collection/collection.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_detextre4/main_navigation.dart';
-import 'package:flutter_detextre4/routes/search/screens/list_screen.dart';
-import 'package:flutter_detextre4/routes/splash_screen.dart';
+import 'package:flutter_detextre4/routes/search/pages/list_page.dart';
+import 'package:flutter_detextre4/routes/splash_page.dart';
 import 'package:flutter_detextre4/main.dart';
-import 'package:flutter_detextre4/routes/home/home_screen.dart';
-import 'package:flutter_detextre4/routes/search/screens/search_screen.dart';
-import 'package:flutter_detextre4/routes/search/screens/search_screen_two.dart';
+import 'package:flutter_detextre4/routes/home/home_page.dart';
+import 'package:flutter_detextre4/routes/search/pages/search_page.dart';
+import 'package:flutter_detextre4/routes/search/pages/search_page_two.dart';
 import 'package:flutter_detextre4/routes/user/bloc/user_bloc.dart';
-import 'package:flutter_detextre4/routes/log_in_screen.dart';
-import 'package:flutter_detextre4/routes/user/screens/user_screen.dart';
+import 'package:flutter_detextre4/routes/log_in_page.dart';
+import 'package:flutter_detextre4/routes/user/pages/user_page.dart';
 import 'package:flutter_detextre4/utils/helper_widgets/custom_transition_wrapper.dart';
 import 'package:generic_bloc_provider/generic_bloc_provider.dart';
 import 'package:go_router/go_router.dart';
@@ -26,7 +26,7 @@ Page _pageBuilder(Widget child) => CustomTransitionPage(
 final GoRouter router = GoRouter(
     initialLocation: kIsWeb ? "/" : "/splash",
     // errorBuilder: (context, state) {
-    //   return const ErrorScreen();
+    //   return const ErrorPage();
     // },
     redirect: (context, state) async {
       final isLogged = await BlocProvider.of<UserBloc>(context).isLogged;
@@ -48,12 +48,12 @@ final GoRouter router = GoRouter(
       GoRoute(
         path: '/splash',
         builder: (context, state) =>
-            const CustomTransitionWrapper(child: SplashScreen()),
+            const CustomTransitionWrapper(child: SplashPage()),
       ),
       GoRoute(
         path: '/login',
         builder: (context, state) =>
-            const CustomTransitionWrapper(child: LogInScreen()),
+            const CustomTransitionWrapper(child: LogInPage()),
         routes: const [],
       ),
       ShellRoute(
@@ -66,32 +66,32 @@ final GoRouter router = GoRouter(
             GoRoute(
               name: "user",
               path: '/user',
-              pageBuilder: (context, state) => _pageBuilder(const UserScreen()),
+              pageBuilder: (context, state) => _pageBuilder(const UserPage()),
               routes: const [],
             ),
             GoRoute(
               name: "home",
               path: '/',
-              pageBuilder: (context, state) => _pageBuilder(const HomeScreen()),
+              pageBuilder: (context, state) => _pageBuilder(const HomePage()),
               routes: const [],
             ),
             GoRoute(
                 name: "search",
                 path: '/search',
                 pageBuilder: (context, state) =>
-                    _pageBuilder(const SearchScreen()),
+                    _pageBuilder(const SearchPage()),
                 routes: [
                   GoRoute(
                     name: "search-two",
                     path: 'search-two',
                     pageBuilder: (context, state) =>
-                        _pageBuilder(const SearchScreenTwo()),
+                        _pageBuilder(const SearchPageTwo()),
                   ),
                   GoRoute(
                     name: "list",
                     path: 'list',
                     pageBuilder: (context, state) =>
-                        _pageBuilder(const ListScreen()),
+                        _pageBuilder(const ListPage()),
                   ),
                 ]),
           ]),
@@ -109,12 +109,12 @@ extension GoRouterExtension on GoRouter {
           (element) => (element as GoRoute).path.startsWith(location))
       ?.routes;
 
-  /// Get index of the current [ShellRoute] displayed in screen.
+  /// Get index of the current [ShellRoute] displayed in Page.
   /// Returns -1 if [element] is not found.
   int get indexShellRoute => shellRoutes.indexWhere(
       (element) => (element as GoRoute).path == "/${location.split('/')[1]}");
 
-  /// Get the current [ShellRoute] displayed in screen.
+  /// Get the current [ShellRoute] displayed in Page.
   RouteBase? get shellRoute => indexShellRoute == -1
       ? null
       : shellRoutes.elementAtOrNull(indexShellRoute);
