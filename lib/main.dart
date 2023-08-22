@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -24,9 +26,11 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   // ? -- config to dotenv 🖊️ --
-  await dotenv
-      .load(fileName: '.env')
-      .catchError((error) => debugPrint('Error loading .env file: $error ㊗️'));
+  final envFile = File('.env');
+  if (envFile.existsSync() && envFile.readAsStringSync().isNotEmpty) {
+    await dotenv.load(fileName: '.env').catchError(
+        (error) => debugPrint('Error loading .env file: $error ㊗️'));
+  }
 
   /*
   ? -- config to firebase 🖊️ --
