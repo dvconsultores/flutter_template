@@ -1,7 +1,7 @@
 import 'package:flutter_detextre4/utils/extensions/type_extensions.dart';
 
-class UserModel implements DefaultModel {
-  UserModel({
+class ProfileModel implements DefaultModel {
+  ProfileModel({
     required this.uid,
     required this.name,
     required this.email,
@@ -16,13 +16,13 @@ class UserModel implements DefaultModel {
   Iterable get values => toJson().values;
 
   @override
-  UserModel copyWith({
+  ProfileModel copyWith({
     int? uid,
     String? name,
     String? email,
     String? photoURL,
   }) =>
-      UserModel(
+      ProfileModel(
         uid: uid ?? this.uid,
         name: name ?? this.name,
         email: email ?? this.email,
@@ -37,13 +37,13 @@ class UserModel implements DefaultModel {
         "photo_url": photoURL,
       };
 
-  factory UserModel.fromJson(Map<String, dynamic> json) => UserModel(
+  factory ProfileModel.fromJson(Map<String, dynamic> json) => ProfileModel(
         uid: json["id"],
         name: json["name"] ?? "",
         email: json["email"] ?? "",
         photoURL: json["photo_url"] ?? "",
       );
 
-  static UserModel? fromJsonNullable(Map<String, dynamic>? json) =>
-      json != null ? UserModel.fromJson(json) : null;
+  static ProfileModel? fromJsonNullable(Map<String, dynamic>? json) =>
+      json != null ? ProfileModel.fromJson(json) : null;
 }

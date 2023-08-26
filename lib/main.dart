@@ -1,8 +1,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_detextre4/routes/search/bloc/search_bloc.dart';
-import 'package:flutter_detextre4/routes/user/bloc/user_bloc.dart';
+import 'package:flutter_detextre4/blocs/main_bloc.dart';
 import 'package:flutter_detextre4/utils/config/router_config.dart';
 import 'package:flutter_detextre4/utils/config/session_timeout_config.dart';
 import 'package:flutter_detextre4/utils/helper_widgets/restart_widget.dart';
@@ -24,8 +23,9 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   // ? -- config to dotenv 🖊️ --
-  await dotenv.load(fileName: '.env').catchError(
-      (error) => debugPrint('Error loading .env file: $error ㊗️'));
+  await dotenv
+      .load(fileName: '.env')
+      .catchError((error) => debugPrint('Error loading .env file: $error ㊗️'));
 
   /*
   ? -- config to firebase 🖊️ --
@@ -48,16 +48,14 @@ class AppState extends StatelessWidget {
       SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersive, overlays: []);
     }
 
-    // * Feature blocs
-    return BlocProvider<UserBloc>(
-      bloc: UserBloc(),
-      child: BlocProvider<SearchBloc>(
-          bloc: SearchBloc(),
-          // * Main Provider
-          child: ChangeNotifierProvider<MainProvider>(
-            create: (context) => MainProvider(),
-            child: const App(),
-          )),
+    // * Route blocs
+    return BlocProvider<MainBloc>(
+      bloc: MainBloc(),
+      // * Main Provider
+      child: ChangeNotifierProvider<MainProvider>(
+        create: (context) => MainProvider(),
+        child: const App(),
+      ),
     );
   }
 }
@@ -70,27 +68,25 @@ class App extends StatefulWidget {
 }
 
 class _AppState extends State<App> {
-  late final userBloc = BlocProvider.of<UserBloc>(context);
+  late final sessionTimeoutConfig = SessionTimeoutConfig(context);
 
   @override
   void initState() {
-    SessionTimeoutConfig.listen(context);
+    sessionTimeoutConfig.listen();
     super.initState();
   }
 
   @override
   void dispose() {
-    SessionTimeoutConfig.dispose();
+    sessionTimeoutConfig.dispose();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) =>
       Consumer<MainProvider>(builder: (context, value, child) {
-        userBloc.init();
-
         return SessionTimeoutManager(
-          sessionConfig: SessionTimeoutConfig.instance,
+          sessionConfig: sessionTimeoutConfig.instance,
           child: ScreenUtilInit(
               designSize: const Size(360, 690),
               builder: (context, child) {

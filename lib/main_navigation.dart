@@ -50,7 +50,7 @@ class MainNavigation extends StatelessWidget {
           items: router.shellRoutes.map((element) {
             Icon getIcon(String? value) {
               switch (value) {
-                case "user":
+                case "profile":
                   return const Icon(Icons.person);
                 case "home":
                   return const Icon(Icons.home);

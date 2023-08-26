@@ -4,11 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 ///? Collection used to know storage elements into secure storage.
-enum SecureStorageCollection {
-  dataUser,
-  tokenAuth,
-  something,
-  somethingMore;
+enum SecureCollection {
+  tokenAuth;
 }
 
 /// Configuration class to Secure storage.
@@ -24,8 +21,8 @@ class SecureStorage {
   ///? Create storage
   static const storage = FlutterSecureStorage();
 
-  /// Get any value from secure storage using [SecureStorageCollection] key.
-  static Future<T> read<T>(SecureStorageCollection key) async {
+  /// Get any value from secure storage using [SecureCollection] key.
+  static Future<T> read<T>(SecureCollection key) async {
     final String? value = await storage.read(
       key: key.name,
       aOptions: getAndroidOptions(),
@@ -49,48 +46,43 @@ class SecureStorage {
     return allValues;
   }
 
-  /// Delete a value from secure storage using [SecureStorageCollection] key.
-  static Future<void> delete(SecureStorageCollection key) async {
-    await storage
-        .delete(
-          key: key.name,
-          aOptions: getAndroidOptions(),
-          iOptions: getIOSOptions(),
-          webOptions: getWebOptions(),
-        )
-        .whenComplete(
-            () => debugPrint("${key.name} - deleted from Secure storage 🛡️"));
-  }
+  /// Delete a value from secure storage using [SecureCollection] key.
+  static Future<void> delete(SecureCollection key) async => await storage
+      .delete(
+        key: key.name,
+        aOptions: getAndroidOptions(),
+        iOptions: getIOSOptions(),
+        webOptions: getWebOptions(),
+      )
+      .whenComplete(
+          () => debugPrint("${key.name} - deleted from Secure storage 🛡️"));
 
   /// Delete all values from secure storage.
-  static Future<void> deleteAll() async {
-    await storage
-        .deleteAll(
-          aOptions: getAndroidOptions(),
-          iOptions: getIOSOptions(),
-          webOptions: getWebOptions(),
-        )
-        .whenComplete(() => debugPrint("Secure storage cleared 🛡️"));
-  }
+  static Future<void> deleteAll() async => await storage
+      .deleteAll(
+        aOptions: getAndroidOptions(),
+        iOptions: getIOSOptions(),
+        webOptions: getWebOptions(),
+      )
+      .whenComplete(() => debugPrint("Secure storage cleared 🛡️"));
 
-  /// Write/storage a value into secure storage using [SecureStorageCollection] key.
-  static Future<void> write(SecureStorageCollection key, dynamic value) async {
-    await storage
-        .write(
-          key: key.name,
-          value: jsonEncode(value),
-          aOptions: getAndroidOptions(),
-          iOptions: getIOSOptions(),
-          webOptions: getWebOptions(),
-        )
-        .then((_) =>
-            debugPrint("${key.name}: $value - written from Secure storage 🛡️"))
-        .catchError((onError) => throw onError);
-  }
+  /// Write/storage a value into secure storage using [SecureCollection] key.
+  static Future<void> write(SecureCollection key, dynamic value) async =>
+      await storage
+          .write(
+            key: key.name,
+            value: jsonEncode(value),
+            aOptions: getAndroidOptions(),
+            iOptions: getIOSOptions(),
+            webOptions: getWebOptions(),
+          )
+          .then((_) => debugPrint(
+              "${key.name}: $value - written from Secure storage 🛡️"))
+          .catchError((onError) => throw onError);
 
-  /// Read and write modifying key / values into hive data elements using [SecureStorageCollection] key.
+  /// Read and write modifying key / values into hive data elements using [SecureCollection] key.
   static Future<void> updateFields<T>(
-    SecureStorageCollection key,
+    SecureCollection key,
     void Function(T stored) values,
   ) async {
     final T storedElement = jsonDecode((await storage.read(

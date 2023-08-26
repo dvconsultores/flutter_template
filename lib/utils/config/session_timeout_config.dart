@@ -1,34 +1,34 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_detextre4/repositories/auth_api.dart';
 import 'package:flutter_detextre4/utils/config/router_config.dart';
-import 'package:flutter_detextre4/routes/user/bloc/user_bloc.dart';
-import 'package:generic_bloc_provider/generic_bloc_provider.dart';
 import 'package:local_session_timeout/local_session_timeout.dart';
 
 class SessionTimeoutConfig {
-  static final instance = SessionConfig(
+  SessionTimeoutConfig(this.context);
+  final BuildContext context;
+
+  late final authApi = AuthApi(context);
+
+  final instance = SessionConfig(
       // invalidateSessionForAppLostFocus: const Duration(seconds: 15),
       // invalidateSessionForUserInactivity: const Duration(seconds: 30),
       );
 
-  static void listen(BuildContext context) =>
-      instance.stream.listen((timeoutEvent) {
-        final userBloc = BlocProvider.of<UserBloc>(context);
-
-        //? Exception routes
-        if (locationExceptions.contains(router.location)) return;
+  void listen() => instance.stream.listen((timeoutEvent) {
+        if (!requireAuth) return;
 
         switch (timeoutEvent) {
           case SessionTimeoutState.userInactivityTimeout:
             // * handle user  inactive timeout
-            userBloc.closeSession;
+            authApi.signOut();
             break;
 
           case SessionTimeoutState.appFocusTimeout:
             // * handle user  app lost focus timeout
-            userBloc.closeSession;
+            authApi.signOut();
             break;
         }
       });
 
-  static void dispose() => instance.dispose();
+  void dispose() => instance.dispose();
 }

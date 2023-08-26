@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_detextre4/repositories/auth_api.dart';
 import 'package:flutter_detextre4/widgets/scaffold.dart';
-import 'package:flutter_detextre4/routes/user/repository/auth_api.dart';
 
 class UserPage extends StatelessWidget {
   const UserPage({super.key});

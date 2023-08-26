@@ -2,20 +2,16 @@ import 'package:collection/collection.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_detextre4/main_navigation.dart';
-import 'package:flutter_detextre4/routes/search/pages/list_page.dart';
+import 'package:flutter_detextre4/routes/log_in_page.dart';
+import 'package:flutter_detextre4/routes/shell_routes/search/pages/list_page.dart';
 import 'package:flutter_detextre4/routes/splash_page.dart';
 import 'package:flutter_detextre4/main.dart';
-import 'package:flutter_detextre4/routes/home/home_page.dart';
-import 'package:flutter_detextre4/routes/search/pages/search_page.dart';
-import 'package:flutter_detextre4/routes/search/pages/search_page_two.dart';
-import 'package:flutter_detextre4/routes/user/bloc/user_bloc.dart';
-import 'package:flutter_detextre4/routes/log_in_page.dart';
-import 'package:flutter_detextre4/routes/user/pages/user_page.dart';
+import 'package:flutter_detextre4/routes/shell_routes/home/home_page.dart';
+import 'package:flutter_detextre4/routes/shell_routes/profile/pages/user_page.dart';
+import 'package:flutter_detextre4/routes/test_web_sockets_page.dart';
 import 'package:flutter_detextre4/utils/helper_widgets/custom_transition_wrapper.dart';
-import 'package:generic_bloc_provider/generic_bloc_provider.dart';
+import 'package:flutter_detextre4/utils/services/local_data/secure_storage_service.dart';
 import 'package:go_router/go_router.dart';
-
-final locationExceptions = ["/splash", "/login"];
 
 Page _pageBuilder(Widget child) => CustomTransitionPage(
       child: child,
@@ -23,20 +19,22 @@ Page _pageBuilder(Widget child) => CustomTransitionPage(
           CustomTransitionWrapper(animation: animation, child: child),
     );
 
+final requireAuth = !router.location.contains('/auth');
+
 final GoRouter router = GoRouter(
     initialLocation: kIsWeb ? "/" : "/splash",
     // errorBuilder: (context, state) {
     //   return const ErrorPage();
     // },
     redirect: (context, state) async {
-      final isLogged = await BlocProvider.of<UserBloc>(context).isLogged;
+      final isLogged =
+          (await SecureStorage.read<String?>(SecureCollection.tokenAuth)) !=
+              null;
 
       if (state.location == "/splash") {
         return null;
-      } else if (!isLogged) {
-        return "/login";
-      } else if (locationExceptions.contains(state.location) && isLogged) {
-        return "/";
+      } else if (requireAuth && !isLogged) {
+        return "/auth/login";
       }
 
       return null;
@@ -47,56 +45,60 @@ final GoRouter router = GoRouter(
       //* top level
       GoRoute(
         path: '/splash',
+        name: 'splash',
         builder: (context, state) =>
             const CustomTransitionWrapper(child: SplashPage()),
       ),
+
       GoRoute(
-        path: '/login',
+          path: '/auth',
+          builder: (context, state) => const SizedBox.shrink(),
+          redirect: (context, state) =>
+              state.path == '/auth' ? '/auth/login' : null,
+          routes: [
+            GoRoute(
+              path: 'login',
+              name: 'login',
+              builder: (context, state) =>
+                  const CustomTransitionWrapper(child: LogInPage()),
+            )
+          ]),
+
+      GoRoute(
+        path: '/test-websockets',
+        name: 'websockets',
         builder: (context, state) =>
-            const CustomTransitionWrapper(child: LogInPage()),
-        routes: const [],
+            const CustomTransitionWrapper(child: TestWebSocketsPage()),
       ),
+
+      // * shell routes
       ShellRoute(
           navigatorKey: globalNavigatorKey,
           builder: (context, state, child) =>
               CustomTransitionWrapper(child: MainNavigation(state, child)),
-
-          // * shell routes
           routes: [
             GoRoute(
-              name: "user",
-              path: '/user',
+              path: '/profile',
+              name: "profile",
               pageBuilder: (context, state) => _pageBuilder(const UserPage()),
               routes: const [],
             ),
             GoRoute(
-              name: "home",
               path: '/',
+              name: "home",
               pageBuilder: (context, state) => _pageBuilder(const HomePage()),
               routes: const [],
             ),
             GoRoute(
-                name: "search",
-                path: '/search',
-                pageBuilder: (context, state) =>
-                    _pageBuilder(const SearchPage()),
-                routes: [
-                  GoRoute(
-                    name: "search-two",
-                    path: 'search-two',
-                    pageBuilder: (context, state) =>
-                        _pageBuilder(const SearchPageTwo()),
-                  ),
-                  GoRoute(
-                    name: "list",
-                    path: 'list',
-                    pageBuilder: (context, state) =>
-                        _pageBuilder(const ListPage()),
-                  ),
-                ]),
+              path: '/search',
+              name: "search",
+              pageBuilder: (context, state) => _pageBuilder(const ListPage()),
+              routes: const [],
+            ),
           ]),
     ]);
 
+//! //FIXME search better practices
 extension GoRouterExtension on GoRouter {
   /// Get list of main routes on the [ShellRoute].
   List<RouteBase> get shellRoutes => router.configuration.routes

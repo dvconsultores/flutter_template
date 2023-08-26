@@ -8,8 +8,7 @@ enum HiveBox { application }
 enum HiveDataCollection {
   theme,
   language,
-  something,
-  somethingMore;
+  profile;
 }
 
 /// Configuration class to hive.
@@ -34,21 +33,18 @@ class HiveData {
   }
 
   /// Delete a value from hive data using [HiveDataCollection] key.
-  static void delete(HiveDataCollection key) {
-    storage.delete(key.name).whenComplete(
-        () => debugPrint("${key.name} - deleted from hive data is cleared 💦"));
-  }
+  static void delete(HiveDataCollection key) =>
+      storage.delete(key.name).whenComplete(() =>
+          debugPrint("${key.name} - deleted from hive data is cleared 💦"));
 
   /// Delete all values from hive data.
-  static void deleteAll() {
-    storage.clear().whenComplete(() => debugPrint("Hive data cleared 💦"));
-  }
+  static void deleteAll() =>
+      storage.clear().whenComplete(() => debugPrint("Hive data cleared 💦"));
 
   /// Write/storage a value into hive data using [HiveDataCollection] key.
-  static void write(HiveDataCollection key, dynamic value) {
-    storage.put(key.name, value).whenComplete(() =>
-        debugPrint("${key.name}: $value - written from hive data storage 💦"));
-  }
+  static void write(HiveDataCollection key, dynamic value) =>
+      storage.put(key.name, value).whenComplete(() => debugPrint(
+          "${key.name}: $value - written from hive data storage 💦"));
 
   /// Read and write modifying key / values into hive data elements using [HiveDataCollection] key.
   static void updateFields<T>(

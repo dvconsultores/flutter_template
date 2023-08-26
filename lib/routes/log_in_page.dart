@@ -1,14 +1,27 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_detextre4/routes/user/repository/auth_api.dart';
+import 'package:flutter/rendering.dart';
+import 'package:flutter_detextre4/repositories/auth_api.dart';
 import 'package:flutter_detextre4/widgets/scaffold.dart';
 import 'package:flutter_detextre4/utils/helper_widgets/responsive_layout.dart';
 
-class LogInPage extends StatelessWidget with ResponsiveLayoutMixin {
+class LogInPage extends StatefulWidget {
   const LogInPage({super.key});
+  @override
+  State<LogInPage> createState() => _LogInPageState();
+}
+
+class _LogInPageState extends State<LogInPage>
+    with ResponsiveLayoutMixinStateful {
+  late final authApi = AuthApi(context);
 
   @override
-  Widget? tabletLayout(BuildContext context, BoxConstraints constraints) {
-    final authAPI = AuthApi(context);
+  void initState() {
+    authApi.clearTokenAuth();
+    super.initState();
+  }
+
+  @override
+  Widget? tabletLayout(BuildContext context, Constraints constraints) {
     final Size size = MediaQuery.of(context).size;
 
     return AppScaffold.responsive(
@@ -37,7 +50,7 @@ class LogInPage extends StatelessWidget with ResponsiveLayoutMixin {
           ),
         ),
         TextButton(
-          onPressed: authAPI.signIn,
+          onPressed: authApi.signIn,
           child: const Text("Login Button", style: TextStyle(fontSize: 25)),
         ),
       ]),

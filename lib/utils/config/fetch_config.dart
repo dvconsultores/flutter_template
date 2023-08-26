@@ -14,11 +14,11 @@ class FetchConfig {
   // * base url
   /// Base url from app domain.
   static final String baseUrl =
-      dotenv.get("BASE_URL", fallback: "domain/api/v1");
+      dotenv.get("API_URL", fallback: "domain/api/v1");
 
   /// Base url from app domain where files are storaged.
   static final String fileBaseUrl =
-      dotenv.get("FILE_BASE_URL", fallback: "domain/api/v1");
+      dotenv.get("FILE_API_URL", fallback: "domain/api/v1");
 
   // * headers without auth
   /// A map that contains header used to application/json http request.
@@ -32,8 +32,8 @@ class FetchConfig {
   /// authorization token.
   static Future<Map<String, String>> headersWithAuth(
       {String? customToken}) async {
-    final String? tokenAuth = customToken ??
-        await SecureStorage.read(SecureStorageCollection.tokenAuth);
+    final String? tokenAuth =
+        customToken ?? await SecureStorage.read(SecureCollection.tokenAuth);
 
     if (tokenAuth == null) throw "tokenAuth is missing!";
 
@@ -142,7 +142,7 @@ class FetchConfig {
       throw connectionFallback;
     }
   }
-  
+
   /// ⭐ Custom ⭐
   /// Sends an HTTP PUT request with the given headers and body to the given URL.
   ///
@@ -180,8 +180,8 @@ class FetchConfig {
     if (showRequest) dev.log("$body ⭐");
 
     try {
-      final response = await http.put(url,
-          headers: headers, body: body, encoding: encoding);
+      final response =
+          await http.put(url, headers: headers, body: body, encoding: encoding);
 
       if (!acceptedStatus.contains(response.statusCode)) {
         throw response.catchErrorMessage(
@@ -200,7 +200,7 @@ class FetchConfig {
       throw connectionFallback;
     }
   }
-  
+
   /// ⭐ Custom ⭐
   /// Sends an HTTP PATCH request with the given headers and body to the given
   /// URL.

@@ -12,20 +12,15 @@ class AppDrawer extends StatelessWidget {
     void goToRouterPage(dynamic page) {
       Navigator.pop(context);
 
-      if (page is Widget) {
-        Navigator.of(context).push(
-          MaterialPageRoute(builder: (context) => page),
-        );
-        return;
-      }
+      if (page is String) return context.goNamed(page);
 
-      context.go(page);
+      Navigator.of(context).push(
+        MaterialPageRoute(builder: (context) => page),
+      );
     }
 
     final items = <String, dynamic>{
       "Test web socket": const TestWebSocketsPage(),
-      "Search Two": "/search/search-two",
-      "List Screen": "/search/list",
     };
 
     return Drawer(
