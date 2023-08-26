@@ -1,6 +1,6 @@
 import 'dart:convert';
 import 'dart:developer' as dev;
-import 'dart:io';
+import 'dart:io' as io;
 
 import 'package:flutter_detextre4/models/files_type.dart';
 import 'package:collection/collection.dart';
@@ -76,7 +76,7 @@ class FetchConfig {
 
       if (showResponse) dev.log("${requestRef ?? ""} ${response.body} ✅");
       return response;
-    } on SocketException catch (error) {
+    } on io.SocketException catch (error) {
       dev.log("$error ⭕");
       if (showSnackbar) {
         fun.showSnackbar(error.toString(), type: fun.ColorSnackbarState.error);
@@ -134,7 +134,124 @@ class FetchConfig {
 
       if (showResponse) dev.log("${requestRef ?? ""} ${response.body} ✅");
       return response;
-    } on SocketException catch (error) {
+    } on io.SocketException catch (error) {
+      dev.log("$error ⭕");
+      if (showSnackbar) {
+        fun.showSnackbar(error.toString(), type: fun.ColorSnackbarState.error);
+      }
+      throw connectionFallback;
+    }
+  }
+  
+  /// ⭐ Custom ⭐
+  /// Sends an HTTP PUT request with the given headers and body to the given URL.
+  ///
+  /// [body] sets the body of the request. It can be a [String], a [List<int>] or
+  /// a [Map<String, String>]. If it's a String, it's encoded using [encoding] and
+  /// used as the body of the request. The content-type of the request will
+  /// default to "text/plain".
+  ///
+  /// If [body] is a List, it's used as a list of bytes for the body of the
+  /// request.
+  ///
+  /// If [body] is a Map, it's encoded as form fields using [encoding]. The
+  /// content-type of the request will be set to
+  /// `"application/x-www-form-urlencoded"`; this cannot be overridden.
+  ///
+  /// [encoding] defaults to [utf8].
+  ///
+  /// For more fine-grained control over the request, use [Request] or
+  /// [StreamedRequest] instead.
+  static Future<http.Response> put(
+    Uri url, {
+    Map<String, String>? headers,
+    Object? body,
+    Encoding? encoding,
+    List<int> acceptedStatus = const [200, 201, 204],
+    String fallback = "Error",
+    String connectionFallback = "Connection Failed",
+    String? requestRef,
+    bool showRequest = false,
+    bool showResponse = false,
+    bool showSnackbar = false,
+  }) async {
+    if (requestRef != null) dev.log("$requestRef⬅️");
+
+    if (showRequest) dev.log("$body ⭐");
+
+    try {
+      final response = await http.put(url,
+          headers: headers, body: body, encoding: encoding);
+
+      if (!acceptedStatus.contains(response.statusCode)) {
+        throw response.catchErrorMessage(
+          fallback: fallback,
+          showSnackbar: showSnackbar,
+        );
+      }
+
+      if (showResponse) dev.log("${requestRef ?? ""} ${response.body} ✅");
+      return response;
+    } on io.SocketException catch (error) {
+      dev.log("$error ⭕");
+      if (showSnackbar) {
+        fun.showSnackbar(error.toString(), type: fun.ColorSnackbarState.error);
+      }
+      throw connectionFallback;
+    }
+  }
+  
+  /// ⭐ Custom ⭐
+  /// Sends an HTTP PATCH request with the given headers and body to the given
+  /// URL.
+  ///
+  /// [body] sets the body of the request. It can be a [String], a [List<int>] or
+  /// a [Map<String, String>]. If it's a String, it's encoded using [encoding] and
+  /// used as the body of the request. The content-type of the request will
+  /// default to "text/plain".
+  ///
+  /// If [body] is a List, it's used as a list of bytes for the body of the
+  /// request.
+  ///
+  /// If [body] is a Map, it's encoded as form fields using [encoding]. The
+  /// content-type of the request will be set to
+  /// `"application/x-www-form-urlencoded"`; this cannot be overridden.
+  ///
+  /// [encoding] defaults to [utf8].
+  ///
+  /// For more fine-grained control over the request, use [Request] or
+  /// [StreamedRequest] instead.
+  static Future<http.Response> patch(
+    Uri url, {
+    Map<String, String>? headers,
+    Object? body,
+    Encoding? encoding,
+    List<int> acceptedStatus = const [200, 201, 204],
+    String fallback = "Error",
+    String connectionFallback = "Connection Failed",
+    String? requestRef,
+    bool showRequest = false,
+    bool showResponse = false,
+    bool showSnackbar = false,
+  }) async {
+    if (requestRef != null) dev.log("$requestRef⬅️");
+
+    if (showRequest) dev.log("$body ⭐");
+
+    try {
+      final response = await http.patch(url,
+          headers: headers, body: body, encoding: encoding);
+
+      if (!acceptedStatus.contains(response.statusCode)) {
+        throw response.catchErrorMessage(
+          fallback: fallback,
+          showSnackbar: showSnackbar,
+        );
+      }
+
+      if (showResponse) dev.log("${requestRef ?? ""} ${response.body} ✅");
+      return response;
+    } on io.SocketException catch (error) {
       dev.log("$error ⭕");
       if (showSnackbar) {
         fun.showSnackbar(error.toString(), type: fun.ColorSnackbarState.error);
@@ -222,7 +339,7 @@ extension MultipartRequestExtension on http.MultipartRequest {
 
       if (showResponse) dev.log("${requestRef ?? ""} ${response.body} ✅");
       return response;
-    } on SocketException catch (error) {
+    } on io.SocketException catch (error) {
       dev.log("$error ⭕");
       if (showSnackbar) {
         fun.showSnackbar(error.toString(), type: fun.ColorSnackbarState.error);
@@ -254,7 +371,7 @@ extension MultipartRequestExtension on http.MultipartRequest {
 
       files.add(http.MultipartFile.fromBytes(
         element.name,
-        await File.fromUri(element.uri).readAsBytes(),
+        await io.File.fromUri(element.uri).readAsBytes(),
         contentType: MediaType(typeFile, formatFile),
         filename: '${element.name}.$formatFile',
       ));

@@ -1,4 +1,4 @@
-import 'dart:io';
+import 'dart:io' as io;
 
 import 'package:flutter/foundation.dart';
 import 'package:local_auth/local_auth.dart';
@@ -11,7 +11,7 @@ class LocalAuth {
   ///
   /// @returns [true] if device has fingerprint/faceID available and registered, [false] otherwise
   static Future<bool> hasBiometrics() async {
-    if (kIsWeb && !(Platform.isAndroid || Platform.isIOS)) return false;
+    if (kIsWeb && !(io.Platform.isAndroid || io.Platform.isIOS)) return false;
 
     final bool canCheck = await _localAuth.canCheckBiometrics;
     if (!canCheck) return false;

@@ -1,5 +1,5 @@
 import 'dart:developer';
-import 'dart:io';
+import 'dart:io' as io;
 
 import 'package:device_info_plus/device_info_plus.dart';
 
@@ -42,7 +42,7 @@ class _Android {
 
   /// Display device information
   Future<String> info() async {
-    if (!Platform.isAndroid) throw "Android device not founded";
+    if (!io.Platform.isAndroid) throw "Android device not founded";
 
     final value =
         'Android ${await release} (SDK ${await sdkInt}), ${await manufacturer} ${await model}';
@@ -82,7 +82,7 @@ class _IOS {
 
   /// Display device information
   Future<String> ios() async {
-    if (!Platform.isIOS) throw "IOS device not founded";
+    if (!io.Platform.isIOS) throw "IOS device not founded";
 
     final value =
         '${await systemName} ${await version}, ${await name} ${await model}';

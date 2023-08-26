@@ -1,5 +1,5 @@
 import 'dart:async';
-import 'dart:io';
+import 'dart:io' as io;
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -52,7 +52,7 @@ class _DoubleBackToCloseWidgetState extends State<DoubleBackToCloseWidget> {
     }
 
     // * Android
-    if (Platform.isAndroid) {
+    if (io.Platform.isAndroid) {
       return WillPopScope(
         onWillPop: onWillPop,
         child: widget.child,

@@ -1,7 +1,7 @@
 import 'dart:async';
 import 'dart:convert';
 import 'dart:developer' as dev;
-import 'dart:io';
+import 'dart:io' as io;
 
 import 'package:csv/csv.dart';
 import 'package:flutter/material.dart';
@@ -70,7 +70,7 @@ extension DateTimeExtension on DateTime {
 }
 
 // ? File extension
-extension FileExtension on File {
+extension FileExtension on io.File {
   String parseToBase64() => base64Encode(readAsBytesSync());
 }
 
@@ -150,7 +150,7 @@ extension ListExtension<T> on List<T> {
       //store file in documents folder
       String dir =
           "${(await getExternalStorageDirectory())!.path}/${dirName ?? AppName.kedabcase}.csv";
-      File file = File(dir);
+      io.File file = io.File(dir);
 
       // convert rows to String and write as csv file
       String csv =
@@ -408,7 +408,7 @@ extension StringExtension on String {
   /// Creates a [File] object from a raw path.
   ///
   /// A raw path is a sequence of bytes, as paths are represented by the OS.
-  File toFileFromBase64() => File.fromRawPath(base64Decode(this));
+  io.File toFileFromBase64() => io.File.fromRawPath(base64Decode(this));
 
   /// Parse [source] as a, possibly signed, integer literal.
   ///
@@ -685,11 +685,11 @@ extension ScreenshotExtension on ScreenshotController {
   }) async {
     Uint8List? imageBytes = await capture(pixelRatio: 1.5);
 
-    final Directory directory = await getApplicationDocumentsDirectory();
+    final io.Directory directory = await getApplicationDocumentsDirectory();
     final String path = directory.path;
     final String imagePath = '$path/screenshot${DateTime.now()}.png';
-    final File file = File(imagePath);
-    await file.writeAsBytes(imageBytes!, mode: FileMode.write);
+    final io.File file = io.File(imagePath);
+    await file.writeAsBytes(imageBytes!, mode: io.FileMode.write);
     dev.log(
         'Image saved to: $imagePath (size: ${file.lengthSync()} bytes) ${file.path} ⭐');
     await GallerySaver.saveImage(file.path);
@@ -706,11 +706,11 @@ extension ScreenshotExtension on ScreenshotController {
   Future<void> shareCapture() async {
     Uint8List? imageBytes = await capture(pixelRatio: 1.5);
 
-    final Directory directory = await getApplicationDocumentsDirectory();
+    final io.Directory directory = await getApplicationDocumentsDirectory();
     final String path = directory.path;
     final String imagePath = '$path/screenshot${DateTime.now()}.png';
-    final File file = File(imagePath);
-    await file.writeAsBytes(imageBytes!, mode: FileMode.write);
+    final io.File file = io.File(imagePath);
+    await file.writeAsBytes(imageBytes!, mode: io.FileMode.write);
     dev.log(
         'Image saved to: $imagePath (size: ${file.lengthSync()} bytes) ${file.path} ⭐');
     Share.shareXFiles([XFile(file.path)]);

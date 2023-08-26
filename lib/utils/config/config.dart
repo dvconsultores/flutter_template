@@ -1,4 +1,4 @@
-import 'dart:io';
+import 'dart:io' as io;
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -281,7 +281,7 @@ enum LanguageList {
 
   static LanguageList deviceLanguage() =>
       LanguageList.values.firstWhereOrNull((element) =>
-          !kIsWeb ? Platform.localeName.contains(element.name) : false) ??
+          !kIsWeb ? io.Platform.localeName.contains(element.name) : false) ??
       LanguageList.en;
 }
 
