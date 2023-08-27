@@ -78,9 +78,7 @@ class FetchConfig {
       return response;
     } on io.SocketException catch (error) {
       dev.log("$error ⭕");
-      if (showSnackbar) {
-        fun.showSnackbar(error.toString(), type: fun.ColorSnackbarState.error);
-      }
+      _showSnackbar(showSnackbar, error.toString());
       throw connectionFallback;
     }
   }
@@ -136,9 +134,7 @@ class FetchConfig {
       return response;
     } on io.SocketException catch (error) {
       dev.log("$error ⭕");
-      if (showSnackbar) {
-        fun.showSnackbar(error.toString(), type: fun.ColorSnackbarState.error);
-      }
+      _showSnackbar(showSnackbar, error.toString());
       throw connectionFallback;
     }
   }
@@ -194,9 +190,7 @@ class FetchConfig {
       return response;
     } on io.SocketException catch (error) {
       dev.log("$error ⭕");
-      if (showSnackbar) {
-        fun.showSnackbar(error.toString(), type: fun.ColorSnackbarState.error);
-      }
+      _showSnackbar(showSnackbar, error.toString());
       throw connectionFallback;
     }
   }
@@ -253,9 +247,7 @@ class FetchConfig {
       return response;
     } on io.SocketException catch (error) {
       dev.log("$error ⭕");
-      if (showSnackbar) {
-        fun.showSnackbar(error.toString(), type: fun.ColorSnackbarState.error);
-      }
+      _showSnackbar(showSnackbar, error.toString());
       throw connectionFallback;
     }
   }
@@ -273,9 +265,7 @@ extension ResponseExtension on http.Response {
   }) {
     dev.log("$statusCode ⭕");
     dev.log("$body ⭕");
-    if (showSnackbar) {
-      fun.showSnackbar(body.toString(), type: fun.ColorSnackbarState.error);
-    }
+    _showSnackbar(showSnackbar, body.toString());
 
     return body.contains('"$searchBy":')
         ? jsonDecode(body)[searchBy]
@@ -341,9 +331,7 @@ extension MultipartRequestExtension on http.MultipartRequest {
       return response;
     } on io.SocketException catch (error) {
       dev.log("$error ⭕");
-      if (showSnackbar) {
-        fun.showSnackbar(error.toString(), type: fun.ColorSnackbarState.error);
-      }
+      _showSnackbar(showSnackbar, error.toString());
       throw connectionFallback;
     }
   }
@@ -404,4 +392,9 @@ class FileConstructor {
         .firstWhereOrNull((element) => element.listValues.contains(getFormat()))
         ?.name;
   }
+}
+
+void _showSnackbar(bool show, String error) {
+  if (!show) return;
+  fun.showSnackbar(error, type: fun.ColorSnackbarState.error);
 }

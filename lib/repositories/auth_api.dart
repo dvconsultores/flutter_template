@@ -24,7 +24,7 @@ class AuthApi implements AuthApiInterface {
     );
 
     // final response = await FetchConfig.post(
-    //   Uri.parse('${FetchConfig.baseUrl}/endpoint/'),
+    //   Uri.parse('${FetchConfig.baseUrl}endpoint/'),
     //   headers: FetchConfig.headersWithoutAuth,
     //   showRequest: true,
     //   showResponse: true,
