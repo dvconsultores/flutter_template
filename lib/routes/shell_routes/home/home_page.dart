@@ -74,6 +74,7 @@ class _Page1State extends State<_Page1> {
               child: FloatingActionButton(
                 onPressed: _incrementCounter,
                 tooltip: 'Increment',
+                heroTag: UniqueKey(),
                 child: const Icon(Icons.add).invertedColor(),
               )),
           Text(
