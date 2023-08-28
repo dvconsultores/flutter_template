@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_detextre4/widgets/custom_bottom_navigation_bar.dart';
 import 'package:flutter_detextre4/widgets/drawer.dart';
 import 'package:flutter_detextre4/widgets/scaffold.dart';
 import 'package:flutter_detextre4/utils/config/router_config.dart';
-import 'package:flutter_detextre4/utils/config/config.dart';
 import 'package:flutter_detextre4/utils/extensions/type_extensions.dart';
 import 'package:flutter_detextre4/utils/helper_widgets/double_back_to_close_widget.dart';
 import 'package:flutter_detextre4/utils/helper_widgets/will_pop_custom.dart';
@@ -24,7 +24,6 @@ class MainNavigation extends StatelessWidget {
     if (router.indexShellRoute == -1) {
       return const ScaffoldBody(body: SizedBox.shrink());
     }
-    final colors = ThemeApp.colors(context);
 
     final currentSubRoute = router.subShellRoutes
         ?.any((element) => (element as GoRoute).path.contains(state.location));
@@ -53,24 +52,17 @@ class MainNavigation extends StatelessWidget {
             : null,
         title: Text((router.shellRoute as GoRoute?)?.name ?? ""),
       ),
-      bottomNavigationBar: Theme(
-        data: Theme.of(context),
-        child: BottomNavigationBar(
-          currentIndex: router.indexShellRoute,
-          onTap: (index) =>
-              context.goNamed((router.shellRoutes[index] as GoRoute).name!),
-          selectedItemColor: colors.focusColor,
-          items: router.shellRoutes
-              .map((element) => BottomNavigationBarItem(
-                    label: "",
-                    tooltip: (element as GoRoute).name?.toCapitalize(),
-                    icon: Container(
-                      margin: const EdgeInsets.only(top: 20),
-                      child: getIcon(element.name),
-                    ),
-                  ))
-              .toList(),
-        ),
+      bottomNavigationBar: CustomBottomNavigationBar(
+        currentIndex: router.indexShellRoute,
+        onTap: (index) =>
+            context.goNamed((router.shellRoutes[index] as GoRoute).name!),
+        items: router.shellRoutes
+            .map((element) => BottomNavigationBarItem(
+                  label: "",
+                  tooltip: (element as GoRoute).name?.toCapitalize(),
+                  icon: getIcon(element.name),
+                ))
+            .toList(),
       ),
 
       //? Render pages

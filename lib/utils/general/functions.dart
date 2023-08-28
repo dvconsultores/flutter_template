@@ -65,7 +65,7 @@ void showSnackbar(
         .textColor,
     duration: duration ?? const Duration(seconds: 3),
     borderRadius: BorderRadius.circular(6),
-    margin: const EdgeInsets.symmetric(horizontal: 10.0),
+    margin: const EdgeInsets.only(left: 10.0, right: 10, bottom: 20),
   ).show(globalNavigatorKey.currentContext!);
 }
 
