@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
@@ -27,18 +29,58 @@ class CustomBottomNavigationBar extends StatefulWidget {
 }
 
 class _CustomBottomNavigationBarState extends State<CustomBottomNavigationBar>
-    with SingleTickerProviderStateMixin {
+    with TickerProviderStateMixin {
   final selectedKey = GlobalKey();
-  final selectedBox = ValueNotifier<RenderBox?>(null);
+  final renderBox = ValueNotifier<RenderBox?>(null);
+
+  static const duration = 200;
+  late final animation = AnimationController(
+    vsync: this,
+    lowerBound: 0.0,
+    upperBound: 1.0,
+    duration: const Duration(milliseconds: duration),
+  )..drive(CurveTween(curve: Curves.decelerate));
+
+  late final opacityAnim = AnimationController(
+    vsync: this,
+    lowerBound: 0.0,
+    upperBound: 1.0,
+    duration: const Duration(milliseconds: duration - 100),
+  )..drive(Tween<double>(begin: 0, end: 1));
+
+  double? cachedDx;
+  double get getDx => renderBox.value?.localToGlobal(Offset.zero).dx ?? 0;
+
+  void startAnimation() {
+    opacityAnim.forward(from: 0);
+    opacityAnim.stop();
+
+    animation.forward(from: 0).then((_) {
+      cachedDx = getDx;
+      opacityAnim.forward(from: 0).then((value) => setState(() {}));
+    });
+  }
+
+  void init() {
+    setState(() => renderBox.value =
+        selectedKey.currentContext?.findRenderObject() as RenderBox?);
+
+    startAnimation();
+  }
 
   @override
   void initState() {
-    SchedulerBinding.instance.addPostFrameCallback((_) => Future.delayed(
-          const Duration(milliseconds: 100),
-          () => setState(() => selectedBox.value =
-              selectedKey.currentContext?.findRenderObject() as RenderBox?),
-        ));
+    SchedulerBinding.instance.addPostFrameCallback(
+      (_) => Future.delayed(const Duration(milliseconds: 100), init),
+    );
     super.initState();
+  }
+
+  @override
+  void dispose() {
+    animation.dispose();
+    opacityAnim.dispose();
+    super.dispose();
   }
 
   @override
@@ -50,63 +92,90 @@ class _CustomBottomNavigationBarState extends State<CustomBottomNavigationBar>
 
     final selectedItem = widget.items.elementAt(widget.currentIndex);
 
-    return SizedBox(
-      width: size.width,
-      height: widget.height,
-      child: CustomPaint(
-        size: Size(size.width, widget.height),
-        painter: _BNBCustomPainter(
-          selectedBox: selectedBox,
-          color: foregroundColor!,
-          activeColor: widget.selectedItemColor ?? colors.primary,
-        ),
-        child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: widget.items
-                .mapIndexed((i, item) => i == widget.currentIndex
-                    ? Transform.translate(
-                        offset: Offset(0, widget.height * -.3),
-                        child: FloatingActionButton(
-                          key: selectedKey,
-                          heroTag: UniqueKey(),
-                          onPressed: () {},
-                          backgroundColor:
-                              widget.selectedItemColor ?? colors.primary,
-                          foregroundColor:
-                              widget.selectedIconColor ?? foregroundColor,
-                          elevation: .1,
-                          tooltip: selectedItem.tooltip,
-                          child: selectedItem.icon,
-                        ),
-                      )
-                    : IconButton(
-                        onPressed: () => widget.onTap(i),
-                        tooltip: item.tooltip,
-                        icon: item.icon,
-                      ))
-                .toList()),
-      ),
-    ).animate().moveY(begin: 100);
+    double? getWidth() => renderBox.value?.size.width;
+
+    return AnimatedBuilder(
+        animation: animation,
+        builder: (context, child) {
+          // animated dx
+          final dxAnim = Tween<double>(
+            begin: cachedDx ?? 0,
+            end: getDx,
+          ).animate(animation);
+
+          // animated translate
+          final translateAnim =
+              Tween<double>(begin: 0, end: -20).animate(animation);
+
+          return SizedBox(
+            width: size.width,
+            height: widget.height,
+            child: CustomPaint(
+              size: Size(size.width, widget.height),
+              painter: _BNBCustomPainter(
+                selectedDx: dxAnim.value,
+                selectedWidth: getWidth(),
+                color: foregroundColor!,
+                activeColor: widget.selectedItemColor ?? colors.primary,
+                opacity: opacityAnim.value,
+              ),
+              child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: widget.items
+                      .mapIndexed((i, item) => i == widget.currentIndex
+                          ? Transform.translate(
+                              offset: Offset(0, translateAnim.value),
+                              child: FloatingActionButton(
+                                key: selectedKey,
+                                heroTag: UniqueKey(),
+                                onPressed: () {},
+                                backgroundColor:
+                                    widget.selectedItemColor ?? colors.primary,
+                                foregroundColor:
+                                    widget.selectedIconColor ?? foregroundColor,
+                                elevation: .1,
+                                tooltip: selectedItem.tooltip,
+                                child: selectedItem.icon,
+                              ),
+                            )
+                          : IconButton(
+                              onPressed: () {
+                                widget.onTap(i);
+                                startAnimation();
+                              },
+                              tooltip: item.tooltip,
+                              icon: item.icon,
+                            ))
+                      .toList()),
+            ),
+          ).animate().moveY(begin: 100);
+        });
   }
 }
 
+// TODO animate this painter with a stream outer him, that emits dynamicly values from positions
 class _BNBCustomPainter extends CustomPainter {
   const _BNBCustomPainter({
     required this.color,
     required this.activeColor,
-    required this.selectedBox,
-  }) : super(repaint: selectedBox);
+    required this.selectedWidth,
+    required this.selectedDx,
+    required this.opacity,
+  });
   final Color color;
   final Color activeColor;
-  final ValueNotifier<RenderBox?> selectedBox;
+  final double? selectedWidth;
+  final double? selectedDx;
+  final double opacity;
 
   @override
   void paint(Canvas canvas, Size size) {
-    if (selectedBox.value == null) return;
-    final box = selectedBox.value!;
+    if (selectedWidth == null || selectedDx == null) {
+      return;
+    }
 
-    final dxl = box.localToGlobal(Offset.zero).dx;
-    final w = box.size.width;
+    final dxl = selectedDx!;
+    final w = selectedWidth!;
     final dxr = dxl + w;
 
     final dLeft = (size.width / dxl) + dxl;
@@ -114,9 +183,7 @@ class _BNBCustomPainter extends CustomPainter {
 
     bool shouldIncreasePixels() => size.width - dRight <= 13 ? true : false;
 
-    final paint = Paint()
-      ..color = color
-      ..style = PaintingStyle.fill;
+    final paint = Paint()..color = color;
 
     final path = Path()
       ..moveTo(0, 20)
@@ -139,10 +206,8 @@ class _BNBCustomPainter extends CustomPainter {
 
     const double dxBubble = 13;
     final double dyBubble = w / 3;
-    const double bubbleSize = 15;
-    final bubblePaint = Paint()
-      ..color = activeColor
-      ..style = PaintingStyle.fill;
+    final double bubbleSize = 15 * opacity;
+    final bubblePaint = Paint()..color = activeColor.withOpacity(opacity);
 
     canvas.drawCircle(
         Offset(dxl + dxBubble, dyBubble), bubbleSize, bubblePaint);
