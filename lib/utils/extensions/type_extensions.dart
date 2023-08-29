@@ -1,6 +1,5 @@
 import 'dart:async';
 import 'dart:convert';
-import 'dart:developer' as dev;
 import 'dart:io' as io;
 
 import 'package:csv/csv.dart';
@@ -690,7 +689,7 @@ extension ScreenshotExtension on ScreenshotController {
     final String imagePath = '$path/screenshot${DateTime.now()}.png';
     final io.File file = io.File(imagePath);
     await file.writeAsBytes(imageBytes!, mode: io.FileMode.write);
-    dev.log(
+    debugPrint(
         'Image saved to: $imagePath (size: ${file.lengthSync()} bytes) ${file.path} ⭐');
     await GallerySaver.saveImage(file.path);
 
@@ -711,7 +710,7 @@ extension ScreenshotExtension on ScreenshotController {
     final String imagePath = '$path/screenshot${DateTime.now()}.png';
     final io.File file = io.File(imagePath);
     await file.writeAsBytes(imageBytes!, mode: io.FileMode.write);
-    dev.log(
+    debugPrint(
         'Image saved to: $imagePath (size: ${file.lengthSync()} bytes) ${file.path} ⭐');
     Share.shareXFiles([XFile(file.path)]);
   }

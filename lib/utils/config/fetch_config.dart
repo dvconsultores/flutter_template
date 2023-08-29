@@ -1,7 +1,7 @@
 import 'dart:convert';
-import 'dart:developer' as dev;
 import 'dart:io' as io;
 
+import 'package:flutter/material.dart';
 import 'package:flutter_detextre4/models/files_type.dart';
 import 'package:collection/collection.dart';
 import 'package:flutter_detextre4/utils/general/functions.dart' as fun;
@@ -62,7 +62,7 @@ class FetchConfig {
     bool showResponse = false,
     bool showSnackbar = false,
   }) async {
-    if (requestRef != null) dev.log("$requestRef⬅️");
+    if (requestRef != null) debugPrint("$requestRef⬅️");
 
     try {
       final response = await http.get(url, headers: headers);
@@ -74,10 +74,10 @@ class FetchConfig {
         );
       }
 
-      if (showResponse) dev.log("${requestRef ?? ""} ${response.body} ✅");
+      if (showResponse) debugPrint("${requestRef ?? ""} ${response.body} ✅");
       return response;
     } on io.SocketException catch (error) {
-      dev.log("$error ⭕");
+      debugPrint("$error ⭕");
       _showSnackbar(showSnackbar, error.toString());
       throw connectionFallback;
     }
@@ -115,9 +115,9 @@ class FetchConfig {
     bool showResponse = false,
     bool showSnackbar = false,
   }) async {
-    if (requestRef != null) dev.log("$requestRef⬅️");
+    if (requestRef != null) debugPrint("$requestRef⬅️");
 
-    if (showRequest) dev.log("$body ⭐");
+    if (showRequest) debugPrint("$body ⭐");
 
     try {
       final response = await http.post(url,
@@ -130,10 +130,10 @@ class FetchConfig {
         );
       }
 
-      if (showResponse) dev.log("${requestRef ?? ""} ${response.body} ✅");
+      if (showResponse) debugPrint("${requestRef ?? ""} ${response.body} ✅");
       return response;
     } on io.SocketException catch (error) {
-      dev.log("$error ⭕");
+      debugPrint("$error ⭕");
       _showSnackbar(showSnackbar, error.toString());
       throw connectionFallback;
     }
@@ -171,9 +171,9 @@ class FetchConfig {
     bool showResponse = false,
     bool showSnackbar = false,
   }) async {
-    if (requestRef != null) dev.log("$requestRef⬅️");
+    if (requestRef != null) debugPrint("$requestRef⬅️");
 
-    if (showRequest) dev.log("$body ⭐");
+    if (showRequest) debugPrint("$body ⭐");
 
     try {
       final response =
@@ -186,10 +186,10 @@ class FetchConfig {
         );
       }
 
-      if (showResponse) dev.log("${requestRef ?? ""} ${response.body} ✅");
+      if (showResponse) debugPrint("${requestRef ?? ""} ${response.body} ✅");
       return response;
     } on io.SocketException catch (error) {
-      dev.log("$error ⭕");
+      debugPrint("$error ⭕");
       _showSnackbar(showSnackbar, error.toString());
       throw connectionFallback;
     }
@@ -228,9 +228,9 @@ class FetchConfig {
     bool showResponse = false,
     bool showSnackbar = false,
   }) async {
-    if (requestRef != null) dev.log("$requestRef⬅️");
+    if (requestRef != null) debugPrint("$requestRef⬅️");
 
-    if (showRequest) dev.log("$body ⭐");
+    if (showRequest) debugPrint("$body ⭐");
 
     try {
       final response = await http.patch(url,
@@ -243,10 +243,10 @@ class FetchConfig {
         );
       }
 
-      if (showResponse) dev.log("${requestRef ?? ""} ${response.body} ✅");
+      if (showResponse) debugPrint("${requestRef ?? ""} ${response.body} ✅");
       return response;
     } on io.SocketException catch (error) {
-      dev.log("$error ⭕");
+      debugPrint("$error ⭕");
       _showSnackbar(showSnackbar, error.toString());
       throw connectionFallback;
     }
@@ -263,8 +263,8 @@ extension ResponseExtension on http.Response {
     String fallback = "Error",
     bool showSnackbar = false,
   }) {
-    dev.log("$statusCode ⭕");
-    dev.log("$body ⭕");
+    debugPrint("$statusCode ⭕");
+    debugPrint("$body ⭕");
     _showSnackbar(showSnackbar, body.toString());
 
     return body.contains('"$searchBy":')
@@ -303,10 +303,10 @@ extension MultipartRequestExtension on http.MultipartRequest {
     bool showResponse = false,
     bool showSnackbar = false,
   }) async {
-    if (requestRef != null) dev.log("$requestRef⬅️");
+    if (requestRef != null) debugPrint("$requestRef⬅️");
 
     if (showRequest) {
-      dev.log("fields: $fields, files: ${files.mapIndexed((i, e) => (
+      debugPrint("fields: $fields, files: ${files.mapIndexed((i, e) => (
             i + 1,
             {
               "contentType": e.contentType,
@@ -327,10 +327,10 @@ extension MultipartRequestExtension on http.MultipartRequest {
         );
       }
 
-      if (showResponse) dev.log("${requestRef ?? ""} ${response.body} ✅");
+      if (showResponse) debugPrint("${requestRef ?? ""} ${response.body} ✅");
       return response;
     } on io.SocketException catch (error) {
-      dev.log("$error ⭕");
+      debugPrint("$error ⭕");
       _showSnackbar(showSnackbar, error.toString());
       throw connectionFallback;
     }

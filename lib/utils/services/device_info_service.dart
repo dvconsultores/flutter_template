@@ -1,7 +1,7 @@
-import 'dart:developer';
 import 'dart:io' as io;
 
 import 'package:device_info_plus/device_info_plus.dart';
+import 'package:flutter/material.dart';
 
 class DeviceInfoService {
   /// No work is done when instantiating the plugin. It's safe to call this
@@ -46,7 +46,7 @@ class _Android {
 
     final value =
         'Android ${await release} (SDK ${await sdkInt}), ${await manufacturer} ${await model}';
-    log(value); // Android 9 (SDK 28), Xiaomi Redmi Note 7
+    debugPrint(value); // Android 9 (SDK 28), Xiaomi Redmi Note 7
     return value;
   }
 }
@@ -86,7 +86,7 @@ class _IOS {
 
     final value =
         '${await systemName} ${await version}, ${await name} ${await model}';
-    log(value); // iOS 13.1, iPhone 11 Pro Max iPhone
+    debugPrint(value); // iOS 13.1, iPhone 11 Pro Max iPhone
     return value;
   }
 }

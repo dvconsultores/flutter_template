@@ -1,4 +1,3 @@
-import 'dart:developer' as dev;
 import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
@@ -24,13 +23,13 @@ class _ListViewExampleState extends State<ListPage> {
   Future<void> onRefresh() async {
     await Future.delayed(const Duration(seconds: 1));
     setState(() => items.add("random-${math.Random().nextInt(100)}"));
-    dev.log("refreshed");
+    debugPrint("refreshed");
   }
 
   Future<void> onPullDown() async {
     await Future.delayed(const Duration(seconds: 1));
     setState(() => items.add("random-${math.Random().nextInt(100)}"));
-    dev.log("charged");
+    debugPrint("charged");
   }
 
   @override
