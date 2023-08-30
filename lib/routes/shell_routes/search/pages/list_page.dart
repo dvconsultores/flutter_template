@@ -22,7 +22,9 @@ class _ListViewExampleState extends State<ListPage> {
 
   Future<void> onRefresh() async {
     await Future.delayed(const Duration(seconds: 1));
-    setState(() => items.add("random-${math.Random().nextInt(100)}"));
+    if (mounted) {
+      setState(() => items.add("random-${math.Random().nextInt(100)}"));
+    }
     debugPrint("refreshed");
   }
 
