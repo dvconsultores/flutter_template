@@ -6,8 +6,8 @@ import 'package:flutter/scheduler.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_detextre4/utils/config/config.dart';
 
-class CustomBottomNavigationBar extends StatefulWidget {
-  const CustomBottomNavigationBar({
+class AppBottomNavigationBar extends StatefulWidget {
+  const AppBottomNavigationBar({
     super.key,
     this.height = 80,
     required this.currentIndex,
@@ -24,11 +24,11 @@ class CustomBottomNavigationBar extends StatefulWidget {
   final List<BottomNavigationBarItem> items;
 
   @override
-  State<CustomBottomNavigationBar> createState() =>
+  State<AppBottomNavigationBar> createState() =>
       _CustomBottomNavigationBarState();
 }
 
-class _CustomBottomNavigationBarState extends State<CustomBottomNavigationBar>
+class _CustomBottomNavigationBarState extends State<AppBottomNavigationBar>
     with TickerProviderStateMixin {
   final selectedKey = GlobalKey();
   final renderBox = ValueNotifier<RenderBox?>(null);
@@ -90,8 +90,6 @@ class _CustomBottomNavigationBarState extends State<CustomBottomNavigationBar>
         Theme.of(context).bottomNavigationBarTheme.backgroundColor;
     final colors = ThemeApp.colors(context);
 
-    final selectedItem = widget.items.elementAt(widget.currentIndex);
-
     double? getWidth() => renderBox.value?.size.width;
 
     return AnimatedBuilder(
@@ -125,26 +123,33 @@ class _CustomBottomNavigationBarState extends State<CustomBottomNavigationBar>
                       .mapIndexed((i, item) => i == widget.currentIndex
                           ? Transform.translate(
                               offset: Offset(0, translateAnim.value),
-                              child: FloatingActionButton(
-                                key: selectedKey,
-                                heroTag: UniqueKey(),
-                                onPressed: () {},
-                                backgroundColor:
-                                    widget.selectedItemColor ?? colors.primary,
-                                foregroundColor:
-                                    widget.selectedIconColor ?? foregroundColor,
-                                elevation: .1,
-                                tooltip: selectedItem.tooltip,
-                                child: selectedItem.icon,
+                              child: Tooltip(
+                                message: item.tooltip,
+                                waitDuration: const Duration(milliseconds: 200),
+                                child: FloatingActionButton(
+                                  key: selectedKey,
+                                  heroTag: UniqueKey(),
+                                  onPressed: () {},
+                                  backgroundColor: widget.selectedItemColor ??
+                                      colors.primary,
+                                  foregroundColor: widget.selectedIconColor ??
+                                      foregroundColor,
+                                  elevation: .1,
+                                  child: item.icon,
+                                ),
                               ),
                             )
-                          : IconButton(
-                              onPressed: () {
-                                widget.onTap(i);
-                                startAnimation();
-                              },
-                              tooltip: item.tooltip,
-                              icon: item.icon,
+                          : Tooltip(
+                              message: item.tooltip,
+                              waitDuration: const Duration(milliseconds: 200),
+                              child: IconButton(
+                                onPressed: () {
+                                  widget.onTap(i);
+                                  startAnimation();
+                                },
+                                visualDensity: VisualDensity.comfortable,
+                                icon: item.icon,
+                              ),
                             ))
                       .toList()),
             ),
@@ -153,7 +158,6 @@ class _CustomBottomNavigationBarState extends State<CustomBottomNavigationBar>
   }
 }
 
-// TODO animate this painter with a stream outer him, that emits dynamicly values from positions
 class _BNBCustomPainter extends CustomPainter {
   const _BNBCustomPainter({
     required this.color,

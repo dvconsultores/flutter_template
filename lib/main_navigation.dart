@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_detextre4/widgets/custom_bottom_navigation_bar.dart';
+import 'package:flutter_detextre4/widgets/bottom_navigation_bar.dart';
 import 'package:flutter_detextre4/widgets/drawer.dart';
 import 'package:flutter_detextre4/widgets/scaffold.dart';
 import 'package:flutter_detextre4/utils/config/router_config.dart';
@@ -52,7 +52,7 @@ class MainNavigation extends StatelessWidget {
             : null,
         title: Text((router.shellRoute as GoRoute?)?.name ?? ""),
       ),
-      bottomNavigationBar: CustomBottomNavigationBar(
+      bottomNavigationBar: AppBottomNavigationBar(
         currentIndex: router.indexShellRoute,
         onTap: (index) =>
             context.goNamed((router.shellRoutes[index] as GoRoute).name!),
