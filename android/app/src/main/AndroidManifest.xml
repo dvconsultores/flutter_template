@@ -46,17 +46,21 @@
     </application>
 
     <queries>
-    <intent>
-        <action android:name="android.intent.action.VIEW" />
-        <data android:scheme="https" />
-    </intent>
-    <intent>
-        <action android:name="android.intent.action.DIAL" />
-        <data android:scheme="tel" />
-    </intent>
-    <intent>
-        <action android:name="android.intent.action.SEND" />
-        <data android:scheme="*/*" />
-    </intent>
+        <intent>
+            <action android:name="android.intent.action.VIEW" />
+            <data android:scheme="https" />
+        </intent>
+        <intent>
+            <action android:name="android.intent.action.DIAL" />
+            <data android:scheme="tel" />
+        </intent>
+        <intent>
+            <action android:name="android.intent.action.SEND" />
+            <data android:scheme="*/*" />
+        </intent>
+    </queries>
+
+    <queries>
+        <package android:name="app.apoloPay.apolo" />
     </queries>
 </manifest>
