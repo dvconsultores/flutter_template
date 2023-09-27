@@ -7,6 +7,7 @@ import 'package:flutter_detextre4/utils/config/session_timeout_config.dart';
 import 'package:flutter_detextre4/utils/helper_widgets/restart_widget.dart';
 import 'package:flutter_detextre4/main_provider.dart';
 import 'package:flutter_detextre4/utils/config/config.dart';
+import 'package:flutter_detextre4/utils/services/dio_service.dart';
 import 'package:flutter_detextre4/utils/services/local_data/hive_data_service.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -72,6 +73,7 @@ class _AppState extends State<App> {
 
   @override
   void initState() {
+    DioService.init();
     sessionTimeoutConfig.listen();
     super.initState();
   }

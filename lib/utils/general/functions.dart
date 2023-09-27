@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:another_flushbar/flushbar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_detextre4/main.dart';
@@ -52,11 +54,23 @@ void showSnackbar(
   String? message, {
   ColorSnackbarState? type,
   Duration? duration,
+  String searchBy = "message",
+  String fallback = "Error",
 }) {
   if (message.hasNotValue) return;
 
+  String? msg() {
+    if (message == null) return null;
+
+    return message.contains('"$searchBy":')
+        ? jsonDecode(message)[searchBy]
+        : message.isNotEmpty
+            ? message
+            : fallback;
+  }
+
   Flushbar(
-    message: message,
+    message: msg(),
     backgroundColor: ColorSnackbarState.values
         .byName(type?.name ?? ColorSnackbarState.neutral.name)
         .color,
