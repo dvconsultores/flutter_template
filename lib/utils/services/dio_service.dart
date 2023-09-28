@@ -347,3 +347,33 @@ enum FilesType {
   /// List of admitted formats
   final List<String> listValues;
 }
+
+// ? dio response extension
+extension DioResponseExtension on Response? {
+  /// Will return the `error message` from the api request.
+  ///
+  /// in case not be founded will return a custome default message.
+  String catchErrorMessage([String fallback = "Error"]) {
+    if (this == null) return fallback;
+
+    final body = this!;
+
+    debugPrint("${body.statusCode} ⭕");
+    debugPrint("${body.data} ⭕");
+
+    return (body.data as String).isNotEmpty ? body.data : fallback;
+  }
+}
+
+// ? response extension
+extension ResponseExtension on http.Response {
+  /// Will return the `error message` from the api request.
+  ///
+  /// in case not be founded will return a custome default message.
+  String catchErrorMessage([String fallback = "Error"]) {
+    debugPrint("$statusCode ⭕");
+    debugPrint("$body ⭕");
+
+    return body.isNotEmpty ? body : fallback;
+  }
+}
