@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
@@ -12,7 +13,6 @@ import 'package:dio/dio.dart';
 final dio = Dio();
 
 class DioService {
-  // * base url
   /// Base url from app domain.
   static final String baseUrl =
       dotenv.get("API_URL", fallback: "domain/api/v1");
@@ -21,9 +21,30 @@ class DioService {
   static final String fileBaseUrl =
       dotenv.get("FILE_API_URL", fallback: "domain/api/v1");
 
+  /// Api url connected to app.
+  static final String apiUrl = dotenv.get('API_URL');
+
+  /// Default [http] header request without authorization
+  static final Map<String, String> unauthorized = {
+    'Content-type': 'application/json',
+    'Accept': 'application/json',
+  };
+
+  /// [http] header request with authorization
+  static Future<Map<String, String>> authorized([String? customToken]) async {
+    final String? tokenAuth =
+        customToken ?? await SecureStorage.read(SecureCollection.tokenAuth);
+
+    return {
+      'Content-type': 'application/json',
+      'Accept': 'application/json',
+      'Authorization': 'Token $tokenAuth',
+    };
+  }
+
   // * set configuration
   static void init() {
-    dio.options.baseUrl = dotenv.get('API_URL');
+    dio.options.baseUrl = apiUrl;
     // ..connectTimeout = const Duration(seconds: 5)
     // ..receiveTimeout = const Duration(seconds: 3);
 
@@ -47,7 +68,7 @@ class DioService {
 
           //* catch connection failed
         } else if (error.error is SocketException) {
-          fun.showSnackbar("Connection failed",
+          fun.showSnackbar("Connection error, try it later",
               type: fun.ColorSnackbarState.error);
         }
 
@@ -68,20 +89,26 @@ extension DioExtensions on Dio {
     CancelToken? cancelToken,
     ProgressCallback? onReceiveProgress,
   }) async {
-    if (requestRef != null) debugPrint("$requestRef⬅️");
+    try {
+      if (requestRef != null) debugPrint("$requestRef⬅️");
 
-    final response = await get(
-      path,
-      data: data,
-      cancelToken: cancelToken,
-      onReceiveProgress: onReceiveProgress,
-      options: options,
-      queryParameters: queryParameters,
-    );
+      final response = await get(
+        path,
+        data: data,
+        cancelToken: cancelToken,
+        onReceiveProgress: onReceiveProgress,
+        options: options,
+        queryParameters: queryParameters,
+      );
 
-    if (showResponse) debugPrint("${requestRef ?? ""} $response ✅");
+      if (showResponse) {
+        debugPrint("${requestRef ?? ""} ${jsonEncode(response.data)} ✅");
+      }
 
-    return response;
+      return response;
+    } on DioException {
+      rethrow;
+    }
   }
 
   Future<Response> postCustom(
@@ -96,23 +123,29 @@ extension DioExtensions on Dio {
     ProgressCallback? onReceiveProgress,
     void Function(int, int)? onSendProgress,
   }) async {
-    if (requestRef != null) debugPrint("$requestRef⬅️");
+    try {
+      if (requestRef != null) debugPrint("$requestRef⬅️");
 
-    if (showRequest) debugPrint("$data ⭐");
+      if (showRequest) debugPrint("$data ⭐");
 
-    final response = await post(
-      path,
-      data: data,
-      cancelToken: cancelToken,
-      onReceiveProgress: onReceiveProgress,
-      options: options,
-      queryParameters: queryParameters,
-      onSendProgress: onSendProgress,
-    );
+      final response = await post(
+        path,
+        data: data,
+        cancelToken: cancelToken,
+        onReceiveProgress: onReceiveProgress,
+        options: options,
+        queryParameters: queryParameters,
+        onSendProgress: onSendProgress,
+      );
 
-    if (showResponse) debugPrint("${requestRef ?? ""} $response ✅");
+      if (showResponse) {
+        debugPrint("${requestRef ?? ""} ${jsonEncode(response.data)} ✅");
+      }
 
-    return response;
+      return response;
+    } on DioException {
+      rethrow;
+    }
   }
 
   Future<Response> putCustom(
@@ -127,23 +160,29 @@ extension DioExtensions on Dio {
     ProgressCallback? onReceiveProgress,
     void Function(int, int)? onSendProgress,
   }) async {
-    if (requestRef != null) debugPrint("$requestRef⬅️");
+    try {
+      if (requestRef != null) debugPrint("$requestRef⬅️");
 
-    if (showRequest) debugPrint("$data ⭐");
+      if (showRequest) debugPrint("$data ⭐");
 
-    final response = await put(
-      path,
-      data: data,
-      cancelToken: cancelToken,
-      onReceiveProgress: onReceiveProgress,
-      options: options,
-      queryParameters: queryParameters,
-      onSendProgress: onSendProgress,
-    );
+      final response = await put(
+        path,
+        data: data,
+        cancelToken: cancelToken,
+        onReceiveProgress: onReceiveProgress,
+        options: options,
+        queryParameters: queryParameters,
+        onSendProgress: onSendProgress,
+      );
 
-    if (showResponse) debugPrint("${requestRef ?? ""} $response ✅");
+      if (showResponse) {
+        debugPrint("${requestRef ?? ""} ${jsonEncode(response.data)} ✅");
+      }
 
-    return response;
+      return response;
+    } on DioException {
+      rethrow;
+    }
   }
 
   Future<Response> patchCustom(
@@ -158,23 +197,29 @@ extension DioExtensions on Dio {
     ProgressCallback? onReceiveProgress,
     void Function(int, int)? onSendProgress,
   }) async {
-    if (requestRef != null) debugPrint("$requestRef⬅️");
+    try {
+      if (requestRef != null) debugPrint("$requestRef⬅️");
 
-    if (showRequest) debugPrint("$data ⭐");
+      if (showRequest) debugPrint("$data ⭐");
 
-    final response = await patch(
-      path,
-      data: data,
-      cancelToken: cancelToken,
-      onReceiveProgress: onReceiveProgress,
-      options: options,
-      queryParameters: queryParameters,
-      onSendProgress: onSendProgress,
-    );
+      final response = await patch(
+        path,
+        data: data,
+        cancelToken: cancelToken,
+        onReceiveProgress: onReceiveProgress,
+        options: options,
+        queryParameters: queryParameters,
+        onSendProgress: onSendProgress,
+      );
 
-    if (showResponse) debugPrint("${requestRef ?? ""} $response ✅");
+      if (showResponse) {
+        debugPrint("${requestRef ?? ""} ${jsonEncode(response.data)} ✅");
+      }
 
-    return response;
+      return response;
+    } on DioException {
+      rethrow;
+    }
   }
 }
 
@@ -229,7 +274,7 @@ extension MultipartResponded on http.MultipartRequest {
       return response;
     } on SocketException catch (error) {
       debugPrint("$error ⭕");
-      throw "Connection failed";
+      throw "Connection error, try it later";
     }
   }
 
@@ -245,9 +290,9 @@ extension MultipartResponded on http.MultipartRequest {
     }
   }
 
-  /// Generate a MultipartFile from each `FileConstructor` into list and will be
+  /// Generate a MultipartFile from each `MultipartContructor` into list and will be
   /// added to multipart request.
-  Future<void> addFiles(List<FileConstructor?> filesIncomingList) async {
+  Future<void> addFiles(List<MultipartContructor?> filesIncomingList) async {
     for (final element in filesIncomingList) {
       if (element == null) continue;
 
@@ -268,8 +313,8 @@ extension MultipartResponded on http.MultipartRequest {
 ///
 /// could be used to add files into `http.MultipartRequest` using `addFiles`
 /// method.
-class FileConstructor {
-  const FileConstructor({
+class MultipartContructor {
+  const MultipartContructor({
     required this.uri,
     required this.name,
     this.format,
@@ -290,7 +335,7 @@ class FileConstructor {
         ?.name;
   }
 
-  Future<http.MultipartFile> toMultipartFile() async {
+  Future<http.MultipartFile> build() async {
     final typeFile = type ?? getType() ?? "unknow";
     final formatFile = format ?? getFormat() ?? "unknow";
 
