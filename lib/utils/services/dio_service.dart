@@ -3,7 +3,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_detextre4/utils/general/functions.dart' as fun;
-import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:flutter_detextre4/utils/services/local_data/app_env.dart';
 import 'package:http/http.dart' as http;
 import 'package:http_parser/http_parser.dart';
 import 'package:collection/collection.dart';
@@ -13,17 +13,6 @@ import 'package:dio/dio.dart';
 final dio = Dio();
 
 class DioService {
-  /// Base url from app domain.
-  static final String baseUrl =
-      dotenv.get("API_URL", fallback: "domain/api/v1");
-
-  /// Base url from app domain where files are storaged.
-  static final String fileBaseUrl =
-      dotenv.get("FILE_API_URL", fallback: "domain/api/v1");
-
-  /// Api url connected to app.
-  static final String apiUrl = dotenv.get('API_URL');
-
   /// Default [http] header request without authorization
   static final Map<String, String> unauthorized = {
     'Content-type': 'application/json',
@@ -44,7 +33,7 @@ class DioService {
 
   // * set configuration
   static void init() {
-    dio.options.baseUrl = apiUrl;
+    dio.options.baseUrl = env.baseUrl;
     // ..connectTimeout = const Duration(seconds: 5)
     // ..receiveTimeout = const Duration(seconds: 3);
 

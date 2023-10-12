@@ -7,7 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_detextre4/utils/config/config.dart';
 import 'package:flutter_detextre4/utils/general/functions.dart';
-import 'package:flutter_detextre4/utils/services/dio_service.dart';
+import 'package:flutter_detextre4/utils/services/local_data/app_env.dart';
 import 'package:gallery_saver/gallery_saver.dart';
 import 'package:collection/collection.dart';
 import 'package:intl/intl.dart';
@@ -630,7 +630,7 @@ extension StringExtension on String {
       return this;
     }
 
-    return "${path ?? DioService.fileBaseUrl}$this";
+    return "${path ?? env.fileApiUrl}$this";
   }
 
   /// Remove Custom network base url path to `string`.
@@ -642,7 +642,7 @@ extension StringExtension on String {
       return this;
     }
 
-    return split(path ?? DioService.fileBaseUrl)[1];
+    return split(path ?? env.fileApiUrl)[1];
   }
 }
 
