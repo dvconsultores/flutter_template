@@ -1,0 +1,74 @@
+# Name of the workflow
+name: Flutter Detextre4 PlayStore Release
+
+# Controls what will trigger the workflow.
+# Change it to your needs.
+on:
+ # A new push to the "main" branch.
+ push:
+   branches: [ "master" ]
+ # A new pull request to the "main" branch.
+ pull_request:
+   branches: [ "master" ]
+ # Allows to trigger the workflow from GitHub interfaces.
+ workflow_dispatch:
+
+# A single workflow can have multiple jobs.
+jobs:
+ # 'A new job is defined with the name: "build_android"
+ build_android:
+   # Defines what operating system will be used for the actions.
+   # For android, we will use Linux GitHub-Hosted Runner.
+   runs-on: ubuntu-22.04
+   # Defines what step should be passed for successful run
+   steps:
+     # Checkout to the selected branch
+     - name: Checkout
+       uses: actions/checkout@v3
+     # Download and install flutter packages
+     - name: Install Flutter
+       uses: subosito/flutter-action@v2
+       with:
+         # Define which stable flutter version should be used
+         flutter-version: "3.10.0"
+         channel: 'stable'
+         # Enables cache for flutter packages
+         # Speed up the process
+         cache: true
+     - name: Update deployment secrets
+       run: |
+         cat << EOF >> .env
+         BASE_URL=${{ secrets.BASE_URL }}
+         API_URL=${{ secrets.API_URL }}
+        #  FILE_API_URL=${{ secrets.FILE_API_URL }}
+
+        #  FIREBASE_API_KEY=${{ secrets.FIREBASE_API_KEY }}
+        #  FIREBASE_AUTH_DOMAIN=${{ secrets.FIREBASE_AUTH_DOMAIN }}
+        #  FIREBASE_PROJECT_ID=${{ secrets.FIREBASE_PROJECT_ID }}
+        #  FIREBASE_STORAGE_BUCKET=${{ secrets.FIREBASE_STORAGE_BUCKET }}
+        #  FIREBASE_MESSAGING_SENDER_ID=${{ secrets.FIREBASE_MESSAGING_SENDER_ID }}
+        #  FIREBASE_APP_ID=${{ secrets.FIREBASE_APP_ID }}
+     # Get Flutter project dependencies
+     - name: Get dependencies
+       run: flutter pub get
+     # Build Android App Bundle which by default will be stored in the
+     # ./build/app/outputs/bundle/release as app-release.aab
+     - name: Build release app bundle
+       run: flutter build appbundle
+     - name: Sign App Bundle
+       uses: r0adkll/sign-android-release@v1
+       id: sign_app
+       with:
+         releaseDirectory: build/app/outputs/bundle/release/
+         signingKeyBase64: ${{ secrets.KEYSTORE_FILE }}
+         alias: ${{ secrets.KEY_ALIAS }}
+         keyStorePassword: ${{ secrets.STORE_PASSWORD }}
+         keyPassword: ${{ secrets.KEY_PASSWORD }}
+     - name: Upload to Play Store (Internal Testing)
+       uses: r0adkll/upload-google-play@v1.0.18
+       with:
+         serviceAccountJsonPlainText: ${{ secrets.SERVICE_ACCOUNT }}
+         packageName: com.example.flutterDetextre4
+         releaseFiles: ${{steps.sign_app.outputs.signedReleaseFile}}
+         mappingFile: ./build/app/outputs/mapping/release/mapping.txt
+         track: internal
