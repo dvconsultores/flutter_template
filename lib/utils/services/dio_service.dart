@@ -57,8 +57,12 @@ class DioService {
 
           //* catch connection failed
         } else if (error.error is SocketException) {
-          fun.showSnackbar("Connection error, try it later",
-              type: fun.ColorSnackbarState.error);
+          return handler.next(error.copyWith(
+            response: Response(
+              requestOptions: error.requestOptions,
+              data: error.response?.data ?? "Connection error, try it later",
+            ),
+          ));
         }
 
         return handler.next(error);
