@@ -1,7 +1,7 @@
 import 'dart:convert';
+import 'dart:developer';
 import 'dart:io';
 
-import 'package:flutter/material.dart';
 import 'package:flutter_detextre4/utils/general/functions.dart' as fun;
 import 'package:flutter_detextre4/utils/services/local_data/app_env.dart';
 import 'package:http/http.dart' as http;
@@ -68,7 +68,7 @@ class DioService {
 }
 
 extension DioExtensions on Dio {
-  Future<Response> getCustom(
+  Future<Response> getDebug(
     String path, {
     String? requestRef,
     bool showResponse = false,
@@ -79,7 +79,7 @@ extension DioExtensions on Dio {
     ProgressCallback? onReceiveProgress,
   }) async {
     try {
-      if (requestRef != null) debugPrint("$requestRef⬅️");
+      if (requestRef != null) log("$requestRef⬅️");
 
       final response = await get(
         path,
@@ -91,7 +91,7 @@ extension DioExtensions on Dio {
       );
 
       if (showResponse) {
-        debugPrint("${requestRef ?? ""} ${jsonEncode(response.data)} ✅");
+        log("${requestRef ?? ""} ${jsonEncode(response.data)} ✅");
       }
 
       return response;
@@ -100,7 +100,7 @@ extension DioExtensions on Dio {
     }
   }
 
-  Future<Response> postCustom(
+  Future<Response> postDebug(
     String path, {
     String? requestRef,
     bool showRequest = false,
@@ -113,9 +113,9 @@ extension DioExtensions on Dio {
     void Function(int, int)? onSendProgress,
   }) async {
     try {
-      if (requestRef != null) debugPrint("$requestRef⬅️");
+      if (requestRef != null) log("$requestRef⬅️");
 
-      if (showRequest) debugPrint("$data ⭐");
+      if (showRequest) log("$data ⭐");
 
       final response = await post(
         path,
@@ -128,7 +128,7 @@ extension DioExtensions on Dio {
       );
 
       if (showResponse) {
-        debugPrint("${requestRef ?? ""} ${jsonEncode(response.data)} ✅");
+        log("${requestRef ?? ""} ${jsonEncode(response.data)} ✅");
       }
 
       return response;
@@ -137,7 +137,7 @@ extension DioExtensions on Dio {
     }
   }
 
-  Future<Response> putCustom(
+  Future<Response> putDebug(
     String path, {
     String? requestRef,
     bool showRequest = false,
@@ -150,9 +150,9 @@ extension DioExtensions on Dio {
     void Function(int, int)? onSendProgress,
   }) async {
     try {
-      if (requestRef != null) debugPrint("$requestRef⬅️");
+      if (requestRef != null) log("$requestRef⬅️");
 
-      if (showRequest) debugPrint("$data ⭐");
+      if (showRequest) log("$data ⭐");
 
       final response = await put(
         path,
@@ -165,7 +165,7 @@ extension DioExtensions on Dio {
       );
 
       if (showResponse) {
-        debugPrint("${requestRef ?? ""} ${jsonEncode(response.data)} ✅");
+        log("${requestRef ?? ""} ${jsonEncode(response.data)} ✅");
       }
 
       return response;
@@ -174,7 +174,7 @@ extension DioExtensions on Dio {
     }
   }
 
-  Future<Response> patchCustom(
+  Future<Response> patchDebug(
     String path, {
     String? requestRef,
     bool showRequest = false,
@@ -187,9 +187,9 @@ extension DioExtensions on Dio {
     void Function(int, int)? onSendProgress,
   }) async {
     try {
-      if (requestRef != null) debugPrint("$requestRef⬅️");
+      if (requestRef != null) log("$requestRef⬅️");
 
-      if (showRequest) debugPrint("$data ⭐");
+      if (showRequest) log("$data ⭐");
 
       final response = await patch(
         path,
@@ -202,7 +202,7 @@ extension DioExtensions on Dio {
       );
 
       if (showResponse) {
-        debugPrint("${requestRef ?? ""} ${jsonEncode(response.data)} ✅");
+        log("${requestRef ?? ""} ${jsonEncode(response.data)} ✅");
       }
 
       return response;
@@ -231,15 +231,15 @@ extension MultipartResponded on http.MultipartRequest {
   /// [RFC 2616][].
   ///
   /// [RFC 2616]: http://www.w3.org/Protocols/rfc2616/rfc2616-sec3.html
-  Future<http.Response> sendCustom({
+  Future<http.Response> sendDebug({
     String? requestRef,
     bool showRequest = false,
     bool showResponse = false,
   }) async {
-    if (requestRef != null) debugPrint("$requestRef⬅️");
+    if (requestRef != null) log("$requestRef⬅️");
 
     if (showRequest) {
-      debugPrint("fields: $fields, files: ${files.mapIndexed((i, e) => (
+      log("fields: $fields, files: ${files.mapIndexed((i, e) => (
             i + 1,
             {
               "contentType": e.contentType,
@@ -259,10 +259,9 @@ extension MultipartResponded on http.MultipartRequest {
         throw "Session has expired";
       }
 
-      if (showResponse) debugPrint("${requestRef ?? ""} ${response.body} ✅");
+      if (showResponse) log("${requestRef ?? ""} ${response.body} ✅");
       return response;
-    } on SocketException catch (error) {
-      debugPrint("$error ⭕");
+    } on SocketException {
       throw "Connection error, try it later";
     }
   }
@@ -386,14 +385,14 @@ enum FilesType {
 extension DioResponseExtension on Response? {
   /// Will return the `error message` from the api request.
   ///
-  /// in case not be founded will return a custome default message.
+  /// in case not be founded will return a custom default message.
   String catchErrorMessage([String fallback = "Error"]) {
     if (this == null) return fallback;
 
     final body = this!;
 
-    debugPrint("${body.statusCode} ⭕");
-    debugPrint("${body.data} ⭕");
+    log("${body.statusCode} ⭕");
+    log("${body.data} ⭕");
 
     return (body.data as String).isNotEmpty ? body.data : fallback;
   }
@@ -403,10 +402,10 @@ extension DioResponseExtension on Response? {
 extension ResponseExtension on http.Response {
   /// Will return the `error message` from the api request.
   ///
-  /// in case not be founded will return a custome default message.
+  /// in case not be founded will return a custom default message.
   String catchErrorMessage([String fallback = "Error"]) {
-    debugPrint("$statusCode ⭕");
-    debugPrint("$body ⭕");
+    log("$statusCode ⭕");
+    log("$body ⭕");
 
     return body.isNotEmpty ? body : fallback;
   }
