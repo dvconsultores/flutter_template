@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:developer';
 import 'dart:io';
 
+import 'package:flutter/material.dart';
 import 'package:flutter_detextre4/utils/general/functions.dart' as fun;
 import 'package:flutter_detextre4/utils/services/local_data/app_env.dart';
 import 'package:http/http.dart' as http;
@@ -394,11 +395,12 @@ extension DioResponseExtension on Response? {
     if (this == null) return fallback;
 
     final body = this!;
+    final response = body.data.toString();
 
-    log("${body.statusCode} ⭕");
-    log("${body.data} ⭕");
+    debugPrint("${body.statusCode} ⭕");
+    debugPrint("${body.data} ⭕");
 
-    return (body.data as String).isNotEmpty ? body.data : fallback;
+    return response.isNotEmpty ? response : fallback;
   }
 }
 
@@ -408,9 +410,11 @@ extension ResponseExtension on http.Response {
   ///
   /// in case not be founded will return a custom default message.
   String catchErrorMessage([String fallback = "Error"]) {
-    log("$statusCode ⭕");
-    log("$body ⭕");
+    final response = body.toString();
 
-    return body.isNotEmpty ? body : fallback;
+    debugPrint("$statusCode ⭕");
+    debugPrint("$body ⭕");
+
+    return response.isNotEmpty ? response : fallback;
   }
 }
