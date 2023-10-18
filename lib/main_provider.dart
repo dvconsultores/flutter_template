@@ -4,6 +4,13 @@ import 'package:flutter_detextre4/utils/config/config.dart';
 import 'package:flutter_detextre4/utils/services/local_data/hive_data_service.dart';
 
 class MainProvider extends ChangeNotifier {
+  // ? -------------------------Global variables----------------------------- //
+  bool stopProcess = false;
+  set setStopProcess(bool value) {
+    stopProcess = value;
+    notifyListeners();
+  }
+
   // ? ----------------------Theme switcher Provider------------------------- //
   /// Current app theme.
   ThemeType appTheme = ThemeType.values.firstWhereOrNull((element) =>

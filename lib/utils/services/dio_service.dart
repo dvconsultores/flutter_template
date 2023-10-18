@@ -3,8 +3,11 @@ import 'dart:developer';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_detextre4/main.dart';
 import 'package:flutter_detextre4/utils/general/functions.dart' as fun;
 import 'package:flutter_detextre4/utils/services/local_data/app_env.dart';
+import 'package:flutter_detextre4/widgets/dialogs/system_alert_widget.dart';
+import 'package:go_router/go_router.dart';
 import 'package:http/http.dart' as http;
 import 'package:http_parser/http_parser.dart';
 import 'package:collection/collection.dart';
@@ -53,8 +56,18 @@ class DioService {
       onError: (DioException error, handler) async {
         //* catch unauthorized request
         if (error.response?.statusCode == 401) {
-          fun.showSnackbar("Session has expired",
-              type: fun.ColorSnackbarState.error);
+          return await showDialog(
+            context: globalNavigatorKey.currentContext!,
+            barrierDismissible: false,
+            builder: (context) => SystemAlertWidget(
+              onOpen: () => SecureStorage.delete(SecureCollection.tokenAuth),
+              dismissible: false,
+              title: 'Tu sesión ha expirado',
+              textContent: 'Por favor, inicia sesión nuevamente',
+              textButton: "Entendido",
+              onPressedButton: () => context.goNamed("login"),
+            ),
+          );
 
           //* catch connection failed
         } else if (error.error is SocketException) {
@@ -391,14 +404,11 @@ extension DioResponseExtension on Response? {
   /// Will return the `error message` from the api request.
   ///
   /// in case not be founded will return a custom default message.
-  String catchErrorMessage([String fallback = "Error"]) {
-    if (this == null) return fallback;
+  String catchErrorMessage([String fallback = '']) {
+    final response = this?.data.toString() ?? '';
 
-    final body = this!;
-    final response = body.data.toString();
-
-    debugPrint("${body.statusCode} ⭕");
-    debugPrint("${body.data} ⭕");
+    debugPrint("statusCode: ${this?.statusCode} ⭕");
+    debugPrint("data: ${this?.data} ⭕");
 
     return response.isNotEmpty ? response : fallback;
   }
@@ -409,11 +419,11 @@ extension ResponseExtension on http.Response {
   /// Will return the `error message` from the api request.
   ///
   /// in case not be founded will return a custom default message.
-  String catchErrorMessage([String fallback = "Error"]) {
+  String catchErrorMessage([String fallback = '']) {
     final response = body.toString();
 
-    debugPrint("$statusCode ⭕");
-    debugPrint("$body ⭕");
+    debugPrint("statusCode: $statusCode ⭕");
+    debugPrint("body: $body ⭕");
 
     return response.isNotEmpty ? response : fallback;
   }
