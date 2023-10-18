@@ -4,7 +4,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_detextre4/main.dart';
-import 'package:flutter_detextre4/utils/general/functions.dart' as fun;
+import 'package:flutter_detextre4/main_provider.dart';
 import 'package:flutter_detextre4/utils/services/local_data/app_env.dart';
 import 'package:flutter_detextre4/widgets/dialogs/system_alert_widget.dart';
 import 'package:go_router/go_router.dart';
@@ -13,6 +13,7 @@ import 'package:http_parser/http_parser.dart';
 import 'package:collection/collection.dart';
 import 'package:flutter_detextre4/utils//services/local_data/secure_storage_service.dart';
 import 'package:dio/dio.dart';
+import 'package:provider/provider.dart';
 
 final dio = Dio();
 
@@ -54,6 +55,11 @@ class DioService {
         return handler.next(options);
       },
       onError: (DioException error, handler) async {
+        //* stopped process
+        final stoppedProcess =
+            globalNavigatorKey.currentContext!.read<MainProvider>().stopProcess;
+        if (stoppedProcess) return;
+
         //* catch unauthorized request
         if (error.response?.statusCode == 401) {
           return await showDialog(
@@ -62,11 +68,15 @@ class DioService {
             builder: (context) => SystemAlertWidget(
               onOpen: () => SecureStorage.delete(SecureCollection.tokenAuth),
               dismissible: false,
-              title: 'Tu sesión ha expirado',
-              textContent: 'Por favor, inicia sesión nuevamente',
+              title: 'Session has expired',
+              textContent: 'Please log in again.',
               textButton: "Entendido",
               onPressedButton: () => context.goNamed("login"),
             ),
+          ).whenComplete(
+            () => globalNavigatorKey.currentContext!
+                .read<MainProvider>()
+                .setStopProcess = false,
           );
 
           //* catch connection failed
@@ -269,12 +279,31 @@ extension MultipartResponded on http.MultipartRequest {
     }
 
     try {
+      //* stopped process
+      final stoppedProcess =
+          globalNavigatorKey.currentContext!.read<MainProvider>().stopProcess;
+      if (stoppedProcess) throw "";
+
       final response = await http.Response.fromStream(await send());
 
       if (response.statusCode == 401) {
-        fun.showSnackbar("Session has expired");
-
-        throw "Session has expired";
+        throw await showDialog(
+              context: globalNavigatorKey.currentContext!,
+              barrierDismissible: false,
+              builder: (context) => SystemAlertWidget(
+                onOpen: () => SecureStorage.delete(SecureCollection.tokenAuth),
+                dismissible: false,
+                title: 'Session has expired',
+                textContent: 'Please log in again.',
+                textButton: "Entendido",
+                onPressedButton: () => context.goNamed("login"),
+              ),
+            ).whenComplete(
+              () => globalNavigatorKey.currentContext!
+                  .read<MainProvider>()
+                  .setStopProcess = false,
+            ) ??
+            "Session has expired";
       }
 
       if (showResponse) log("${requestRef ?? ""} ${response.body} ✅");
