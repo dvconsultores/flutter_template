@@ -143,7 +143,7 @@ extension DioExtensions on Dio {
     try {
       if (requestRef != null) log("$requestRef⬅️");
 
-      if (showRequest) log("$data ⭐");
+      if (showRequest) log("${jsonEncode(data)} ⭐");
 
       final response = await post(
         path,
@@ -180,7 +180,7 @@ extension DioExtensions on Dio {
     try {
       if (requestRef != null) log("$requestRef⬅️");
 
-      if (showRequest) log("$data ⭐");
+      if (showRequest) log("${jsonEncode(data)} ⭐");
 
       final response = await put(
         path,
@@ -217,7 +217,7 @@ extension DioExtensions on Dio {
     try {
       if (requestRef != null) log("$requestRef⬅️");
 
-      if (showRequest) log("$data ⭐");
+      if (showRequest) log("${jsonEncode(data)} ⭐");
 
       final response = await patch(
         path,
