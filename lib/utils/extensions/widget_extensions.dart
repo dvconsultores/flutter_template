@@ -47,53 +47,85 @@ extension ImageExtension on Image {
       ClipRRect(
         borderRadius: borderRadius ?? BorderRadius.circular(200),
         clipBehavior: clipBehavior,
-        child: Image.network(
-          (image as NetworkImage).url,
-          key: key,
-          alignment: alignment,
-          fit: fit ?? BoxFit.cover,
-          centerSlice: centerSlice,
-          color: color,
-          colorBlendMode: colorBlendMode,
-          excludeFromSemantics: excludeFromSemantics,
-          filterQuality: filterQuality,
-          frameBuilder: frameBuilder,
-          gaplessPlayback: gaplessPlayback,
-          height: height,
-          isAntiAlias: isAntiAlias,
-          matchTextDirection: matchTextDirection,
-          opacity: opacity,
-          repeat: repeat,
-          semanticLabel: semanticLabel,
-          width: width,
-          loadingBuilder: loadingBuilder ??
-              (context, child, loadingProgress) => SizedBox(
-                    width: width,
-                    height: height,
-                    child: Skeleton(
-                      isLoading: loadingProgress?.cumulativeBytesLoaded !=
-                          loadingProgress?.expectedTotalBytes,
-                      duration: shimmerDuration,
-                      shimmerGradient: shimmerGradient ??
-                          LinearGradient(colors: [
-                            ThemeApp.colors(context).primary.withOpacity(.5),
-                            ThemeApp.colors(context).secondary.withOpacity(.5),
-                          ]),
-                      skeleton: SkeletonAvatar(
-                        style:
-                            SkeletonAvatarStyle(width: width, height: height),
-                      ),
-                      child: child,
-                    ),
+        child: image is NetworkImage
+            ? Image.network(
+                (image as NetworkImage).url,
+                key: key,
+                alignment: alignment,
+                fit: fit ?? BoxFit.cover,
+                centerSlice: centerSlice,
+                color: color,
+                colorBlendMode: colorBlendMode,
+                excludeFromSemantics: excludeFromSemantics,
+                filterQuality: filterQuality,
+                frameBuilder: frameBuilder,
+                gaplessPlayback: gaplessPlayback,
+                height: height,
+                isAntiAlias: isAntiAlias,
+                matchTextDirection: matchTextDirection,
+                opacity: opacity,
+                repeat: repeat,
+                semanticLabel: semanticLabel,
+                width: width,
+                loadingBuilder: loadingBuilder ??
+                    (context, child, loadingProgress) => SizedBox(
+                          width: width,
+                          height: height,
+                          child: Skeleton(
+                            isLoading: loadingProgress?.cumulativeBytesLoaded !=
+                                loadingProgress?.expectedTotalBytes,
+                            duration: shimmerDuration,
+                            shimmerGradient: shimmerGradient ??
+                                LinearGradient(colors: [
+                                  ThemeApp.colors(context)
+                                      .primary
+                                      .withOpacity(.5),
+                                  ThemeApp.colors(context)
+                                      .secondary
+                                      .withOpacity(.5),
+                                ]),
+                            skeleton: SkeletonAvatar(
+                              style: SkeletonAvatarStyle(
+                                  width: width, height: height),
+                            ),
+                            child: child,
+                          ),
+                        ),
+                errorBuilder: (context, error, stackTrace) => SizedBox(
+                  width: (width ?? 40),
+                  height: (height ?? 40),
+                  child: Align(
+                    child: Icon(Icons.error, size: (width ?? 40) / 2),
                   ),
-          errorBuilder: (context, error, stackTrace) => SizedBox(
-            width: (width ?? 40) / 2,
-            height: (height ?? 40) / 2,
-            child: const Align(
-              child: Icon(Icons.error),
-            ),
-          ),
-        ),
+                ),
+              )
+            : Image.file(
+                (image as FileImage).file,
+                key: key,
+                alignment: alignment,
+                fit: fit ?? BoxFit.cover,
+                centerSlice: centerSlice,
+                color: color,
+                colorBlendMode: colorBlendMode,
+                excludeFromSemantics: excludeFromSemantics,
+                filterQuality: filterQuality,
+                frameBuilder: frameBuilder,
+                gaplessPlayback: gaplessPlayback,
+                height: height,
+                isAntiAlias: isAntiAlias,
+                matchTextDirection: matchTextDirection,
+                opacity: opacity,
+                repeat: repeat,
+                semanticLabel: semanticLabel,
+                width: width,
+                errorBuilder: (context, error, stackTrace) => SizedBox(
+                  width: (width ?? 40),
+                  height: (height ?? 40),
+                  child: Align(
+                    child: Icon(Icons.error, size: (height ?? 40) / 2),
+                  ),
+                ),
+              ),
       );
 }
 
