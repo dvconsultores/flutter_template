@@ -26,17 +26,23 @@ class AppEnv implements _DefaultEnv, _FirebaseEnv {
 
   // _FirebaseEnv
   @override
-  String firebaseApiKey = dotenv.get('FIREBASE_API_KEY');
+  String firebaseApiKey =
+      dotenv.get('FIREBASE_API_KEY', fallback: "firebaseApiKey");
   @override
-  String firebaseAuthDomain = dotenv.get('FIREBASE_AUTH_DOMAIN');
+  String firebaseAuthDomain =
+      dotenv.get('FIREBASE_AUTH_DOMAIN', fallback: "firebaseAuthDomain");
   @override
-  String firebaseProjectId = dotenv.get('FIREBASE_PROJECT_ID');
+  String firebaseProjectId =
+      dotenv.get('FIREBASE_PROJECT_ID', fallback: "firebaseProjectId");
   @override
-  String firebaseStorageBucket = dotenv.get('FIREBASE_STORAGE_BUCKET');
+  String firebaseStorageBucket =
+      dotenv.get('FIREBASE_STORAGE_BUCKET', fallback: "firebaseStorageBucket");
   @override
-  String firebaseMessagingSenderId = dotenv.get('FIREBASE_MESSAGING_SENDER_ID');
+  String firebaseMessagingSenderId = dotenv.get('FIREBASE_MESSAGING_SENDER_ID',
+      fallback: "firebaseMessagingSenderId");
   @override
-  String firebaseAppId = dotenv.get('FIREBASE_APP_ID');
+  String firebaseAppId =
+      dotenv.get('FIREBASE_APP_ID', fallback: "firebaseAppId");
 }
 
 final AppEnv env = AppEnv();

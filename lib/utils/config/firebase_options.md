@@ -42,7 +42,7 @@ class DefaultFirebaseOptions {
   }
 
   static final web = FirebaseOptions(
-    apiKey: env.firebaseAppId,
+    apiKey: env.firebaseApiKey,
     authDomain: env.firebaseAuthDomain,
     projectId: env.firebaseProjectId,
     storageBucket: env.firebaseStorageBucket,
@@ -51,7 +51,7 @@ class DefaultFirebaseOptions {
   );
 
   static final android = FirebaseOptions(
-    apiKey: env.firebaseAppId,
+    apiKey: env.firebaseApiKey,
     authDomain: env.firebaseAuthDomain,
     projectId: env.firebaseProjectId,
     storageBucket: env.firebaseStorageBucket,
@@ -60,7 +60,7 @@ class DefaultFirebaseOptions {
   );
 
   static final ios = FirebaseOptions(
-    apiKey: env.firebaseAppId,
+    apiKey: env.firebaseApiKey,
     authDomain: env.firebaseAuthDomain,
     projectId: env.firebaseProjectId,
     storageBucket: env.firebaseStorageBucket,
@@ -69,7 +69,7 @@ class DefaultFirebaseOptions {
   );
 
   static final windows = FirebaseOptions(
-    apiKey: env.firebaseAppId,
+    apiKey: env.firebaseApiKey,
     authDomain: env.firebaseAuthDomain,
     projectId: env.firebaseProjectId,
     storageBucket: env.firebaseStorageBucket,
@@ -78,7 +78,7 @@ class DefaultFirebaseOptions {
   );
 
   static final macos = FirebaseOptions(
-    apiKey: env.firebaseAppId,
+    apiKey: env.firebaseApiKey,
     authDomain: env.firebaseAuthDomain,
     projectId: env.firebaseProjectId,
     storageBucket: env.firebaseStorageBucket,
