@@ -1,0 +1,5 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+  <!-- ? value to firebase cloud messaging 🖊️ -->
+  <!-- <string name="default_notification_channel_id">app.apoloPay.apolo.urgent</string> -->
+</resources>
