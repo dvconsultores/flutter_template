@@ -5,6 +5,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_detextre4/main.dart';
 import 'package:flutter_detextre4/main_provider.dart';
+import 'package:flutter_detextre4/utils/general/variables.dart';
 import 'package:flutter_detextre4/utils/services/local_data/app_env.dart';
 import 'package:flutter_detextre4/widgets/dialogs/system_alert_widget.dart';
 import 'package:go_router/go_router.dart';
@@ -46,7 +47,9 @@ class DioService {
       onRequest: (options, handler) async {
         //* set default header auth
         final optionToken = options.headers['Authorization'];
-        final tokenAuth = await SecureStorage.read(SecureCollection.tokenAuth);
+        final tokenAuth = await SecureStorage.read(SecureCollection.tokenAuth)
+            .timeout(const Duration(seconds: Variables.requestTiming))
+            .catchError((_) => null);
 
         if (tokenAuth != null && optionToken == null) {
           options.headers['Authorization'] = 'Token $tokenAuth';
