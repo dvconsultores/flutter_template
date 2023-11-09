@@ -11,6 +11,14 @@ enum ThemeType {
   dark;
 }
 
+///? A Collection of app font families.
+enum FontFamily {
+  lato("Lato_regular");
+
+  const FontFamily(this.value);
+  final String value;
+}
+
 /// Themes configuration class from app.
 class ThemeApp {
   static TextTheme _defaultFont(BuildContext context) =>
