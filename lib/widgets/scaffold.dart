@@ -2,6 +2,34 @@ import 'package:flutter/material.dart';
 import 'package:flutter_detextre4/utils/general/variables.dart';
 import 'package:flutter_detextre4/utils/helper_widgets/responsive_layout.dart';
 
+/// ? Custom background styled
+class _BackgroundStyled extends StatelessWidget {
+  const _BackgroundStyled({required this.child, this.padding});
+  final EdgeInsetsGeometry? padding;
+  final Widget child;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+        width: double.maxFinite,
+        height: double.maxFinite,
+        padding: padding ?? Variables.paddingScaffold,
+        decoration: const BoxDecoration(
+          gradient: SweepGradient(
+            center: Alignment.center,
+            transform: GradientRotation(-10.5),
+            colors: [
+              Color.fromRGBO(255, 255, 255, 0.53),
+              Color.fromRGBO(220, 220, 220, 0.48),
+              Color.fromRGBO(36, 200, 255, 0.35),
+              Color(0xFFF6F6F7),
+            ],
+            stops: [0, 0.333, 0.666, 1],
+          ),
+        ));
+  }
+}
+
 /// ? Custom Application scaffold
 class AppScaffold extends StatelessWidget {
   const AppScaffold({
@@ -24,8 +52,8 @@ class AppScaffold extends StatelessWidget {
   Widget build(BuildContext context) => Scaffold(
         drawer: drawer,
         appBar: appBar,
-        body: Container(
-          padding: padding ?? Variables.paddingScaffold,
+        body: _BackgroundStyled(
+          padding: padding,
           child: child,
         ),
         bottomNavigationBar: bottomNavigationBar,
@@ -87,8 +115,8 @@ class _AppScaffoldResponsive extends StatelessWidget {
   Widget build(BuildContext context) => Scaffold(
         drawer: drawer,
         appBar: appBar,
-        body: Container(
-          padding: padding ?? Variables.paddingScaffold,
+        body: _BackgroundStyled(
+          padding: padding,
           child: ResponsiveLayout(
             mobile: mobile,
             tablet: tablet,
