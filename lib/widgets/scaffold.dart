@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_detextre4/utils/general/variables.dart';
 import 'package:flutter_detextre4/utils/helper_widgets/responsive_layout.dart';
 
-/// ? Custom background styled
+// * Custom background styled
 class _BackgroundStyled extends StatelessWidget {
   const _BackgroundStyled({required this.child, this.padding});
   final EdgeInsetsGeometry? padding;
@@ -27,6 +27,27 @@ class _BackgroundStyled extends StatelessWidget {
           stops: [0, 0.333, 0.666, 1],
         ),
       ),
+      child: child,
+    );
+  }
+}
+
+// * Custom body background styled
+class _BodyBackgroundStyled extends StatelessWidget {
+  const _BodyBackgroundStyled({
+    required this.child,
+    this.color,
+    this.padding,
+  });
+  final EdgeInsetsGeometry? padding;
+  final Color? color;
+  final Widget child;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      color: color ?? Theme.of(context).scaffoldBackgroundColor,
+      padding: padding ?? Variables.paddingScaffold,
       child: child,
     );
   }
@@ -87,7 +108,7 @@ class AppScaffold extends StatelessWidget {
       );
 }
 
-/// ? Responsive variant from `AppScaffold`
+// ? Responsive variant from `AppScaffold`
 class _AppScaffoldResponsive extends StatelessWidget {
   const _AppScaffoldResponsive({
     this.drawer,
@@ -144,9 +165,9 @@ class ScaffoldBody extends StatelessWidget {
   final Color? color;
 
   @override
-  Widget build(BuildContext context) => Container(
-        color: color ?? Theme.of(context).scaffoldBackgroundColor,
-        padding: padding ?? Variables.paddingScaffold,
+  Widget build(BuildContext context) => _BodyBackgroundStyled(
+        color: color,
+        padding: padding,
         child: body,
       );
 
@@ -169,7 +190,7 @@ class ScaffoldBody extends StatelessWidget {
       );
 }
 
-/// ? Responsive variant from `ScaffoldBody`
+// ? Responsive variant from `ScaffoldBody`
 class _ScaffoldBodyResponsive extends StatelessWidget {
   const _ScaffoldBodyResponsive({
     this.padding,
@@ -190,9 +211,9 @@ class _ScaffoldBodyResponsive extends StatelessWidget {
   final Color? color;
 
   @override
-  Widget build(BuildContext context) => Container(
-        color: color ?? Theme.of(context).scaffoldBackgroundColor,
-        padding: padding ?? Variables.paddingScaffold,
+  Widget build(BuildContext context) => _BodyBackgroundStyled(
+        color: color,
+        padding: padding,
         child: ResponsiveLayout(
           mobile: mobile,
           tablet: tablet,
