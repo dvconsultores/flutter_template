@@ -13,10 +13,17 @@ enum ThemeType {
 
 /// Themes configuration class from app.
 class ThemeApp {
+  static TextTheme _defaultFont(BuildContext context) =>
+      GoogleFonts.latoTextTheme().merge(_getTheme(context)!.textTheme);
+
+  static TextTheme _textTheme(BuildContext context) =>
+      _defaultFont(context).copyWith(
+        bodyMedium: _defaultFont(context).bodyLarge?.copyWith(fontSize: 16),
+      );
+
   static final _themes = <ThemeType, ThemeData>{
     // ? ligth
     ThemeType.light: ThemeData.light().copyWith(
-      textTheme: GoogleFonts.latoTextTheme().merge(ThemeData.light().textTheme),
       primaryColor: Colors.amber,
       focusColor: const Color.fromARGB(255, 255, 17, 0),
       disabledColor: const Color.fromARGB(255, 209, 175, 172),
@@ -70,6 +77,9 @@ class ThemeApp {
     ),
   };
 
+  static ThemeData? _getTheme(BuildContext context) =>
+      _themes[(context).watch<MainProvider>().appTheme];
+
   ///* Getter to current theme name.
   static ThemeType get theme =>
       globalNavigatorKey.currentContext!.watch<MainProvider>().appTheme;
@@ -79,10 +89,11 @@ class ThemeApp {
       'assets/themes/${(context ?? globalNavigatorKey.currentContext!).watch<MainProvider>().appTheme.name}';
 
   ///* Getter to current themeData.
-  static ThemeData of(BuildContext? context) =>
-      _themes[(context ?? globalNavigatorKey.currentContext!)
-          .watch<MainProvider>()
-          .appTheme]!;
+  static ThemeData of(BuildContext? context) {
+    final ctx = context ?? globalNavigatorKey.currentContext!;
+
+    return _getTheme(ctx)!.copyWith(textTheme: _textTheme(ctx));
+  }
 
   ///* Switch between themeData.
   static void switchTheme(BuildContext? context, ThemeType themeType) =>
