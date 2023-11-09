@@ -11,22 +11,24 @@ class _BackgroundStyled extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-        width: double.maxFinite,
-        height: double.maxFinite,
-        padding: padding ?? Variables.paddingScaffold,
-        decoration: const BoxDecoration(
-          gradient: SweepGradient(
-            center: Alignment.center,
-            transform: GradientRotation(-10.5),
-            colors: [
-              Color.fromRGBO(255, 255, 255, 0.53),
-              Color.fromRGBO(220, 220, 220, 0.48),
-              Color.fromRGBO(36, 200, 255, 0.35),
-              Color(0xFFF6F6F7),
-            ],
-            stops: [0, 0.333, 0.666, 1],
-          ),
-        ));
+      width: double.maxFinite,
+      height: double.maxFinite,
+      padding: padding ?? Variables.paddingScaffold,
+      decoration: const BoxDecoration(
+        gradient: SweepGradient(
+          center: Alignment.center,
+          transform: GradientRotation(-10.5),
+          colors: [
+            Color.fromRGBO(255, 255, 255, 0.53),
+            Color.fromRGBO(220, 220, 220, 0.48),
+            Color.fromRGBO(36, 200, 255, 0.35),
+            Color(0xFFF6F6F7),
+          ],
+          stops: [0, 0.333, 0.666, 1],
+        ),
+      ),
+      child: child,
+    );
   }
 }
 
