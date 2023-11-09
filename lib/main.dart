@@ -4,6 +4,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_detextre4/blocs/main_bloc.dart';
 import 'package:flutter_detextre4/utils/config/router_config.dart';
 import 'package:flutter_detextre4/utils/config/session_timeout_config.dart';
+import 'package:flutter_detextre4/utils/general/variables.dart';
 import 'package:flutter_detextre4/utils/helper_widgets/restart_widget.dart';
 import 'package:flutter_detextre4/main_provider.dart';
 import 'package:flutter_detextre4/utils/config/config.dart';
@@ -90,13 +91,13 @@ class _AppState extends State<App> {
         return SessionTimeoutManager(
           sessionConfig: sessionTimeoutConfig.instance,
           child: ScreenUtilInit(
-              designSize: const Size(360, 690),
+              designSize: Variables.mSize,
               builder: (context, child) {
                 return MaterialApp.router(
                   scaffoldMessengerKey: globalScaffoldMessengerKey,
                   locale: value.locale,
                   debugShowCheckedModeBanner: true,
-                  title: 'Flutter Demo',
+                  title: AppName.capitalize.value,
                   theme: ThemeApp.of(context), // * Theme switcher
                   localizationsDelegates:
                       AppLocalizations.localizationsDelegates,

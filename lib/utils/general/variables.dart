@@ -5,5 +5,6 @@ mixin Variables {
   // * fetching
   static const requestTiming = 10;
   // * Sizing
+  static const mSize = Size(360, 690);
   static const paddingScaffold = EdgeInsets.all(12.0);
 }
