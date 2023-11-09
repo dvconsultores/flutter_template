@@ -1,6 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_detextre4/utils/config/config.dart';
+import 'package:flutter_detextre4/utils/config/theme.dart';
 import 'package:skeletons/skeletons.dart';
 
 // ? text extension

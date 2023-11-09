@@ -3,7 +3,7 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter_detextre4/main_provider.dart';
-import 'package:flutter_detextre4/utils/config/config.dart';
+import 'package:flutter_detextre4/utils/config/theme.dart';
 import 'package:flutter_detextre4/utils/helper_widgets/will_pop_custom.dart';
 import 'package:provider/provider.dart';
 

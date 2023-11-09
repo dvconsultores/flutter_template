@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_detextre4/utils/config/config.dart';
 import 'package:flutter_detextre4/routes/test_web_sockets_page.dart';
+import 'package:flutter_detextre4/utils/config/theme.dart';
 import 'package:go_router/go_router.dart';
 
 class AppDrawer extends StatelessWidget {

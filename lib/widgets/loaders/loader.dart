@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_detextre4/main.dart';
-import 'package:flutter_detextre4/utils/config/config.dart';
+import 'package:flutter_detextre4/utils/config/theme.dart';
 import 'package:flutter_detextre4/utils/helper_widgets/will_pop_custom.dart';
 
 /// Global loader used for asyncronous process.

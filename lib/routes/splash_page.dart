@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_detextre4/utils/config/router_config.dart';
-import 'package:flutter_detextre4/utils/config/config.dart';
 import 'dart:math' as math;
+
+import 'package:flutter_detextre4/utils/config/theme.dart';
 
 class SplashPage extends StatefulWidget {
   const SplashPage({super.key});
