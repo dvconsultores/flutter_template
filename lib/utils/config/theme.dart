@@ -11,82 +11,89 @@ enum ThemeType {
   dark;
 }
 
-///? A Collection of app font families.
-enum FontFamily {
-  lato("Lato_regular");
+///? A Mixin to getter some weigth of current font families.
+/// use like `FontFamily.lato("400")`
+mixin FontFamily {
+  static final _conversion = {
+    "400": "regular",
+  };
 
-  const FontFamily(this.value);
-  final String value;
+  static String lato(String value) => 'Lato_${_conversion[value] ?? value}';
 }
 
 /// Themes configuration class from app.
 class ThemeApp {
-  static TextTheme _defaultFont(BuildContext context) =>
-      GoogleFonts.latoTextTheme().merge(_getTheme(context)!.textTheme);
+  static Map<ThemeType, ThemeData> get _themes {
+    final ligthTheme = ThemeData.light();
+    final darkTheme = ThemeData.dark();
 
-  static TextTheme _textTheme(BuildContext context) =>
-      _defaultFont(context).copyWith(
-        bodyMedium: _defaultFont(context).bodyLarge?.copyWith(fontSize: 16),
-      );
+    return {
+      // ? ligth
+      ThemeType.light: ligthTheme.copyWith(
+        // text config
+        textTheme: GoogleFonts.latoTextTheme(ligthTheme.textTheme.copyWith(
+          bodyMedium: ligthTheme.textTheme.bodyLarge?.copyWith(fontSize: 16),
+        )),
 
-  static final _themes = <ThemeType, ThemeData>{
-    // ? ligth
-    ThemeType.light: ThemeData.light().copyWith(
-      primaryColor: Colors.amber,
-      focusColor: const Color.fromARGB(255, 255, 17, 0),
-      disabledColor: const Color.fromARGB(255, 209, 175, 172),
-      bottomNavigationBarTheme: const BottomNavigationBarThemeData(
-        backgroundColor: Color.fromARGB(255, 231, 225, 225),
-      ),
-      colorScheme: const ColorScheme.light(
-        background: Colors.white,
-        primary: Colors.amber,
-        secondary: Colors.red,
-        tertiary: Colors.deepPurpleAccent,
-        error: Colors.red,
-      ),
-      extensions: const <ThemeExtension<dynamic>>[
-        ThemeDataColorExtension(
-          text: Colors.black,
-          accent: Colors.red,
-          success: Colors.green,
+        // color config
+        primaryColor: Colors.amber,
+        focusColor: const Color.fromARGB(255, 255, 17, 0),
+        disabledColor: const Color.fromARGB(255, 209, 175, 172),
+        bottomNavigationBarTheme: const BottomNavigationBarThemeData(
+          backgroundColor: Color.fromARGB(255, 231, 225, 225),
         ),
-        ThemeDataStyleExtension(
-          customText: TextStyle(),
+        colorScheme: const ColorScheme.light(
+          background: Colors.white,
+          primary: Colors.amber,
+          secondary: Colors.red,
+          tertiary: Colors.deepPurpleAccent,
+          error: Colors.red,
         ),
-      ],
-    ),
+        extensions: const <ThemeExtension<dynamic>>[
+          ThemeDataColorExtension(
+            text: Colors.black,
+            accent: Colors.red,
+            success: Colors.green,
+          ),
+          ThemeDataStyleExtension(
+            customText: TextStyle(),
+          ),
+        ],
+      ),
 
-    // ? dark
-    ThemeType.dark: ThemeData.dark().copyWith(
-      textTheme: GoogleFonts.latoTextTheme().merge(ThemeData.dark().textTheme),
-      primaryColor: Colors.pink,
-      focusColor: const Color.fromARGB(255, 0, 32, 215),
-      disabledColor: const Color.fromARGB(255, 138, 146, 191),
-      bottomNavigationBarTheme: const BottomNavigationBarThemeData(
-        backgroundColor: Color.fromARGB(255, 39, 37, 37),
-      ),
-      colorScheme: const ColorScheme.dark(
-        primary: Colors.pink,
-        secondary: Colors.red,
-        tertiary: Colors.deepPurpleAccent,
-        error: Colors.red,
-      ),
-      extensions: const <ThemeExtension<dynamic>>[
-        ThemeDataColorExtension(
-          text: Colors.white,
-          accent: Colors.indigo,
-          success: Colors.green,
-        ),
-        ThemeDataStyleExtension(
-          customText: TextStyle(),
-        ),
-      ],
-    ),
-  };
+      // ? dark
+      ThemeType.dark: darkTheme.copyWith(
+        // text config
+        textTheme: GoogleFonts.latoTextTheme(darkTheme.textTheme.copyWith(
+          bodyMedium: ligthTheme.textTheme.bodyLarge?.copyWith(fontSize: 16),
+        )),
 
-  static ThemeData? _getTheme(BuildContext context) =>
-      _themes[(context).watch<MainProvider>().appTheme];
+        // color config
+        primaryColor: Colors.pink,
+        focusColor: const Color.fromARGB(255, 0, 32, 215),
+        disabledColor: const Color.fromARGB(255, 138, 146, 191),
+        bottomNavigationBarTheme: const BottomNavigationBarThemeData(
+          backgroundColor: Color.fromARGB(255, 39, 37, 37),
+        ),
+        colorScheme: const ColorScheme.dark(
+          primary: Colors.pink,
+          secondary: Colors.red,
+          tertiary: Colors.deepPurpleAccent,
+          error: Colors.red,
+        ),
+        extensions: const <ThemeExtension<dynamic>>[
+          ThemeDataColorExtension(
+            text: Colors.white,
+            accent: Colors.indigo,
+            success: Colors.green,
+          ),
+          ThemeDataStyleExtension(
+            customText: TextStyle(),
+          ),
+        ],
+      ),
+    };
+  }
 
   ///* Getter to current theme name.
   static ThemeType get theme =>
@@ -99,8 +106,7 @@ class ThemeApp {
   ///* Getter to current themeData.
   static ThemeData of(BuildContext? context) {
     final ctx = context ?? globalNavigatorKey.currentContext!;
-
-    return _getTheme(ctx)!.copyWith(textTheme: _textTheme(ctx));
+    return _themes[ctx.watch<MainProvider>().appTheme]!;
   }
 
   ///* Switch between themeData.
