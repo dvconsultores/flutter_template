@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_detextre4/repositories/auth_api.dart';
+import 'package:flutter_detextre4/widgets/button.dart';
 import 'package:flutter_detextre4/widgets/scaffold.dart';
 import 'package:flutter_detextre4/utils/helper_widgets/responsive_layout.dart';
 
@@ -49,9 +50,10 @@ class _LogInPageState extends State<LogInPage>
             style: Theme.of(context).textTheme.displayMedium,
           ),
         ),
-        TextButton(
+        Button(
+          width: 200,
+          text: "Login Button",
           onPressed: authApi.signIn,
-          child: const Text("Login Button", style: TextStyle(fontSize: 25)),
         ),
       ]),
     );

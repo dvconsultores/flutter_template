@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_detextre4/utils/config/theme.dart';
+import 'package:flutter_detextre4/widgets/button.dart';
 import 'package:flutter_detextre4/widgets/scaffold.dart';
 import 'package:flutter_detextre4/utils/config/config.dart';
 import 'package:flutter_detextre4/utils/extensions/widget_extensions.dart';
@@ -49,14 +50,9 @@ class _Page1State extends State<_Page1> {
     return Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
-          TextButton(
-            child: Text(
-              "Change language: ${AppLocalizations.of(context)!.helloWorld}",
-              style: Theme.of(context).textTheme.bodyLarge!.copyWith(
-                    color: ThemeApp.colors(context).primary,
-                    fontSize: 14,
-                  ),
-            ),
+          Button(
+            text:
+                "Change language: ${AppLocalizations.of(context)!.helloWorld}",
             onPressed: () {
               AppLocale.locale == LanguageList.en.locale
                   ? AppLocale.changeLanguage(LanguageList.es)
@@ -83,15 +79,15 @@ class _Page1State extends State<_Page1> {
             style: Theme.of(context).textTheme.displaySmall,
           ),
           Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-            IconButton(
+            Button.icon(
               onPressed: () => ThemeApp.switchTheme(context, ThemeType.light),
               icon: Icon(
                 Icons.light_mode,
-                color: ThemeApp.colors(context).primary,
+                color: ThemeApp.colors(context).tertiary,
               ),
             ),
             const Gap(20).row,
-            IconButton(
+            Button.icon(
               onPressed: () => ThemeApp.switchTheme(context, ThemeType.dark),
               icon: Icon(
                 Icons.dark_mode,

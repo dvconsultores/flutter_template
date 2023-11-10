@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_detextre4/utils/config/theme.dart';
+import 'package:flutter_detextre4/utils/helper_widgets/gap.dart';
 import 'package:flutter_detextre4/widgets/loaders/custom_circular_progress_indicator.dart';
 
 class Button extends StatelessWidget {
@@ -10,10 +11,11 @@ class Button extends StatelessWidget {
     this.textStyle,
     this.loading = false,
     this.disabled = false,
-    this.width = 100,
+    this.width,
     this.height = 45,
     this.shape,
     this.borderRadius = const BorderRadius.all(Radius.circular(40)),
+    this.borderSide = BorderSide.none,
     this.boxShadow = const [
       BoxShadow(
         offset: Offset(-1, 6),
@@ -27,21 +29,38 @@ class Button extends StatelessWidget {
     this.bgColorDisabled,
     this.padding,
     this.child,
+    this.leading,
+    this.trailing,
+    this.buttonAxisAlignment,
+    this.gap = 10,
+    this.leadingGap,
+    this.trailingGap,
+    this.textSoftWrap,
+    this.textOverflow,
   });
   final String text;
   final void Function()? onPressed;
   final TextStyle? textStyle;
   final bool loading;
   final bool disabled;
-  final double width;
+  final double? width;
   final double height;
   final BorderRadius borderRadius;
+  final BorderSide borderSide;
   final OutlinedBorder? shape;
   final List<BoxShadow> boxShadow;
   final Color color;
   final Color? bgColor;
   final Color? bgColorDisabled;
   final EdgeInsets? padding;
+  final MainAxisAlignment? buttonAxisAlignment;
+  final double gap;
+  final double? leadingGap;
+  final double? trailingGap;
+  final Widget? leading;
+  final Widget? trailing;
+  final bool? textSoftWrap;
+  final TextOverflow? textOverflow;
   final Widget? child;
 
   static Button icon({
@@ -50,7 +69,8 @@ class Button extends StatelessWidget {
     bool disabled = false,
     double size = 45,
     BorderRadius borderRadius = const BorderRadius.all(Radius.circular(100)),
-    OutlinedBorder? shape = const CircleBorder(),
+    BorderSide borderSide = BorderSide.none,
+    OutlinedBorder? shape,
     List<BoxShadow> boxShadow = const [
       BoxShadow(
         offset: Offset(0, 6),
@@ -69,7 +89,7 @@ class Button extends StatelessWidget {
         text: "",
         width: size,
         height: size,
-        shape: shape,
+        shape: shape ?? CircleBorder(side: borderSide),
         borderRadius: borderRadius,
         boxShadow: boxShadow,
         loading: loading,
@@ -86,6 +106,7 @@ class Button extends StatelessWidget {
   Widget build(BuildContext context) {
     final ts = textStyle ??
         TextStyle(
+          fontSize: 14,
           letterSpacing: 3.9,
           fontWeight: FontWeight.w700,
           fontFamily: FontFamily.lato("700"),
@@ -101,6 +122,7 @@ class Button extends StatelessWidget {
       child: ElevatedButton(
         onPressed: disabled || loading ? null : onPressed,
         style: ButtonStyle(
+          elevation: const MaterialStatePropertyAll(0),
           padding: MaterialStatePropertyAll(padding),
           foregroundColor: MaterialStatePropertyAll(color),
           backgroundColor: disabled
@@ -109,7 +131,10 @@ class Button extends StatelessWidget {
               : MaterialStatePropertyAll(
                   bgColor ?? ThemeApp.colors(context).primary),
           shape: MaterialStatePropertyAll(
-              shape ?? RoundedRectangleBorder(borderRadius: borderRadius)),
+            shape ??
+                RoundedRectangleBorder(
+                    borderRadius: borderRadius, side: borderSide),
+          ),
         ),
         child: loading
             ? SizedBox(
@@ -117,7 +142,20 @@ class Button extends StatelessWidget {
                 height: height / 2,
                 child: const CustomCircularProgressIndicator(strokeWidth: 3),
               )
-            : child ?? Text(text, style: ts),
+            : child ??
+                Row(
+                    mainAxisAlignment:
+                        buttonAxisAlignment ?? MainAxisAlignment.center,
+                    children: [
+                      if (leading != null) leading!,
+                      Gap(leadingGap ?? gap).row,
+                      Text(text,
+                          softWrap: textSoftWrap,
+                          overflow: textOverflow,
+                          style: ts),
+                      Gap(trailingGap ?? gap).row,
+                      if (trailing != null) trailing!,
+                    ]),
       ),
     );
   }

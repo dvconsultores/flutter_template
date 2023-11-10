@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_detextre4/routes/test_web_sockets_page.dart';
-import 'package:flutter_detextre4/utils/config/theme.dart';
+import 'package:flutter_detextre4/widgets/button.dart';
 import 'package:go_router/go_router.dart';
 
 class AppDrawer extends StatelessWidget {
@@ -27,13 +27,9 @@ class AppDrawer extends StatelessWidget {
         child: Column(
       children: [
         for (final element in items.entries) ...[
-          TextButton(
+          Button(
+            text: element.key,
             onPressed: () => goToRouterPage(element.value),
-            child: Text(element.key,
-                style: TextStyle(
-                  fontSize: 20,
-                  color: ThemeApp.colors(context).focusColor,
-                )),
           ),
         ],
       ],
