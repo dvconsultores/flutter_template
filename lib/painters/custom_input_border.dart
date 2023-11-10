@@ -4,8 +4,8 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'dart:math' as math;
 
-class ShadowInputBorder extends OutlineInputBorder {
-  const ShadowInputBorder({
+class CustomInputBorder extends OutlineInputBorder {
+  const CustomInputBorder({
     BorderSide borderSide = const BorderSide(),
     BorderRadius borderRadius = const BorderRadius.all(Radius.circular(10)),
     gapPadding = 4.0,
