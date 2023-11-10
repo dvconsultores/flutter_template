@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_detextre4/routes/test_web_sockets_page.dart';
+import 'package:flutter_detextre4/pages/test_web_sockets_page.dart';
 import 'package:flutter_detextre4/widgets/button.dart';
 import 'package:go_router/go_router.dart';
 

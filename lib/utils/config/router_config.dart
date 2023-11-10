@@ -8,7 +8,7 @@ import 'package:flutter_detextre4/routes/splash_page.dart';
 import 'package:flutter_detextre4/main.dart';
 import 'package:flutter_detextre4/routes/shell_routes/home/home_page.dart';
 import 'package:flutter_detextre4/routes/shell_routes/profile/pages/user_page.dart';
-import 'package:flutter_detextre4/routes/test_web_sockets_page.dart';
+import 'package:flutter_detextre4/pages/test_web_sockets_page.dart';
 import 'package:flutter_detextre4/utils/helper_widgets/custom_transition_wrapper.dart';
 import 'package:flutter_detextre4/utils/services/local_data/secure_storage_service.dart';
 import 'package:go_router/go_router.dart';
