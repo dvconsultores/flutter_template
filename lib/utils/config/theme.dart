@@ -48,6 +48,7 @@ class ThemeApp {
           secondary: Colors.red,
           tertiary: Colors.deepPurpleAccent,
           error: Colors.red,
+          outline: Colors.black,
         ),
         extensions: const <ThemeExtension<dynamic>>[
           ThemeDataColorExtension(
@@ -80,6 +81,7 @@ class ThemeApp {
           secondary: Colors.red,
           tertiary: Colors.deepPurpleAccent,
           error: Colors.red,
+          outline: Colors.white,
         ),
         extensions: const <ThemeExtension<dynamic>>[
           ThemeDataColorExtension(
