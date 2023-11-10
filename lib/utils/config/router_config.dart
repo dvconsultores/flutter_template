@@ -19,8 +19,6 @@ Page _pageBuilder(Widget child) => CustomTransitionPage(
           CustomTransitionWrapper(animation: animation, child: child),
     );
 
-final requireAuth = !router.location.contains('/auth');
-
 final GoRouter router = GoRouter(
     initialLocation: kIsWeb ? "/" : "/splash",
     // errorBuilder: (context, state) {
@@ -33,7 +31,7 @@ final GoRouter router = GoRouter(
 
       if (state.location == "/splash") {
         return null;
-      } else if (requireAuth && !isLogged) {
+      } else if (router.requireAuth && !isLogged) {
         return "/auth/login";
       }
 
@@ -100,6 +98,9 @@ final GoRouter router = GoRouter(
 
 //! //FIXME search better practices
 extension GoRouterExtension on GoRouter {
+  /// Getter yo know if current route require authentication
+  get requireAuth => !router.location.contains('/auth');
+
   /// Get list of main routes on the [ShellRoute].
   List<RouteBase> get shellRoutes => router.configuration.routes
       .firstWhere((element) => element is ShellRoute)

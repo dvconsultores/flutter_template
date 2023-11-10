@@ -15,7 +15,7 @@ class SessionTimeoutConfig {
       );
 
   void listen() => instance.stream.listen((timeoutEvent) {
-        if (!requireAuth) return;
+        if (!router.requireAuth) return;
 
         switch (timeoutEvent) {
           case SessionTimeoutState.userInactivityTimeout:
