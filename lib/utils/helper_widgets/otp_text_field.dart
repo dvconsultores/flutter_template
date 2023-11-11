@@ -114,8 +114,13 @@ class _OtpTextFieldState extends State<OtpTextField> {
     for (var controller in _textControllers) {
       controller?.dispose();
     }
+    for (var nodes in _focusNodes) {
+      nodes?.removeListener(updateState);
+    }
     super.dispose();
   }
+
+  void updateState() => setState(() {});
 
   OutlineInputBorder outlineBorder(Color color) {
     return OutlineInputBorder(
@@ -168,7 +173,7 @@ class _OtpTextFieldState extends State<OtpTextField> {
   void addFocusNodeToEachTextField({required int index}) {
     if (_focusNodes[index] == null) _focusNodes[index] = FocusNode();
 
-    _focusNodes[index]?.addListener(() => setState(() {}));
+    _focusNodes[index]?.addListener(updateState);
   }
 
   void addTextEditingControllerToEachTextField({required int index}) {
