@@ -2,22 +2,18 @@ import 'package:flutter/material.dart';
 import 'package:flutter_detextre4/utils/config/theme.dart';
 import 'package:flutter_detextre4/utils/extensions/type_extensions.dart';
 import 'package:flutter_detextre4/utils/helper_widgets/gap.dart';
-import 'package:flutter_detextre4/widgets/loaders/custom_circular_progress_indicator.dart';
 
-class Button extends StatelessWidget {
-  const Button({
+class ButtonAspect extends StatelessWidget {
+  const ButtonAspect({
     super.key,
-    required this.onPressed,
     this.text,
     this.textStyle,
-    this.loading = false,
-    this.disabled = false,
     this.width,
     this.height = 45,
     this.constraints,
     this.shape,
     this.borderRadius = const BorderRadius.all(Radius.circular(40)),
-    this.borderSide = BorderSide.none,
+    this.border,
     this.boxShadow = const [
       BoxShadow(
         offset: Offset(-1, 6),
@@ -47,16 +43,13 @@ class Button extends StatelessWidget {
     this.textExpanded = false,
   });
   final String? text;
-  final void Function()? onPressed;
   final TextStyle? textStyle;
-  final bool loading;
-  final bool disabled;
   final double? width;
   final double height;
   final BoxConstraints? constraints;
-  final BorderRadius borderRadius;
-  final BorderSide borderSide;
-  final OutlinedBorder? shape;
+  final BorderRadius? borderRadius;
+  final BoxBorder? border;
+  final BoxShape? shape;
   final List<BoxShadow> boxShadow;
   final Color color;
   final Color? bgColor;
@@ -78,15 +71,12 @@ class Button extends StatelessWidget {
   final Widget? content;
   final Widget? child;
 
-  static Button icon({
-    required void Function()? onPressed,
-    bool loading = false,
-    bool disabled = false,
+  static ButtonAspect icon({
     double size = 45,
     BoxConstraints? constraints,
-    BorderRadius borderRadius = const BorderRadius.all(Radius.circular(100)),
-    BorderSide borderSide = BorderSide.none,
-    OutlinedBorder? shape,
+    BorderRadius? borderRadius,
+    BoxBorder? border,
+    BoxShape? shape,
     List<BoxShadow> boxShadow = const [
       BoxShadow(
         offset: Offset(0, 6),
@@ -102,21 +92,18 @@ class Button extends StatelessWidget {
     EdgeInsets? margin,
     required Widget? icon,
   }) =>
-      Button(
+      ButtonAspect(
         width: size,
         height: size,
-        shape: shape ?? CircleBorder(side: borderSide),
-        borderSide: borderSide,
+        shape: shape ?? BoxShape.circle,
+        border: border,
         margin: margin,
         borderRadius: borderRadius,
         boxShadow: boxShadow,
-        loading: loading,
-        disabled: disabled,
         color: color,
         bgColor: bgColor,
         bgColorDisabled: bgColorDisabled,
         padding: padding,
-        onPressed: onPressed,
         constraints: constraints,
         child: icon,
       );
@@ -125,6 +112,7 @@ class Button extends StatelessWidget {
   Widget build(BuildContext context) {
     final ts = textStyle ??
         TextStyle(
+          color: color,
           fontSize: 14,
           letterSpacing: 3.9,
           fontWeight: FontWeight.w700,
@@ -141,61 +129,41 @@ class Button extends StatelessWidget {
 
     return Container(
       margin: margin,
+      padding: padding,
       width: width,
       height: height,
       constraints: constraints,
       decoration: BoxDecoration(
+        color: bgColor ?? ThemeApp.colors(context).primary,
+        shape: shape ?? BoxShape.rectangle,
         borderRadius: borderRadius,
+        border: border,
         boxShadow: boxShadow,
       ),
-      child: ElevatedButton(
-        onPressed: disabled || loading ? null : onPressed,
-        style: ButtonStyle(
-          elevation: const MaterialStatePropertyAll(0),
-          padding: MaterialStatePropertyAll(padding),
-          foregroundColor: MaterialStatePropertyAll(color),
-          backgroundColor: disabled
-              ? MaterialStatePropertyAll(
-                  bgColorDisabled ?? ThemeApp.colors(context).disabledColor)
-              : MaterialStatePropertyAll(
-                  bgColor ?? ThemeApp.colors(context).primary),
-          shape: MaterialStatePropertyAll(
-            shape ??
-                RoundedRectangleBorder(
-                    borderRadius: borderRadius, side: borderSide),
-          ),
-        ),
-        child: loading
-            ? SizedBox(
-                width: height / 2,
-                height: height / 2,
-                child: const CustomCircularProgressIndicator(strokeWidth: 3),
-              )
-            : child ??
-                Row(
-                    mainAxisAlignment:
-                        buttonAxisAlignment ?? MainAxisAlignment.center,
-                    children: [
-                      if (leading != null) leading!,
-                      //
-                      if (leadingSpacer)
-                        const Spacer()
-                      else if (leadingGap != null || gap != null)
-                        Gap(leadingGap ?? gap!).row,
-                      //
-                      if (content != null)
-                        content!
-                      else if (text.hasValue)
-                        textExpanded ? Expanded(child: widgetText) : widgetText,
-                      //
-                      if (trailingSpacer)
-                        const Spacer()
-                      else if (trailingGap != null || gap != null)
-                        Gap(trailingGap ?? gap!).row,
-                      //
-                      if (trailing != null) trailing!,
-                    ]),
-      ),
+      child: child ??
+          Row(
+              mainAxisAlignment:
+                  buttonAxisAlignment ?? MainAxisAlignment.center,
+              children: [
+                if (leading != null) leading!,
+                //
+                if (leadingSpacer)
+                  const Spacer()
+                else if (leadingGap != null || gap != null)
+                  Gap(leadingGap ?? gap!).row,
+                //
+                if (content != null)
+                  content!
+                else if (text.hasValue)
+                  textExpanded ? Expanded(child: widgetText) : widgetText,
+                //
+                if (trailingSpacer)
+                  const Spacer()
+                else if (trailingGap != null || gap != null)
+                  Gap(trailingGap ?? gap!).row,
+                //
+                if (trailing != null) trailing!,
+              ]),
     );
   }
 }
