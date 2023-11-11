@@ -22,6 +22,9 @@ Future<void> openUrl(String url) async {
   }
 }
 
+/// * Used to get a function instance inside widget building
+Widget buildWidget(Widget Function() callback) => callback();
+
 // * App snackbar
 enum ColorSnackbarState {
   neutral(
