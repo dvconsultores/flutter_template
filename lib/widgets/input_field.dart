@@ -35,10 +35,18 @@ class InputField extends StatelessWidget {
     this.onTapOutside,
     this.borderRadius = const BorderRadius.all(Radius.circular(40)),
     this.borderWidth = 1,
-    this.borderColor = Colors.black,
+    this.borderColor,
+    this.disabledBorderColor,
+    this.errorBorderColor,
+    this.focusedBorderColor,
+    this.underline = false,
     this.floatingLabelBehavior = FloatingLabelBehavior.never,
     this.contentPadding,
     this.height,
+    this.textStyle,
+    this.hintStyle,
+    this.labelStyle,
+    this.floatingLabelStyle,
   });
   final AutovalidateMode? autovalidateMode;
   final TextEditingController? controller;
@@ -69,10 +77,18 @@ class InputField extends StatelessWidget {
   final void Function(PointerDownEvent event)? onTapOutside;
   final BorderRadius borderRadius;
   final double borderWidth;
-  final Color borderColor;
+  final Color? borderColor;
+  final Color? disabledBorderColor;
+  final Color? errorBorderColor;
+  final Color? focusedBorderColor;
+  final bool underline;
   final FloatingLabelBehavior floatingLabelBehavior;
   final EdgeInsets? contentPadding;
   final double? height;
+  final TextStyle? textStyle;
+  final TextStyle? hintStyle;
+  final TextStyle? labelStyle;
+  final TextStyle? floatingLabelStyle;
 
   static InputField textBox({
     TextEditingController? controller,
@@ -100,7 +116,11 @@ class InputField extends StatelessWidget {
     EdgeInsetsGeometry? prefixPadding,
     BorderRadius borderRadius = const BorderRadius.all(Radius.circular(40)),
     double borderWidth = 1,
-    Color borderColor = Colors.black,
+    Color? borderColor,
+    Color? disabledBorderColor,
+    Color? errorBorderColor,
+    Color? focusedBorderColor,
+    bool underline = false,
     FloatingLabelBehavior floatingLabelBehavior = FloatingLabelBehavior.never,
     EdgeInsets? contentPadding,
     bool formatByComma = true,
@@ -108,6 +128,10 @@ class InputField extends StatelessWidget {
     int maxDecimals = 2,
     double maxWidthPrefix = double.infinity,
     double? height,
+    TextStyle? textStyle,
+    TextStyle? hintStyle,
+    TextStyle? labelStyle,
+    TextStyle? floatingLabelStyle,
   }) =>
       InputField(
         onTapOutside: onTapOutside,
@@ -125,9 +149,13 @@ class InputField extends StatelessWidget {
         suffixIcon: suffixIcon,
         textAlign: textAlign,
         autovalidateMode: autovalidateMode,
-        borderColor: borderColor,
         borderRadius: borderRadius,
         borderWidth: borderWidth,
+        borderColor: borderColor,
+        disabledBorderColor: disabledBorderColor,
+        errorBorderColor: errorBorderColor,
+        focusedBorderColor: focusedBorderColor,
+        underline: underline,
         contentPadding: contentPadding,
         floatingLabelBehavior: floatingLabelBehavior,
         formatByComma: formatByComma,
@@ -143,27 +171,41 @@ class InputField extends StatelessWidget {
         suffix: suffix,
         validator: validator,
         height: height,
+        textStyle: textStyle,
+        hintStyle: hintStyle,
+        labelStyle: labelStyle,
+        floatingLabelStyle: floatingLabelStyle,
       );
 
   @override
   Widget build(BuildContext context) {
-    final textStyle = TextStyle(
-      color: Colors.black87,
-      fontSize: 16,
-      fontWeight: FontWeight.w400,
-      fontFamily: FontFamily.lato("400"),
-    );
+    final ts = textStyle ??
+        TextStyle(
+          color: ThemeApp.colors(context).text.withOpacity(.75),
+          fontSize: 16,
+          fontWeight: FontWeight.w400,
+          fontFamily: FontFamily.lato("400"),
+        );
 
-    final hintStyle = textStyle.copyWith(color: Colors.black, fontSize: 12);
+    final hs = hintStyle ??
+        ts.copyWith(color: ThemeApp.colors(context).text, fontSize: 12);
+    final ls = labelStyle ??
+        ts.copyWith(color: ThemeApp.colors(context).text, fontSize: 12);
+    final fls = floatingLabelStyle ?? ls;
 
-    final labelStyle = textStyle.copyWith(color: Colors.black, fontSize: 12);
+    OutlineInputBorder outlinedBorder(Color color) => OutlineInputBorder(
+        borderSide: BorderSide(width: borderWidth, color: color),
+        borderRadius: borderRadius);
 
-    final floatingLabelStyle = labelStyle;
+    UnderlineInputBorder underlineBorder(Color color) => UnderlineInputBorder(
+        borderSide: BorderSide(width: borderWidth, color: color),
+        borderRadius: borderRadius);
 
-    final border = OutlineInputBorder(
-      borderSide: BorderSide(color: borderColor, width: borderWidth),
-      borderRadius: borderRadius,
-    );
+    final border = borderColor ?? Theme.of(context).colorScheme.outline;
+    final disabledBorder =
+        disabledBorderColor ?? Theme.of(context).disabledColor;
+    final errorBorder = errorBorderColor ?? Theme.of(context).colorScheme.error;
+    final focusedBorder = focusedBorderColor ?? Theme.of(context).focusColor;
 
     final expanded = height != null;
 
@@ -200,22 +242,32 @@ class InputField extends StatelessWidget {
             if (inputFormatters != null && inputFormatters!.isNotEmpty)
               ...inputFormatters!
           ],
-          style: textStyle,
+          style: ts,
           expands: expanded,
           decoration: InputDecoration(
             prefixIconConstraints: BoxConstraints(maxWidth: maxWidthPrefix),
             enabled: !disabled,
             hintText: hintText,
-            hintStyle: hintStyle,
+            hintStyle: hs,
             labelText: labelText,
-            labelStyle: labelStyle,
-            floatingLabelStyle: floatingLabelStyle,
+            labelStyle: ls,
+            floatingLabelStyle: fls,
             floatingLabelBehavior: floatingLabelBehavior,
             filled: true,
             fillColor: ThemeApp.colors(context).tertiary,
-            border: border,
-            enabledBorder: border,
-            disabledBorder: border,
+            border:
+                underline ? underlineBorder(border) : outlinedBorder(border),
+            enabledBorder:
+                underline ? underlineBorder(border) : outlinedBorder(border),
+            disabledBorder: underline
+                ? underlineBorder(disabledBorder)
+                : outlinedBorder(disabledBorder),
+            errorBorder: underline
+                ? underlineBorder(errorBorder)
+                : outlinedBorder(errorBorder),
+            focusedBorder: underline
+                ? underlineBorder(focusedBorder)
+                : outlinedBorder(focusedBorder),
             prefix: prefix,
             prefixIcon: prefixIcon != null
                 ? IntrinsicWidth(
