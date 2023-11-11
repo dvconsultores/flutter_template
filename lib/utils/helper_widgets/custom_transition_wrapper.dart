@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:wallet_p2p/utils/helper_widgets/circle_clipper.dart';
+import 'package:flutter_detextre4/utils/helper_widgets/circle_clipper.dart';
 
 Animation<double> _animation(BuildContext context) =>
     ModalRoute.of(context)!.animation!;
