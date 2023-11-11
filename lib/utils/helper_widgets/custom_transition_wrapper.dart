@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_detextre4/utils/helper_widgets/circle_clipper.dart';
+import 'package:wallet_p2p/utils/helper_widgets/circle_clipper.dart';
 
 Animation<double> _animation(BuildContext context) =>
     ModalRoute.of(context)!.animation!;
@@ -43,6 +43,8 @@ class CustomTransitionWrapper extends StatelessWidget {
     Offset? offset,
     required double radiusBegin,
     required double radiusEnd,
+    double opacityBegin = .6,
+    double opacityEnd = 1,
     Animation<double>? animation,
   }) =>
       _CircleFade(
@@ -50,6 +52,8 @@ class CustomTransitionWrapper extends StatelessWidget {
         offset: offset,
         radiusBegin: radiusBegin,
         radiusEnd: radiusEnd,
+        opacityBegin: opacityBegin,
+        opacityEnd: opacityEnd,
         animation: animation,
         child: child,
       );
@@ -82,12 +86,16 @@ class _CircleFade extends StatelessWidget {
     required this.radiusBegin,
     required this.radiusEnd,
     required this.animation,
+    required this.opacityBegin,
+    required this.opacityEnd,
   });
   final Widget child;
   final Duration? duration;
   final Offset? offset;
   final double radiusBegin;
   final double radiusEnd;
+  final double opacityBegin;
+  final double opacityEnd;
   final Animation<double>? animation;
 
   @override
@@ -97,7 +105,7 @@ class _CircleFade extends StatelessWidget {
     return AnimatedBuilder(
       animation: animated,
       builder: (context, child) {
-        final Animation<double> animation = Tween<double>(
+        final Animation<double> curvedAnimation = Tween<double>(
           begin: radiusBegin,
           end: radiusEnd,
         ).animate(CurvedAnimation(
@@ -105,9 +113,20 @@ class _CircleFade extends StatelessWidget {
           curve: Curves.fastLinearToSlowEaseIn,
         ));
 
+        final Animation<double> opacityAnimation = Tween<double>(
+          begin: opacityBegin,
+          end: opacityEnd,
+        ).animate(CurvedAnimation(
+          parent: animated,
+          curve: Curves.fastLinearToSlowEaseIn,
+        ));
+
         return ClipPath(
-          clipper: CircleClipper(offset: offset, radius: animation.value),
-          child: child,
+          clipper: CircleClipper(offset: offset, radius: curvedAnimation.value),
+          child: Opacity(
+            opacity: opacityAnimation.value,
+            child: child,
+          ),
         );
       },
       child: child,
