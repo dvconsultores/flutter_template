@@ -38,18 +38,24 @@ class _BodyBackgroundStyled extends StatelessWidget {
     required this.child,
     this.color,
     this.padding,
+    required this.scrollable,
   });
   final EdgeInsetsGeometry? padding;
   final Color? color;
+  final bool scrollable;
   final Widget child;
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      color: color ?? Theme.of(context).scaffoldBackgroundColor,
-      padding: padding ?? Variables.paddingScaffold,
-      child: child,
-    );
+    final widget = Align(
+        alignment: Alignment.centerLeft,
+        child: Container(
+          color: color ?? Theme.of(context).scaffoldBackgroundColor,
+          padding: padding ?? Variables.paddingScaffold,
+          child: child,
+        ));
+
+    return scrollable ? SingleChildScrollView(child: widget) : widget;
   }
 }
 
@@ -159,15 +165,18 @@ class ScaffoldBody extends StatelessWidget {
     required this.body,
     this.padding,
     this.color,
+    this.scrollable = false,
   });
   final Widget body;
   final EdgeInsetsGeometry? padding;
+  final bool scrollable;
   final Color? color;
 
   @override
   Widget build(BuildContext context) => _BodyBackgroundStyled(
         color: color,
         padding: padding,
+        scrollable: scrollable,
         child: body,
       );
 
@@ -179,6 +188,7 @@ class ScaffoldBody extends StatelessWidget {
     Widget? Function(BuildContext context, BoxConstraints constraints)? tv,
     EdgeInsetsGeometry? padding,
     Color? color,
+    bool scrollable = false,
   }) =>
       _ScaffoldBodyResponsive(
         color: color,
@@ -187,6 +197,7 @@ class ScaffoldBody extends StatelessWidget {
         desktop: desktop,
         tablet: tablet,
         tv: tv,
+        scrollable: scrollable,
       );
 }
 
@@ -199,6 +210,7 @@ class _ScaffoldBodyResponsive extends StatelessWidget {
     this.tablet,
     this.desktop,
     this.tv,
+    required this.scrollable,
   });
   final Widget? Function(BuildContext context, BoxConstraints constraints)?
       mobile;
@@ -209,11 +221,13 @@ class _ScaffoldBodyResponsive extends StatelessWidget {
   final Widget? Function(BuildContext context, BoxConstraints constraints)? tv;
   final EdgeInsetsGeometry? padding;
   final Color? color;
+  final bool scrollable;
 
   @override
   Widget build(BuildContext context) => _BodyBackgroundStyled(
         color: color,
         padding: padding,
+        scrollable: scrollable,
         child: ResponsiveLayout(
           mobile: mobile,
           tablet: tablet,
