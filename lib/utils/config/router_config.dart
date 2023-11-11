@@ -13,9 +13,9 @@ import 'package:flutter_detextre4/utils/services/local_data/secure_storage_servi
 import 'package:go_router/go_router.dart';
 
 Page _pageBuilder(Widget child) => CustomTransitionPage(
-      child: child,
       transitionsBuilder: (context, animation, secondaryAnimation, child) =>
           CustomTransitionWrapper(animation: animation, child: child),
+      child: child,
     );
 
 final GoRouter router = GoRouter(
