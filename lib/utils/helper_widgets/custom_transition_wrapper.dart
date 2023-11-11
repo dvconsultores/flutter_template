@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_detextre4/utils/helper_widgets/circle_clipper.dart';
 
 Animation<double> _animation(BuildContext context) =>
     ModalRoute.of(context)!.animation!;
@@ -8,9 +9,11 @@ class CustomTransitionWrapper extends StatelessWidget {
     super.key,
     required this.child,
     this.animation,
+    this.secondaryAnimation,
   });
   final Widget child;
   final Animation<double>? animation;
+  final Animation<double>? secondaryAnimation;
 
   @override
   Widget build(BuildContext context) {
@@ -31,21 +34,29 @@ class CustomTransitionWrapper extends StatelessWidget {
     );
   }
 
-  static Widget rotate({
+  static Widget rotate({required Widget child, Animation<double>? animation}) =>
+      _RotateTransition(animation: animation, child: child);
+
+  static Widget circleFade({
     required Widget child,
+    Duration? duration,
+    Offset? offset,
+    required double radiusBegin,
+    required double radiusEnd,
     Animation<double>? animation,
   }) =>
-      _RotateTransition(
+      _CircleFade(
+        duration: duration,
+        offset: offset,
+        radiusBegin: radiusBegin,
+        radiusEnd: radiusEnd,
         animation: animation,
         child: child,
       );
 }
 
 class _RotateTransition extends StatelessWidget {
-  const _RotateTransition({
-    required this.child,
-    this.animation,
-  });
+  const _RotateTransition({required this.child, this.animation});
   final Widget child;
   final Animation<double>? animation;
 
@@ -58,6 +69,47 @@ class _RotateTransition extends StatelessWidget {
           curve: Curves.easeInOut,
         ),
       ),
+      child: child,
+    );
+  }
+}
+
+class _CircleFade extends StatelessWidget {
+  const _CircleFade({
+    required this.child,
+    required this.duration,
+    required this.offset,
+    required this.radiusBegin,
+    required this.radiusEnd,
+    required this.animation,
+  });
+  final Widget child;
+  final Duration? duration;
+  final Offset? offset;
+  final double radiusBegin;
+  final double radiusEnd;
+  final Animation<double>? animation;
+
+  @override
+  Widget build(BuildContext context) {
+    final animated = animation ?? _animation(context);
+
+    return AnimatedBuilder(
+      animation: animated,
+      builder: (context, child) {
+        final Animation<double> animation = Tween<double>(
+          begin: radiusBegin,
+          end: radiusEnd,
+        ).animate(CurvedAnimation(
+          parent: animated,
+          curve: Curves.fastLinearToSlowEaseIn,
+        ));
+
+        return ClipPath(
+          clipper: CircleClipper(offset: offset, radius: animation.value),
+          child: child,
+        );
+      },
       child: child,
     );
   }
