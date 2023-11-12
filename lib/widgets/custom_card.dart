@@ -4,7 +4,7 @@ class CustomCard extends StatelessWidget {
   const CustomCard({
     super.key,
     required this.child,
-    this.margin,
+    this.margin = const EdgeInsets.all(0),
     this.padding = const EdgeInsets.all(14),
     this.constraints,
     this.width,
@@ -20,7 +20,7 @@ class CustomCard extends StatelessWidget {
     this.shadowColor,
     this.surfaceTintColor,
   });
-  final EdgeInsets? margin;
+  final EdgeInsets margin;
   final EdgeInsets padding;
   final BoxConstraints? constraints;
   final double? width;
