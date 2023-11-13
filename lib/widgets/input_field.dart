@@ -18,6 +18,7 @@ class InputField extends StatelessWidget {
     this.suffixIcon,
     this.suffix,
     this.maxLines = 1,
+    this.minLines,
     this.maxLength,
     this.onChanged,
     this.validator,
@@ -61,6 +62,7 @@ class InputField extends StatelessWidget {
   final Widget? suffixIcon;
   final Widget? suffix;
   final int? maxLines;
+  final int? minLines;
   final int? maxLength;
   final void Function(String value)? onChanged;
   final String? Function(String? value)? validator;
@@ -91,7 +93,8 @@ class InputField extends StatelessWidget {
   final TextStyle? floatingLabelStyle;
 
   static Widget sizedBox({
-    double height = 45,
+    double? width,
+    double? height,
     TextEditingController? controller,
     String? labelText,
     String? hintText,
@@ -102,6 +105,8 @@ class InputField extends StatelessWidget {
     TextInputType? keyboardType,
     Widget? prefixIcon,
     Widget? suffixIcon,
+    int maxLines = 1,
+    int? minLines,
     int? maxLength,
     FocusNode? focusNode,
     void Function(String value)? onChanged,
@@ -129,54 +134,60 @@ class InputField extends StatelessWidget {
     TextStyle? hintStyle,
     TextStyle? labelStyle,
     TextStyle? floatingLabelStyle,
-  }) =>
-      SizedBox(
-        height: height,
-        child: InputField(
-          onTapOutside: onTapOutside,
-          onTap: onTap,
-          onChanged: onChanged,
-          focusNode: focusNode,
-          controller: controller,
-          hintText: hintText,
-          disabled: disabled,
-          expands: true,
-          keyboardType: numeric
-              ? const TextInputType.numberWithOptions(
-                  signed: true, decimal: true)
-              : keyboardType ?? TextInputType.text,
-          maxLines: null,
-          labelText: labelText,
-          maxLength: maxLength,
-          prefixIcon: prefixIcon,
-          suffixIcon: suffixIcon,
-          textAlign: textAlign,
-          autovalidateMode: autovalidateMode,
-          borderRadius: borderRadius,
-          borderWidth: borderWidth,
-          borderColor: borderColor,
-          disabledBorderColor: disabledBorderColor,
-          errorBorderColor: errorBorderColor,
-          focusedBorderColor: focusedBorderColor,
-          underline: underline,
-          contentPadding: contentPadding,
-          floatingLabelBehavior: floatingLabelBehavior,
-          formatByComma: formatByComma,
-          inputFormatters: inputFormatters,
-          maxWidthPrefix: maxWidthPrefix,
-          numeric: numeric,
-          obscureText: obscureText,
-          prefix: prefix,
-          prefixPadding: prefixPadding,
-          readOnly: readOnly,
-          suffix: suffix,
-          validator: validator,
-          textStyle: textStyle,
-          hintStyle: hintStyle,
-          labelStyle: labelStyle,
-          floatingLabelStyle: floatingLabelStyle,
-        ),
-      );
+  }) {
+    final expanded = height != null;
+
+    return SizedBox(
+      width: width,
+      height: height,
+      child: InputField(
+        onTapOutside: onTapOutside,
+        onTap: onTap,
+        onChanged: onChanged,
+        focusNode: focusNode,
+        controller: controller,
+        hintText: hintText,
+        disabled: disabled,
+        expands: expanded,
+        keyboardType: numeric
+            ? const TextInputType.numberWithOptions(signed: true, decimal: true)
+            : expanded && keyboardType == null
+                ? TextInputType.text
+                : keyboardType,
+        maxLines: expanded ? null : maxLines,
+        minLines: minLines,
+        labelText: labelText,
+        maxLength: maxLength,
+        prefixIcon: prefixIcon,
+        suffixIcon: suffixIcon,
+        textAlign: textAlign,
+        autovalidateMode: autovalidateMode,
+        borderRadius: borderRadius,
+        borderWidth: borderWidth,
+        borderColor: borderColor,
+        disabledBorderColor: disabledBorderColor,
+        errorBorderColor: errorBorderColor,
+        focusedBorderColor: focusedBorderColor,
+        underline: underline,
+        contentPadding: contentPadding,
+        floatingLabelBehavior: floatingLabelBehavior,
+        formatByComma: formatByComma,
+        inputFormatters: inputFormatters,
+        maxWidthPrefix: maxWidthPrefix,
+        numeric: numeric,
+        obscureText: obscureText,
+        prefix: prefix,
+        prefixPadding: prefixPadding,
+        readOnly: readOnly,
+        suffix: suffix,
+        validator: validator,
+        textStyle: textStyle,
+        hintStyle: hintStyle,
+        labelStyle: labelStyle,
+        floatingLabelStyle: floatingLabelStyle,
+      ),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -221,6 +232,7 @@ class InputField extends StatelessWidget {
         textAlign: textAlign,
         keyboardType: keyboardType,
         maxLines: maxLines,
+        minLines: minLines,
         maxLength: maxLength,
         onChanged: onChanged,
         validator: validator,
