@@ -122,24 +122,20 @@ class _OtpTextFieldState extends State<OtpTextField> {
 
   void updateState() => setState(() {});
 
-  OutlineInputBorder outlineBorder(Color color) {
-    return OutlineInputBorder(
-      borderSide: BorderSide(
-        width: widget.borderWidth,
-        color: color,
-      ),
-      borderRadius: widget.borderRadius,
-    );
-  }
-
-  UnderlineInputBorder underlineInputBorder(Color color) {
-    return UnderlineInputBorder(
-      borderSide: BorderSide(
-        color: color,
-        width: widget.borderWidth,
-      ),
-    );
-  }
+  InputBorder checkBorder(Color color) => widget.showFieldAsBox
+      ? OutlineInputBorder(
+          borderSide: BorderSide(
+            width: widget.borderWidth,
+            color: color,
+          ),
+          borderRadius: widget.borderRadius,
+        )
+      : UnderlineInputBorder(
+          borderSide: BorderSide(
+            color: color,
+            width: widget.borderWidth,
+          ),
+        );
 
   Widget generateTextFields(BuildContext context) {
     List<Widget> textFields =
@@ -294,27 +290,14 @@ class _OtpTextFieldState extends State<OtpTextField> {
               counterText: "",
               filled: widget.filled,
               fillColor: widget.fillColor,
-              errorBorder: widget.showFieldAsBox
-                  ? outlineBorder(errorBorder)
-                  : underlineInputBorder(errorBorder),
-              focusedBorder: widget.showFieldAsBox
-                  ? outlineBorder(focusedBorder)
-                  : underlineInputBorder(focusedBorder),
-              enabledBorder: widget.showFieldAsBox
-                  ? outlineBorder(
-                      (_textControllers[index]?.text.isNotEmpty ?? false)
-                          ? filledBorderColor
-                          : enabledBorder)
-                  : underlineInputBorder(
-                      (_textControllers[index]?.text.isNotEmpty ?? false)
-                          ? filledBorderColor
-                          : enabledBorder),
-              disabledBorder: widget.showFieldAsBox
-                  ? outlineBorder(disabledBorder)
-                  : underlineInputBorder(disabledBorder),
-              border: widget.showFieldAsBox
-                  ? outlineBorder(border)
-                  : underlineInputBorder(border),
+              errorBorder: checkBorder(errorBorder),
+              focusedBorder: checkBorder(focusedBorder),
+              enabledBorder: checkBorder(
+                  (_textControllers[index]?.text.isNotEmpty ?? false)
+                      ? filledBorderColor
+                      : enabledBorder),
+              disabledBorder: checkBorder(disabledBorder),
+              border: checkBorder(border),
             ),
         obscureText: widget.obscureText,
         onTap: () => moveCursorToEnd(index),
