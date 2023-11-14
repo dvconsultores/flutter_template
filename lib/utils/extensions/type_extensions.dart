@@ -6,8 +6,8 @@ import 'package:csv/csv.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_detextre4/utils/config/config.dart';
-import 'package:flutter_detextre4/utils/general/functions.dart';
 import 'package:flutter_detextre4/utils/services/local_data/app_env.dart';
+import 'package:flutter_detextre4/widgets/snackbar.dart';
 import 'package:gallery_saver/gallery_saver.dart';
 import 'package:collection/collection.dart';
 import 'package:intl/intl.dart';
@@ -537,14 +537,16 @@ extension StringExtension on String {
       split(" ").map((str) => str.toCapitalize()).join(" ");
 
   /// Copy text from `string` to clipboard.
-  void copyToClipboard({String? message, Duration? messageDuration}) {
+  void copyToClipboard({
+    String? message,
+    Duration? messageDuration = const Duration(seconds: 3),
+  }) {
     Clipboard.setData(ClipboardData(text: this))
-        .then((value) => message.isExist
-            ? showSnackbar(message!,
-                type: ColorSnackbarState.success, duration: messageDuration)
+        .then((value) => message != null
+            ? showSnackbar(message,
+                type: ColorSnackbarState.info, duration: messageDuration)
             : null)
-        .catchError((onError) => showSnackbar(onError,
-            type: ColorSnackbarState.error, duration: messageDuration));
+        .catchError((onError) => debugPrint("${onError.toString()} ⭕"));
   }
 
   /// Converts all commas inside `string` to dots

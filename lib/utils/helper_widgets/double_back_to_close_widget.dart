@@ -4,7 +4,6 @@ import 'dart:io' as io;
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_detextre4/utils/extensions/type_extensions.dart';
-import 'package:flutter_detextre4/utils/general/functions.dart';
 
 class DoubleBackToCloseWidget extends StatefulWidget {
   const DoubleBackToCloseWidget({
@@ -41,7 +40,7 @@ class _DoubleBackToCloseWidgetState extends State<DoubleBackToCloseWidget> {
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
           content: Text(widget.snackBarMessage),
           duration: widget.doubleBackDuration,
-          backgroundColor: ColorSnackbarState.neutral.color,
+          backgroundColor: Colors.black54,
         ));
         return false;
       }

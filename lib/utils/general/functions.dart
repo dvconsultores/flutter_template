@@ -1,9 +1,5 @@
-import 'dart:convert';
-
-import 'package:another_flushbar/flushbar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_detextre4/main.dart';
-import 'package:flutter_detextre4/utils/extensions/type_extensions.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 /// * Helper to multiple pop callbacks
@@ -24,67 +20,6 @@ Future<void> openUrl(String url) async {
 
 /// * Used to get a function instance inside widget building
 T buildWidget<T>(T Function() callback) => callback();
-
-// * App snackbar
-enum ColorSnackbarState {
-  neutral(
-    color: Colors.black54,
-    textColor: Colors.white,
-  ),
-  success(
-    color: Color.fromARGB(180, 76, 175, 79),
-    textColor: Colors.black,
-  ),
-  warning(
-    color: Color.fromARGB(180, 255, 235, 59),
-    textColor: Colors.black,
-  ),
-  error(
-    color: Color.fromARGB(180, 244, 67, 54),
-    textColor: Colors.white,
-  );
-
-  const ColorSnackbarState({
-    required this.color,
-    required this.textColor,
-  });
-  final Color color;
-  final Color textColor;
-}
-
-/// A global snackbar that can be invoked onto whatever widget.
-void showSnackbar(
-  String? message, {
-  ColorSnackbarState? type,
-  Duration? duration,
-  String searchBy = "message",
-  String fallback = "Error",
-}) {
-  if (message.hasNotValue) return;
-
-  String? msg() {
-    if (message == null) return null;
-
-    return message.contains('"$searchBy":')
-        ? jsonDecode(message)[searchBy]
-        : message.isNotEmpty
-            ? message
-            : fallback;
-  }
-
-  Flushbar(
-    message: msg(),
-    backgroundColor: ColorSnackbarState.values
-        .byName(type?.name ?? ColorSnackbarState.neutral.name)
-        .color,
-    messageColor: ColorSnackbarState.values
-        .byName(type?.name ?? ColorSnackbarState.neutral.name)
-        .textColor,
-    duration: duration ?? const Duration(seconds: 3),
-    borderRadius: BorderRadius.circular(6),
-    margin: const EdgeInsets.only(left: 10.0, right: 10, bottom: 20),
-  ).show(globalNavigatorKey.currentContext!);
-}
 
 /// A global menu that can be invoked onto whatever widget.
 Future<String?> showPopup(

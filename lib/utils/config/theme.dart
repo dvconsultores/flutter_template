@@ -55,6 +55,7 @@ class ThemeApp {
             text: Colors.black,
             accent: Colors.red,
             success: Colors.green,
+            warning: Color.fromARGB(255, 233, 198, 2),
           ),
           ThemeDataStyleExtension(
             customText: TextStyle(),
@@ -88,6 +89,7 @@ class ThemeApp {
             text: Colors.white,
             accent: Colors.indigo,
             success: Colors.green,
+            warning: Color.fromARGB(255, 233, 198, 2),
           ),
           ThemeDataStyleExtension(
             customText: TextStyle(),
@@ -132,6 +134,8 @@ class ThemeApp {
       text: themeData.extension<ThemeDataColorExtension>()!.text!,
       accent: themeData.extension<ThemeDataColorExtension>()!.accent!,
       success: themeData.extension<ThemeDataColorExtension>()!.success!,
+      warning: themeData.extension<ThemeDataColorExtension>()!.warning!,
+      
     );
   }
 
@@ -158,6 +162,7 @@ class ColorsApp {
     required this.text,
     required this.accent,
     required this.success,
+    required this.warning,
   });
   final Color background;
   final Color primary;
@@ -169,6 +174,7 @@ class ColorsApp {
   final Color text;
   final Color accent;
   final Color success;
+  final Color warning;
 }
 
 // ? Theme data color extension
@@ -178,21 +184,25 @@ class ThemeDataColorExtension extends ThemeExtension<ThemeDataColorExtension> {
     this.text,
     this.accent,
     this.success,
+    this.warning,
   });
   final Color? text;
   final Color? accent;
   final Color? success;
+  final Color? warning;
 
   @override
   ThemeDataColorExtension copyWith({
     Color? text,
     Color? accent,
     Color? success,
+    Color? warning,
   }) {
     return ThemeDataColorExtension(
       text: text ?? this.text,
       accent: accent ?? this.accent,
       success: success ?? this.success,
+      warning: warning ?? this.warning,
     );
   }
 
@@ -204,12 +214,13 @@ class ThemeDataColorExtension extends ThemeExtension<ThemeDataColorExtension> {
       text: Color.lerp(text, other.text, t),
       accent: Color.lerp(accent, other.accent, t),
       success: Color.lerp(success, other.success, t),
+      warning: Color.lerp(warning, other.warning, t),
     );
   }
 
   @override
   String toString() =>
-      'ThemeDataColorExtension(text: $text, accent: $accent, success: $success)';
+      'ThemeDataColorExtension(text: $text, accent: $accent, success: $success, warning: $warning)';
 }
 
 // ? Theme data style extension
