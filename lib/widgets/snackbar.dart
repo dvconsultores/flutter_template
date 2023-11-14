@@ -88,7 +88,7 @@ void showSnackbar(
     icon: getValueByType().$2,
     titleColor: ThemeApp.colors(context).text,
     messageColor: ThemeApp.colors(context).text,
-    backgroundColor: ThemeApp.colors(context).tertiary,
+    backgroundColor: ThemeApp.colors(context).background,
     borderRadius: const BorderRadius.only(
       topLeft: Radius.circular(10),
       bottomLeft: Radius.circular(10),

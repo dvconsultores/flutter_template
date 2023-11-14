@@ -67,7 +67,7 @@ class ThemeApp {
       ThemeType.dark: darkTheme.copyWith(
         // text config
         textTheme: GoogleFonts.latoTextTheme(darkTheme.textTheme.copyWith(
-          bodyMedium: ligthTheme.textTheme.bodyLarge?.copyWith(fontSize: 16),
+          bodyMedium: darkTheme.textTheme.bodyLarge?.copyWith(fontSize: 16),
         )),
 
         // color config
@@ -135,7 +135,6 @@ class ThemeApp {
       accent: themeData.extension<ThemeDataColorExtension>()!.accent!,
       success: themeData.extension<ThemeDataColorExtension>()!.success!,
       warning: themeData.extension<ThemeDataColorExtension>()!.warning!,
-      
     );
   }
 
