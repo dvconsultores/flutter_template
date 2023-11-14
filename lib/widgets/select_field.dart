@@ -46,7 +46,6 @@ class SelectField<T> extends StatefulWidget {
   final TextStyle? textStyle;
   final List<DropdownMenuItem<T>>? items;
   final void Function(T? value)? onChanged;
-
   final String? Function(T? value)? validator;
   final AutovalidateMode? autovalidateMode;
   final FocusNode? focusNode;
