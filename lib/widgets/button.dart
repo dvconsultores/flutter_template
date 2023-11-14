@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_detextre4/main.dart';
 import 'package:flutter_detextre4/utils/config/theme.dart';
 import 'package:flutter_detextre4/utils/extensions/type_extensions.dart';
 import 'package:flutter_detextre4/utils/helper_widgets/gap.dart';
@@ -46,6 +47,8 @@ class Button extends StatelessWidget {
     this.textAlign = TextAlign.center,
     this.textExpanded = false,
   });
+  static final context = globalNavigatorKey.currentContext!;
+
   final String? text;
   final void Function()? onPressed;
   final TextStyle? textStyle;
@@ -78,8 +81,7 @@ class Button extends StatelessWidget {
   final Widget? content;
   final Widget? child;
 
-  static Button variant(
-    BuildContext context, {
+  static Button variant({
     String? text,
     void Function()? onPressed,
     TextStyle? textStyle,
@@ -189,8 +191,7 @@ class Button extends StatelessWidget {
         child: icon,
       );
 
-  static Button iconVariant(
-    BuildContext context, {
+  static Button iconVariant({
     required void Function()? onPressed,
     bool loading = false,
     bool disabled = false,
