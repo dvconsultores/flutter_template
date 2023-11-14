@@ -48,6 +48,8 @@ class InputField extends StatelessWidget {
     this.hintStyle,
     this.labelStyle,
     this.floatingLabelStyle,
+    this.filled = true,
+    this.color,
   });
   final AutovalidateMode? autovalidateMode;
   final TextEditingController? controller;
@@ -91,6 +93,8 @@ class InputField extends StatelessWidget {
   final TextStyle? hintStyle;
   final TextStyle? labelStyle;
   final TextStyle? floatingLabelStyle;
+  final bool filled;
+  final Color? color;
 
   static Widget sizedBox({
     double? width,
@@ -134,6 +138,8 @@ class InputField extends StatelessWidget {
     TextStyle? hintStyle,
     TextStyle? labelStyle,
     TextStyle? floatingLabelStyle,
+    bool filled = true,
+    Color? color,
   }) {
     final expanded = height != null;
 
@@ -185,6 +191,8 @@ class InputField extends StatelessWidget {
         hintStyle: hintStyle,
         labelStyle: labelStyle,
         floatingLabelStyle: floatingLabelStyle,
+        filled: filled,
+        color: color,
       ),
     );
   }
@@ -259,8 +267,8 @@ class InputField extends StatelessWidget {
           labelStyle: ls,
           floatingLabelStyle: fls,
           floatingLabelBehavior: floatingLabelBehavior,
-          filled: true,
-          fillColor: ThemeApp.colors(context).tertiary,
+          filled: filled,
+          fillColor: color ?? ThemeApp.colors(context).tertiary,
           border: checkBorder(border),
           enabledBorder: checkBorder(border),
           disabledBorder: checkBorder(disabledBorder),
