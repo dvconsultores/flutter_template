@@ -70,6 +70,71 @@ class ButtonAspect extends StatelessWidget {
   final bool textExpanded;
   final Widget? content;
   final Widget? child;
+  
+  static ButtonAspect variant(
+    BuildContext context, {
+    String? text,
+    TextStyle? textStyle,
+    double? width,
+    double height = 45,
+    BoxConstraints? constraints,
+    BorderRadius borderRadius = const BorderRadius.all(Radius.circular(40)),
+    BoxShape? shape,
+    BoxBorder border = const Border.symmetric(
+      horizontal: BorderSide(width: 1),
+      vertical: BorderSide(width: 1),
+    ),
+    List<BoxShadow> boxShadow = const [],
+    Color? color,
+    Color? bgColor,
+    Color? bgColorDisabled,
+    EdgeInsets? padding,
+    EdgeInsets? margin,
+    MainAxisAlignment? buttonAxisAlignment,
+    double? gap,
+    double? leadingGap,
+    double? trailingGap,
+    bool leadingSpacer = false,
+    bool trailingSpacer = false,
+    Widget? leading,
+    Widget? trailing,
+    bool? textSoftWrap,
+    TextOverflow? textOverflow,
+    TextAlign textAlign = TextAlign.center,
+    bool textExpanded = false,
+    Widget? content,
+    Widget? child,
+  }) =>
+      ButtonAspect(
+        text: text,
+        textStyle: textStyle,
+        width: width,
+        height: height,
+        constraints: constraints,
+        shape: shape,
+        borderRadius: borderRadius,
+        border: border,
+        boxShadow: boxShadow,
+        color: color ?? ThemeApp.colors(context).text,
+        bgColor: bgColor ?? ThemeApp.colors(context).tertiary,
+        bgColorDisabled: bgColorDisabled,
+        padding: padding,
+        margin: margin,
+        leading: leading,
+        trailing: trailing,
+        buttonAxisAlignment: buttonAxisAlignment,
+        gap: gap,
+        leadingGap: leadingGap,
+        trailingGap: trailingGap,
+        leadingSpacer: leadingSpacer,
+        trailingSpacer: trailingSpacer,
+        textSoftWrap: textSoftWrap,
+        textOverflow: textOverflow,
+        content: content,
+        textAlign: textAlign,
+        textExpanded: textExpanded,
+        child: child,
+      );
 
   static ButtonAspect icon({
     double size = 45,
@@ -102,6 +167,41 @@ class ButtonAspect extends StatelessWidget {
         boxShadow: boxShadow,
         color: color,
         bgColor: bgColor,
+        bgColorDisabled: bgColorDisabled,
+        padding: padding,
+        constraints: constraints,
+        child: icon,
+      );
+      
+
+  static ButtonAspect iconVariant(
+    BuildContext context, {
+    double size = 45,
+    BoxConstraints? constraints,
+    BorderRadius? borderRadius,
+    BoxBorder border = const Border.symmetric(
+      horizontal: BorderSide(width: 1),
+      vertical: BorderSide(width: 1),
+    ),
+    BoxShape shape = BoxShape.circle,
+    List<BoxShadow> boxShadow = const [],
+    Color? color,
+    Color? bgColor,
+    Color? bgColorDisabled,
+    EdgeInsets padding = const EdgeInsets.all(0),
+    EdgeInsets? margin,
+    required Widget? icon,
+  }) =>
+      ButtonAspect(
+        width: size,
+        height: size,
+        shape: shape,
+        border: border,
+        margin: margin,
+        borderRadius: borderRadius,
+        boxShadow: boxShadow,
+        color: color ?? ThemeApp.colors(context).text,
+        bgColor: bgColor ?? ThemeApp.colors(context).tertiary,
         bgColorDisabled: bgColorDisabled,
         padding: padding,
         constraints: constraints,
