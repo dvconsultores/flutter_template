@@ -19,6 +19,7 @@ Page _pageBuilder(Widget child) => CustomTransitionPage(
     );
 
 final GoRouter router = GoRouter(
+    navigatorKey: globalNavigatorKey,
     initialLocation: kIsWeb ? "/" : "/splash",
     // errorBuilder: (context, state) {
     //   return const ErrorPage();
@@ -63,7 +64,7 @@ final GoRouter router = GoRouter(
 
       // * shell routes
       ShellRoute(
-          navigatorKey: globalNavigatorKey,
+          navigatorKey: globalShellrouteKey,
           builder: (context, state, child) =>
               CustomTransitionWrapper(child: MainNavigation(state, child)),
           routes: [

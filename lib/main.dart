@@ -20,6 +20,7 @@ import 'package:provider/provider.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 final globalNavigatorKey = GlobalKey<NavigatorState>();
+final globalShellrouteKey = GlobalKey<NavigatorState>();
 final globalScaffoldMessengerKey = GlobalKey<ScaffoldMessengerState>();
 
 void main() async {
