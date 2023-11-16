@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:wallet_p2p/utils/helper_widgets/gap.dart';
+import 'package:flutter_detextre4/utils/helper_widgets/gap.dart';
 
 class OrderedList extends StatelessWidget {
   const OrderedList(
