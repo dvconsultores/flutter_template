@@ -30,6 +30,8 @@ class Button extends StatelessWidget {
     this.color = Colors.white,
     this.bgColor,
     this.bgColorDisabled,
+    this.splashFactory,
+    this.overlayColor,
     this.padding,
     this.margin,
     this.child,
@@ -64,6 +66,8 @@ class Button extends StatelessWidget {
   final Color color;
   final Color? bgColor;
   final Color? bgColorDisabled;
+  final InteractiveInkFeatureFactory? splashFactory;
+  final Color? overlayColor;
   final EdgeInsets? padding;
   final EdgeInsets? margin;
   final MainAxisAlignment? buttonAxisAlignment;
@@ -97,6 +101,8 @@ class Button extends StatelessWidget {
     Color? color,
     Color? bgColor,
     Color? bgColorDisabled,
+    InteractiveInkFeatureFactory? splashFactory,
+    Color? overlayColor,
     EdgeInsets? padding,
     EdgeInsets? margin,
     MainAxisAlignment? buttonAxisAlignment,
@@ -130,6 +136,8 @@ class Button extends StatelessWidget {
         color: color ?? ThemeApp.colors(context).text,
         bgColor: bgColor ?? ThemeApp.colors(context).tertiary,
         bgColorDisabled: bgColorDisabled,
+        splashFactory: splashFactory,
+        overlayColor: overlayColor,
         padding: padding,
         margin: margin,
         leading: leading,
@@ -168,6 +176,8 @@ class Button extends StatelessWidget {
     Color color = Colors.white,
     Color? bgColor,
     Color? bgColorDisabled,
+    InteractiveInkFeatureFactory? splashFactory,
+    Color? overlayColor,
     EdgeInsets padding = const EdgeInsets.all(0),
     EdgeInsets? margin,
     required Widget? icon,
@@ -185,6 +195,8 @@ class Button extends StatelessWidget {
         color: color,
         bgColor: bgColor,
         bgColorDisabled: bgColorDisabled,
+        splashFactory: splashFactory,
+        overlayColor: overlayColor,
         padding: padding,
         onPressed: onPressed,
         constraints: constraints,
@@ -204,6 +216,8 @@ class Button extends StatelessWidget {
     Color? color,
     Color? bgColor,
     Color? bgColorDisabled,
+    InteractiveInkFeatureFactory? splashFactory,
+    Color? overlayColor,
     EdgeInsets padding = const EdgeInsets.all(0),
     EdgeInsets? margin,
     required Widget? icon,
@@ -221,6 +235,8 @@ class Button extends StatelessWidget {
         color: color ?? ThemeApp.colors(context).text,
         bgColor: bgColor ?? ThemeApp.colors(context).tertiary,
         bgColorDisabled: bgColorDisabled,
+        splashFactory: splashFactory,
+        overlayColor: overlayColor,
         padding: padding,
         onPressed: onPressed,
         constraints: constraints,
@@ -260,6 +276,8 @@ class Button extends StatelessWidget {
           elevation: const MaterialStatePropertyAll(0),
           padding: MaterialStatePropertyAll(padding),
           foregroundColor: MaterialStatePropertyAll(color),
+          splashFactory: splashFactory,
+          overlayColor: MaterialStatePropertyAll(overlayColor),
           backgroundColor: disabled
               ? MaterialStatePropertyAll(
                   bgColorDisabled ?? ThemeApp.colors(context).disabledColor)
