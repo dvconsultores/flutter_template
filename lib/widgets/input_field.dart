@@ -17,24 +17,24 @@ class InputField extends TextFormField {
     super.focusNode,
     super.onTap,
     super.onTapOutside,
-    super.keyboardType,
     super.maxLines,
     super.minLines,
     super.maxLength,
     super.onChanged,
+    super.textAlign = TextAlign.start,
+    this.keyboardType,
     this.inputFormatters,
     this.labelText,
     this.hintText,
     this.disabled = false,
-    this.textAlign = TextAlign.start,
     this.prefixIcon,
     this.prefix,
     this.suffixIcon,
     this.suffix,
     this.maxWidthPrefix = double.infinity,
     this.numeric = false,
-    this.formatByComma = true,
-    this.maxEntires = 4,
+    this.formatByComma = false,
+    this.maxEntires = 10,
     this.maxDecimals = 2,
     this.prefixPadding,
     this.borderRadius = const BorderRadius.all(Radius.circular(40)),
@@ -52,7 +52,13 @@ class InputField extends TextFormField {
     this.floatingLabelStyle,
     this.filled = true,
     this.color,
+    this.decoration,
   }) : super(
+          style: textStyle ?? _ts,
+          keyboardType: numeric
+              ? const TextInputType.numberWithOptions(
+                  signed: true, decimal: true)
+              : keyboardType,
           inputFormatters: [
             if (numeric) ...[
               DecimalTextInputFormatter(
@@ -64,79 +70,85 @@ class InputField extends TextFormField {
             if (inputFormatters != null && inputFormatters.isNotEmpty)
               ...inputFormatters
           ],
-          decoration: buildWidget<InputDecoration>(() {
-            final ts = textStyle ??
-                TextStyle(
-                  color: ThemeApp.colors(context).text.withOpacity(.75),
-                  fontSize: 16,
-                  fontWeight: FontWeight.w400,
-                  fontFamily: FontFamily.lato("400"),
+          decoration: decoration ??
+              buildWidget<InputDecoration>(() {
+                final ts = textStyle ?? _ts;
+
+                final hs = hintStyle ??
+                    ts.copyWith(
+                        color: ThemeApp.colors(context).text, fontSize: 12);
+                final ls = labelStyle ??
+                    ts.copyWith(
+                        color: ThemeApp.colors(context).text, fontSize: 12);
+                final fls = floatingLabelStyle ?? ls;
+
+                InputBorder checkBorder(Color color) => underline
+                    ? UnderlineInputBorder(
+                        borderSide:
+                            BorderSide(width: borderWidth, color: color),
+                        borderRadius: borderRadius,
+                      )
+                    : OutlineInputBorder(
+                        borderSide:
+                            BorderSide(width: borderWidth, color: color),
+                        borderRadius: borderRadius,
+                      );
+
+                final border =
+                    borderColor ?? Theme.of(context).colorScheme.outline;
+                final disabledBorder =
+                    disabledBorderColor ?? Theme.of(context).disabledColor;
+                final errorBorder =
+                    errorBorderColor ?? Theme.of(context).colorScheme.error;
+                final focusedBorder =
+                    focusedBorderColor ?? Theme.of(context).focusColor;
+
+                return InputDecoration(
+                  prefixIconConstraints:
+                      BoxConstraints(maxWidth: maxWidthPrefix),
+                  enabled: !disabled,
+                  hintText: hintText,
+                  hintStyle: hs,
+                  labelText: labelText,
+                  labelStyle: ls,
+                  floatingLabelStyle: fls,
+                  floatingLabelBehavior: floatingLabelBehavior,
+                  filled: filled,
+                  fillColor: color ?? ThemeApp.colors(context).tertiary,
+                  border: checkBorder(border),
+                  enabledBorder: checkBorder(border),
+                  disabledBorder: checkBorder(disabledBorder),
+                  errorBorder: checkBorder(errorBorder),
+                  focusedBorder: checkBorder(focusedBorder),
+                  prefix: prefix,
+                  prefixIcon: prefixIcon != null
+                      ? IntrinsicWidth(
+                          child: Padding(
+                            padding: prefixPadding ??
+                                const EdgeInsets.symmetric(horizontal: 10),
+                            child: prefixIcon,
+                          ),
+                        )
+                      : null,
+                  suffix: suffix,
+                  suffixIcon: suffixIcon,
+                  isDense: true,
+                  contentPadding: contentPadding ??
+                      const EdgeInsets.symmetric(horizontal: 26, vertical: 10),
                 );
-
-            final hs = hintStyle ??
-                ts.copyWith(color: ThemeApp.colors(context).text, fontSize: 12);
-            final ls = labelStyle ??
-                ts.copyWith(color: ThemeApp.colors(context).text, fontSize: 12);
-            final fls = floatingLabelStyle ?? ls;
-
-            InputBorder checkBorder(Color color) => underline
-                ? UnderlineInputBorder(
-                    borderSide: BorderSide(width: borderWidth, color: color),
-                    borderRadius: borderRadius,
-                  )
-                : OutlineInputBorder(
-                    borderSide: BorderSide(width: borderWidth, color: color),
-                    borderRadius: borderRadius,
-                  );
-
-            final border = borderColor ?? Theme.of(context).colorScheme.outline;
-            final disabledBorder =
-                disabledBorderColor ?? Theme.of(context).disabledColor;
-            final errorBorder =
-                errorBorderColor ?? Theme.of(context).colorScheme.error;
-            final focusedBorder =
-                focusedBorderColor ?? Theme.of(context).focusColor;
-
-            return InputDecoration(
-              prefixIconConstraints: BoxConstraints(maxWidth: maxWidthPrefix),
-              enabled: !disabled,
-              hintText: hintText,
-              hintStyle: hs,
-              labelText: labelText,
-              labelStyle: ls,
-              floatingLabelStyle: fls,
-              floatingLabelBehavior: floatingLabelBehavior,
-              filled: filled,
-              fillColor: color ?? ThemeApp.colors(context).tertiary,
-              border: checkBorder(border),
-              enabledBorder: checkBorder(border),
-              disabledBorder: checkBorder(disabledBorder),
-              errorBorder: checkBorder(errorBorder),
-              focusedBorder: checkBorder(focusedBorder),
-              prefix: prefix,
-              prefixIcon: prefixIcon != null
-                  ? IntrinsicWidth(
-                      child: Padding(
-                        padding: prefixPadding ??
-                            const EdgeInsets.symmetric(horizontal: 10),
-                        child: prefixIcon,
-                      ),
-                    )
-                  : null,
-              suffix: suffix,
-              suffixIcon: suffixIcon,
-              isDense: true,
-              contentPadding: contentPadding ??
-                  const EdgeInsets.symmetric(horizontal: 26, vertical: 10),
-            );
-          }),
+              }),
         );
   static final context = globalNavigatorKey.currentContext!;
+  static final _ts = TextStyle(
+    color: ThemeApp.colors(context).text.withOpacity(.75),
+    fontSize: 16,
+    fontWeight: FontWeight.w400,
+    fontFamily: FontFamily.lato("400"),
+  );
 
   final String? labelText;
   final String? hintText;
   final bool disabled;
-  final TextAlign textAlign;
   final Widget? prefixIcon;
   final Widget? prefix;
   final Widget? suffixIcon;
@@ -163,6 +175,8 @@ class InputField extends TextFormField {
   final TextStyle? floatingLabelStyle;
   final bool filled;
   final Color? color;
+  final TextInputType? keyboardType;
+  final InputDecoration? decoration;
 
   static Widget sizedBox({
     double? width,
@@ -208,6 +222,7 @@ class InputField extends TextFormField {
     TextStyle? floatingLabelStyle,
     bool filled = true,
     Color? color,
+    InputDecoration? decoration,
   }) {
     final expanded = height != null;
 
@@ -261,6 +276,7 @@ class InputField extends TextFormField {
         floatingLabelStyle: floatingLabelStyle,
         filled: filled,
         color: color,
+        decoration: decoration,
       ),
     );
   }
