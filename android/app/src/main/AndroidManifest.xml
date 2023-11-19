@@ -11,7 +11,7 @@
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
 
     <application
-        android:label="flutter detextre4"
+        android:label="Flutter detextre4"
         android:name="${applicationName}"
         android:icon="@mipmap/launcher_icon">
         <activity
@@ -77,6 +77,6 @@
     </queries>
 
     <queries>
-        <package android:name="app.apoloPay.apolo" />
+        <package android:name="com.example.flutterDetextre4" />
     </queries>
 </manifest>

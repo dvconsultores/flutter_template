@@ -58,7 +58,7 @@
 		<string>Why is my app authenticating using face id?</string>
 		<key>LSApplicationQueriesSchemes</key>
 		<array>
-			<string>apolopay</string>
+			<string>flutterDetextre4</string>
 		</array>
 	</dict>
 </plist>
