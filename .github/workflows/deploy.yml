@@ -68,7 +68,7 @@ jobs:
        uses: r0adkll/upload-google-play@v1.0.18
        with:
          serviceAccountJsonPlainText: ${{ secrets.SERVICE_ACCOUNT }}
-         packageName: com.example.flutterDetextre4
+         packageName: com.example.flutter_detextre4
          releaseFiles: ${{steps.sign_app.outputs.signedReleaseFile}}
          mappingFile: ./build/app/outputs/mapping/release/mapping.txt
          track: internal

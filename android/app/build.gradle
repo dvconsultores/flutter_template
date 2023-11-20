@@ -27,7 +27,7 @@ if (flutterVersionName == null) {
     flutterVersionName = '1.0'
 }
 
-def packageId = "com.example.flutterDetextre4"
+def packageId = "com.example.flutter_detextre4"
 
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'

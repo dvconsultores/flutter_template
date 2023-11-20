@@ -13,7 +13,7 @@
 		<key>CFBundleInfoDictionaryVersion</key>
 		<string>6.0</string>
 		<key>CFBundleName</key>
-		<string>flutterDetextre4</string>
+		<string>flutter_detextre4</string>
 		<key>CFBundlePackageType</key>
 		<string>APPL</string>
 		<key>CFBundleShortVersionString</key>
@@ -58,7 +58,7 @@
 		<string>Why is my app authenticating using face id?</string>
 		<key>LSApplicationQueriesSchemes</key>
 		<array>
-			<string>flutterDetextre4</string>
+			<string>flutter_detextre4</string>
 		</array>
 	</dict>
 </plist>

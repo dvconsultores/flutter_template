@@ -1,4 +1,4 @@
-package com.example.flutterDetextre4
+package com.example.flutter_detextre4
 
 import io.flutter.embedding.android.FlutterFragmentActivity
 import io.flutter.plugins.GeneratedPluginRegistrant
