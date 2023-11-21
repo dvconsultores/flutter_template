@@ -1,4 +1,5 @@
 import 'package:collection/collection.dart';
+import 'package:double_back_to_exit/double_back_to_exit.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_detextre4/main_navigation.dart';
@@ -11,6 +12,11 @@ import 'package:flutter_detextre4/routes/shell_routes/profile/pages/user_page.da
 import 'package:flutter_detextre4/utils/helper_widgets/custom_transition_wrapper.dart';
 import 'package:flutter_detextre4/utils/services/local_data/secure_storage_service.dart';
 import 'package:go_router/go_router.dart';
+
+Page _topLevelPageBuilder(Widget child) => _pageBuilder(DoubleBackToExit(
+      snackBarMessage: "Press again to leave",
+      child: child,
+    ));
 
 Page _pageBuilder(Widget child) => CustomTransitionPage(
       transitionsBuilder: (context, animation, secondaryAnimation, child) =>
@@ -32,7 +38,7 @@ final GoRouter router = GoRouter(
       if (state.location == "/splash") {
         return null;
       } else if (router.requireAuth && !isLogged) {
-        return "/auth/login";
+        return "/auth";
       }
 
       return null;
@@ -44,29 +50,22 @@ final GoRouter router = GoRouter(
       GoRoute(
         path: '/splash',
         name: 'splash',
-        builder: (context, state) =>
-            const CustomTransitionWrapper(child: SplashPage()),
+        pageBuilder: (context, state) =>
+            _topLevelPageBuilder(const SplashPage()),
       ),
 
       GoRoute(
-          path: '/auth',
-          builder: (context, state) => const SizedBox.shrink(),
-          redirect: (context, state) =>
-              state.path == '/auth' ? '/auth/login' : null,
-          routes: [
-            GoRoute(
-              path: 'login',
-              name: 'login',
-              builder: (context, state) =>
-                  const CustomTransitionWrapper(child: LogInPage()),
-            )
-          ]),
+        path: '/auth',
+        name: 'login',
+        pageBuilder: (context, state) =>
+            _topLevelPageBuilder(const LogInPage()),
+        routes: const [],
+      ),
 
       // * shell routes
       ShellRoute(
           navigatorKey: globalShellrouteKey,
-          builder: (context, state, child) =>
-              CustomTransitionWrapper(child: MainNavigation(state, child)),
+          builder: (context, state, child) => MainNavigation(state, child),
           routes: [
             GoRoute(
               path: '/profile',

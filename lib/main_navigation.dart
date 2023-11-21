@@ -1,10 +1,10 @@
+import 'package:double_back_to_exit/double_back_to_exit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_detextre4/widgets/bottom_navigation_bar.dart';
 import 'package:flutter_detextre4/widgets/drawer.dart';
 import 'package:flutter_detextre4/widgets/scaffold.dart';
 import 'package:flutter_detextre4/utils/config/router_config.dart';
 import 'package:flutter_detextre4/utils/extensions/type_extensions.dart';
-import 'package:flutter_detextre4/utils/helper_widgets/double_back_to_close_widget.dart';
 import 'package:flutter_detextre4/utils/helper_widgets/will_pop_custom.dart';
 import 'package:go_router/go_router.dart';
 
@@ -113,14 +113,12 @@ class _Body extends StatelessWidget {
               }
             }
           : null,
-      child: state.location == "/"
-          ? DoubleBackToCloseWidget(
-              snackBarMessage: "Press again to leave",
-              child: child,
-            )
+      child: state.name == "home"
+          ? DoubleBackToExit(
+              snackBarMessage: "Press again to leave", child: child)
           : WillPopCustom(
               onWillPop: () {
-                context.go("/");
+                context.goNamed("home");
                 return false;
               },
               child: child,

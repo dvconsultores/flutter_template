@@ -47,7 +47,7 @@ class _BodyBackgroundStyled extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final widget = Align(
+    final body = Align(
         alignment: Alignment.centerLeft,
         child: Container(
           color: color ?? Theme.of(context).scaffoldBackgroundColor,
@@ -55,7 +55,7 @@ class _BodyBackgroundStyled extends StatelessWidget {
           child: child,
         ));
 
-    return scrollable ? SingleChildScrollView(child: widget) : widget;
+    return scrollable ? SingleChildScrollView(child: body) : body;
   }
 }
 

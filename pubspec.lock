@@ -241,6 +241,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "5.3.3"
+  double_back_to_exit:
+    dependency: "direct main"
+    description:
+      name: double_back_to_exit
+      sha256: "5058bd4043dfbf506ae8c1023139610cfa1b221ef99fa5fb4294ad74aac1d0ee"
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.0.1"
   dropdown_button2:
     dependency: "direct main"
     description:
