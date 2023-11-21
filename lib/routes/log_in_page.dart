@@ -12,7 +12,7 @@ class LogInPage extends StatefulWidget {
 }
 
 class _LogInPageState extends State<LogInPage>
-    with ResponsiveLayoutMixinStateful {
+    with ResponsiveMixinLayoutStateful {
   late final authApi = AuthApi(context);
 
   @override

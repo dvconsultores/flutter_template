@@ -9,7 +9,7 @@ import 'package:flutter_detextre4/widgets/snackbar.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:responsive_mixin_layout/responsive_mixin_layout.dart';
 
-class HomePage extends StatelessWidget with ResponsiveLayoutMixin {
+class HomePage extends StatelessWidget with ResponsiveMixinLayout {
   const HomePage({super.key});
 
   @override
