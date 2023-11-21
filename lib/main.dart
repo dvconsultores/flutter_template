@@ -18,6 +18,7 @@ import 'package:hive_flutter/adapters.dart';
 import 'package:local_session_timeout/local_session_timeout.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:responsive_mixin_layout/responsive_mixin_layout.dart';
 
 final globalNavigatorKey = GlobalKey<NavigatorState>();
 final globalShellrouteKey = GlobalKey<NavigatorState>();
@@ -94,28 +95,30 @@ class _AppState extends State<App> {
       Consumer<MainProvider>(builder: (context, value, child) {
         return SessionTimeoutManager(
           sessionConfig: sessionTimeoutConfig.instance,
-          child: ScreenUtilInit(
-              designSize: Variables.mSize,
-              builder: (context, child) {
-                return MaterialApp.router(
-                  scaffoldMessengerKey: globalScaffoldMessengerKey,
-                  locale: value.locale,
-                  debugShowCheckedModeBanner: true,
-                  title: AppName.capitalize.value,
-                  theme: ThemeApp.of(context), // * Theme switcher
-                  localizationsDelegates:
-                      AppLocalizations.localizationsDelegates,
-                  supportedLocales: AppLocalizations.supportedLocales,
-                  routerConfig: router,
-                  // // * global text scale factorized
-                  // builder: (context, child) {
-                  //   return MediaQuery(
-                  //     data: MediaQuery.of(context).copyWith(textScaleFactor: 1),
-                  //     child: child!,
-                  //   );
-                  // },
-                );
-              }),
+          child: ScreenSizes(
+            child: ScreenUtilInit(
+                designSize: Variables.mSize,
+                builder: (context, child) {
+                  return MaterialApp.router(
+                    scaffoldMessengerKey: globalScaffoldMessengerKey,
+                    locale: value.locale,
+                    debugShowCheckedModeBanner: true,
+                    title: AppName.capitalize.value,
+                    theme: ThemeApp.of(context), // * Theme switcher
+                    localizationsDelegates:
+                        AppLocalizations.localizationsDelegates,
+                    supportedLocales: AppLocalizations.supportedLocales,
+                    routerConfig: router,
+                    // // * global text scale factorized
+                    // builder: (context, child) {
+                    //   return MediaQuery(
+                    //     data: MediaQuery.of(context).copyWith(textScaleFactor: 1),
+                    //     child: child!,
+                    //   );
+                    // },
+                  );
+                }),
+          ),
         );
       });
 }

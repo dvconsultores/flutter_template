@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_detextre4/utils/general/variables.dart';
-import 'package:flutter_detextre4/utils/helper_widgets/responsive_layout.dart';
+import 'package:responsive_mixin_layout/responsive_mixin_layout.dart';
 
 // * Custom background styled
 class _BackgroundStyled extends StatelessWidget {

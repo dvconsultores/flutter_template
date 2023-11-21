@@ -245,10 +245,10 @@ packages:
     dependency: "direct main"
     description:
       name: double_back_to_exit
-      sha256: "5058bd4043dfbf506ae8c1023139610cfa1b221ef99fa5fb4294ad74aac1d0ee"
+      sha256: e4af6336405378411e21725db3dc2913710dc9a05dbe537a40743af948bb5d01
       url: "https://pub.dev"
     source: hosted
-    version: "1.0.1"
+    version: "1.0.2"
   dropdown_button2:
     dependency: "direct main"
     description:
@@ -965,6 +965,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "0.3.3"
+  responsive_mixin_layout:
+    dependency: "direct main"
+    description:
+      name: responsive_mixin_layout
+      sha256: e968d0a7990b5691d9fd316c985d3b5a43f6389f0a58cf4e482f71dca9d92bce
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.0.1"
   rxdart:
     dependency: "direct main"
     description:

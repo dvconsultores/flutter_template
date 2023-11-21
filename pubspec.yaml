@@ -109,7 +109,8 @@ dependencies:
   skeletons: ^0.0.3
   lottie: ^2.5.0 # ? official animation site https://lottiefiles.com/es/animation/flutter
   dropdown_button2: ^2.3.9
-  double_back_to_exit: ^1.0.1
+  double_back_to_exit: ^1.0.2
+  responsive_mixin_layout: ^1.0.1
 
 
 dev_dependencies:

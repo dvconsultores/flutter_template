@@ -18,27 +18,6 @@ enum AppName {
   final String value;
 }
 
-// * Responsive sizes
-/// A list of sizes from device screen resolution
-enum ScreenSize {
-  mobile(600),
-  tablet(880),
-  desktop(2000),
-  tv(4000);
-
-  const ScreenSize(this.value);
-  final int value;
-
-  static bool isMobile(BuildContext context) =>
-      MediaQuery.of(context).size.width < mobile.value;
-  static bool isTablet(BuildContext context) =>
-      MediaQuery.of(context).size.width < tablet.value;
-  static bool isDesktop(BuildContext context) =>
-      MediaQuery.of(context).size.width < desktop.value;
-  static bool isTV(BuildContext context) =>
-      MediaQuery.of(context).size.width < tv.value;
-}
-
 /// ? A Collection of diverse languages.
 enum LanguageList {
   en(value: 'english', lcidString: 'en_US', locale: Locale("en")),

@@ -3,7 +3,7 @@ import 'package:flutter/rendering.dart';
 import 'package:flutter_detextre4/repositories/auth_api.dart';
 import 'package:flutter_detextre4/widgets/button.dart';
 import 'package:flutter_detextre4/widgets/scaffold.dart';
-import 'package:flutter_detextre4/utils/helper_widgets/responsive_layout.dart';
+import 'package:responsive_mixin_layout/responsive_mixin_layout.dart';
 
 class LogInPage extends StatefulWidget {
   const LogInPage({super.key});
