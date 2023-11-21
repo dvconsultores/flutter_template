@@ -969,10 +969,10 @@ packages:
     dependency: "direct main"
     description:
       name: responsive_mixin_layout
-      sha256: e968d0a7990b5691d9fd316c985d3b5a43f6389f0a58cf4e482f71dca9d92bce
+      sha256: "777f6af62618dba9dbf47606e9cb7c7dcd17b115ed8fbce1e2310d8d945d3f37"
       url: "https://pub.dev"
     source: hosted
-    version: "1.0.1"
+    version: "1.0.2"
   rxdart:
     dependency: "direct main"
     description:
