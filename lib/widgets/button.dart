@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_detextre4/main.dart';
 import 'package:flutter_detextre4/utils/config/theme.dart';
 import 'package:flutter_detextre4/utils/extensions/type_extensions.dart';
-import 'package:flutter_detextre4/utils/helper_widgets/gap.dart';
 import 'package:flutter_detextre4/widgets/loaders/custom_circular_progress_indicator.dart';
+import 'package:flutter_gap/flutter_gap.dart';
 
 class Button extends StatelessWidget {
   const Button({

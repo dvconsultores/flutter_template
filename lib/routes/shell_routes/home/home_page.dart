@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_detextre4/utils/config/config.dart';
 import 'package:flutter_detextre4/utils/config/theme.dart';
 import 'package:flutter_detextre4/utils/extensions/widget_extensions.dart';
-import 'package:flutter_detextre4/utils/helper_widgets/gap.dart';
 import 'package:flutter_detextre4/widgets/button.dart';
 import 'package:flutter_detextre4/widgets/scaffold.dart';
 import 'package:flutter_detextre4/widgets/snackbar.dart';
+import 'package:flutter_gap/flutter_gap.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:responsive_mixin_layout/responsive_mixin_layout.dart';
 
