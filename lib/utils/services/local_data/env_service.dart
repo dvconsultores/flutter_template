@@ -16,7 +16,7 @@ mixin _DefaultEnv {
 //   abstract String firebaseAppId;
 // }
 
-class AppEnv implements _DefaultEnv {
+class Env implements _DefaultEnv {
   // _DefaultEnv
   @override
   String baseUrl = dotenv.get('BASE_URL', fallback: "domain/api/v1");
@@ -47,4 +47,4 @@ class AppEnv implements _DefaultEnv {
   //     dotenv.get('FIREBASE_APP_ID', fallback: "firebaseAppId");
 }
 
-final AppEnv env = AppEnv();
+final Env env = Env();
