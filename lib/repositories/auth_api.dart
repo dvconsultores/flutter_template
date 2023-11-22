@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_detextre4/repositories/auth_api_interface.dart';
-
 import 'package:flutter_detextre4/models/profile_model.dart';
+import 'package:flutter_detextre4/repositories/auth_api_interface.dart';
 import 'package:flutter_detextre4/utils/services/local_data/hive_data_service.dart';
 import 'package:flutter_detextre4/utils/services/local_data/secure_storage_service.dart';
 import 'package:go_router/go_router.dart';
