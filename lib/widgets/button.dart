@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_detextre4/main.dart';
 import 'package:flutter_detextre4/utils/config/theme.dart';
 import 'package:flutter_detextre4/utils/extensions/type_extensions.dart';
-import 'package:flutter_detextre4/widgets/loaders/custom_circular_progress_indicator.dart';
 import 'package:flutter_gap/flutter_gap.dart';
 
 class Button extends StatelessWidget {
@@ -293,7 +292,7 @@ class Button extends StatelessWidget {
             ? SizedBox(
                 width: height / 2,
                 height: height / 2,
-                child: const CustomCircularProgressIndicator(strokeWidth: 3),
+                child: const CircularProgressIndicator(strokeWidth: 3),
               )
             : child ??
                 Row(

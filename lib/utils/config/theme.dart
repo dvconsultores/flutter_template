@@ -42,6 +42,8 @@ class ThemeApp {
         bottomNavigationBarTheme: const BottomNavigationBarThemeData(
           backgroundColor: Color.fromARGB(255, 231, 225, 225),
         ),
+        progressIndicatorTheme: const ProgressIndicatorThemeData(
+            circularTrackColor: Colors.red, color: Colors.amber),
         colorScheme: const ColorScheme.light(
           background: Colors.white,
           primary: Colors.amber,
@@ -77,6 +79,8 @@ class ThemeApp {
         bottomNavigationBarTheme: const BottomNavigationBarThemeData(
           backgroundColor: Color.fromARGB(255, 39, 37, 37),
         ),
+        progressIndicatorTheme: const ProgressIndicatorThemeData(
+            circularTrackColor: Colors.red, color: Colors.pink),
         colorScheme: const ColorScheme.dark(
           primary: Colors.pink,
           secondary: Colors.red,
