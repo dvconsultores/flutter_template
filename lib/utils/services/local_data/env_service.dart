@@ -6,7 +6,7 @@ mixin _DefaultEnv {
   abstract String fileApiUrl;
 }
 
-class AppEnv implements _DefaultEnv {
+class Env implements _DefaultEnv {
   // _DefaultEnv
   @override
   String baseUrl = dotenv.get('BASE_URL', fallback: "domain/api/v1");
@@ -16,4 +16,4 @@ class AppEnv implements _DefaultEnv {
   String fileApiUrl = dotenv.get('FILE_API_URL', fallback: "domain/api/v1");
 }
 
-final AppEnv env = AppEnv();
+final Env env = Env();

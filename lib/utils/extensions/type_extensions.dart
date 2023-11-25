@@ -2,14 +2,14 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:io' as io;
 
+import 'package:collection/collection.dart';
 import 'package:csv/csv.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_detextre4/utils/config/config.dart';
-import 'package:flutter_detextre4/utils/services/local_data/app_env.dart';
+import 'package:flutter_detextre4/utils/services/local_data/env_service.dart';
 import 'package:flutter_detextre4/widgets/snackbar.dart';
 import 'package:gallery_saver/gallery_saver.dart';
-import 'package:collection/collection.dart';
 import 'package:intl/intl.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
@@ -211,6 +211,15 @@ extension SetExtension<T> on Set<T> {
 
     return distinctList.cast<T>().toSet();
   }
+}
+
+// ? Nullable Iterable extension
+extension NullableIterableExtension on Iterable? {
+  /// Getter to know if List is not `null` or is not [Empty].
+  bool get hasValue => this?.isNotEmpty ?? false;
+
+  /// Getter to know if List is `null` or is [Empty].
+  bool get hasNotValue => this?.isEmpty ?? true;
 }
 
 // ? Nullable list extension

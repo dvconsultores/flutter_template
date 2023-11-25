@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:io' as io;
+
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
@@ -34,8 +35,9 @@ class WillPopCustom extends StatelessWidget {
     return WillPopScope(
       onWillPop: () async => false,
       child: GestureDetector(
-        onHorizontalDragUpdate: (details) =>
-            (details.delta.dx > 8) ? onWillPopCallback() : true,
+        onHorizontalDragUpdate: (details) {
+          if (details.delta.dx > 8) onWillPopCallback();
+        },
         child: child,
       ),
     );
