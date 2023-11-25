@@ -32,13 +32,6 @@ void main() async {
       .load(fileName: '.env')
       .catchError((error) => debugPrint('Error loading .env file: $error ㊗️'));
 
-  /*
-  ? -- config to firebase 🖊️ --
-  await Firebase.initializeApp(
-    options: DefaultFirebaseOptions.currentPlatform,
-  );
-  */
-
   Hive.initFlutter().then((_) => Hive.openBox(HiveData.boxName).then((value) {
         runApp(const RestartWidget(child: AppState()));
       }));

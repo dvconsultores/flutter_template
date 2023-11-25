@@ -42,18 +42,6 @@ dependencies:
   # flutter_native_splash: ^2.3.1 # ? in case need native splash screen
   google_fonts: ^4.0.4
   flutter_svg: ^2.0.5
-  # ? -- firebase and google auth packages 🖊️ --
-  # firebase_core: ^2.4.0
-  # firebase_auth: ^4.2.3
-  # google_sign_in: ^5.4.2
-  # firebase_storage: ^11.0.8
-  # cloud_firestore: ^4.2.0
-  # flutter_firebase_chat_core: ^1.6.7
-  # flutter_chat_types: ^3.6.1
-  # google_api_availability: ^5.0.0
-  # firebase_messaging: ^14.7.2
-  # flutter_local_notifications: ^16.1.0
-  # ? -- firebase and google auth packages 🖊️ --
   generic_bloc_provider: ^2.1.1
   image_picker: ^0.8.7+5
   image_cropper: ^3.0.3

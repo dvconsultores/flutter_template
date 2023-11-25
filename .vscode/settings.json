@@ -54,4 +54,5 @@
 		"editor.wordBasedSuggestions": false,
 	},
 	"todo-tree.tree.showBadges": true,
+	"editor.inlineSuggest.showToolbar": "always",
 }

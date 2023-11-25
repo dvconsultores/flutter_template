@@ -40,14 +40,6 @@ jobs:
          cat << EOF >> .env
          BASE_URL=${{ secrets.BASE_URL }}
          API_URL=${{ secrets.API_URL }}
-        #  FILE_API_URL=${{ secrets.FILE_API_URL }}
-
-        #  FIREBASE_API_KEY=${{ secrets.FIREBASE_API_KEY }}
-        #  FIREBASE_AUTH_DOMAIN=${{ secrets.FIREBASE_AUTH_DOMAIN }}
-        #  FIREBASE_PROJECT_ID=${{ secrets.FIREBASE_PROJECT_ID }}
-        #  FIREBASE_STORAGE_BUCKET=${{ secrets.FIREBASE_STORAGE_BUCKET }}
-        #  FIREBASE_MESSAGING_SENDER_ID=${{ secrets.FIREBASE_MESSAGING_SENDER_ID }}
-        #  FIREBASE_APP_ID=${{ secrets.FIREBASE_APP_ID }}
      # Get Flutter project dependencies
      - name: Get dependencies
        run: flutter pub get
