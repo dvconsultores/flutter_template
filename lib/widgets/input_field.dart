@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_detextre4/main.dart';
+import 'package:flutter_detextre4/painters/decorated_input_border.dart';
 import 'package:flutter_detextre4/utils/config/theme.dart';
 import 'package:flutter_detextre4/utils/general/functions.dart';
 import 'package:flutter_detextre4/utils/general/input_formatters.dart';
@@ -22,6 +23,8 @@ class InputField extends TextFormField {
     super.maxLength,
     super.onChanged,
     super.textAlign = TextAlign.start,
+    super.onFieldSubmitted,
+    super.autocorrect,
     this.keyboardType,
     this.inputFormatters,
     this.labelText,
@@ -53,6 +56,8 @@ class InputField extends TextFormField {
     this.filled = true,
     this.color,
     this.decoration,
+    this.errorMaxLines,
+    this.shadow,
   }) : super(
           style: textStyle ?? _ts,
           keyboardType: numeric
@@ -82,17 +87,20 @@ class InputField extends TextFormField {
                         color: ThemeApp.colors(context).text, fontSize: 12);
                 final fls = floatingLabelStyle ?? ls;
 
-                InputBorder checkBorder(Color color) => underline
-                    ? UnderlineInputBorder(
-                        borderSide:
-                            BorderSide(width: borderWidth, color: color),
-                        borderRadius: borderRadius,
-                      )
-                    : OutlineInputBorder(
-                        borderSide:
-                            BorderSide(width: borderWidth, color: color),
-                        borderRadius: borderRadius,
-                      );
+                InputBorder checkBorder(Color color) => DecoratedInputBorder(
+                      child: underline
+                          ? UnderlineInputBorder(
+                              borderSide:
+                                  BorderSide(width: borderWidth, color: color),
+                              borderRadius: borderRadius,
+                            )
+                          : OutlineInputBorder(
+                              borderSide:
+                                  BorderSide(width: borderWidth, color: color),
+                              borderRadius: borderRadius,
+                            ),
+                      shadow: shadow ?? const BoxShadow(),
+                    );
 
                 final border =
                     borderColor ?? Theme.of(context).colorScheme.outline;
@@ -177,6 +185,8 @@ class InputField extends TextFormField {
   final Color? color;
   final TextInputType? keyboardType;
   final InputDecoration? decoration;
+  final int? errorMaxLines;
+  final BoxShadow? shadow;
 
   static Widget sizedBox({
     double? width,
@@ -223,6 +233,10 @@ class InputField extends TextFormField {
     bool filled = true,
     Color? color,
     InputDecoration? decoration,
+    int? errorMaxLines,
+    void Function(String value)? onFieldSubmitted,
+    bool autocorrect = true,
+    BoxShadow? shadow,
   }) {
     final expanded = height != null;
 
@@ -277,6 +291,10 @@ class InputField extends TextFormField {
         filled: filled,
         color: color,
         decoration: decoration,
+        errorMaxLines: errorMaxLines,
+        onFieldSubmitted: onFieldSubmitted,
+        autocorrect: autocorrect,
+        shadow: shadow,
       ),
     );
   }

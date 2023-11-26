@@ -1,5 +1,6 @@
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_detextre4/painters/decorated_input_border.dart';
 import 'package:flutter_detextre4/utils/config/theme.dart';
 import 'package:flutter_detextre4/utils/extensions/type_extensions.dart';
 
@@ -41,6 +42,7 @@ class SelectField<T> extends StatefulWidget {
     this.onMenuStateChange,
     this.dropdownStyleData,
     this.menuItemStyleData = const MenuItemStyleData(),
+    this.shadow,
   });
   final T? value;
   final TextStyle? textStyle;
@@ -77,6 +79,7 @@ class SelectField<T> extends StatefulWidget {
   final void Function(bool isOpen)? onMenuStateChange;
   final DropdownStyleData? dropdownStyleData;
   final MenuItemStyleData menuItemStyleData;
+  final BoxShadow? shadow;
 
   static Widget sizedBox<T>({
     double? width,
@@ -115,6 +118,7 @@ class SelectField<T> extends StatefulWidget {
     void Function(bool isOpen)? onMenuStateChange,
     DropdownStyleData? dropdownStyleData,
     MenuItemStyleData menuItemStyleData = const MenuItemStyleData(),
+    BoxShadow? shadow,
   }) {
     final expanded = height != null;
 
@@ -165,6 +169,7 @@ class SelectField<T> extends StatefulWidget {
         onMenuStateChange: onMenuStateChange,
         dropdownStyleData: dropdownStyleData,
         menuItemStyleData: menuItemStyleData,
+        shadow: shadow,
       ),
     );
   }
@@ -197,15 +202,20 @@ class _SelectFieldState<T> extends State<SelectField<T>> {
         widget.labelStyle ?? ts.copyWith(color: colorSwither, fontSize: 12);
     final fls = widget.floatingLabelStyle ?? ls;
 
-    InputBorder checkBorder(Color color) => widget.underline
-        ? UnderlineInputBorder(
-            borderSide: BorderSide(width: widget.borderWidth, color: color),
-            borderRadius: widget.borderRadius,
-          )
-        : OutlineInputBorder(
-            borderSide: BorderSide(width: widget.borderWidth, color: color),
-            borderRadius: widget.borderRadius,
-          );
+    InputBorder checkBorder(Color color) => DecoratedInputBorder(
+          child: widget.underline
+              ? UnderlineInputBorder(
+                  borderSide:
+                      BorderSide(width: widget.borderWidth, color: color),
+                  borderRadius: widget.borderRadius,
+                )
+              : OutlineInputBorder(
+                  borderSide:
+                      BorderSide(width: widget.borderWidth, color: color),
+                  borderRadius: widget.borderRadius,
+                ),
+          shadow: widget.shadow ?? const BoxShadow(),
+        );
 
     final border = widget.borderColor ?? Theme.of(context).colorScheme.outline;
     final disabledBorder =
