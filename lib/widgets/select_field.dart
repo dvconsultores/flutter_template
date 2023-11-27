@@ -1,8 +1,7 @@
-import 'package:flutter_detextre4/painters/decorated_input_border.dart';
-import 'package:flutter_detextre4/utils/config/theme.dart';
-import 'package:flutter_detextre4/utils/extensions/type_extensions.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_detextre4/utils/config/theme.dart';
+import 'package:flutter_detextre4/utils/extensions/type_extensions.dart';
 
 class SelectField<T> extends StatefulWidget {
   const SelectField({
@@ -210,20 +209,15 @@ class _SelectFieldState<T> extends State<SelectField<T>> {
         widget.labelStyle ?? ts.copyWith(color: colorSwither, fontSize: 12);
     final fls = widget.floatingLabelStyle ?? ls;
 
-    InputBorder checkBorder(Color color) => DecoratedInputBorder(
-          child: widget.underline
-              ? UnderlineInputBorder(
-                  borderSide:
-                      BorderSide(width: widget.borderWidth, color: color),
-                  borderRadius: widget.borderRadius,
-                )
-              : OutlineInputBorder(
-                  borderSide:
-                      BorderSide(width: widget.borderWidth, color: color),
-                  borderRadius: widget.borderRadius,
-                ),
-          shadow: widget.shadow ?? const BoxShadow(),
-        );
+    InputBorder checkBorder(Color color) => widget.underline
+        ? UnderlineInputBorder(
+            borderSide: BorderSide(width: widget.borderWidth, color: color),
+            borderRadius: widget.borderRadius,
+          )
+        : OutlineInputBorder(
+            borderSide: BorderSide(width: widget.borderWidth, color: color),
+            borderRadius: widget.borderRadius,
+          );
 
     final border = widget.borderColor ?? Theme.of(context).colorScheme.outline;
     final disabledBorder =
