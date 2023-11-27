@@ -7,43 +7,12 @@ typedef HandleControllers = void Function(
     List<TextEditingController?> controllers);
 
 class OtpTextField extends StatefulWidget {
-  final bool showCursor;
-  final int numberOfFields;
-  final double fieldWidth;
-  final double borderWidth;
-  final Color? enabledBorderColor;
-  final Color? focusedBorderColor;
-  final Color? errorBorderColor;
-  final Color? disabledBorderColor;
-  final Color? borderColor;
-  final Color? filledBorderColor;
-  final Color? cursorColor;
-  final TextInputType keyboardType;
-  final TextStyle? textStyle;
-  final MainAxisAlignment mainAxisAlignment;
-  final CrossAxisAlignment crossAxisAlignment;
-  final OnCodeEnteredCompletion? onSubmit;
-  final OnCodeEnteredCompletion? onCodeChanged;
-  final HandleControllers? handleControllers;
-  final bool obscureText;
-  final bool showFieldAsBox;
-  final bool enabled;
-  final bool filled;
-  final bool autoFocus;
-  final bool readOnly;
-  final bool clearText;
-  final Color fillColor;
-  final BorderRadius borderRadius;
-  final InputDecoration? decoration;
-  final List<TextStyle?> styles;
-  final List<TextInputFormatter>? inputFormatters;
-  final double gap;
-
   OtpTextField({
     super.key,
     this.showCursor = true,
     this.numberOfFields = 4,
     this.fieldWidth = 40.0,
+    this.fieldHeight = 58.0,
     this.textStyle,
     this.clearText = false,
     this.styles = const [],
@@ -72,10 +41,47 @@ class OtpTextField extends StatefulWidget {
     this.borderRadius = const BorderRadius.all(Radius.circular(4.0)),
     this.inputFormatters,
     this.gap = 10,
+    this.loading = false,
+    this.loadingColor,
   })  : assert(numberOfFields > 0),
         assert(styles.isNotEmpty
             ? styles.length == numberOfFields
             : styles.isEmpty);
+
+  final bool showCursor;
+  final int numberOfFields;
+  final double fieldWidth;
+  final double fieldHeight;
+  final double borderWidth;
+  final Color? enabledBorderColor;
+  final Color? focusedBorderColor;
+  final Color? errorBorderColor;
+  final Color? disabledBorderColor;
+  final Color? borderColor;
+  final Color? filledBorderColor;
+  final Color? cursorColor;
+  final TextInputType keyboardType;
+  final TextStyle? textStyle;
+  final MainAxisAlignment mainAxisAlignment;
+  final CrossAxisAlignment crossAxisAlignment;
+  final OnCodeEnteredCompletion? onSubmit;
+  final OnCodeEnteredCompletion? onCodeChanged;
+  final HandleControllers? handleControllers;
+  final bool obscureText;
+  final bool showFieldAsBox;
+  final bool enabled;
+  final bool filled;
+  final bool autoFocus;
+  final bool readOnly;
+  final bool clearText;
+  final Color fillColor;
+  final BorderRadius borderRadius;
+  final InputDecoration? decoration;
+  final List<TextStyle?> styles;
+  final List<TextInputFormatter>? inputFormatters;
+  final double gap;
+  final bool loading;
+  final Color? loadingColor;
 
   @override
   State<StatefulWidget> createState() => _OtpTextFieldState();
@@ -124,17 +130,11 @@ class _OtpTextFieldState extends State<OtpTextField> {
 
   InputBorder checkBorder(Color color) => widget.showFieldAsBox
       ? OutlineInputBorder(
-          borderSide: BorderSide(
-            width: widget.borderWidth,
-            color: color,
-          ),
+          borderSide: BorderSide(width: widget.borderWidth, color: color),
           borderRadius: widget.borderRadius,
         )
       : UnderlineInputBorder(
-          borderSide: BorderSide(
-            color: color,
-            width: widget.borderWidth,
-          ),
+          borderSide: BorderSide(color: color, width: widget.borderWidth),
         );
 
   Widget generateTextFields(BuildContext context) {
@@ -270,53 +270,75 @@ class _OtpTextFieldState extends State<OtpTextField> {
     required int index,
     TextStyle? style,
   }) {
-    return SizedBox(
-      width: widget.fieldWidth,
-      child: TextField(
-        showCursor: widget.showCursor,
-        keyboardType: widget.keyboardType,
-        textAlign: TextAlign.center,
-        maxLength: 2,
-        readOnly: widget.readOnly,
-        style: style ?? widget.textStyle,
-        autofocus: widget.autoFocus,
-        cursorColor: widget.cursorColor,
-        controller: _textControllers[index],
-        focusNode: _focusNodes[index],
-        enabled: widget.enabled,
-        inputFormatters: widget.inputFormatters,
-        decoration: widget.decoration ??
-            InputDecoration(
-              counterText: "",
-              filled: widget.filled,
-              fillColor: widget.fillColor,
-              errorBorder: checkBorder(errorBorder),
-              focusedBorder: checkBorder(focusedBorder),
-              enabledBorder: checkBorder(
-                  (_textControllers[index]?.text.isNotEmpty ?? false)
-                      ? filledBorderColor
-                      : enabledBorder),
-              disabledBorder: checkBorder(disabledBorder),
-              border: checkBorder(border),
+    return widget.loading
+        ? Container(
+            width: widget.fieldWidth,
+            height: widget.fieldHeight,
+            decoration: BoxDecoration(
+              borderRadius: widget.borderRadius,
+              border: Border.all(
+                width: widget.borderWidth,
+                color:
+                    widget.enabledBorderColor != null ? enabledBorder : border,
+              ),
             ),
-        obscureText: widget.obscureText,
-        onTap: () => moveCursorToEnd(index),
-        onChanged: (String value) {
-          //save entered value in a list
-          _verificationCode[index] = value;
-          onCodeChanged(verificationCode: value);
+            child: LinearProgressIndicator(
+              borderRadius: widget.borderRadius
+                  .subtract(const BorderRadius.all(Radius.circular(1))),
+              color:
+                  widget.loadingColor ?? Theme.of(context).colorScheme.primary,
+            ),
+          )
+        : SizedBox(
+            width: widget.fieldWidth,
+            height: widget.fieldHeight,
+            child: TextField(
+              maxLines: null,
+              expands: true,
+              showCursor: widget.showCursor,
+              keyboardType: widget.keyboardType,
+              textAlign: TextAlign.center,
+              maxLength: 2,
+              readOnly: widget.readOnly,
+              style: style ?? widget.textStyle,
+              autofocus: widget.autoFocus,
+              cursorColor: widget.cursorColor,
+              controller: _textControllers[index],
+              focusNode: _focusNodes[index],
+              enabled: widget.enabled,
+              inputFormatters: widget.inputFormatters,
+              decoration: widget.decoration ??
+                  InputDecoration(
+                    counterText: "",
+                    filled: widget.filled,
+                    fillColor: widget.fillColor,
+                    errorBorder: checkBorder(errorBorder),
+                    focusedBorder: checkBorder(focusedBorder),
+                    enabledBorder: checkBorder(
+                        (_textControllers[index]?.text.isNotEmpty ?? false)
+                            ? filledBorderColor
+                            : enabledBorder),
+                    disabledBorder: checkBorder(disabledBorder),
+                    border: checkBorder(border),
+                  ),
+              obscureText: widget.obscureText,
+              onTap: () => moveCursorToEnd(index),
+              onChanged: (String value) {
+                //save entered value in a list
+                _verificationCode[index] = value;
+                onCodeChanged(verificationCode: value);
 
-          replaceSecondValue(value: value, indexOfTextField: index);
+                replaceSecondValue(value: value, indexOfTextField: index);
 
-          changeFocusToNextNodeWhenValueIsEntered(
-              value: value, indexOfTextField: index);
+                changeFocusToNextNodeWhenValueIsEntered(
+                    value: value, indexOfTextField: index);
 
-          changeFocusToPreviousNodeWhenValueIsRemoved(
-              value: value, indexOfTextField: index);
+                changeFocusToPreviousNodeWhenValueIsRemoved(
+                    value: value, indexOfTextField: index);
 
-          onSubmit(verificationCode: _verificationCode);
-        },
-      ),
-    );
+                onSubmit(verificationCode: _verificationCode);
+              },
+            ),
+          );
   }
 }
