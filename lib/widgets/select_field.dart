@@ -1,8 +1,8 @@
-import 'package:dropdown_button2/dropdown_button2.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_detextre4/painters/decorated_input_border.dart';
 import 'package:flutter_detextre4/utils/config/theme.dart';
 import 'package:flutter_detextre4/utils/extensions/type_extensions.dart';
+import 'package:dropdown_button2/dropdown_button2.dart';
+import 'package:flutter/material.dart';
 
 class SelectField<T> extends StatefulWidget {
   const SelectField({
@@ -43,6 +43,8 @@ class SelectField<T> extends StatefulWidget {
     this.dropdownStyleData,
     this.menuItemStyleData = const MenuItemStyleData(),
     this.shadow,
+    this.customButton,
+    this.alignment = AlignmentDirectional.centerStart,
   });
   final T? value;
   final TextStyle? textStyle;
@@ -80,6 +82,8 @@ class SelectField<T> extends StatefulWidget {
   final DropdownStyleData? dropdownStyleData;
   final MenuItemStyleData menuItemStyleData;
   final BoxShadow? shadow;
+  final Widget? customButton;
+  final AlignmentGeometry alignment;
 
   static Widget sizedBox<T>({
     double? width,
@@ -119,6 +123,8 @@ class SelectField<T> extends StatefulWidget {
     DropdownStyleData? dropdownStyleData,
     MenuItemStyleData menuItemStyleData = const MenuItemStyleData(),
     BoxShadow? shadow,
+    Widget? customButton,
+    AlignmentGeometry alignment = AlignmentDirectional.centerStart,
   }) {
     final expanded = height != null;
 
@@ -170,6 +176,8 @@ class SelectField<T> extends StatefulWidget {
         dropdownStyleData: dropdownStyleData,
         menuItemStyleData: menuItemStyleData,
         shadow: shadow,
+        customButton: customButton,
+        alignment: alignment,
       ),
     );
   }
@@ -227,11 +235,13 @@ class _SelectFieldState<T> extends State<SelectField<T>> {
 
     return DropdownButtonFormField2<T>(
       value: widget.value,
+      alignment: widget.alignment,
       hint: widget.hintText.hasValue ? Text(widget.hintText!, style: hs) : null,
       isExpanded: widget.isExpanded,
       focusNode: widget.focusNode,
+      customButton: widget.customButton,
       buttonStyleData: ButtonStyleData(
-        width: widget.buttonStyleData?.width,
+        width: widget.buttonStyleData?.width ?? 100,
         height: widget.buttonStyleData?.height,
         elevation: widget.buttonStyleData?.elevation,
         overlayColor: widget.buttonStyleData?.overlayColor,
@@ -252,7 +262,7 @@ class _SelectFieldState<T> extends State<SelectField<T>> {
         labelStyle: ls,
         floatingLabelStyle: fls,
         floatingLabelBehavior: widget.floatingLabelBehavior,
-        fillColor: widget.color ?? ThemeApp.colors(context).tertiary,
+        fillColor: widget.color ?? ThemeApp.colors(context).background,
         filled: widget.filled,
         border: checkBorder(border),
         enabledBorder: checkBorder(border),
@@ -274,31 +284,33 @@ class _SelectFieldState<T> extends State<SelectField<T>> {
         suffixIcon: widget.suffixIcon,
         isDense: true,
         contentPadding: widget.contentPadding ??
-            const EdgeInsets.symmetric(horizontal: 26, vertical: 10),
+            const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
       ),
-      dropdownStyleData: widget.dropdownStyleData ??
-          DropdownStyleData(
-              direction: widget.dropdownStyleData?.direction ??
-                  DropdownDirection.textDirection,
-              elevation: widget.dropdownStyleData?.elevation ?? 8,
-              isOverButton: widget.dropdownStyleData?.isOverButton ?? false,
-              width: widget.dropdownStyleData?.width,
-              maxHeight: widget.dropdownStyleData?.maxHeight,
-              offset: widget.dropdownStyleData?.offset ?? Offset.zero,
-              openInterval: widget.dropdownStyleData?.openInterval ??
-                  const Interval(0.25, 0.5),
-              padding: widget.dropdownStyleData?.padding,
-              scrollPadding: widget.dropdownStyleData?.scrollPadding,
-              scrollbarTheme: widget.dropdownStyleData?.scrollbarTheme,
-              useRootNavigator:
-                  widget.dropdownStyleData?.useRootNavigator ?? false,
-              useSafeArea: widget.dropdownStyleData?.useSafeArea ?? true,
-              decoration: widget.dropdownStyleData?.decoration ??
-                  BoxDecoration(
-                    borderRadius: const BorderRadius.all(Radius.circular(12)),
-                    border: Border.all(
-                        width: 1, color: ThemeApp.colors(context).primary),
-                  )),
+      dropdownStyleData: DropdownStyleData(
+          direction: widget.dropdownStyleData?.direction ??
+              DropdownDirection.textDirection,
+          elevation: widget.dropdownStyleData?.elevation ?? 8,
+          isOverButton: widget.dropdownStyleData?.isOverButton ?? false,
+          width: widget.dropdownStyleData?.width,
+          maxHeight: widget.dropdownStyleData?.maxHeight ?? 300,
+          offset: widget.dropdownStyleData?.offset ?? Offset.zero,
+          openInterval: widget.dropdownStyleData?.openInterval ??
+              const Interval(0.25, 0.5),
+          padding: widget.dropdownStyleData?.padding,
+          scrollPadding: widget.dropdownStyleData?.scrollPadding,
+          scrollbarTheme: widget.dropdownStyleData?.scrollbarTheme ??
+              ScrollbarThemeData(
+                thumbColor: MaterialStatePropertyAll(
+                    ThemeApp.colors(context).secondary),
+              ),
+          useRootNavigator: widget.dropdownStyleData?.useRootNavigator ?? false,
+          useSafeArea: widget.dropdownStyleData?.useSafeArea ?? true,
+          decoration: widget.dropdownStyleData?.decoration ??
+              BoxDecoration(
+                borderRadius: const BorderRadius.all(Radius.circular(12)),
+                border: Border.all(
+                    width: 1, color: ThemeApp.colors(context).primary),
+              )),
       menuItemStyleData: widget.menuItemStyleData,
       items: widget.items,
       validator: widget.validator,
