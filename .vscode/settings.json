@@ -45,14 +45,19 @@
 
 		// Allows pressing <TAB> to complete snippets such as `for` even when the
 		// completion list is not visible.
-		"editor.tabCompletion": "onlySnippets",
+		"editor.tabCompletion": "off",
 
 		// By default, VS Code will populate code completion with words found in the
 		// current file when a language service does not provide its own completions.
 		// This results in code completion suggesting words when editing comments and
 		// strings. This setting will prevent that.
-		"editor.wordBasedSuggestions": false,
+		"editor.wordBasedSuggestions": true,
+		"editor.quickSuggestions": {
+			"other": "on",
+			"comments": "off",
+			"strings": "off"
+		},
 	},
 	"todo-tree.tree.showBadges": true,
-	"editor.inlineSuggest.showToolbar": "always",
+	"editor.inlineSuggest.showToolbar": "onHover",
 }
