@@ -1,7 +1,7 @@
 {
 	// Auto fix warning code at save
 	"editor.codeActionsOnSave": {
-		"source.organizeImports": true,
+		"source.organizeImports": "explicit",
 		"source.fixAll": "always"
 	},
 
@@ -51,7 +51,7 @@
 		// current file when a language service does not provide its own completions.
 		// This results in code completion suggesting words when editing comments and
 		// strings. This setting will prevent that.
-		"editor.wordBasedSuggestions": true,
+		"editor.wordBasedSuggestions": "matchingDocuments",
 		"editor.quickSuggestions": {
 			"other": "on",
 			"comments": "off",

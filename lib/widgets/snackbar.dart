@@ -6,6 +6,8 @@ import 'package:flutter_detextre4/main.dart';
 import 'package:flutter_detextre4/utils/config/theme.dart';
 import 'package:flutter_detextre4/utils/extensions/type_extensions.dart';
 
+final GlobalKey flushBarKey = GlobalKey();
+
 // * App snackbar types
 enum ColorSnackbarState {
   neutral,
@@ -78,6 +80,7 @@ void showSnackbar(
 
   Flushbar? flushbar;
   flushbar = Flushbar(
+    key: flushBarKey,
     titleText: title.hasValue
         ? Text(title!, style: Theme.of(context).textTheme.bodyLarge)
         : null,
@@ -112,4 +115,10 @@ void showSnackbar(
   );
 
   flushbar.show(context);
+}
+
+void clearSnackbar() {
+  if (flushBarKey.currentWidget == null) return;
+
+  (flushBarKey.currentWidget as Flushbar).dismiss();
 }
