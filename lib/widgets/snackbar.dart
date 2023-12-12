@@ -106,6 +106,7 @@ void showSnackbar(
         ? IconButton(
             onPressed: () => flushbar?.dismiss(),
             icon: const Icon(Icons.close),
+            splashRadius: 20,
           )
         : null,
     positionOffset: 20,
