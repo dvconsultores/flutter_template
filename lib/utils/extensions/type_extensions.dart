@@ -160,7 +160,7 @@ extension ListExtension<T> on List<T> {
       if (message != null) {
         showSnackbar(
           message(dir),
-          type: ColorSnackbarState.success,
+          type: SnackbarType.success,
           duration: messageDuration,
         );
       }
@@ -553,7 +553,7 @@ extension StringExtension on String {
     Clipboard.setData(ClipboardData(text: this))
         .then((value) => message != null
             ? showSnackbar(message,
-                type: ColorSnackbarState.info, duration: messageDuration)
+                type: SnackbarType.info, duration: messageDuration)
             : null)
         .catchError((onError) => debugPrint("${onError.toString()} ⭕"));
   }
@@ -707,7 +707,7 @@ extension ScreenshotExtension on ScreenshotController {
     if (message != null) {
       showSnackbar(
         message,
-        type: ColorSnackbarState.success,
+        type: SnackbarType.success,
         duration: messageDuration,
       );
     }

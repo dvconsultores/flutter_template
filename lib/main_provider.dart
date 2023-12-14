@@ -1,3 +1,4 @@
+import 'package:another_flushbar/flushbar.dart';
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_detextre4/utils/config/config.dart';
@@ -9,6 +10,35 @@ class MainProvider extends ChangeNotifier {
   bool stopProcess = false;
   set setStopProcess(bool value) {
     stopProcess = value;
+    notifyListeners();
+  }
+
+  // ? ------------------------Snackbar Provider----------------------------- //
+  final List<Flushbar> snackbars = [];
+
+  set addSnackbar(Flushbar flushbar) {
+    snackbars.add(flushbar);
+    notifyListeners();
+  }
+
+  void get clearSnackbars {
+    for (final element in snackbars) {
+      element.dismiss();
+    }
+
+    snackbars.clear();
+    notifyListeners();
+  }
+
+  void get removeLastSnackbar {
+    snackbars.last.dismiss();
+    snackbars.removeLast();
+    notifyListeners();
+  }
+
+  void get removeFirstSnackbar {
+    snackbars.first.dismiss();
+    snackbars.removeAt(0);
     notifyListeners();
   }
 

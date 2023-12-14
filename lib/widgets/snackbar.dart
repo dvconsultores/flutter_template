@@ -1,15 +1,17 @@
 import 'dart:convert';
 
 import 'package:another_flushbar/flushbar.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_detextre4/main.dart';
+import 'package:flutter_detextre4/main_provider.dart';
 import 'package:flutter_detextre4/utils/config/theme.dart';
 import 'package:flutter_detextre4/utils/extensions/type_extensions.dart';
+import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
-final GlobalKey flushBarKey = GlobalKey();
+final _context = globalNavigatorKey.currentContext!;
 
 // * App snackbar types
-enum ColorSnackbarState {
+enum SnackbarType {
   neutral,
   info,
   success,
@@ -22,16 +24,15 @@ enum ColorSnackbarState {
 void showSnackbar(
   String? message, {
   String? title,
-  ColorSnackbarState? type,
-  Duration? duration = const Duration(seconds: 3),
+  SnackbarType? type,
+  Duration? duration = const Duration(seconds: 15),
   bool closable = true,
-  FlushbarDismissDirection dismissDirection =
-      FlushbarDismissDirection.HORIZONTAL,
+  FlushbarDismissDirection dismissDirection = FlushbarDismissDirection.VERTICAL,
   FlushbarPosition? flushbarPosition,
+  FlushbarStyle flushbarStyle = FlushbarStyle.FLOATING,
   String searchBy = "message",
   String fallback = "Error",
 }) {
-  final context = globalNavigatorKey.currentContext!;
   if (message.hasNotValue) return;
 
   final String msg = message!.contains('"$searchBy":')
@@ -44,34 +45,34 @@ void showSnackbar(
     Color? color;
 
     switch (type) {
-      case ColorSnackbarState.success:
+      case SnackbarType.success:
         return (
-          color ??= ThemeApp.colors(context).success,
+          color ??= ThemeApp.colors(_context).success,
           Icon(Icons.check_circle_outline_rounded, color: color),
-          FlushbarPosition.TOP
+          FlushbarPosition.BOTTOM
         );
-      case ColorSnackbarState.warning:
+      case SnackbarType.warning:
         return (
-          color ??= ThemeApp.colors(context).warning,
+          color ??= ThemeApp.colors(_context).warning,
           Icon(Icons.warning_amber_rounded, color: color),
-          FlushbarPosition.TOP
+          FlushbarPosition.BOTTOM
         );
-      case ColorSnackbarState.error:
+      case SnackbarType.error:
         return (
-          color ??= ThemeApp.colors(context).error,
+          color ??= ThemeApp.colors(_context).error,
           Icon(Icons.error_rounded, color: color),
-          FlushbarPosition.TOP
+          FlushbarPosition.BOTTOM
         );
-      case ColorSnackbarState.info:
+      case SnackbarType.info:
         return (
-          color ??= ThemeApp.colors(context).primary,
+          color ??= ThemeApp.colors(_context).secondary,
           Icon(Icons.info_outline_rounded, color: color),
           FlushbarPosition.BOTTOM
         );
-      case ColorSnackbarState.neutral:
+      case SnackbarType.neutral:
       default:
         return (
-          color ??= ThemeApp.colors(context).text,
+          color ??= ThemeApp.colors(_context).text,
           null,
           FlushbarPosition.BOTTOM
         );
@@ -80,28 +81,21 @@ void showSnackbar(
 
   Flushbar? flushbar;
   flushbar = Flushbar(
-    key: flushBarKey,
     titleText: title.hasValue
-        ? Text(title!, style: Theme.of(context).textTheme.bodyLarge)
+        ? Text(title!, style: Theme.of(_context).textTheme.bodyLarge)
         : null,
     messageText: Text(
       msg,
-      style: Theme.of(context).textTheme.bodyMedium?.copyWith(fontSize: 14),
+      style: Theme.of(_context).textTheme.bodyMedium?.copyWith(fontSize: 14),
     ),
     icon: getValueByType().$2,
-    titleColor: ThemeApp.colors(context).text,
-    messageColor: ThemeApp.colors(context).text,
-    backgroundColor: ThemeApp.colors(context).background,
-    borderRadius: const BorderRadius.only(
-      topLeft: Radius.circular(10),
-      bottomLeft: Radius.circular(10),
-      topRight: Radius.circular(20),
-      bottomRight: Radius.circular(20),
-    ),
+    titleColor: ThemeApp.colors(_context).text,
+    messageColor: ThemeApp.colors(_context).text,
+    backgroundColor: ThemeApp.colors(_context).background,
+    borderRadius: const BorderRadius.all(Radius.circular(20)),
     borderColor: getValueByType().$1,
-    borderWidth: 1.5,
+    borderWidth: 2.5,
     dismissDirection: dismissDirection,
-    leftBarIndicatorColor: getValueByType().$1,
     mainButton: closable
         ? IconButton(
             onPressed: () => flushbar?.dismiss(),
@@ -113,13 +107,12 @@ void showSnackbar(
     flushbarPosition: flushbarPosition ?? getValueByType().$3,
     margin: const EdgeInsets.only(left: 10.0, right: 10),
     duration: duration,
+    flushbarStyle: flushbarStyle,
   );
 
-  flushbar.show(context);
+  _context.read<MainProvider>().addSnackbar = flushbar;
+
+  flushbar.show(_context);
 }
 
-void clearSnackbar() {
-  if (flushBarKey.currentWidget == null) return;
-
-  (flushBarKey.currentWidget as Flushbar).dismiss();
-}
+void clearSnackbars() => _context.read<MainProvider>().clearSnackbars;
