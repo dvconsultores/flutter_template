@@ -94,9 +94,16 @@ class Button extends StatelessWidget {
     double height = 45,
     BoxConstraints? constraints,
     BorderRadius borderRadius = const BorderRadius.all(Radius.circular(40)),
-    BorderSide borderSide = const BorderSide(width: 1),
+    BorderSide borderSide = BorderSide.none,
     OutlinedBorder? shape,
-    List<BoxShadow> boxShadow = const [],
+    List<BoxShadow> boxShadow = const [
+      BoxShadow(
+        offset: Offset(-1, 6),
+        blurRadius: 3,
+        spreadRadius: 0,
+        color: Color.fromRGBO(0, 0, 0, 0.2),
+      ),
+    ],
     Color? color,
     Color? bgColor,
     Color? bgColorDisabled,
@@ -132,8 +139,8 @@ class Button extends StatelessWidget {
         borderRadius: borderRadius,
         borderSide: borderSide,
         boxShadow: boxShadow,
-        color: color ?? ThemeApp.colors(context).text,
-        bgColor: bgColor ?? ThemeApp.colors(context).tertiary,
+        color: color ?? Colors.white,
+        bgColor: bgColor ?? ThemeApp.colors(context).secondary.withOpacity(.8),
         bgColorDisabled: bgColorDisabled,
         splashFactory: splashFactory,
         overlayColor: overlayColor,
@@ -154,7 +161,7 @@ class Button extends StatelessWidget {
         textExpanded: textExpanded,
         child: child,
       );
-      
+
   static Button textVariant({
     String? text,
     void Function()? onPressed,
@@ -226,7 +233,6 @@ class Button extends StatelessWidget {
         textExpanded: textExpanded,
         child: child,
       );
-
 
   static Button icon({
     required void Function()? onPressed,
@@ -357,7 +363,7 @@ class Button extends StatelessWidget {
                   bgColor ?? ThemeApp.colors(context).primary),
           shape: MaterialStatePropertyAll(
             shape ??
-                RoundedRectangleBorder(
+                ContinuousRectangleBorder(
                     borderRadius: borderRadius, side: borderSide),
           ),
         ),

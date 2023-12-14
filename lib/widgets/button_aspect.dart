@@ -221,43 +221,47 @@ class ButtonAspect extends StatelessWidget {
       style: ts,
     );
 
-    return Container(
-      margin: margin,
-      padding: padding,
-      width: width,
-      height: height,
-      constraints: constraints,
-      decoration: BoxDecoration(
-        color: bgColor ?? ThemeApp.colors(context).primary,
-        shape: shape ?? BoxShape.rectangle,
-        borderRadius: borderRadius,
-        border: borderSide != null ? Border.fromBorderSide(borderSide!) : null,
-        boxShadow: boxShadow,
+    return Material(
+      shape: ContinuousRectangleBorder(
+        borderRadius: borderRadius!,
+        side: borderSide!,
       ),
-      child: child ??
-          Row(
-              mainAxisAlignment:
-                  buttonAxisAlignment ?? MainAxisAlignment.center,
-              children: [
-                if (leading != null) leading!,
-                //
-                if (leadingSpacer)
-                  const Spacer()
-                else if (leadingGap != null || gap != null)
-                  Gap(leadingGap ?? gap!).row,
-                //
-                if (content != null)
-                  content!
-                else if (text.hasValue)
-                  textExpanded ? Expanded(child: widgetText) : widgetText,
-                //
-                if (trailingSpacer)
-                  const Spacer()
-                else if (trailingGap != null || gap != null)
-                  Gap(trailingGap ?? gap!).row,
-                //
-                if (trailing != null) trailing!,
-              ]),
+      clipBehavior: Clip.antiAliasWithSaveLayer,
+      child: Container(
+        margin: margin,
+        padding: padding,
+        width: width,
+        height: height,
+        constraints: constraints,
+        decoration: BoxDecoration(
+          color: bgColor ?? ThemeApp.colors(context).primary,
+          boxShadow: boxShadow,
+        ),
+        child: child ??
+            Row(
+                mainAxisAlignment:
+                    buttonAxisAlignment ?? MainAxisAlignment.center,
+                children: [
+                  if (leading != null) leading!,
+                  //
+                  if (leadingSpacer)
+                    const Spacer()
+                  else if (leadingGap != null || gap != null)
+                    Gap(leadingGap ?? gap!).row,
+                  //
+                  if (content != null)
+                    content!
+                  else if (text.hasValue)
+                    textExpanded ? Expanded(child: widgetText) : widgetText,
+                  //
+                  if (trailingSpacer)
+                    const Spacer()
+                  else if (trailingGap != null || gap != null)
+                    Gap(trailingGap ?? gap!).row,
+                  //
+                  if (trailing != null) trailing!,
+                ]),
+      ),
     );
   }
 }

@@ -5,9 +5,10 @@ import 'package:flutter_detextre4/painters/decorated_input_border.dart';
 import 'package:flutter_detextre4/utils/config/theme.dart';
 import 'package:flutter_detextre4/utils/general/functions.dart';
 import 'package:flutter_detextre4/utils/general/input_formatters.dart';
+import 'package:flutter_detextre4/utils/helper_widgets/async_text_form_field.dart';
 
-class InputField extends TextFormField {
-  InputField({
+class AsyncInputField extends AsyncTextFormField {
+  AsyncInputField({
     super.key,
     super.controller,
     super.validator,
@@ -26,8 +27,8 @@ class InputField extends TextFormField {
     super.onFieldSubmitted,
     super.autocorrect,
     super.autofocus,
-    this.keyboardType,
-    this.inputFormatters,
+    this.typeKeyboard,
+    this.formatters,
     this.labelText,
     this.hintText,
     this.disabled = false,
@@ -41,7 +42,7 @@ class InputField extends TextFormField {
     this.maxEntires = 10,
     this.maxDecimals = 2,
     this.prefixPadding,
-    this.borderRadius = const BorderRadius.all(Radius.circular(40)),
+    this.borderRadius = const BorderRadius.all(Radius.circular(15)),
     this.borderWidth = 1,
     this.borderColor,
     this.disabledBorderColor,
@@ -56,7 +57,7 @@ class InputField extends TextFormField {
     this.floatingLabelStyle,
     this.filled = true,
     this.color,
-    this.decoration,
+    this.inputDecoration,
     this.errorMaxLines,
     this.shadow,
     this.counterText,
@@ -66,7 +67,7 @@ class InputField extends TextFormField {
           keyboardType: numeric
               ? const TextInputType.numberWithOptions(
                   signed: true, decimal: true)
-              : keyboardType,
+              : typeKeyboard,
           inputFormatters: [
             if (numeric) ...[
               DecimalTextInputFormatter(
@@ -75,20 +76,19 @@ class InputField extends TextFormField {
                 maxDecimals: maxDecimals,
               ),
             ],
-            if (inputFormatters != null && inputFormatters.isNotEmpty)
-              ...inputFormatters
+            if (formatters != null && formatters.isNotEmpty) ...formatters
           ],
-          decoration: decoration ??
+          decoration: inputDecoration ??
               buildWidget<InputDecoration>(() {
                 final ts = textStyle ?? _ts;
 
                 final hs = hintStyle ??
                     ts.copyWith(
                         color: ThemeApp.colors(context).text.withOpacity(.7),
-                        fontSize: 13);
+                        fontSize: 12);
                 final ls = labelStyle ??
                     ts.copyWith(
-                        color: ThemeApp.colors(context).text, fontSize: 13);
+                        color: ThemeApp.colors(context).text, fontSize: 12);
                 final fls = floatingLabelStyle ?? ls;
 
                 InputBorder checkBorder(Color color) => DecoratedInputBorder(
@@ -175,7 +175,7 @@ class InputField extends TextFormField {
   final Widget? suffix;
   final double maxWidthPrefix;
   final bool numeric;
-  final List<TextInputFormatter>? inputFormatters;
+  final List<TextInputFormatter>? formatters;
   final bool formatByComma;
   final int maxEntires;
   final int maxDecimals;
@@ -195,8 +195,8 @@ class InputField extends TextFormField {
   final TextStyle? floatingLabelStyle;
   final bool filled;
   final Color? color;
-  final TextInputType? keyboardType;
-  final InputDecoration? decoration;
+  final TextInputType? typeKeyboard;
+  final InputDecoration? inputDecoration;
   final int? errorMaxLines;
   final BoxShadow? shadow;
   final String? counterText;
@@ -225,7 +225,7 @@ class InputField extends TextFormField {
     AutovalidateMode? autovalidateMode,
     Widget? prefix,
     Widget? suffix,
-    String? Function(String? value)? validator,
+    Future<String?> Function(String? value)? validator,
     List<TextInputFormatter>? inputFormatters,
     bool obscureText = false,
     EdgeInsetsGeometry? prefixPadding,
@@ -260,7 +260,7 @@ class InputField extends TextFormField {
     return SizedBox(
       width: width,
       height: height,
-      child: InputField(
+      child: AsyncInputField(
         onTapOutside: onTapOutside,
         onTap: onTap,
         onChanged: onChanged,
@@ -269,19 +269,20 @@ class InputField extends TextFormField {
         hintText: hintText,
         disabled: disabled,
         expands: expanded,
-        keyboardType: numeric
+        typeKeyboard: numeric
             ? const TextInputType.numberWithOptions(signed: true, decimal: true)
             : expanded && keyboardType == null
                 ? TextInputType.text
                 : keyboardType,
-        maxLines: expanded ? null : maxLines,
+        maxLines: expanded ? 1 : maxLines,
         minLines: minLines,
         labelText: labelText,
         maxLength: maxLength,
         prefixIcon: prefixIcon,
         suffixIcon: suffixIcon,
         textAlign: textAlign,
-        autovalidateMode: autovalidateMode,
+        autovalidateMode:
+            autovalidateMode ?? AutovalidateMode.onUserInteraction,
         borderRadius: borderRadius,
         borderWidth: borderWidth,
         borderColor: borderColor,
@@ -292,7 +293,7 @@ class InputField extends TextFormField {
         contentPadding: contentPadding,
         floatingLabelBehavior: floatingLabelBehavior,
         formatByComma: formatByComma,
-        inputFormatters: inputFormatters,
+        formatters: inputFormatters,
         maxWidthPrefix: maxWidthPrefix,
         numeric: numeric,
         obscureText: obscureText,
@@ -307,7 +308,7 @@ class InputField extends TextFormField {
         floatingLabelStyle: floatingLabelStyle,
         filled: filled,
         color: color,
-        decoration: decoration,
+        inputDecoration: decoration,
         errorMaxLines: errorMaxLines,
         onFieldSubmitted: onFieldSubmitted,
         autocorrect: autocorrect,
