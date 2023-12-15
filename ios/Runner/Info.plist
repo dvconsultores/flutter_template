@@ -47,7 +47,6 @@
 		<true/>
 		<key>UIApplicationSupportsIndirectInputEvents</key>
 		<true/>
-
 		<key>NSCameraUsageDescription</key>
 		<string>Flutter Detextre4 reuiere tomar una foto. ¿Podemos user tú cámara?</string>
 		<key>NSPhotoLibraryUsageDescription</key>
@@ -60,5 +59,7 @@
 		<array>
 			<string>flutter_detextre4</string>
 		</array>
+		<key>UIStatusBarHidden</key>
+		<true/>
 	</dict>
 </plist>
