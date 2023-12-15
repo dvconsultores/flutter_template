@@ -22,9 +22,7 @@ Future<void> openUrl(String url) async {
 T buildWidget<T>(T Function() callback) => callback();
 
 /// A global menu that can be invoked onto whatever widget.
-Future<String?> showPopup(
-  Map<String, IconData> items,
-) async {
+Future<String?> showPopup(Map<String, IconData> items) async {
   final context = globalNavigatorKey.currentContext!;
 
   //*get the render box from the context

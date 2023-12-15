@@ -11,6 +11,7 @@ class Button extends StatelessWidget {
     this.text,
     this.textStyle,
     this.loading = false,
+    this.loaderSize = 25,
     this.disabled = false,
     this.width,
     this.height = 45,
@@ -56,7 +57,8 @@ class Button extends StatelessWidget {
   final bool loading;
   final bool disabled;
   final double? width;
-  final double height;
+  final double? height;
+  final double? loaderSize;
   final BoxConstraints? constraints;
   final BorderRadius borderRadius;
   final BorderSide borderSide;
@@ -91,7 +93,8 @@ class Button extends StatelessWidget {
     bool loading = false,
     bool disabled = false,
     double? width,
-    double height = 45,
+    double? height = 45,
+    double? loaderSize = 25,
     BoxConstraints? constraints,
     BorderRadius borderRadius = const BorderRadius.all(Radius.circular(40)),
     BorderSide borderSide = BorderSide.none,
@@ -132,6 +135,7 @@ class Button extends StatelessWidget {
         textStyle: textStyle,
         loading: loading,
         disabled: disabled,
+        loaderSize: loaderSize,
         width: width,
         height: height,
         constraints: constraints,
@@ -140,8 +144,9 @@ class Button extends StatelessWidget {
         borderSide: borderSide,
         boxShadow: boxShadow,
         color: color ?? Colors.white,
-        bgColor: bgColor ?? ThemeApp.colors(context).secondary.withOpacity(.8),
-        bgColorDisabled: bgColorDisabled,
+        bgColor: bgColor ?? ThemeApp.colors(context).secondary,
+        bgColorDisabled: bgColorDisabled ??
+            ThemeApp.colors(context).secondary.withOpacity(.4),
         splashFactory: splashFactory,
         overlayColor: overlayColor,
         padding: padding,
@@ -169,7 +174,8 @@ class Button extends StatelessWidget {
     bool loading = false,
     bool disabled = false,
     double? width,
-    double height = 45,
+    double? height = 45,
+    double? loaderSize = 25,
     BoxConstraints? constraints,
     BorderRadius borderRadius = const BorderRadius.all(Radius.circular(40)),
     BorderSide borderSide = BorderSide.none,
@@ -203,6 +209,7 @@ class Button extends StatelessWidget {
         textStyle: textStyle,
         loading: loading,
         disabled: disabled,
+        loaderSize: loaderSize,
         width: width,
         height: height,
         constraints: constraints,
@@ -212,7 +219,7 @@ class Button extends StatelessWidget {
         boxShadow: boxShadow,
         color: color ?? ThemeApp.colors(context).text,
         bgColor: bgColor,
-        bgColorDisabled: bgColorDisabled,
+        bgColorDisabled: bgColorDisabled ?? Colors.transparent,
         splashFactory: splashFactory,
         overlayColor:
             overlayColor ?? ThemeApp.colors(context).secondary.withOpacity(.4),
@@ -238,6 +245,7 @@ class Button extends StatelessWidget {
     required void Function()? onPressed,
     bool loading = false,
     bool disabled = false,
+    double? loaderSize = 25,
     double size = 45,
     BoxConstraints? constraints,
     BorderRadius borderRadius = const BorderRadius.all(Radius.circular(100)),
@@ -263,6 +271,7 @@ class Button extends StatelessWidget {
       Button(
         width: size,
         height: size,
+        loaderSize: loaderSize,
         shape: shape ?? CircleBorder(side: borderSide),
         borderSide: borderSide,
         margin: margin,
@@ -272,7 +281,8 @@ class Button extends StatelessWidget {
         disabled: disabled,
         color: color,
         bgColor: bgColor,
-        bgColorDisabled: bgColorDisabled,
+        bgColorDisabled:
+            bgColorDisabled ?? ThemeApp.colors(context).primary.withOpacity(.4),
         splashFactory: splashFactory,
         overlayColor: overlayColor,
         padding: padding,
@@ -286,6 +296,7 @@ class Button extends StatelessWidget {
     bool loading = false,
     bool disabled = false,
     double size = 45,
+    double? loaderSize = 25,
     BoxConstraints? constraints,
     BorderRadius borderRadius = const BorderRadius.all(Radius.circular(100)),
     BorderSide borderSide = const BorderSide(width: 1),
@@ -303,6 +314,7 @@ class Button extends StatelessWidget {
       Button(
         width: size,
         height: size,
+        loaderSize: loaderSize,
         shape: shape ?? CircleBorder(side: borderSide),
         borderSide: borderSide,
         margin: margin,
@@ -312,7 +324,8 @@ class Button extends StatelessWidget {
         disabled: disabled,
         color: color ?? ThemeApp.colors(context).text,
         bgColor: bgColor ?? ThemeApp.colors(context).tertiary,
-        bgColorDisabled: bgColorDisabled,
+        bgColorDisabled: bgColorDisabled ??
+            ThemeApp.colors(context).tertiary.withOpacity(.4),
         splashFactory: splashFactory,
         overlayColor: overlayColor,
         padding: padding,
@@ -357,8 +370,8 @@ class Button extends StatelessWidget {
           splashFactory: splashFactory,
           overlayColor: MaterialStatePropertyAll(overlayColor),
           backgroundColor: disabled
-              ? MaterialStatePropertyAll(
-                  bgColorDisabled ?? ThemeApp.colors(context).disabledColor)
+              ? MaterialStatePropertyAll(bgColorDisabled ??
+                  ThemeApp.colors(context).primary.withOpacity(.4))
               : MaterialStatePropertyAll(
                   bgColor ?? ThemeApp.colors(context).primary),
           shape: MaterialStatePropertyAll(
@@ -369,8 +382,8 @@ class Button extends StatelessWidget {
         ),
         child: loading
             ? SizedBox(
-                width: height / 2,
-                height: height / 2,
+                width: loaderSize ?? (width! / 2),
+                height: loaderSize ?? (height! / 2),
                 child: const CircularProgressIndicator(strokeWidth: 3),
               )
             : child ??

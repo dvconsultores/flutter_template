@@ -1,5 +1,5 @@
-import 'package:flutter_detextre4/utils/config/theme.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_detextre4/utils/config/theme.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 
 class AppQrCode extends StatelessWidget {
@@ -45,11 +45,8 @@ class AppQrCode extends StatelessWidget {
           color: ThemeApp.colors(context).text,
           dataModuleShape: QrDataModuleShape.circle,
         ),
-        embeddedImage: hideLogo
-            ? null
-            : const AssetImage(
-                'assets/logos/logo_apolo.png',
-              ),
+        embeddedImage:
+            hideLogo ? null : const AssetImage('assets/images/avatar.png'),
       ),
     );
   }

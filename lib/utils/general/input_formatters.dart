@@ -1,6 +1,8 @@
+import 'dart:math';
+
+import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
-import 'dart:math';
 
 // ? Decimal text input formatter
 class DecimalTextInputFormatter extends TextInputFormatter {
@@ -207,5 +209,23 @@ class CurrencyInputFormatter extends TextInputFormatter {
   static bool _lastCharacterIsDigit(String text) {
     final String lastChar = text.substring(text.length - 1);
     return RegExp('[0-9]').hasMatch(lastChar);
+  }
+}
+
+class RestringedCharactersFormatter extends TextInputFormatter {
+  const RestringedCharactersFormatter(this.restrictedCharacters);
+  final Set<String> restrictedCharacters;
+
+  @override
+  TextEditingValue formatEditUpdate(
+      TextEditingValue oldValue, TextEditingValue newValue) {
+    final replaced = newValue.text.characters
+        .map((char) => restrictedCharacters.contains(char) ? '' : char)
+        .join('');
+
+    return TextEditingValue(
+      text: replaced,
+      selection: TextSelection.collapsed(offset: replaced.length),
+    );
   }
 }
