@@ -23,14 +23,14 @@ class SecureStorage {
 
   /// Get any value from secure storage using [SecureCollection] key.
   static Future<T> read<T>(SecureCollection key) async {
-    final String? value = await storage.read(
-      key: key.name,
-      aOptions: getAndroidOptions(),
-      iOptions: getIOSOptions(),
-      webOptions: getWebOptions(),
-    );
-
     try {
+      final String? value = await storage.read(
+        key: key.name,
+        aOptions: getAndroidOptions(),
+        iOptions: getIOSOptions(),
+        webOptions: getWebOptions(),
+      );
+
       debugPrint("${key.name}: $value - readed from Secure storage 🛡️");
       return jsonDecode(value ?? "null") as T;
     } catch (_) {
