@@ -30,8 +30,13 @@ class SecureStorage {
       webOptions: getWebOptions(),
     );
 
-    debugPrint("${key.name}: $value - readed from Secure storage 🛡️");
-    return jsonDecode(value ?? "null") as T;
+    try {
+      debugPrint("${key.name}: $value - readed from Secure storage 🛡️");
+      return jsonDecode(value ?? "null") as T;
+    } catch (_) {
+      delete(key);
+      return null as T;
+    }
   }
 
   /// Get all values storaged into secure storage.
