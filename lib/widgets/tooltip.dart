@@ -1,17 +1,21 @@
-import 'package:flutter/material.dart';
 import 'package:flutter_detextre4/utils/config/theme.dart';
+import 'package:flutter/material.dart';
 
 class AppTooltip extends StatelessWidget {
   const AppTooltip({
     super.key,
     required this.child,
+    this.showTooltip = false,
     this.message,
   });
   final Widget child;
+  final bool showTooltip;
   final String? message;
 
   @override
   Widget build(BuildContext context) {
+    if (!showTooltip) return child;
+
     return Tooltip(
       message: message,
       triggerMode: TooltipTriggerMode.longPress,

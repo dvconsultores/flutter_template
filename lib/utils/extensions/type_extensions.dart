@@ -350,6 +350,13 @@ extension NullableStringExtension on String? {
 
 // ? String extension
 extension StringExtension on String {
+  /// Limit characters length to value provided.
+  ///
+  /// in case the current string is not long enough, an unmutated value will
+  /// be returned
+  String limitChatacters(int value) =>
+      length >= value ? "${substring(0, value)}..." : this;
+
   /// Constructs a new [DateTime] instance based on [formattedString].
   ///
   /// Throws a [FormatException] if the input string cannot be parsed.
