@@ -1,5 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_detextre4/main.dart';
 import 'package:flutter_detextre4/utils/config/theme.dart';
 import 'package:skeletons/skeletons.dart';
 
@@ -43,90 +44,95 @@ extension ImageExtension on Image {
     Clip clipBehavior = Clip.antiAlias,
     Duration shimmerDuration = const Duration(milliseconds: 1500),
     LinearGradient? shimmerGradient,
-  }) =>
-      ClipRRect(
-        borderRadius: borderRadius ?? BorderRadius.circular(200),
-        clipBehavior: clipBehavior,
-        child: image is NetworkImage
-            ? Image.network(
-                (image as NetworkImage).url,
-                key: key,
-                alignment: alignment,
-                fit: fit ?? BoxFit.cover,
-                centerSlice: centerSlice,
-                color: color,
-                colorBlendMode: colorBlendMode,
-                excludeFromSemantics: excludeFromSemantics,
-                filterQuality: filterQuality,
-                frameBuilder: frameBuilder,
-                gaplessPlayback: gaplessPlayback,
-                height: height,
-                isAntiAlias: isAntiAlias,
-                matchTextDirection: matchTextDirection,
-                opacity: opacity,
-                repeat: repeat,
-                semanticLabel: semanticLabel,
-                width: width,
-                loadingBuilder: loadingBuilder ??
-                    (context, child, loadingProgress) => SizedBox(
-                          width: width,
-                          height: height,
-                          child: Skeleton(
-                            isLoading: loadingProgress?.cumulativeBytesLoaded !=
-                                loadingProgress?.expectedTotalBytes,
-                            duration: shimmerDuration,
-                            shimmerGradient: shimmerGradient ??
-                                LinearGradient(colors: [
-                                  ThemeApp.colors(context)
-                                      .primary
-                                      .withOpacity(.5),
-                                  ThemeApp.colors(context)
-                                      .secondary
-                                      .withOpacity(.5),
-                                ]),
-                            skeleton: SkeletonAvatar(
-                              style: SkeletonAvatarStyle(
-                                  width: width, height: height),
-                            ),
-                            child: child,
-                          ),
-                        ),
-                errorBuilder: (context, error, stackTrace) => SizedBox(
-                  width: (width ?? 40),
-                  height: (height ?? 40),
-                  child: Align(
-                    child: Icon(Icons.error, size: (width ?? 40) / 2),
-                  ),
-                ),
-              )
-            : Image.file(
-                (image as FileImage).file,
-                key: key,
-                alignment: alignment,
-                fit: fit ?? BoxFit.cover,
-                centerSlice: centerSlice,
-                color: color,
-                colorBlendMode: colorBlendMode,
-                excludeFromSemantics: excludeFromSemantics,
-                filterQuality: filterQuality,
-                frameBuilder: frameBuilder,
-                gaplessPlayback: gaplessPlayback,
-                height: height,
-                isAntiAlias: isAntiAlias,
-                matchTextDirection: matchTextDirection,
-                opacity: opacity,
-                repeat: repeat,
-                semanticLabel: semanticLabel,
-                width: width,
-                errorBuilder: (context, error, stackTrace) => SizedBox(
-                  width: (width ?? 40),
-                  height: (height ?? 40),
-                  child: Align(
-                    child: Icon(Icons.error, size: (height ?? 40) / 2),
-                  ),
+    bool loading = false,
+  }) {
+    Widget skeletonLoader(BuildContext context, bool loading) => SizedBox(
+          width: width,
+          height: height,
+          child: Skeleton(
+            isLoading: loading,
+            duration: shimmerDuration,
+            shimmerGradient: shimmerGradient ??
+                LinearGradient(colors: [
+                  ThemeApp.colors(context).primary.withOpacity(.5),
+                  ThemeApp.colors(context).secondary.withOpacity(.5),
+                ]),
+            skeleton: SkeletonAvatar(
+              style: SkeletonAvatarStyle(width: width, height: height),
+            ),
+            child: this,
+          ),
+        );
+
+    if (loading) {
+      return skeletonLoader(globalNavigatorKey.currentContext!, true);
+    }
+
+    return ClipRRect(
+      borderRadius: borderRadius ?? BorderRadius.circular(200),
+      clipBehavior: clipBehavior,
+      child: image is NetworkImage
+          ? Image.network(
+              (image as NetworkImage).url,
+              key: key,
+              alignment: alignment,
+              fit: fit ?? BoxFit.cover,
+              centerSlice: centerSlice,
+              color: color,
+              colorBlendMode: colorBlendMode,
+              excludeFromSemantics: excludeFromSemantics,
+              filterQuality: filterQuality,
+              frameBuilder: frameBuilder,
+              gaplessPlayback: gaplessPlayback,
+              height: height,
+              isAntiAlias: isAntiAlias,
+              matchTextDirection: matchTextDirection,
+              opacity: opacity,
+              repeat: repeat,
+              semanticLabel: semanticLabel,
+              width: width,
+              loadingBuilder: loadingBuilder ??
+                  (context, child, loadingProgress) => skeletonLoader(
+                      context,
+                      loadingProgress?.cumulativeBytesLoaded !=
+                          loadingProgress?.expectedTotalBytes),
+              errorBuilder: (context, error, stackTrace) => SizedBox(
+                width: (width ?? 40),
+                height: (height ?? 40),
+                child: Align(
+                  child: Icon(Icons.error, size: (width ?? 40) / 2),
                 ),
               ),
-      );
+            )
+          : Image.file(
+              (image as FileImage).file,
+              key: key,
+              alignment: alignment,
+              fit: fit ?? BoxFit.cover,
+              centerSlice: centerSlice,
+              color: color,
+              colorBlendMode: colorBlendMode,
+              excludeFromSemantics: excludeFromSemantics,
+              filterQuality: filterQuality,
+              frameBuilder: frameBuilder,
+              gaplessPlayback: gaplessPlayback,
+              height: height,
+              isAntiAlias: isAntiAlias,
+              matchTextDirection: matchTextDirection,
+              opacity: opacity,
+              repeat: repeat,
+              semanticLabel: semanticLabel,
+              width: width,
+              errorBuilder: (context, error, stackTrace) => SizedBox(
+                width: (width ?? 40),
+                height: (height ?? 40),
+                child: Align(
+                  child: Icon(Icons.error, size: (height ?? 40) / 2),
+                ),
+              ),
+            ),
+    );
+  }
 }
 
 // ? cachedNetworkImage extension
@@ -136,66 +142,73 @@ extension CachedNetworkImageExtension on CachedNetworkImage {
     Clip clipBehavior = Clip.antiAlias,
     Duration shimmerDuration = const Duration(milliseconds: 1500),
     LinearGradient? shimmerGradient,
-  }) =>
-      ClipRRect(
-        borderRadius: borderRadius ?? BorderRadius.circular(200),
-        clipBehavior: clipBehavior,
-        child: CachedNetworkImage(
-          key: key,
-          imageUrl: imageUrl,
-          alignment: alignment,
-          fit: fit ?? BoxFit.cover,
-          color: color,
-          colorBlendMode: colorBlendMode,
-          filterQuality: filterQuality,
-          height: height,
-          matchTextDirection: matchTextDirection,
-          repeat: repeat,
+    bool loading = false,
+  }) {
+    Widget skeletonLoader(BuildContext context, bool loading) => SizedBox(
           width: width,
-          cacheKey: cacheKey,
-          cacheManager: cacheManager,
-          fadeInCurve: fadeInCurve,
-          fadeInDuration: fadeInDuration,
-          fadeOutCurve: fadeOutCurve,
-          fadeOutDuration: fadeOutDuration,
-          httpHeaders: httpHeaders,
-          imageBuilder: imageBuilder,
-          maxHeightDiskCache: maxHeightDiskCache,
-          maxWidthDiskCache: maxWidthDiskCache,
-          memCacheHeight: memCacheHeight,
-          memCacheWidth: memCacheWidth,
-          placeholder: placeholder,
-          placeholderFadeInDuration: placeholderFadeInDuration,
-          useOldImageOnUrlChange: useOldImageOnUrlChange,
-          progressIndicatorBuilder: progressIndicatorBuilder ??
-              (context, child, loadingProgress) => SizedBox(
-                    width: width,
-                    height: height,
-                    child: Skeleton(
-                      isLoading: loadingProgress.downloaded !=
-                          loadingProgress.totalSize,
-                      duration: shimmerDuration,
-                      shimmerGradient: shimmerGradient ??
-                          LinearGradient(colors: [
-                            ThemeApp.colors(context).primary.withOpacity(.5),
-                            ThemeApp.colors(context).secondary.withOpacity(.5),
-                          ]),
-                      skeleton: SkeletonAvatar(
-                        style:
-                            SkeletonAvatarStyle(width: width, height: height),
-                      ),
-                      child: this,
-                    ),
-                  ),
-          errorWidget: (context, error, stackTrace) => SizedBox(
-            width: (width ?? 40) / 2,
-            height: (height ?? 40) / 2,
-            child: const Align(
-              child: Icon(Icons.error),
+          height: height,
+          child: Skeleton(
+            isLoading: loading,
+            duration: shimmerDuration,
+            shimmerGradient: shimmerGradient ??
+                LinearGradient(colors: [
+                  ThemeApp.colors(context).primary.withOpacity(.5),
+                  ThemeApp.colors(context).secondary.withOpacity(.5),
+                ]),
+            skeleton: SkeletonAvatar(
+              style: SkeletonAvatarStyle(width: width, height: height),
             ),
+            child: this,
+          ),
+        );
+
+    if (loading) {
+      return skeletonLoader(globalNavigatorKey.currentContext!, true);
+    }
+
+    return ClipRRect(
+      borderRadius: borderRadius ?? BorderRadius.circular(200),
+      clipBehavior: clipBehavior,
+      child: CachedNetworkImage(
+        key: key,
+        imageUrl: imageUrl,
+        alignment: alignment,
+        fit: fit ?? BoxFit.cover,
+        color: color,
+        colorBlendMode: colorBlendMode,
+        filterQuality: filterQuality,
+        height: height,
+        matchTextDirection: matchTextDirection,
+        repeat: repeat,
+        width: width,
+        cacheKey: cacheKey,
+        cacheManager: cacheManager,
+        fadeInCurve: fadeInCurve,
+        fadeInDuration: fadeInDuration,
+        fadeOutCurve: fadeOutCurve,
+        fadeOutDuration: fadeOutDuration,
+        httpHeaders: httpHeaders,
+        imageBuilder: imageBuilder,
+        maxHeightDiskCache: maxHeightDiskCache,
+        maxWidthDiskCache: maxWidthDiskCache,
+        memCacheHeight: memCacheHeight,
+        memCacheWidth: memCacheWidth,
+        placeholder: placeholder,
+        placeholderFadeInDuration: placeholderFadeInDuration,
+        useOldImageOnUrlChange: useOldImageOnUrlChange,
+        progressIndicatorBuilder: progressIndicatorBuilder ??
+            (context, child, loadingProgress) => skeletonLoader(context,
+                loadingProgress.downloaded != loadingProgress.totalSize),
+        errorWidget: (context, error, stackTrace) => SizedBox(
+          width: (width ?? 40) / 2,
+          height: (height ?? 40) / 2,
+          child: const Align(
+            child: Icon(Icons.error),
           ),
         ),
-      );
+      ),
+    );
+  }
 }
 
 // ? Navigator extension

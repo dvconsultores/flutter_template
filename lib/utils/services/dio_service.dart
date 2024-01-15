@@ -76,10 +76,6 @@ class DioService {
               textButton: "Entendido",
               onPressedButton: () => context.goNamed("login"),
             ),
-          ).whenComplete(
-            () => globalNavigatorKey.currentContext!
-                .read<MainProvider>()
-                .setStopProcess = false,
           );
 
           //* catch connection failed
@@ -301,10 +297,6 @@ extension MultipartResponded on http.MultipartRequest {
                 textButton: "Entendido",
                 onPressedButton: () => context.goNamed("login"),
               ),
-            ).whenComplete(
-              () => globalNavigatorKey.currentContext!
-                  .read<MainProvider>()
-                  .setStopProcess = false,
             ) ??
             "Session has expired";
       }

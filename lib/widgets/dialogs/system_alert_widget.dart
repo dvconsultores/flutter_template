@@ -2,12 +2,13 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
+import 'package:flutter_detextre4/main.dart';
 import 'package:flutter_detextre4/main_provider.dart';
 import 'package:flutter_detextre4/utils/config/theme.dart';
 import 'package:flutter_detextre4/utils/helper_widgets/will_pop_custom.dart';
 import 'package:provider/provider.dart';
 
-class SystemAlertWidget extends StatelessWidget {
+class SystemAlertWidget extends StatefulWidget {
   const SystemAlertWidget({
     super.key,
     required this.title,
@@ -29,12 +30,32 @@ class SystemAlertWidget extends StatelessWidget {
   final VoidCallback? onOpen;
 
   @override
-  Widget build(BuildContext context) {
-    SchedulerBinding.instance.addPostFrameCallback((_) {
-      context.read<MainProvider>().setStopProcess = true;
-    });
+  State<SystemAlertWidget> createState() => _SystemAlertWidgetState();
+}
 
-    if (onOpen != null) onOpen!();
+class _SystemAlertWidgetState extends State<SystemAlertWidget> {
+  @override
+  void initState() {
+    SchedulerBinding.instance.addPostFrameCallback((timeStamp) {
+      globalNavigatorKey.currentContext!.read<MainProvider>().setStopProcess =
+          true;
+    });
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    Future.delayed(
+        const Duration(milliseconds: 500),
+        () => globalNavigatorKey.currentContext!
+            .read<MainProvider>()
+            .setStopProcess = false);
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    if (widget.onOpen != null) widget.onOpen!();
 
     return WillPopCustom(
       onWillPop: () async => true,
@@ -48,8 +69,9 @@ class SystemAlertWidget extends StatelessWidget {
                 width: 2,
               ),
             ),
-            title: Text(title),
-            content: textContent != null ? Text(textContent!) : null,
+            title: Text(widget.title),
+            content:
+                widget.textContent != null ? Text(widget.textContent!) : null,
             actionsAlignment: MainAxisAlignment.center,
             titlePadding:
                 const EdgeInsets.only(top: 15, bottom: 10, left: 15, right: 15),
@@ -59,34 +81,34 @@ class SystemAlertWidget extends StatelessWidget {
                 const EdgeInsets.only(top: 10, bottom: 15, left: 15, right: 15),
             actions: [
               Row(children: [
-                if (textButton != null)
+                if (widget.textButton != null)
                   Expanded(
                     child: TextButton(
-                      onPressed:
-                          onPressedButton ?? () => Navigator.pop(context),
+                      onPressed: widget.onPressedButton ??
+                          () => Navigator.pop(context),
                       style: ButtonStyle(
                         backgroundColor: MaterialStatePropertyAll(
                             ThemeApp.colors(context).secondary),
                         foregroundColor:
                             const MaterialStatePropertyAll(Colors.white),
                       ),
-                      child: Text(textButton!),
+                      child: Text(widget.textButton!),
                     ),
                   ),
-                if (textButton != null && textButton2 != null)
+                if (widget.textButton != null && widget.textButton2 != null)
                   const SizedBox(width: 15),
-                if (textButton2 != null)
+                if (widget.textButton2 != null)
                   Expanded(
                     child: TextButton(
-                      onPressed:
-                          onPressedButton2 ?? () => Navigator.pop(context),
+                      onPressed: widget.onPressedButton2 ??
+                          () => Navigator.pop(context),
                       style: ButtonStyle(
                         backgroundColor: MaterialStatePropertyAll(
                             ThemeApp.colors(context).primary),
                         foregroundColor:
                             const MaterialStatePropertyAll(Colors.white),
                       ),
-                      child: Text(textButton2!),
+                      child: Text(widget.textButton2!),
                     ),
                   ),
               ])
