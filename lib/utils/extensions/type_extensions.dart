@@ -268,6 +268,25 @@ extension IntExtension on int {
 
 // ? Double extension
 extension DoubleExtension on double {
+  // Map the value from one range to another
+  double mapRanged({
+    bool invert = false,
+    required double fromMin,
+    required double fromMax,
+    required double toMin,
+    required double toMax,
+  }) {
+    // Mapea el valor de un rango a otro
+    double mappedValue =
+        ((this - fromMin) / (fromMax - fromMin)) * (toMax - toMin) + toMin;
+
+    // Asegúrate de que el valor mapeado esté dentro de los rangos toMin y toMax
+    mappedValue = mappedValue.clamp(toMin, toMax);
+
+    // Invierte los valores de retorno si se especifica invert como true
+    return invert ? toMax + toMin - mappedValue : mappedValue;
+  }
+
   /// Format `double` to decimal number system with nested currency.
   ///
   /// by default [locale] has ['en_US'] value and 2 decimals max.
