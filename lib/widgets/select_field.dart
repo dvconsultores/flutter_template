@@ -301,7 +301,11 @@ class _SelectFieldState<T> extends State<SelectField<T>> {
         );
 
     final hs = widget.hintStyle ??
-        ts.copyWith(color: ThemeApp.colors(context).text.withOpacity(.7));
+        ts.copyWith(
+          color: ThemeApp.colors(context).text.withOpacity(.7),
+          fontFamily: FontFamily.lato("400"),
+          fontWeight: FontWeight.w400,
+        );
     final ls =
         widget.labelStyle ?? ts.copyWith(color: colorSwither, fontSize: 12);
     final fls = widget.floatingLabelStyle ?? ls;
