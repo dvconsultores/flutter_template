@@ -59,7 +59,7 @@ class OrderedList extends StatelessWidget {
       // * Add list item
       counter++;
       widgetList.add(OrderedListItem(
-        item.text,
+        text: item.text,
         id: item.id ?? ValueKey(counter),
         markdown: item.markdown ?? markdown,
         markdownSeparator: item.markdownSeparator ?? markdownSeparator,
@@ -74,6 +74,7 @@ class OrderedList extends StatelessWidget {
         textStyleMarkdown: item.textStyleMarkdown ?? textStyleMarkdown,
         mainAxisAlignment: item.mainAxisAlignment ?? mainAxisAlignment,
         crossAxisAlignment: item.crossAxisAlignment ?? crossAxisAlignment,
+        child: item.child,
       ));
 
       // * Add space between items
@@ -91,8 +92,8 @@ class OrderedList extends StatelessWidget {
       // * Add list item
       counter++;
       widgetList.add(OrderedListItem(
-        text,
         id: ValueKey(counter),
+        text: text,
         markdown: markdown,
         markdownSeparator: markdownSeparator,
         separation: separation,
@@ -117,10 +118,11 @@ class OrderedList extends StatelessWidget {
 }
 
 class OrderedListItem extends StatelessWidget {
-  const OrderedListItem(
-    this.text, {
+  const OrderedListItem({
     super.key,
     this.id,
+    this.child,
+    this.text,
     this.markdown,
     this.markdownSeparator,
     this.separation,
@@ -143,7 +145,8 @@ class OrderedListItem extends StatelessWidget {
   final Object? markdownSeparator;
   final double? separation;
   final ValueKey? id;
-  final String text;
+  final Widget? child;
+  final String? text;
   final double? fontSize;
   final double? fontSizeMarkdown;
   final Color? color;
@@ -177,19 +180,20 @@ class OrderedListItem extends StatelessWidget {
           if (markdownSeparator is Widget) markdownSeparator as Widget,
           Gap(separation ?? 5.0).row,
           Expanded(
-              child: Text(
-            text,
-            style: textStyle?.copyWith(
-                  fontSize: fontSize,
-                  fontWeight: fontWeight,
-                  color: color,
-                ) ??
-                TextStyle(
-                  fontSize: fontSize,
-                  fontWeight: fontWeight,
-                  color: color,
-                ),
-          )),
+              child: child ??
+                  Text(
+                    text ?? "",
+                    style: textStyle?.copyWith(
+                          fontSize: fontSize,
+                          fontWeight: fontWeight,
+                          color: color,
+                        ) ??
+                        TextStyle(
+                          fontSize: fontSize,
+                          fontWeight: fontWeight,
+                          color: color,
+                        ),
+                  )),
         ]);
   }
 }
