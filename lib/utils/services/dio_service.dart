@@ -2,18 +2,19 @@ import 'dart:convert';
 import 'dart:developer';
 import 'dart:io';
 
+import 'package:collection/collection.dart';
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_detextre4/main.dart';
 import 'package:flutter_detextre4/main_provider.dart';
+import 'package:flutter_detextre4/utils//services/local_data/secure_storage_service.dart';
 import 'package:flutter_detextre4/utils/general/variables.dart';
 import 'package:flutter_detextre4/utils/services/local_data/env_service.dart';
 import 'package:flutter_detextre4/widgets/dialogs/system_alert_widget.dart';
 import 'package:go_router/go_router.dart';
 import 'package:http/http.dart' as http;
 import 'package:http_parser/http_parser.dart';
-import 'package:collection/collection.dart';
-import 'package:flutter_detextre4/utils//services/local_data/secure_storage_service.dart';
-import 'package:dio/dio.dart';
+import 'package:path/path.dart';
 import 'package:provider/provider.dart';
 
 final dio = Dio();
@@ -326,15 +327,7 @@ extension MultipartResponded on http.MultipartRequest {
     for (final element in filesIncomingList) {
       if (element == null) continue;
 
-      final typeFile = element.type ?? element.getType() ?? "unknow";
-      final formatFile = element.format ?? element.getFormat() ?? "unknow";
-
-      files.add(http.MultipartFile.fromBytes(
-        element.name,
-        await File.fromUri(element.uri).readAsBytes(),
-        contentType: MediaType(typeFile, formatFile),
-        filename: '${element.name}.$formatFile',
-      ));
+      files.add(await element.build());
     }
   }
 }
@@ -345,18 +338,18 @@ extension MultipartResponded on http.MultipartRequest {
 /// method.
 class MultipartContructor {
   const MultipartContructor({
-    required this.uri,
+    required this.file,
     required this.name,
     this.format,
     this.type,
   });
-  final Uri uri;
+  final File file;
   final String name;
   final String? format;
   final String? type;
 
   /// Get current format of Uri, if dont match will return null
-  String? getFormat() => uri.path.split(".").last;
+  String? getFormat() => file.path.split(".").last;
 
   /// Get current type of File, if dont match will return null
   String? getType() {
@@ -371,9 +364,9 @@ class MultipartContructor {
 
     return http.MultipartFile.fromBytes(
       name,
-      await File.fromUri(uri).readAsBytes(),
+      await file.readAsBytes(),
       contentType: MediaType(typeFile, formatFile),
-      filename: '$name.$formatFile',
+      filename: basename(file.path),
     );
   }
 }
@@ -409,12 +402,45 @@ enum FilesType {
     "mpeg-2",
   ]),
   audio([
+    ".aac",
     "m4a",
     "flac",
     "mp3",
     "wav",
     "wma",
     "aac",
+  ]),
+  application([
+    ".abw",
+    ".arc",
+    ".bin",
+    ".bz",
+    ".bz2",
+    ".csh",
+    ".doc",
+    ".epub",
+    ".jar",
+    ".js",
+    ".json",
+    ".mpkg",
+    ".odp",
+    ".ods",
+    ".odt",
+    ".ogx",
+    ".pdf",
+    ".ppt",
+    ".rar",
+    ".rtf",
+    ".sh",
+    ".swf",
+    ".tar",
+    ".vsd",
+    ".xhtml",
+    ".xls",
+    ".xml",
+    ".xul",
+    ".zip",
+    ".7z",
   ]);
 
   const FilesType(this.listValues);
