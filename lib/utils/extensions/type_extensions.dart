@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:convert';
 import 'dart:io' as io;
+import 'dart:math' as math;
 
 import 'package:collection/collection.dart';
 import 'package:csv/csv.dart';
@@ -8,7 +9,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_detextre4/utils/config/config.dart';
 import 'package:flutter_detextre4/utils/services/local_data/env_service.dart';
-import 'package:flutter_detextre4/widgets/snackbar.dart';
+import 'package:flutter_detextre4/widgets/defaults/snackbar.dart';
 import 'package:gallery_saver/gallery_saver.dart';
 import 'package:intl/intl.dart';
 import 'package:path_provider/path_provider.dart';
@@ -242,6 +243,21 @@ extension NullableMapExtension on Map? {
 
 // ? Int extension
 extension IntExtension on int {
+  /// Converts a number of bytes into a human-readable string representing the size in B, KB, MB, GB, etc.
+  ///
+  /// @param bytes The number of bytes to convert.
+  /// @param decimals The number of decimal places to include in the result.
+  /// @return A string representing the size in B, KB, MB, GB, etc., with the specified number of decimal places.
+  ///
+  /// Usage example:
+  ///   String size = formatBytes(1550, 2); // Returns "1.51 KB"
+  String formatBytes({int decimals = 2}) {
+    if (this <= 0) return "0 B";
+    const suffixes = ["B", "KB", "MB", "GB", "TB", "PB", "EB", "ZB", "YB"];
+    var i = (math.log(this) / math.log(1024)).floor();
+    return '${(this / math.pow(1024, i)).toStringAsFixed(decimals)} ${suffixes[i]}';
+  }
+
   /// Format `int` to decimal number system with nested currency.
   ///
   /// by default [locale] has ['en_US'] value and 2 decimals max.
