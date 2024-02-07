@@ -22,6 +22,7 @@ class FilePickerField extends StatefulWidget {
     ],
     this.placeholderText,
     this.placeholder,
+    this.onChanged,
   });
 
   final ValueNotifier<File?>? controller;
@@ -31,6 +32,7 @@ class FilePickerField extends StatefulWidget {
   final List<BoxShadow> boxShadow;
   final String? placeholderText;
   final Widget? placeholder;
+  final void Function(File? value)? onChanged;
 
   @override
   State<FilePickerField> createState() => _FilePickerFieldState();
@@ -57,6 +59,16 @@ class _FilePickerFieldState extends State<FilePickerField> {
 
     fileExtension = result.files.single.extension;
     setState(() {});
+
+    if (widget.onChanged != null) widget.onChanged!(getFile);
+  }
+
+  void clear() {
+    widget.controller?.value = null;
+    file = null;
+    setState(() {});
+
+    if (widget.onChanged != null) widget.onChanged!(getFile);
   }
 
   @override
@@ -144,10 +156,7 @@ class _FilePickerFieldState extends State<FilePickerField> {
           ),
           if (getFile != null)
             IconButton(
-              onPressed: () => setState(() {
-                widget.controller?.value = null;
-                file = null;
-              }),
+              onPressed: clear,
               visualDensity: VisualDensity.compact,
               icon: const Icon(Icons.close_sharp),
             )
