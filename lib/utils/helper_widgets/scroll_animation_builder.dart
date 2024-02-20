@@ -13,12 +13,18 @@ class ScrollAnimationBuilder<T> extends StatefulWidget {
   final ScrollController controller;
   final Widget Function(BuildContext context, AsyncSnapshot<T> snapshot)
       builder;
-  final T Function(double offset) onListen;
+  final T Function(double offset, ScrollAnimationDirection scrollDirection)
+      onListen;
   final double threshold;
 
   @override
   State<ScrollAnimationBuilder> createState() =>
       _ScrollAnimationWidgetState<T>();
+}
+
+enum ScrollAnimationDirection {
+  up,
+  down;
 }
 
 class _ScrollAnimationWidgetState<T> extends State<ScrollAnimationBuilder<T>> {
@@ -28,9 +34,14 @@ class _ScrollAnimationWidgetState<T> extends State<ScrollAnimationBuilder<T>> {
   void listenerScroll() {
     final offset = widget.controller.offset;
     if ((offset - lastOffsetProcessed).abs() < widget.threshold) return;
+
+    final scrollDirection = offset < lastOffsetProcessed
+        ? ScrollAnimationDirection.up
+        : ScrollAnimationDirection.down;
+
     lastOffsetProcessed = offset;
 
-    animStreamController.add(widget.onListen(offset));
+    animStreamController.add(widget.onListen(offset, scrollDirection));
   }
 
   @override
