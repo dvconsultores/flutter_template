@@ -41,7 +41,7 @@ class _ScrollAnimationWidgetState<T> extends State<ScrollAnimationBuilder<T>> {
 
   @override
   void dispose() {
-    widget.controller.dispose();
+    widget.controller.removeListener(listenerScroll);
     super.dispose();
   }
 

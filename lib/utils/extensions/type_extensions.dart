@@ -541,7 +541,7 @@ extension StringExtension on String {
     String? symbol,
     String? locale = 'en_US',
     int maxDecimals = 3,
-    int minimumFractionDigits = 3,
+    int minimumFractionDigits = 0,
     String? customPattern = '#,##0.00 ¤',
   }) {
     final formatter = NumberFormat.currency(
