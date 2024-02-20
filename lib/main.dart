@@ -2,29 +2,29 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_detextre4/blocs/main_bloc.dart';
+import 'package:flutter_detextre4/main_provider.dart';
+import 'package:flutter_detextre4/utils/config/config.dart';
 import 'package:flutter_detextre4/utils/config/router_config.dart';
 import 'package:flutter_detextre4/utils/config/session_timeout_config.dart';
 import 'package:flutter_detextre4/utils/config/theme.dart';
 import 'package:flutter_detextre4/utils/general/variables.dart';
 import 'package:flutter_detextre4/utils/helper_widgets/restart_widget.dart';
-import 'package:flutter_detextre4/main_provider.dart';
-import 'package:flutter_detextre4/utils/config/config.dart';
 import 'package:flutter_detextre4/utils/services/dio_service.dart';
 import 'package:flutter_detextre4/utils/services/local_data/hive_data_service.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:generic_bloc_provider/generic_bloc_provider.dart';
 import 'package:hive_flutter/adapters.dart';
 import 'package:local_session_timeout/local_session_timeout.dart';
 import 'package:provider/provider.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:responsive_mixin_layout/responsive_mixin_layout.dart';
 
-final globalNavigatorKey = GlobalKey<NavigatorState>();
-final globalShellrouteKey = GlobalKey<NavigatorState>();
-final globalScaffoldMessengerKey = GlobalKey<ScaffoldMessengerState>();
+final globalNavigatorKey = GlobalKey<NavigatorState>(),
+    globalShellrouteKey = GlobalKey<NavigatorState>(),
+    globalScaffoldMessengerKey = GlobalKey<ScaffoldMessengerState>();
 
-void main() async {
+Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   // ? -- config to dotenv 🖊️ --
@@ -32,9 +32,10 @@ void main() async {
       .load(fileName: '.env')
       .catchError((error) => debugPrint('Error loading .env file: $error ㊗️'));
 
-  Hive.initFlutter().then((_) => Hive.openBox(HiveData.boxName).then((value) {
-        runApp(const RestartWidget(child: AppState()));
-      }));
+  await Hive.initFlutter();
+  await Hive.openBox(HiveData.boxName);
+
+  runApp(const RestartWidget(child: AppState()));
 }
 
 class AppState extends StatelessWidget {

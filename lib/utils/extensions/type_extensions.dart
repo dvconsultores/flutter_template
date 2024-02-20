@@ -76,11 +76,11 @@ extension FileExtension on io.File {
 
 // ? Duration extension
 extension DurationExtension on Duration {
-  String toStringShort() {
+  String toStringShort({bool showSeconds = true}) {
     String twoDigits(int n) => n.toString().padLeft(2, "0");
     String twoDigitMinutes = twoDigits(inMinutes.remainder(60));
     String twoDigitSeconds = twoDigits(inSeconds.remainder(60));
-    return "${twoDigits(inHours)}:$twoDigitMinutes:$twoDigitSeconds";
+    return "${twoDigits(inHours)}:$twoDigitMinutes${showSeconds ? ':$twoDigitSeconds' : ''}";
   }
 
   String toStringSimple() {
@@ -264,8 +264,8 @@ extension IntExtension on int {
   String amountFormatterCurrency({
     String? name,
     String? symbol,
-    String? locale,
-    String? customPattern,
+    String? locale = 'en_US',
+    String? customPattern = '#,##0.00 ¤',
   }) =>
       NumberFormat.currency(
         locale: locale,
@@ -285,21 +285,20 @@ extension IntExtension on int {
 // ? Double extension
 extension DoubleExtension on double {
   // Map the value from one range to another
-  double mapRanged({
+  double clampMapRanged({
     bool invert = false,
     required double fromMin,
     required double fromMax,
     required double toMin,
     required double toMax,
   }) {
-    // Mapea el valor de un rango a otro
     double mappedValue =
         ((this - fromMin) / (fromMax - fromMin)) * (toMax - toMin) + toMin;
 
-    // Asegúrate de que el valor mapeado esté dentro de los rangos toMin y toMax
+    // Make sure the mapped value is within the toMin and toMax ranges
     mappedValue = mappedValue.clamp(toMin, toMax);
 
-    // Invierte los valores de retorno si se especifica invert como true
+    // Inverts return values if invert is specified as true
     return invert ? toMax + toMin - mappedValue : mappedValue;
   }
 
@@ -309,9 +308,10 @@ extension DoubleExtension on double {
   String amountFormatterCurrency({
     String? name,
     String? symbol,
-    String? locale,
-    int? maxDecimals,
-    String? customPattern,
+    String? locale = 'en_US',
+    int maxDecimals = 3,
+    int minimumFractionDigits = 3,
+    String? customPattern = '#,##0.00 ¤',
   }) {
     final formatter = NumberFormat.currency(
       locale: locale,
@@ -320,7 +320,7 @@ extension DoubleExtension on double {
       decimalDigits: maxDecimals,
       customPattern: customPattern,
     );
-    formatter.minimumFractionDigits = 0;
+    formatter.minimumFractionDigits = minimumFractionDigits;
     return formatter
         .format(double.tryParse(toString().replaceAll(",", "")) ?? 0.0)
         .trim();
@@ -330,8 +330,8 @@ extension DoubleExtension on double {
   ///
   /// by default `locale` has `'en_US'` value and 2 decimals max.
   String amountFormatter({
-    int maxDecimals = 2,
-    String? locale,
+    int maxDecimals = 3,
+    String? locale = "en_US",
     bool onlyDecimals = false,
   }) =>
       NumberFormat(
@@ -342,20 +342,20 @@ extension DoubleExtension on double {
   ///
   /// by default `locale` has `'en_US'` value and 2 decimals max.
   String amountFormatterWithFilledIn({
-    int maxDecimals = 2,
-    String? locale,
+    int maxDecimals = 3,
+    String? locale = "en_US",
     bool onlyDecimals = false,
   }) {
     final formattedAmount = amountFormatter(
-      maxDecimals: maxDecimals,
-      locale: locale,
-      onlyDecimals: onlyDecimals,
-    );
-    final dotOrComma = locale == null ? "." : ",";
-    final amountSplitted = formattedAmount.split(dotOrComma);
+          maxDecimals: maxDecimals,
+          locale: locale,
+          onlyDecimals: onlyDecimals,
+        ),
+        decimalSeparator = LanguageList.get(locale).decimalSeparator,
+        amountSplitted = formattedAmount.split(decimalSeparator);
 
     if (amountSplitted.length == 1 || amountSplitted.last.isEmpty) {
-      return "${amountSplitted.first}${maxDecimals > 0 ? dotOrComma + '0' * maxDecimals : ''}";
+      return "${amountSplitted.first}${maxDecimals > 0 ? decimalSeparator + '0' * maxDecimals : ''}";
     }
 
     return amountSplitted.last.length < maxDecimals
@@ -381,6 +381,37 @@ extension NullableStringExtension on String? {
 
   /// Getter to know if String is `null` or is [Empty].
   bool get hasNotValue => this?.isEmpty ?? true;
+
+  /// Getter to check if `string` contains `http` inside.
+  bool get hasNetworkPath => this?.contains("http") ?? false;
+
+  String splitUrlFile(String by) => this?.split("?")[0] ?? "";
+
+  /// Add Custom network base url path to `string`.
+  ///
+  /// normally must to end without slash `/`.
+  String? addNetworkPath({String? path}) {
+    if (this == null) return null;
+    if (hasNetworkPath) {
+      debugPrint("$this - already has scheme ⭕");
+      return this;
+    }
+
+    return "${path ?? env.fileApiUrl}$this";
+  }
+
+  /// Remove Custom network base url path to `string`.
+  ///
+  /// normally must to end without slash [/].
+  String? removeNetworkPath({String? path}) {
+    if (this == null) return null;
+    if (hasNetworkPath) {
+      debugPrint("$this - haven't scheme ⭕");
+      return this;
+    }
+
+    return this!.split(path ?? env.fileApiUrl)[1];
+  }
 }
 
 // ? String extension
@@ -508,9 +539,10 @@ extension StringExtension on String {
   String amountFormatterCurrency({
     String? name,
     String? symbol,
-    String? locale,
-    int? maxDecimals,
-    String? customPattern,
+    String? locale = 'en_US',
+    int maxDecimals = 3,
+    int minimumFractionDigits = 3,
+    String? customPattern = '#,##0.00 ¤',
   }) {
     final formatter = NumberFormat.currency(
       locale: locale,
@@ -519,13 +551,15 @@ extension StringExtension on String {
       decimalDigits: maxDecimals,
       customPattern: customPattern,
     );
-    formatter.minimumFractionDigits = 0;
+    formatter.minimumFractionDigits = minimumFractionDigits;
     return formatter.format(double.tryParse(replaceAll(",", "")) ?? 0.0).trim();
   }
 
   /// Get amount without formatter.
-  String amountUnformatter({String? locale}) {
-    if (locale?.contains("es") ?? false) {
+  String amountUnformatter({String? locale = "en_US"}) {
+    final language = LanguageList.get(locale);
+
+    if (language.decimalSeparator == ',') {
       return split(".").join("").split(",").join(".");
     }
 
@@ -536,8 +570,8 @@ extension StringExtension on String {
   ///
   /// by default `locale` has `'en_US'` value and 2 decimals max.
   String amountFormatter({
-    int maxDecimals = 2,
-    String? locale,
+    int maxDecimals = 3,
+    String? locale = "en_US",
     bool onlyDecimals = false,
   }) =>
       NumberFormat(
@@ -548,20 +582,20 @@ extension StringExtension on String {
   ///
   /// by default `locale` has `'en_US'` value and 2 decimals max.
   String amountFormatterWithFilledIn({
-    int maxDecimals = 2,
-    String? locale,
+    int maxDecimals = 3,
+    String? locale = "en_US",
     bool onlyDecimals = false,
   }) {
     final formattedAmount = amountFormatter(
-      maxDecimals: maxDecimals,
-      locale: locale,
-      onlyDecimals: onlyDecimals,
-    );
-    final dotOrComma = locale == null ? "." : ",";
-    final amountSplitted = formattedAmount.split(dotOrComma);
+          maxDecimals: maxDecimals,
+          locale: locale,
+          onlyDecimals: onlyDecimals,
+        ),
+        decimalSeparator = LanguageList.get(locale).decimalSeparator,
+        amountSplitted = formattedAmount.split(decimalSeparator);
 
     if (amountSplitted.length == 1 || amountSplitted.last.isEmpty) {
-      return "${amountSplitted.first}${maxDecimals > 0 ? dotOrComma + '0' * maxDecimals : ''}";
+      return "${amountSplitted.first}${maxDecimals > 0 ? decimalSeparator + '0' * maxDecimals : ''}";
     }
 
     return amountSplitted.last.length < maxDecimals
@@ -570,13 +604,14 @@ extension StringExtension on String {
   }
 
   /// Used to limit decimal characters in `double`
-  String maxDecimals(int max) {
-    final splitted = toString().split(".");
+  String maxDecimals(int max, {String locale = 'en_US'}) {
+    final splitted =
+        toString().split(LanguageList.get(locale).decimalSeparator);
     final decimalsFiltered = splitted.last
         .substring(0, splitted.last.length > max ? max : splitted.last.length);
     splitted.removeLast();
     splitted.add(decimalsFiltered);
-    return splitted.join(".");
+    return splitted.join(LanguageList.get(locale).decimalSeparator);
   }
 
   /// Converts first character from `string` in uppercase.
@@ -604,37 +639,9 @@ extension StringExtension on String {
   /// and vice versa
   ///
   /// if has multiple commas / dots will be removes and just stay the first.
-  String invertDecimal() {
-    switch (contains(",")) {
-      case true:
-        {
-          final splitted = split(",");
-
-          if (splitted.length > 2) {
-            final intire = splitted.first;
-            splitted
-                .removeWhere((element) => element.isEmpty || element == intire);
-            return "$intire,${splitted.join("")}";
-          } else {
-            return splitted.join(".");
-          }
-        }
-      case false:
-        {
-          final splitted = split(".");
-
-          if (splitted.length > 2) {
-            final intire = splitted.first;
-            splitted
-                .removeWhere((element) => element.isEmpty || element == intire);
-            return "$intire.${splitted.join("")}";
-          } else {
-            return splitted.join(",");
-          }
-        }
-      default:
-        return this;
-    }
+  String invertDecimal({String? locale = 'en_US'}) {
+    final decimalSeparator = LanguageList.get(locale).decimalSeparator;
+    return split(decimalSeparator).join(decimalSeparator == ',' ? '.' : ',');
   }
 
   /// Converts all commas inside `string` to dots
@@ -669,33 +676,6 @@ extension StringExtension on String {
     } else {
       return splitted.join(",");
     }
-  }
-
-  /// Getter to check if `string` contains `http` inside.
-  bool get hasNetworkPath => contains("http");
-
-  /// Add Custom network base url path to `string`.
-  ///
-  /// normally must to end without slash `/`.
-  String addNetworkPath({String? path}) {
-    if (hasNetworkPath) {
-      debugPrint("$this - already has scheme ⭕");
-      return this;
-    }
-
-    return "${path ?? env.fileApiUrl}$this";
-  }
-
-  /// Remove Custom network base url path to `string`.
-  ///
-  /// normally must to end without slash [/].
-  String removeNetworkPath({String? path}) {
-    if (hasNetworkPath) {
-      debugPrint("$this - haven't scheme ⭕");
-      return this;
-    }
-
-    return split(path ?? env.fileApiUrl)[1];
   }
 }
 

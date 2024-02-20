@@ -58,7 +58,7 @@ class MainProvider extends ChangeNotifier {
   // ? ----------------------Localization translate-------------------------- //
   /// Current locale.
   Locale locale = Locale(HiveData.read(HiveDataCollection.language) ??
-      LanguageList.deviceLanguage().name);
+      LanguageList.deviceLanguage.name);
 
   /// change current locale.
   set changeLocale(LanguageList value) {

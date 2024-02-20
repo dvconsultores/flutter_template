@@ -1,6 +1,41 @@
+import 'dart:convert';
+import 'dart:io' show Directory, File, FileMode;
+
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_detextre4/main.dart';
+import 'package:gallery_saver/gallery_saver.dart';
+import 'package:http/http.dart' show Response, get;
+import 'package:path_provider/path_provider.dart';
+import 'package:share_plus/share_plus.dart';
 import 'package:url_launcher/url_launcher.dart';
+
+Future<String?> downloadAndSavePicture(String? url, String fileName) async {
+  if (url == null) return null;
+  final Directory directory = await getApplicationDocumentsDirectory();
+  final String filePath = '${directory.path}/$fileName';
+  final Response response = await get(Uri.parse(url));
+  final File file = File(filePath);
+  await file.writeAsBytes(response.bodyBytes);
+  return filePath;
+}
+
+Future<dynamic> capturePng(Uint8List imageBytes) async {
+  final Directory directory = await getApplicationDocumentsDirectory();
+  final String path = directory.path;
+  final String imagePath = '$path/screenshot${DateTime.now()}.png';
+  final File file = File(imagePath);
+  await file.writeAsBytes(imageBytes, mode: FileMode.write);
+  debugPrint(
+      'Image saved to $imagePath (size: ${file.lengthSync()} bytes) ${file.path} ⬅️');
+  await GallerySaver.saveImage(file.path);
+  Share.shareXFiles([XFile(file.path)]);
+  return file;
+}
+
+/// Read JSON asset file
+Future<T> getJsonFile<T>(String path) async =>
+    jsonDecode(await rootBundle.loadString(path));
 
 /// * Helper to multiple pop callbacks
 void popMultiple(BuildContext context, [int count = 1]) {
