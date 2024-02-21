@@ -4,9 +4,9 @@ import 'package:custom_refresh_indicator/custom_refresh_indicator.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
-import 'package:flutter_detextre4/utils/config/theme.dart';
 import 'package:flutter_detextre4/painters/sky_painter.dart';
 import 'package:flutter_detextre4/painters/triangule_painter.dart';
+import 'package:flutter_detextre4/utils/config/theme.dart';
 import 'package:liquid_pull_to_refresh/liquid_pull_to_refresh.dart' as liq;
 
 /// A `RefreshIndicator` with Custom app loader on refresh list.
@@ -20,6 +20,8 @@ class AppRefreshIndicator extends StatelessWidget {
     this.trailingScrollIndicatorVisible = true,
     this.leadingScrollIndicatorVisible = false,
     this.trigger = IndicatorTrigger.leadingEdge,
+    this.notificationPredicate = defaultScrollNotificationPredicate,
+    this.offsetToArmed,
   });
   final Widget child;
   final IndicatorController? controller;
@@ -32,10 +34,15 @@ class AppRefreshIndicator extends StatelessWidget {
   final bool trailingScrollIndicatorVisible;
   final bool leadingScrollIndicatorVisible;
   final IndicatorTrigger trigger;
+  final bool Function(ScrollNotification scrollNotification)
+      notificationPredicate;
+  final double? offsetToArmed;
 
   @override
   Widget build(BuildContext context) {
     return CustomRefreshIndicator(
+      notificationPredicate: notificationPredicate,
+      offsetToArmed: offsetToArmed,
       controller: controller,
       builder: (context, child, controller) {
         if (builder != null) return builder!(context, child, controller);
@@ -67,11 +74,16 @@ class AppRefreshIndicator extends StatelessWidget {
     RefreshCallback? onPullDown,
     String textOnPullDown = "Pull to fetch more",
     String textOnChargePullDown = "Fetching...",
+    bool Function(ScrollNotification scrollNotification) notificationPredicate =
+        defaultScrollNotificationPredicate,
+    double? offsetToArmed,
   }) {
     var indicatorController = IndicatorController();
     const height = 150.0;
 
     return AppRefreshIndicator(
+      offsetToArmed: offsetToArmed,
+      notificationPredicate: notificationPredicate,
       controller: indicatorController,
       builder: (context, child, controller) {
         indicatorController = controller;
@@ -187,6 +199,9 @@ class AppRefreshIndicator extends StatelessWidget {
     Color? color,
     String textOnPullDown = "Pull to fetch more",
     String textOnChargePullDown = "Fetching...",
+    bool Function(ScrollNotification scrollNotification) notificationPredicate =
+        defaultScrollNotificationPredicate,
+    double? offsetToArmed,
   }) {
     var indicatorController = IndicatorController();
     const circleSize = 70.0;
@@ -194,6 +209,8 @@ class AppRefreshIndicator extends StatelessWidget {
     const defaultShadow = [BoxShadow(blurRadius: 10, color: Colors.black26)];
 
     return AppRefreshIndicator(
+      offsetToArmed: offsetToArmed,
+      notificationPredicate: notificationPredicate,
       builder: (context, child, controller) =>
           LayoutBuilder(builder: (context, constraints) {
         indicatorController = controller;
@@ -476,6 +493,8 @@ class WarpRefreshIndicator extends StatefulWidget {
   final Color skyColor;
   final StarColorGetter starColorGetter;
   final Key? indicatorKey;
+  final bool Function(ScrollNotification scrollNotification)
+      notificationPredicate;
 
   const WarpRefreshIndicator({
     super.key,
@@ -486,6 +505,7 @@ class WarpRefreshIndicator extends StatefulWidget {
     this.starsCount = 30,
     this.skyColor = Colors.transparent,
     this.starColorGetter = _defaultStarColorGetter,
+    this.notificationPredicate = defaultScrollNotificationPredicate,
   });
 
   @override
@@ -565,6 +585,7 @@ class _WarpIndicatorState extends State<WarpRefreshIndicator>
   Widget build(BuildContext context) {
     return CustomRefreshIndicator(
       key: widget.indicatorKey,
+      notificationPredicate: widget.notificationPredicate,
       controller: widget.controller,
       offsetToArmed: _indicatorSize,
       leadingScrollIndicatorVisible: false,
