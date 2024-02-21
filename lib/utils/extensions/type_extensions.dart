@@ -5,6 +5,7 @@ import 'dart:math' as math;
 
 import 'package:collection/collection.dart';
 import 'package:csv/csv.dart';
+import 'package:dio/dio.dart' as dio;
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_detextre4/utils/config/config.dart';
@@ -747,4 +748,13 @@ extension ScreenshotExtension on ScreenshotController {
         'Image saved to: $imagePath (size: ${file.lengthSync()} bytes) ${file.path} ⭐');
     Share.shareXFiles([XFile(file.path)]);
   }
+}
+
+// ? MultipartFile extension
+extension MultipartFileExtension on dio.MultipartFile {
+  Map<String, dynamic> toJson() => {
+        "contentType": contentType.toString(),
+        "filename": filename,
+        "length": length,
+      };
 }

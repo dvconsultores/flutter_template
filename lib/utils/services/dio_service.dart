@@ -7,15 +7,27 @@ import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_detextre4/main.dart';
 import 'package:flutter_detextre4/main_provider.dart';
-import 'package:flutter_detextre4/utils//services/local_data/secure_storage_service.dart';
+import 'package:flutter_detextre4/utils/extensions/type_extensions.dart';
 import 'package:flutter_detextre4/utils/general/variables.dart';
 import 'package:flutter_detextre4/utils/services/local_data/env_service.dart';
+import 'package:flutter_detextre4/utils/services/local_data/secure_storage_service.dart';
 import 'package:flutter_detextre4/widgets/dialogs/system_alert_widget.dart';
 import 'package:go_router/go_router.dart';
 import 'package:http/http.dart' as http;
 import 'package:http_parser/http_parser.dart';
 import 'package:path/path.dart';
 import 'package:provider/provider.dart';
+
+Future<bool> get haveConnection async {
+  try {
+    final result = await InternetAddress.lookup('example.com');
+    if (result.isNotEmpty && result[0].rawAddress.isNotEmpty) return true;
+  } on SocketException catch (_) {
+    return false;
+  }
+
+  return false;
+}
 
 final dio = Dio();
 
@@ -70,7 +82,8 @@ class DioService {
             context: globalNavigatorKey.currentContext!,
             barrierDismissible: false,
             builder: (context) => SystemAlertWidget(
-              onOpen: () => SecureStorage.delete(SecureCollection.tokenAuth),
+              onOpen: () async =>
+                  await SecureStorage.delete(SecureCollection.tokenAuth),
               dismissible: false,
               title: 'Session has expired',
               textContent: 'Please log in again.',
@@ -143,7 +156,14 @@ extension DioExtensions on Dio {
     try {
       if (requestRef != null) log("$requestRef⬅️");
 
-      if (showRequest) log("${jsonEncode(data)} ⭐");
+      if (showRequest) {
+        log("${data is FormData ? jsonEncode({
+                "fields": data.fields.map((e) => e.toString()).toList(),
+                "files": data.files
+                    .map((e) => MapEntry(e.key, e.value.toJson()).toString())
+                    .toList(),
+              }) : jsonEncode(data)} ⭐");
+      }
 
       final response = await post(
         path,
@@ -260,6 +280,9 @@ extension MultipartResponded on http.MultipartRequest {
   ///
   /// [RFC 2616]: http://www.w3.org/Protocols/rfc2616/rfc2616-sec3.html
   Future<http.Response> sendDebug({
+    List<int> acceptedStatus = const [200, 201, 204],
+    String fallback = "",
+    String connectionFallback = "Connection error, try it later",
     String? requestRef,
     bool showRequest = false,
     bool showResponse = false,
@@ -291,7 +314,8 @@ extension MultipartResponded on http.MultipartRequest {
               context: globalNavigatorKey.currentContext!,
               barrierDismissible: false,
               builder: (context) => SystemAlertWidget(
-                onOpen: () => SecureStorage.delete(SecureCollection.tokenAuth),
+                onOpen: () async =>
+                    await SecureStorage.delete(SecureCollection.tokenAuth),
                 dismissible: false,
                 title: 'Session has expired',
                 textContent: 'Please log in again.',
@@ -300,12 +324,14 @@ extension MultipartResponded on http.MultipartRequest {
               ),
             ) ??
             "Session has expired";
+      } else if (!acceptedStatus.contains(response.statusCode)) {
+        throw response.catchErrorMessage(fallback: fallback);
       }
 
       if (showResponse) log("${requestRef ?? ""} ${response.body} ✅");
       return response;
     } on SocketException {
-      throw "Connection error, try it later";
+      throw connectionFallback;
     }
   }
 
@@ -454,7 +480,7 @@ extension DioResponseExtension on Response? {
   /// Will return the `error message` from the api request.
   ///
   /// in case not be founded will return a custom default message.
-  String catchErrorMessage([String fallback = '']) {
+  String catchErrorMessage({String fallback = ''}) {
     final response = this?.data.toString() ?? '';
 
     debugPrint("statusCode: ${this?.statusCode} ⭕");
@@ -469,7 +495,7 @@ extension ResponseExtension on http.Response {
   /// Will return the `error message` from the api request.
   ///
   /// in case not be founded will return a custom default message.
-  String catchErrorMessage([String fallback = '']) {
+  String catchErrorMessage({String fallback = ''}) {
     final response = body.toString();
 
     debugPrint("statusCode: $statusCode ⭕");

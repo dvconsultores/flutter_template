@@ -1,6 +1,7 @@
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 mixin _DefaultEnv {
+  abstract String environment;
   abstract String baseUrl;
   abstract String apiUrl;
   abstract String fileApiUrl;
@@ -8,6 +9,8 @@ mixin _DefaultEnv {
 
 class Env implements _DefaultEnv {
   // _DefaultEnv
+  @override
+  String environment = dotenv.get('ENVIRONMENT', fallback: "development");
   @override
   String baseUrl = dotenv.get('BASE_URL', fallback: "domain/api/v1");
   @override
