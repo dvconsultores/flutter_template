@@ -267,15 +267,15 @@ extension MultipartResponded on http.MultipartRequest {
     if (requestRef != null) log("$requestRef⬅️");
 
     if (showRequest) {
-      log("fields: $fields, files: ${files.mapIndexed((i, e) => (
-            i + 1,
-            {
-              "contentType": e.contentType,
-              "field": e.field,
-              "filename": e.filename,
-              "length": e.length,
-            }
-          )).toList()} ⭐");
+      final f = files
+          .mapIndexed((i, e) => {
+                "contentType": e.contentType.toString(),
+                "field": e.field,
+                "filename": e.filename,
+                "length": e.length,
+              })
+          .toList();
+      log('${jsonEncode({"fields": fields, "files": f})} ⭐');
     }
 
     try {
