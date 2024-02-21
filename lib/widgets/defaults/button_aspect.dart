@@ -138,7 +138,7 @@ class ButtonAspect extends StatelessWidget {
   static ButtonAspect icon({
     double size = 45,
     BoxConstraints? constraints,
-    BorderRadius? borderRadius,
+    BorderRadius borderRadius = const BorderRadius.all(Radius.circular(50)),
     BoxShape shape = BoxShape.circle,
     BorderSide borderSide = const BorderSide(width: 1),
     List<BoxShadow> boxShadow = const [
@@ -175,7 +175,7 @@ class ButtonAspect extends StatelessWidget {
   static ButtonAspect iconVariant({
     double size = 45,
     BoxConstraints? constraints,
-    BorderRadius? borderRadius,
+    BorderRadius borderRadius = const BorderRadius.all(Radius.circular(50)),
     BorderSide borderSide = const BorderSide(width: 1),
     BoxShape shape = BoxShape.circle,
     List<BoxShadow> boxShadow = const [],
