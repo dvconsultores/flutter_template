@@ -4,11 +4,15 @@ import 'dart:io' show Directory, File, FileMode;
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_detextre4/main.dart';
+import 'package:flutter_detextre4/widgets/dialogs/system_alert_widget.dart';
 import 'package:gallery_saver/gallery_saver.dart';
 import 'package:http/http.dart' show Response, get;
+import 'package:launch_review/launch_review.dart';
+import 'package:package_info_plus/package_info_plus.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:version/version.dart';
 
 Future<String?> downloadAndSavePicture(String? url, String fileName) async {
   if (url == null) return null;
@@ -90,3 +94,33 @@ Future<String?> showPopup(Map<String, IconData> items) async {
         );
       }).toList());
 }
+
+Future<void> checkVersion(BuildContext context) =>
+    PackageInfo.fromPlatform().then((packageInfo) async {
+      final (minVersion, currentVersion) =
+          ("1.0.0", "1.0.0"); //? implement fetch to get version 🖊️
+      final packageVersion = packageInfo.version;
+
+      final hasUpdate =
+          Version.parse(packageVersion) < Version.parse(currentVersion);
+      final requireUpdate =
+          Version.parse(packageVersion) < Version.parse(minVersion);
+
+      if (context.mounted && hasUpdate) {
+        await showDialog(
+            context: context,
+            barrierColor: Colors.black.withOpacity(.1),
+            barrierDismissible: !requireUpdate,
+            builder: (context) => SystemAlertWidget(
+                  title: "Actualización disponible!",
+                  textContent: requireUpdate
+                      ? "Debes actualizar tu applicación de Apolo Pay para poder continuar"
+                      : "Tenemos una nueva versión de Apolo Pay disponible para ti en la tienda",
+                  dismissible: !requireUpdate,
+                  textButton: requireUpdate ? null : "Continuar",
+                  textButton2: "Actualizar",
+                  onPressedButton2: () => LaunchReview.launch(
+                      androidAppId: packageInfo.packageName),
+                ));
+      }
+    });

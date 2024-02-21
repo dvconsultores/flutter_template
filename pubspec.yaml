@@ -102,6 +102,10 @@ dependencies:
   double_back_to_exit: ^1.0.3
   responsive_mixin_layout: ^1.0.3
   flutter_gap: ^1.0.0
+  system_info_plus: ^0.0.5
+  version: ^3.0.2
+  package_info_plus: ^5.0.1
+  launch_review: ^3.0.1
 
 
 dev_dependencies:
