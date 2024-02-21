@@ -30,6 +30,7 @@ class SelectField<T> extends StatefulWidget {
     this.disabledBorderColor,
     this.errorBorderColor,
     this.focusedBorderColor,
+    this.iconEnabledColor,
     this.underline = false,
     this.contentPadding,
     this.prefixPadding,
@@ -47,6 +48,8 @@ class SelectField<T> extends StatefulWidget {
     this.alignment = AlignmentDirectional.centerStart,
     this.loading = false,
     this.loaderHeight = 20,
+    this.openedIcon,
+    this.closedIcon,
   });
   static final _context = globalNavigatorKey.currentContext!;
 
@@ -73,6 +76,7 @@ class SelectField<T> extends StatefulWidget {
   final Color? disabledBorderColor;
   final Color? errorBorderColor;
   final Color? focusedBorderColor;
+  final Color? iconEnabledColor;
   final bool underline;
   final EdgeInsetsGeometry? contentPadding;
   final EdgeInsetsGeometry? prefixPadding;
@@ -90,6 +94,8 @@ class SelectField<T> extends StatefulWidget {
   final AlignmentGeometry alignment;
   final bool loading;
   final double loaderHeight;
+  final Widget? openedIcon;
+  final Widget? closedIcon;
 
   static SelectField<T> variant<T>({
     T? value,
@@ -115,6 +121,7 @@ class SelectField<T> extends StatefulWidget {
     Color? disabledBorderColor,
     Color? errorBorderColor,
     Color? focusedBorderColor,
+    Color? iconEnabledColor,
     bool underline = false,
     EdgeInsetsGeometry contentPadding =
         const EdgeInsets.symmetric(horizontal: 10, vertical: 12),
@@ -133,6 +140,8 @@ class SelectField<T> extends StatefulWidget {
     AlignmentGeometry alignment = AlignmentDirectional.centerStart,
     bool loading = false,
     double loaderHeight = 20,
+    Widget? openedIcon,
+    Widget? closedIcon,
   }) =>
       SelectField<T>(
         value: value,
@@ -152,6 +161,7 @@ class SelectField<T> extends StatefulWidget {
         buttonStyleData: buttonStyleData,
         filled: filled,
         color: color,
+        iconEnabledColor: iconEnabledColor,
         borderRadius: borderRadius,
         borderWidth: borderWidth,
         borderColor: borderColor ?? ThemeApp.colors(_context).primary,
@@ -175,6 +185,8 @@ class SelectField<T> extends StatefulWidget {
         alignment: alignment,
         loading: loading,
         loaderHeight: loaderHeight,
+        openedIcon: openedIcon,
+        closedIcon: closedIcon,
       );
 
   static Widget sizedBox<T>({
@@ -202,6 +214,7 @@ class SelectField<T> extends StatefulWidget {
     Color? disabledBorderColor,
     Color? errorBorderColor,
     Color? focusedBorderColor,
+    Color? iconEnabledColor,
     bool underline = false,
     EdgeInsetsGeometry? contentPadding,
     EdgeInsetsGeometry? prefixPadding,
@@ -219,6 +232,8 @@ class SelectField<T> extends StatefulWidget {
     AlignmentGeometry alignment = AlignmentDirectional.centerStart,
     bool loading = false,
     double loaderHeight = 20,
+    Widget? openedIcon,
+    Widget? closedIcon,
   }) {
     final expanded = height != null;
 
@@ -249,6 +264,7 @@ class SelectField<T> extends StatefulWidget {
         ),
         filled: filled,
         color: color,
+        iconEnabledColor: iconEnabledColor,
         underline: underline,
         borderRadius: borderRadius,
         borderWidth: borderWidth,
@@ -274,6 +290,8 @@ class SelectField<T> extends StatefulWidget {
         alignment: alignment,
         loading: loading,
         loaderHeight: loaderHeight,
+        openedIcon: openedIcon,
+        closedIcon: closedIcon,
       ),
     );
   }
@@ -354,9 +372,10 @@ class _SelectFieldState<T> extends State<SelectField<T>> {
         ),
         style: ts,
         iconStyleData: IconStyleData(
-          iconEnabledColor: colorSwither,
-          icon: const Icon(Icons.arrow_drop_down_rounded),
-          openMenuIcon: const Icon(Icons.arrow_drop_up_rounded),
+          iconEnabledColor: widget.iconEnabledColor ?? colorSwither,
+          icon: widget.openedIcon ?? const Icon(Icons.arrow_drop_down_rounded),
+          openMenuIcon:
+              widget.closedIcon ?? const Icon(Icons.arrow_drop_up_rounded),
         ),
         decoration: InputDecoration(
           enabled: !widget.disabled,
