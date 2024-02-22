@@ -22,9 +22,17 @@ class AppRefreshIndicator extends StatelessWidget {
     this.trigger = IndicatorTrigger.leadingEdge,
     this.notificationPredicate = defaultScrollNotificationPredicate,
     this.offsetToArmed,
+    this.autoRebuild = true,
+    this.completeStateDuration,
+    this.containerExtentPercentageToArmed,
+    this.indicatorCancelDuration = const Duration(milliseconds: 300),
+    this.indicatorFinalizeDuration = const Duration(milliseconds: 100),
+    this.indicatorSettleDuration = const Duration(milliseconds: 150),
+    this.onStateChanged,
+    this.triggerMode = IndicatorTriggerMode.onEdge,
   });
   final Widget child;
-  final IndicatorController? controller;
+  final ValueNotifier<IndicatorController>? controller;
   final RefreshCallback onRefresh;
   final Widget Function(
     BuildContext context,
@@ -37,15 +45,35 @@ class AppRefreshIndicator extends StatelessWidget {
   final bool Function(ScrollNotification scrollNotification)
       notificationPredicate;
   final double? offsetToArmed;
+  final bool autoRebuild;
+  final Duration? completeStateDuration;
+  final double? containerExtentPercentageToArmed;
+  final Duration indicatorCancelDuration;
+  final Duration indicatorFinalizeDuration;
+  final Duration indicatorSettleDuration;
+  final void Function(IndicatorStateChange indicatorStateChange)?
+      onStateChanged;
+  final IndicatorTriggerMode triggerMode;
 
   @override
   Widget build(BuildContext context) {
     return CustomRefreshIndicator(
+      autoRebuild: autoRebuild,
+      completeStateDuration: completeStateDuration,
+      containerExtentPercentageToArmed: containerExtentPercentageToArmed,
+      indicatorCancelDuration: indicatorCancelDuration,
+      indicatorFinalizeDuration: indicatorFinalizeDuration,
+      indicatorSettleDuration: indicatorSettleDuration,
+      onStateChanged: onStateChanged,
+      triggerMode: triggerMode,
       notificationPredicate: notificationPredicate,
       offsetToArmed: offsetToArmed,
-      controller: controller,
-      builder: (context, child, controller) {
-        if (builder != null) return builder!(context, child, controller);
+      controller: controller?.value,
+      builder: (context, child, localController) {
+        controller?.value = localController;
+        IndicatorController getController() =>
+            controller?.value ?? localController;
+        if (builder != null) return builder!(context, child, getController());
 
         return MaterialIndicatorDelegate(
           builder: (context, controller) => AnimatedOpacity(
@@ -57,7 +85,7 @@ class AppRefreshIndicator extends StatelessWidget {
               size: 30,
             ),
           ),
-        )(context, child, controller);
+        )(context, child, getController());
       },
       trailingScrollIndicatorVisible: trailingScrollIndicatorVisible,
       leadingScrollIndicatorVisible: leadingScrollIndicatorVisible,
@@ -69,6 +97,7 @@ class AppRefreshIndicator extends StatelessWidget {
 
   /// A variant used to fetch data on pull down.
   static Widget pullDown({
+    ValueNotifier<IndicatorController>? controller,
     required Widget child,
     RefreshCallback? onRefresh,
     RefreshCallback? onPullDown,
@@ -78,28 +107,28 @@ class AppRefreshIndicator extends StatelessWidget {
         defaultScrollNotificationPredicate,
     double? offsetToArmed,
   }) {
-    var indicatorController = IndicatorController();
+    var localController = IndicatorController();
+    IndicatorController getController() => controller?.value ?? localController;
     const height = 150.0;
 
     return AppRefreshIndicator(
       offsetToArmed: offsetToArmed,
       notificationPredicate: notificationPredicate,
-      controller: indicatorController,
+      controller: controller,
       builder: (context, child, controller) {
-        indicatorController = controller;
         bool isLeading =
-            onRefresh != null && controller.edge == IndicatorEdge.leading;
-        bool isTrailing =
-            onPullDown != null && controller.edge == IndicatorEdge.trailing;
+                onRefresh != null && controller.edge == IndicatorEdge.leading,
+            isTrailing =
+                onPullDown != null && controller.edge == IndicatorEdge.trailing;
 
         //* leading y animation
         final dyLeading =
-            controller.value.clamp(0.0, 1.25) * (height - (height * 0.25)) -
-                (height - (height * 0.70));
+                controller.value.clamp(0.0, 1.25) * (height - (height * 0.25)) -
+                    (height - (height * 0.70)),
 
-        //* trailing y animation
-        final dyTrailing =
-            controller.value.clamp(0.0, 1.25) * -(height - (height * 0.25));
+            //* trailing y animation
+            dyTrailing =
+                controller.value.clamp(0.0, 1.25) * -(height - (height * 0.25));
 
         return Stack(children: [
           Transform.translate(
@@ -181,7 +210,7 @@ class AppRefreshIndicator extends StatelessWidget {
       trailingScrollIndicatorVisible: onPullDown == null,
       leadingScrollIndicatorVisible: onRefresh == null,
       onRefresh: () async {
-        if (indicatorController.edge == IndicatorEdge.leading) {
+        if (getController().edge == IndicatorEdge.leading) {
           onRefresh != null ? await onRefresh() : null;
         } else {
           onPullDown != null ? await onPullDown() : null;
@@ -191,8 +220,9 @@ class AppRefreshIndicator extends StatelessWidget {
     );
   }
 
-  /// [Envelope] variant of `RefreshIndicator`.
+  /// [envelope] variant of `RefreshIndicator`.
   static Widget envelope({
+    ValueNotifier<IndicatorController>? controller,
     required Widget child,
     RefreshCallback? onRefresh,
     RefreshCallback? onPullDown,
@@ -203,17 +233,19 @@ class AppRefreshIndicator extends StatelessWidget {
         defaultScrollNotificationPredicate,
     double? offsetToArmed,
   }) {
-    var indicatorController = IndicatorController();
-    const circleSize = 70.0;
-    const iconSize = 35.0;
-    const defaultShadow = [BoxShadow(blurRadius: 10, color: Colors.black26)];
+    var localController = IndicatorController();
+    IndicatorController getController() => controller?.value ?? localController;
+    const circleSize = 70.0,
+        iconSize = 35.0,
+        defaultShadow = [BoxShadow(blurRadius: 10, color: Colors.black26)];
 
     return AppRefreshIndicator(
       offsetToArmed: offsetToArmed,
       notificationPredicate: notificationPredicate,
+      controller: controller,
       builder: (context, child, controller) =>
           LayoutBuilder(builder: (context, constraints) {
-        indicatorController = controller;
+        localController = controller;
         bool isLeading =
             onRefresh != null && controller.edge == IndicatorEdge.leading;
         bool isTrailing =
@@ -412,7 +444,7 @@ class AppRefreshIndicator extends StatelessWidget {
       trailingScrollIndicatorVisible: onPullDown == null,
       trigger: IndicatorTrigger.bothEdges,
       onRefresh: () async {
-        if (indicatorController.edge == IndicatorEdge.leading) {
+        if (getController().edge == IndicatorEdge.leading) {
           onRefresh != null ? await onRefresh() : null;
         } else {
           onPullDown != null ? await onPullDown() : null;
@@ -422,14 +454,16 @@ class AppRefreshIndicator extends StatelessWidget {
     );
   }
 
-  /// [Warp] variant of `RefreshIndicator`.
+  /// [warp] variant of `RefreshIndicator`.
   static Widget warp({
     required Widget child,
     int starsCount = 30,
     required AsyncCallback onRefresh,
-    IndicatorController? controller,
+    ValueNotifier<IndicatorController>? controller,
     Color skyColor = Colors.transparent,
     StarColorGetter starColorGetter = _defaultStarColorGetter,
+    bool Function(ScrollNotification scrollNotification) notificationPredicate =
+        defaultScrollNotificationPredicate,
     Key? indicatorKey,
   }) {
     return WarpRefreshIndicator(
@@ -439,10 +473,12 @@ class AppRefreshIndicator extends StatelessWidget {
       starsCount: starsCount,
       starColorGetter: starColorGetter,
       skyColor: skyColor,
+      notificationPredicate: notificationPredicate,
       child: child,
     );
   }
 
+  /// Package widget to liquid effect on refresh.
   static Widget liquid({
     required Future<void> Function() onRefresh,
     required Widget child,
@@ -489,7 +525,7 @@ class WarpRefreshIndicator extends StatefulWidget {
   final Widget child;
   final int starsCount;
   final AsyncCallback onRefresh;
-  final IndicatorController? controller;
+  final ValueNotifier<IndicatorController>? controller;
   final Color skyColor;
   final StarColorGetter starColorGetter;
   final Key? indicatorKey;
@@ -583,7 +619,7 @@ class _WarpIndicatorState extends State<WarpRefreshIndicator>
 
   @override
   Widget build(BuildContext context) {
-    return CustomRefreshIndicator(
+    return AppRefreshIndicator(
       key: widget.indicatorKey,
       notificationPredicate: widget.notificationPredicate,
       controller: widget.controller,
@@ -600,11 +636,7 @@ class _WarpIndicatorState extends State<WarpRefreshIndicator>
         }
       },
       child: widget.child,
-      builder: (
-        BuildContext context,
-        Widget child,
-        IndicatorController controller,
-      ) {
+      builder: (context, child, controller) {
         final animation = Listenable.merge([controller, shakeController]);
 
         return Stack(children: <Widget>[
