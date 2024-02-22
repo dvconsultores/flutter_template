@@ -829,10 +829,12 @@ class _TransitionNotifierWidgetState extends State<TransitionIndicator> {
         if (widget.onReachedSecondaryScroll == null) return;
 
         final offset = event.localPosition.dy,
+            draggingUp = offset < lastOffsetProcessed,
             draggingDown = offset > lastOffsetProcessed;
 
         if (getController.value.isArmed) {
-          draggingDown ? totalPixels++ : totalPixels--;
+          if (draggingUp) totalPixels--;
+          if (draggingDown) totalPixels++;
           setState(() {});
         }
 
