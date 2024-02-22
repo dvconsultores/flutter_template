@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_detextre4/utils/helper_widgets/circle_clipper.dart';
 
@@ -163,16 +165,19 @@ class _FallTransition extends StatelessWidget {
         curve = Curves.easeInOutCubic,
         tween = Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
 
-    return Stack(children: [
-      SlideTransition(
-        position: animation.drive(tween),
-        child: currentWidget,
-      ),
-      SlideTransition(
-        position: Tween(begin: const Offset(0.0, -1.0), end: Offset.zero)
-            .animate(animation),
-        child: child,
-      ),
-    ]);
+    return BackdropFilter(
+      filter: ImageFilter.blur(sigmaX: 100, sigmaY: 100),
+      child: Stack(children: [
+        SlideTransition(
+          position: animation.drive(tween),
+          child: currentWidget,
+        ),
+        SlideTransition(
+          position: Tween(begin: const Offset(0.0, -1.0), end: Offset.zero)
+              .animate(animation),
+          child: child,
+        ),
+      ]),
+    );
   }
 }
