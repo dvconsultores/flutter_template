@@ -57,6 +57,17 @@ class CustomTransitionWrapper extends StatelessWidget {
         animation: animation,
         child: child,
       );
+
+  static Widget fall({
+    required Widget child,
+    required Widget currentWidget,
+    required Animation<double> animation,
+  }) =>
+      _FallTransition(
+        animation: animation,
+        currentWidget: currentWidget,
+        child: child,
+      );
 }
 
 class _RotateTransition extends StatelessWidget {
@@ -131,5 +142,37 @@ class _CircleFade extends StatelessWidget {
       },
       child: child,
     );
+  }
+}
+
+class _FallTransition extends StatelessWidget {
+  const _FallTransition({
+    required this.child,
+    required this.animation,
+    required this.currentWidget,
+  });
+
+  final Widget child;
+  final Animation<double> animation;
+  final Widget currentWidget;
+
+  @override
+  Widget build(BuildContext context) {
+    final begin = const Offset(0.0, 0.0),
+        end = const Offset(0.0, 1.0),
+        curve = Curves.easeInOutCubic,
+        tween = Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
+
+    return Stack(children: [
+      SlideTransition(
+        position: animation.drive(tween),
+        child: currentWidget,
+      ),
+      SlideTransition(
+        position: Tween(begin: const Offset(0.0, -1.0), end: Offset.zero)
+            .animate(animation),
+        child: child,
+      ),
+    ]);
   }
 }

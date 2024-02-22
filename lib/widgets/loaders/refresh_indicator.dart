@@ -1,4 +1,5 @@
 import 'dart:math' as math;
+import 'dart:ui';
 
 import 'package:custom_refresh_indicator/custom_refresh_indicator.dart';
 import 'package:flutter/foundation.dart';
@@ -502,6 +503,36 @@ class AppRefreshIndicator extends StatelessWidget {
             springAnimationDurationInMilliseconds,
         child: child,
       );
+
+  /// [spin] variant of `RefreshIndicator` with transition widget.
+  static Widget spin({
+    ValueNotifier<IndicatorController>? controller,
+    required Widget child,
+    RefreshCallback? onRefresh,
+    bool Function(ScrollNotification scrollNotification) notificationPredicate =
+        defaultScrollNotificationPredicate,
+    double? offsetToArmed,
+    double secondaryScrollLimit = 60,
+    void Function()? onReachedSecondaryScroll,
+    Widget? secondaryLabel,
+  }) =>
+      TransitionIndicator(
+        controller: controller,
+        trigger: IndicatorTrigger.leadingEdge,
+        onRefresh: onRefresh,
+        notificationPredicate: notificationPredicate,
+        offsetToArmed: offsetToArmed,
+        secondaryScrollLimit: secondaryScrollLimit,
+        onReachedSecondaryScroll: onReachedSecondaryScroll,
+        secondaryLabel: secondaryLabel,
+        builder: (context, child, controller) => SpinRefreshIndicator(
+          controller: controller,
+          haveSecondaryScroll: onReachedSecondaryScroll != null,
+          secondaryLabel: secondaryLabel,
+          child: child,
+        ),
+        child: child,
+      );
 }
 
 /// This allows a value of type T or T?
@@ -684,6 +715,151 @@ class _WarpIndicatorState extends State<WarpRefreshIndicator>
           ),
         ]);
       },
+    );
+  }
+}
+
+/// [spin] variant of `RefreshIndicator` with transition widget.
+class SpinRefreshIndicator extends StatelessWidget {
+  const SpinRefreshIndicator({
+    super.key,
+    required this.child,
+    required this.controller,
+    required this.haveSecondaryScroll,
+    this.secondaryLabel,
+  });
+  final Widget child;
+  final bool haveSecondaryScroll;
+  final Widget? secondaryLabel;
+  final IndicatorController controller;
+
+  @override
+  Widget build(BuildContext context) {
+    const duration = Duration(milliseconds: 100);
+
+    return MaterialIndicatorDelegate(
+      elevation: 0,
+      clipBehavior: Clip.none,
+      backgroundColor: Colors.transparent,
+      builder: (context, controller) => Stack(
+          clipBehavior: Clip.none,
+          alignment: Alignment.center,
+          children: [
+            if (controller.isArmed && secondaryLabel != null)
+              Positioned(
+                top: -60,
+                child: BackdropFilter(
+                  filter: ImageFilter.blur(sigmaX: .5, sigmaY: .5),
+                  child: secondaryLabel,
+                ),
+              ),
+            AnimatedRotation(
+              turns: controller.value,
+              duration: duration,
+              child: AnimatedScale(
+                scale: controller.value.clamp(0, 1),
+                duration: duration,
+                child: AnimatedOpacity(
+                  duration: duration,
+                  opacity: controller.value.clamp(0, 1),
+                  child: Material(
+                    color: Colors.white,
+                    elevation: 3,
+                    shape: const CircleBorder(),
+                    child: Stack(alignment: Alignment.center, children: [
+                      const Icon(Icons.cached, color: Colors.blue, size: 30),
+                      CircularProgressIndicator(
+                        color: ThemeApp.colors(context).primary,
+                        value: controller.value,
+                      ),
+                    ]),
+                  ),
+                ),
+              ),
+            ),
+          ]),
+    )(context, child, controller);
+  }
+}
+
+/// A helper widget used to build transitions on overscroll refresh indicator
+class TransitionIndicator extends StatefulWidget {
+  const TransitionIndicator({
+    super.key,
+    this.controller,
+    this.trigger = IndicatorTrigger.leadingEdge,
+    this.builder,
+    required this.child,
+    this.onRefresh,
+    required this.notificationPredicate,
+    this.offsetToArmed,
+    this.secondaryScrollLimit = 60,
+    this.onReachedSecondaryScroll,
+    this.secondaryLabel,
+  });
+
+  final ValueNotifier<IndicatorController>? controller;
+  final Widget Function(BuildContext context, Widget child,
+      IndicatorController indicatorController)? builder;
+  final Widget child;
+  final IndicatorTrigger trigger;
+  final RefreshCallback? onRefresh;
+  final bool Function(ScrollNotification scrollNotification)
+      notificationPredicate;
+  final double? offsetToArmed;
+  final double secondaryScrollLimit;
+  final void Function()? onReachedSecondaryScroll;
+  final Widget? secondaryLabel;
+
+  @override
+  State<TransitionIndicator> createState() => _TransitionNotifierWidgetState();
+}
+
+class _TransitionNotifierWidgetState extends State<TransitionIndicator> {
+  final localController = ValueNotifier(IndicatorController());
+  ValueNotifier<IndicatorController> get getController =>
+      widget.controller ?? localController;
+
+  double lastOffsetProcessed = 0.0, totalPixels = 0.0;
+
+  @override
+  Widget build(BuildContext context) {
+    return Listener(
+      onPointerMove: (event) {
+        if (widget.onReachedSecondaryScroll == null) return;
+
+        final offset = event.localPosition.dy,
+            draggingDown = offset > lastOffsetProcessed;
+
+        if (getController.value.isArmed) {
+          draggingDown ? totalPixels++ : totalPixels--;
+          setState(() {});
+        }
+
+        lastOffsetProcessed = offset;
+      },
+      child: AppRefreshIndicator(
+        controller: getController,
+        notificationPredicate: (scrollNotification) {
+          if (totalPixels > widget.secondaryScrollLimit &&
+              getController.value.isArmed) {
+            totalPixels = 0;
+            widget.onReachedSecondaryScroll!();
+            return false;
+          }
+
+          return widget.notificationPredicate(scrollNotification);
+        },
+        offsetToArmed: widget.offsetToArmed,
+        builder: widget.builder,
+        trigger: widget.trigger,
+        trailingScrollIndicatorVisible: false,
+        leadingScrollIndicatorVisible: widget.onRefresh == null,
+        onRefresh: () async {
+          widget.onRefresh != null ? await widget.onRefresh!() : null;
+        },
+        child: widget.child,
+      ),
     );
   }
 }

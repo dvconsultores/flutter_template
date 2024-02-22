@@ -213,7 +213,7 @@ extension CachedNetworkImageExtension on CachedNetworkImage {
 
 // ? Navigator extension
 extension NavigatorExtension on Navigator {
-  ///* Normal `push` method from `Navigator` with custome transition.
+  ///* Normal `push` method from `Navigator` with custom transition.
   void pushWithTransition(
     BuildContext context,
     Widget page, {
@@ -236,7 +236,7 @@ extension NavigatorExtension on Navigator {
         ),
       );
 
-  ///* Normal `pushReplacement` method from `Navigator` with custome transition.
+  ///* Normal `pushReplacement` method from `Navigator` with custom transition.
   void pushReplacementWithTransition(
     BuildContext context,
     Widget page, {

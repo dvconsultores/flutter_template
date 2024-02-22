@@ -138,7 +138,7 @@ class OrderedListItem extends StatelessWidget {
     this.crossAxisAlignment,
   });
 
-  /// This is a custome markdown for the list.
+  /// This is a custom markdown for the list.
   final Object? markdown;
 
   /// Only can be used without custom markdown.

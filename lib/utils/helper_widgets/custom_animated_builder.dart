@@ -1,4 +1,3 @@
-import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 
@@ -71,20 +70,16 @@ class _MultipleWidgetBuilderState extends State<MultipleAnimatedBuilder>
     super.dispose();
   }
 
-  List<AnimationController> get getAnimations => widget.animationSettings
-      .mapIndexed((i, e) => e.animation ?? animations[i])
-      .toList();
-
   @override
   Widget build(BuildContext context) {
     Widget renderWidget() {
       Widget? lastWidget;
 
-      for (var animation in getAnimations) {
+      for (final animation in animations) {
         lastWidget = AnimatedBuilder(
           animation: animation,
           builder: (context, child) =>
-              widget.builder(context, child, getAnimations),
+              widget.builder(context, child, animations),
           child: lastWidget ?? widget.child,
         );
       }
@@ -156,14 +151,11 @@ class _AnimatedWidgetBuilderState extends State<SingleAnimatedBuilder>
     super.dispose();
   }
 
-  AnimationController get getAnimation =>
-      widget.animationSettings.animation ?? animation;
-
   @override
   Widget build(BuildContext context) {
     return AnimatedBuilder(
-      animation: getAnimation,
-      builder: (context, child) => widget.builder(context, child, getAnimation),
+      animation: animation,
+      builder: (context, child) => widget.builder(context, child, animation),
       child: widget.child,
     );
   }
@@ -171,7 +163,6 @@ class _AnimatedWidgetBuilderState extends State<SingleAnimatedBuilder>
 
 class CustomAnimationSettings {
   CustomAnimationSettings({
-    this.animation,
     this.animationBehavior = AnimationBehavior.normal,
     this.debugLabel,
     required this.duration,
@@ -181,10 +172,9 @@ class CustomAnimationSettings {
     this.value,
     this.type = const TypeAnimatedOnce(),
   });
-  final AnimationController? animation;
   final AnimationBehavior animationBehavior;
   final String? debugLabel;
-  final Duration duration;
+  final Duration? duration;
   final double lowerBound;
   final Duration? reverseDuration;
   final double upperBound;
