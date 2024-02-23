@@ -1,5 +1,4 @@
 import 'dart:math' as math;
-import 'dart:ui';
 
 import 'package:custom_refresh_indicator/custom_refresh_indicator.dart';
 import 'package:flutter/foundation.dart';
@@ -509,26 +508,28 @@ class AppRefreshIndicator extends StatelessWidget {
     ValueNotifier<IndicatorController>? controller,
     required Widget child,
     RefreshCallback? onRefresh,
+    RefreshCallback? onSecondaryRefresh,
     bool Function(ScrollNotification scrollNotification) notificationPredicate =
         defaultScrollNotificationPredicate,
     double? offsetToArmed,
-    double secondaryScrollLimit = 60,
-    void Function()? onReachedSecondaryScroll,
-    Widget? secondaryLabel,
+    double secondaryIndicatorLimit = 60,
+    Widget Function(
+            BuildContext context, IndicatorController indicatorController)?
+        secondaryhIndicator,
   }) =>
-      TransitionIndicator(
+      SecondaryRefreshIndicator(
         controller: controller,
         trigger: IndicatorTrigger.leadingEdge,
         onRefresh: onRefresh,
         notificationPredicate: notificationPredicate,
         offsetToArmed: offsetToArmed,
-        secondaryScrollLimit: secondaryScrollLimit,
-        onReachedSecondaryScroll: onReachedSecondaryScroll,
-        secondaryLabel: secondaryLabel,
-        builder: (context, child, controller) => SpinRefreshIndicator(
+        secondaryIndicatorLimit: secondaryIndicatorLimit,
+        onSecondaryRefresh: onSecondaryRefresh,
+        builder: (context, child, controller, showSecondartIndicator) =>
+            SpinRefreshIndicator(
           controller: controller,
-          haveSecondaryScroll: onReachedSecondaryScroll != null,
-          secondaryLabel: secondaryLabel,
+          showSecondartIndicator: showSecondartIndicator,
+          secondaryhIndicator: secondaryhIndicator,
           child: child,
         ),
         child: child,
@@ -725,12 +726,14 @@ class SpinRefreshIndicator extends StatelessWidget {
     super.key,
     required this.child,
     required this.controller,
-    required this.haveSecondaryScroll,
-    this.secondaryLabel,
+    required this.showSecondartIndicator,
+    this.secondaryhIndicator,
   });
   final Widget child;
-  final bool haveSecondaryScroll;
-  final Widget? secondaryLabel;
+  final bool showSecondartIndicator;
+  final Widget Function(
+          BuildContext context, IndicatorController indicatorController)?
+      secondaryhIndicator;
   final IndicatorController controller;
 
   @override
@@ -741,19 +744,16 @@ class SpinRefreshIndicator extends StatelessWidget {
       elevation: 0,
       clipBehavior: Clip.none,
       backgroundColor: Colors.transparent,
-      builder: (context, controller) => Stack(
-          clipBehavior: Clip.none,
-          alignment: Alignment.center,
-          children: [
-            if (controller.isArmed && secondaryLabel != null)
-              Positioned(
-                top: -60,
-                child: BackdropFilter(
-                  filter: ImageFilter.blur(sigmaX: .5, sigmaY: .5),
-                  child: secondaryLabel,
-                ),
-              ),
-            AnimatedRotation(
+      builder: (context, controller) => showSecondartIndicator &&
+              secondaryhIndicator != null
+          ? OverflowBox(
+              minWidth: 0.0,
+              minHeight: 0.0,
+              maxWidth: double.infinity,
+              maxHeight: double.infinity,
+              child: secondaryhIndicator!(context, controller),
+            )
+          : AnimatedRotation(
               turns: controller.value,
               duration: duration,
               child: AnimatedScale(
@@ -777,57 +777,64 @@ class SpinRefreshIndicator extends StatelessWidget {
                 ),
               ),
             ),
-          ]),
     )(context, child, controller);
   }
 }
 
-/// A helper widget used to build transitions on overscroll refresh indicator
-class TransitionIndicator extends StatefulWidget {
-  const TransitionIndicator({
+/// A helper widget used to build secondary indicators with custom actions
+class SecondaryRefreshIndicator extends StatefulWidget {
+  const SecondaryRefreshIndicator({
     super.key,
     this.controller,
     this.trigger = IndicatorTrigger.leadingEdge,
-    this.builder,
+    required this.builder,
     required this.child,
     this.onRefresh,
+    this.onSecondaryRefresh,
     required this.notificationPredicate,
     this.offsetToArmed,
-    this.secondaryScrollLimit = 60,
-    this.onReachedSecondaryScroll,
-    this.secondaryLabel,
+    this.secondaryIndicatorLimit = 60,
   });
 
   final ValueNotifier<IndicatorController>? controller;
-  final Widget Function(BuildContext context, Widget child,
-      IndicatorController indicatorController)? builder;
+  final Widget Function(
+    BuildContext context,
+    Widget child,
+    IndicatorController indicatorController,
+    bool showSecondartIndicator,
+  ) builder;
   final Widget child;
   final IndicatorTrigger trigger;
   final RefreshCallback? onRefresh;
+  final RefreshCallback? onSecondaryRefresh;
   final bool Function(ScrollNotification scrollNotification)
       notificationPredicate;
   final double? offsetToArmed;
-  final double secondaryScrollLimit;
-  final void Function()? onReachedSecondaryScroll;
-  final Widget? secondaryLabel;
+  final double secondaryIndicatorLimit;
 
   @override
-  State<TransitionIndicator> createState() => _TransitionNotifierWidgetState();
+  State<SecondaryRefreshIndicator> createState() =>
+      _SecondaryRefreshIndicatorState();
 }
 
-class _TransitionNotifierWidgetState extends State<TransitionIndicator> {
+class _SecondaryRefreshIndicatorState extends State<SecondaryRefreshIndicator> {
   final localController = ValueNotifier(IndicatorController());
   ValueNotifier<IndicatorController> get getController =>
       widget.controller ?? localController;
 
   double lastOffsetProcessed = 0.0, totalPixels = 0.0;
 
+  bool showSecondaryRefresh = false;
+
   @override
   Widget build(BuildContext context) {
+    void resetPixels([_]) {
+      totalPixels = 0;
+      setState(() => showSecondaryRefresh = false);
+    }
+
     return Listener(
       onPointerMove: (event) {
-        if (widget.onReachedSecondaryScroll == null) return;
-
         final offset = event.localPosition.dy,
             draggingUp = offset < lastOffsetProcessed,
             draggingDown = offset > lastOffsetProcessed;
@@ -843,22 +850,36 @@ class _TransitionNotifierWidgetState extends State<TransitionIndicator> {
       child: AppRefreshIndicator(
         controller: getController,
         notificationPredicate: (scrollNotification) {
-          if (totalPixels > widget.secondaryScrollLimit &&
+          if (getController.value.isCanceling ||
+              getController.value.isFinalizing) {
+            resetPixels();
+          }
+
+          if (totalPixels > widget.secondaryIndicatorLimit &&
               getController.value.isArmed) {
-            totalPixels = 0;
-            widget.onReachedSecondaryScroll!();
-            return false;
+            setState(() => showSecondaryRefresh = true);
           }
 
           return widget.notificationPredicate(scrollNotification);
         },
         offsetToArmed: widget.offsetToArmed,
-        builder: widget.builder,
+        builder: (context, child, indicatorController) => widget.builder(
+          context,
+          child,
+          indicatorController,
+          showSecondaryRefresh,
+        ),
         trigger: widget.trigger,
         trailingScrollIndicatorVisible: false,
         leadingScrollIndicatorVisible: widget.onRefresh == null,
         onRefresh: () async {
-          widget.onRefresh != null ? await widget.onRefresh!() : null;
+          if (!showSecondaryRefresh) {
+            return widget.onRefresh != null ? await widget.onRefresh!() : null;
+          }
+
+          widget.onSecondaryRefresh != null
+              ? await widget.onSecondaryRefresh!().then(resetPixels)
+              : null;
         },
         child: widget.child,
       ),
