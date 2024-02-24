@@ -2,8 +2,8 @@ import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_detextre4/utils/config/theme.dart';
 import 'package:flutter_detextre4/utils/extensions/type_extensions.dart';
+import 'package:flutter_detextre4/utils/general/variables.dart';
 import 'package:flutter_detextre4/widgets/defaults/button.dart';
-import 'package:flutter_detextre4/widgets/defaults/button_aspect.dart';
 import 'package:flutter_detextre4/widgets/defaults/snackbar.dart';
 import 'package:flutter_detextre4/widgets/sheets/bottom_sheet_card.dart';
 import 'package:flutter_gap/flutter_gap.dart';
@@ -152,12 +152,7 @@ class _MultiSelectFieldState<T> extends State<MultiSelectField<T>> {
                     children: controllerValue()
                         .expand((item) => widget.items
                             .where((element) => element.value == item))
-                        .map((e) => ButtonAspect(
-                              padding:
-                                  const EdgeInsets.symmetric(horizontal: 5),
-                              bgColor: ThemeApp.colors(context).primary,
-                              child: e.child,
-                            ))
+                        .map((e) => e.child)
                         .toList(),
                   ),
         iconColor: getValue.value.hasValue && widget.indicator
@@ -188,17 +183,9 @@ class _MultiSelectFieldState<T> extends State<MultiSelectField<T>> {
 
           setState(() => isOpen = true);
 
-          final List<T>? result = await showModalBottomSheet(
-            backgroundColor: const Color(0xFFF6F7F7),
-            isScrollControlled: true,
-            shape: const RoundedRectangleBorder(
-              borderRadius: BorderRadius.only(
-                topLeft: Radius.circular(50),
-                topRight: Radius.circular(50),
-              ),
-            ),
-            context: context,
-            builder: (context) => _ShowApoloModal<T>(
+          final List<T>? result = await BottomSheetCard.showModal(
+            context,
+            builder: (context) => _ShowModal<T>(
               items: widget.items,
               controllerValue: controllerValue(),
               title: widget.dialogTittle,
@@ -219,8 +206,8 @@ class _MultiSelectFieldState<T> extends State<MultiSelectField<T>> {
   }
 }
 
-class _ShowApoloModal<T> extends StatefulWidget {
-  const _ShowApoloModal({
+class _ShowModal<T> extends StatefulWidget {
+  const _ShowModal({
     required this.items,
     required this.controllerValue,
     required this.title,
@@ -234,10 +221,10 @@ class _ShowApoloModal<T> extends StatefulWidget {
   final String? emptyDataMessage;
 
   @override
-  State<_ShowApoloModal> createState() => _ShowApoloModalState<T>();
+  State<_ShowModal> createState() => _ShowModalState<T>();
 }
 
-class _ShowApoloModalState<T> extends State<_ShowApoloModal<T>> {
+class _ShowModalState<T> extends State<_ShowModal<T>> {
   late final selectedItems = List.of(widget.controllerValue);
 
   @override
@@ -261,44 +248,47 @@ class _ShowApoloModalState<T> extends State<_ShowApoloModal<T>> {
           Expanded(
             child: widget.items.isEmpty
                 ? Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 20),
-                    child: Text(widget.emptyDataMessage ?? "No hay registros"))
-                : SingleChildScrollView(
-                    padding: EdgeInsets.symmetric(
-                      horizontal: MediaQuery.of(context).size.width * 0.1,
-                    ),
-                    child: Wrap(
-                      spacing: 10,
-                      runSpacing: 10,
-                      alignment: WrapAlignment.spaceBetween,
-                      runAlignment: WrapAlignment.spaceBetween,
-                      crossAxisAlignment: WrapCrossAlignment.center,
-                      children: widget.items
-                          .map(
-                            (item) => Button(
-                              padding:
-                                  const EdgeInsets.symmetric(horizontal: 10),
-                              bgColor: isSelected(item.value)
+                    padding:
+                        const EdgeInsets.symmetric(vertical: Variables.gapMax),
+                    child: Text(widget.emptyDataMessage ?? "No hay registros"),
+                  )
+                : GridView.count(
+                    crossAxisCount: 2,
+                    childAspectRatio: 20 / 4.8,
+                    crossAxisSpacing: Variables.gapXLarge,
+                    mainAxisSpacing: Variables.gapXLarge,
+                    children: widget.items
+                        .map(
+                          (item) => Button(
+                            borderRadius:
+                                const BorderRadius.all(Radius.circular(10)),
+                            boxShadow: [
+                              if (!isSelected(item.value)) Variables.boxShadow2,
+                            ],
+                            borderSide: BorderSide(
+                              width: 1.3,
+                              color: isSelected(item.value)
                                   ? ThemeApp.colors(context).primary
-                                  : ThemeApp.colors(context).disabledColor,
-                              onPressed: () => setState(() {
-                                if (isSelected(item.value)) {
-                                  return selectedItems.removeWhere(
-                                      (element) => element == item.value);
-                                }
-
-                                if (widget.maxLenght == null) {
-                                  selectedItems.add(item.value as T);
-                                } else if (selectedItems.length <
-                                    widget.maxLenght!) {
-                                  selectedItems.add(item.value as T);
-                                }
-                              }),
-                              child: item.child,
+                                  : Colors.transparent,
                             ),
-                          )
-                          .toList(),
-                    ),
+                            bgColor: Colors.white,
+                            onPressed: () => setState(() {
+                              if (isSelected(item.value)) {
+                                return selectedItems.removeWhere(
+                                    (element) => element == item.value);
+                              }
+
+                              if (widget.maxLenght == null) {
+                                selectedItems.add(item.value as T);
+                              } else if (selectedItems.length <
+                                  widget.maxLenght!) {
+                                selectedItems.add(item.value as T);
+                              }
+                            }),
+                            child: item.child,
+                          ),
+                        )
+                        .toList(),
                   ),
           ),
           const Gap(10).column,

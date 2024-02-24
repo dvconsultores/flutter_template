@@ -10,6 +10,8 @@ import 'package:flutter_detextre4/widgets/defaults/button.dart';
 import 'package:flutter_gap/flutter_gap.dart';
 import 'package:provider/provider.dart';
 
+// TODO migrate and create other general alert based on apolo
+//* plus add to general widgets correct sizings on variables
 class SystemAlertWidget extends StatefulWidget {
   const SystemAlertWidget({
     super.key,
