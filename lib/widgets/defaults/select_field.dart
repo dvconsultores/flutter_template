@@ -124,8 +124,8 @@ class SelectField<T> extends StatefulWidget {
     Color? focusedBorderColor,
     Color? iconEnabledColor,
     bool underline = false,
-    EdgeInsetsGeometry contentPadding =
-        const EdgeInsets.symmetric(horizontal: 10, vertical: 12),
+    EdgeInsetsGeometry contentPadding = const EdgeInsets.symmetric(
+        horizontal: Variables.gapMedium, vertical: Variables.gapLarge),
     EdgeInsetsGeometry? prefixPadding,
     double maxWidthPrefix = double.infinity,
     Widget? prefixIcon,
@@ -401,7 +401,8 @@ class _SelectFieldState<T> extends State<SelectField<T>> {
               ? IntrinsicWidth(
                   child: Padding(
                     padding: widget.prefixPadding ??
-                        const EdgeInsets.symmetric(horizontal: 10),
+                        const EdgeInsets.symmetric(
+                            horizontal: Variables.gapMedium),
                     child: widget.prefixIcon,
                   ),
                 )
@@ -410,7 +411,9 @@ class _SelectFieldState<T> extends State<SelectField<T>> {
           suffixIcon: widget.suffixIcon,
           isDense: true,
           contentPadding: widget.contentPadding ??
-              const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+              const EdgeInsets.symmetric(
+                  horizontal: Variables.gapMedium,
+                  vertical: Variables.gapMedium),
         ),
         dropdownStyleData: DropdownStyleData(
             direction: widget.dropdownStyleData?.direction ??

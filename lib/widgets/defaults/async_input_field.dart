@@ -5,6 +5,7 @@ import 'package:flutter_detextre4/painters/decorated_input_border.dart';
 import 'package:flutter_detextre4/utils/config/theme.dart';
 import 'package:flutter_detextre4/utils/general/functions.dart';
 import 'package:flutter_detextre4/utils/general/input_formatters.dart';
+import 'package:flutter_detextre4/utils/general/variables.dart';
 import 'package:flutter_detextre4/utils/helper_widgets/async_text_form_field.dart';
 
 class AsyncInputField extends AsyncTextFormField {
@@ -144,7 +145,8 @@ class AsyncInputField extends AsyncTextFormField {
                       ? IntrinsicWidth(
                           child: Padding(
                             padding: prefixPadding ??
-                                const EdgeInsets.symmetric(horizontal: 10),
+                                const EdgeInsets.symmetric(
+                                    horizontal: Variables.gapMedium),
                             child: prefixIcon,
                           ),
                         )
@@ -154,7 +156,9 @@ class AsyncInputField extends AsyncTextFormField {
                   isCollapsed: isCollapsed,
                   isDense: true,
                   contentPadding: contentPadding ??
-                      const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+                      const EdgeInsets.symmetric(
+                          horizontal: Variables.gapMedium,
+                          vertical: Variables.gapMedium),
                 );
               }),
         );

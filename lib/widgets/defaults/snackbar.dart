@@ -106,7 +106,8 @@ void showSnackbar(
         : null,
     positionOffset: 20,
     flushbarPosition: flushbarPosition ?? getValueByType().$3,
-    margin: const EdgeInsets.only(left: 10.0, right: 10),
+    margin: const EdgeInsets.only(
+        left: Variables.gapMedium, right: Variables.gapMedium),
     duration: duration,
     flushbarStyle: flushbarStyle,
   );

@@ -5,6 +5,7 @@ import 'package:flutter/scheduler.dart';
 import 'package:flutter_detextre4/main.dart';
 import 'package:flutter_detextre4/main_provider.dart';
 import 'package:flutter_detextre4/utils/config/theme.dart';
+import 'package:flutter_detextre4/utils/general/variables.dart';
 import 'package:flutter_detextre4/utils/helper_widgets/will_pop_custom.dart';
 import 'package:flutter_detextre4/widgets/defaults/button.dart';
 import 'package:flutter_gap/flutter_gap.dart';
@@ -75,12 +76,22 @@ class _SystemAlertWidgetState extends State<SystemAlertWidget> {
             content:
                 widget.textContent != null ? Text(widget.textContent!) : null,
             actionsAlignment: MainAxisAlignment.center,
-            titlePadding:
-                const EdgeInsets.only(top: 15, bottom: 10, left: 15, right: 15),
-            contentPadding:
-                const EdgeInsets.symmetric(vertical: 0, horizontal: 15),
-            actionsPadding:
-                const EdgeInsets.only(top: 10, bottom: 15, left: 15, right: 15),
+            titlePadding: const EdgeInsets.only(
+              top: Variables.gapXLarge,
+              bottom: Variables.gapMedium,
+              left: Variables.gapXLarge,
+              right: Variables.gapXLarge,
+            ),
+            contentPadding: const EdgeInsets.symmetric(
+              vertical: 0,
+              horizontal: Variables.gapXLarge,
+            ),
+            actionsPadding: const EdgeInsets.only(
+              top: Variables.gapMedium,
+              bottom: Variables.gapXLarge,
+              left: Variables.gapXLarge,
+              right: Variables.gapXLarge,
+            ),
             actions: [
               Row(children: [
                 if (widget.textButton != null)

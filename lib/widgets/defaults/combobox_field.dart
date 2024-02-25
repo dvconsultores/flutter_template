@@ -29,7 +29,7 @@ class ComboboxField<T> extends StatefulWidget {
     this.bgColor,
     this.boxShadow,
     this.gap = 5,
-    this.padding = const EdgeInsets.symmetric(horizontal: 10),
+    this.padding = const EdgeInsets.symmetric(horizontal: Variables.gapMedium),
     this.dense = true,
     this.onSubmit,
     this.onTap,
@@ -168,7 +168,7 @@ class _ComboboxFieldState<T> extends State<ComboboxField<T>> {
                             .mapIndexed((index, item) => IntrinsicWidth(
                                   child: ButtonAspect(
                                     padding: const EdgeInsets.symmetric(
-                                        horizontal: 10),
+                                        horizontal: Variables.gapMedium),
                                     height: 35,
                                     bgColor: ThemeApp.colors(context)
                                         .primary

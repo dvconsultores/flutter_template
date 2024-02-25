@@ -39,7 +39,7 @@ class MultiSelectField<T> extends StatefulWidget {
     this.bgColor,
     this.boxShadow,
     this.gap = 5,
-    this.padding = const EdgeInsets.symmetric(horizontal: 10),
+    this.padding = const EdgeInsets.symmetric(horizontal: Variables.gapMedium),
     this.dense = true,
   });
   final Function(List<T>? value)? onChanged;

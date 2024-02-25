@@ -182,7 +182,8 @@ class AppRefreshIndicator extends StatelessWidget {
                 child: Column(children: [
                   if (controller.isLoading)
                     Container(
-                      margin: const EdgeInsets.only(bottom: 8.0),
+                      margin:
+                          const EdgeInsets.only(bottom: Variables.gapNormal),
                       width: 28,
                       height: 28,
                       child: CircularProgressIndicator(
