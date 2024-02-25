@@ -5,8 +5,8 @@ import 'package:flutter_detextre4/utils/general/variables.dart';
 import 'package:flutter_detextre4/widgets/defaults/snackbar.dart';
 import 'package:flutter_detextre4/widgets/sheets/bottom_sheet_card.dart';
 
-class MultipleSelectField<T> extends StatefulWidget {
-  const MultipleSelectField({
+class BottomSelectField<T> extends StatefulWidget {
+  const BottomSelectField({
     super.key,
     this.onChanged,
     required this.items,
@@ -23,11 +23,9 @@ class MultipleSelectField<T> extends StatefulWidget {
     this.visualDensity,
     this.dialogTittle,
     this.textAlignPlaceHolder,
-    this.indicator = false,
     this.loading = false,
     this.loaderHeight = 20,
     this.disabled = false,
-    this.maxLenght,
     this.emptyDataMessage,
     this.hideTrailing = false,
     this.placeholderSize,
@@ -38,17 +36,17 @@ class MultipleSelectField<T> extends StatefulWidget {
     this.borderFocused,
     this.bgColor,
     this.boxShadow,
-    this.gap = Variables.gapLow,
+    this.gap = 5,
     this.padding = const EdgeInsets.symmetric(horizontal: Variables.gapMedium),
     this.dense = true,
   });
-  final Function(List<T>? value)? onChanged;
+  final Function(T? value)? onChanged;
   final List<DropdownMenuItem<T>> items;
   final String? placeholder;
   final String? disabledMessage;
   final bool clearValue;
-  final List<T>? initialValue;
-  final List<T>? value;
+  final ValueNotifier<T?>? value;
+  final T? initialValue;
   final double width;
   final double? height;
   final VisualDensity? visualDensity;
@@ -57,10 +55,8 @@ class MultipleSelectField<T> extends StatefulWidget {
   final Widget? trailing;
   final String? dialogTittle;
   final TextAlign? textAlignPlaceHolder;
-  final bool indicator;
   final bool loading;
   final bool disabled;
-  final int? maxLenght;
   final String? emptyDataMessage;
   final bool hideTrailing;
   final double? placeholderSize;
@@ -76,31 +72,24 @@ class MultipleSelectField<T> extends StatefulWidget {
   final bool dense;
 
   @override
-  State<MultipleSelectField> createState() => _MultiSelectFieldState<T>();
+  State<BottomSelectField> createState() => _BottomSelectFieldState<T>();
 }
 
-class _MultiSelectFieldState<T> extends State<MultipleSelectField<T>> {
+class _BottomSelectFieldState<T> extends State<BottomSelectField<T>> {
   bool isOpen = false;
 
-  List<T> get getValue => widget.value ?? <T>[];
+  final localValue = ValueNotifier<T?>(null);
+
+  ValueNotifier<T?> get getValue => widget.value ?? localValue;
 
   @override
   void initState() {
-    if (widget.initialValue != null && getValue.isEmpty) {
-      widget.value!.addAll(widget.initialValue!);
-    }
+    if (widget.initialValue != null) getValue.value = widget.initialValue;
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    List<T> selectedItems() {
-      if (widget.maxLenght == null) return getValue;
-
-      return getValue.slices(widget.maxLenght!).elementAtOrNull(0)?.toList() ??
-          [];
-    }
-
     return Container(
       width: widget.width,
       height: widget.height,
@@ -137,25 +126,20 @@ class _MultiSelectFieldState<T> extends State<MultipleSelectField<T>> {
                   minHeight: widget.loaderHeight,
                 ),
               )
-            : getValue.isEmpty || widget.indicator
+            :
+            // value
+            widget.items
+                    .singleWhereOrNull(
+                        (element) => element.value == getValue.value)
+                    ?.child ??
                 // placeholder
-                ? Text(
-                    widget.placeholder ?? "",
-                    textAlign: widget.textAlignPlaceHolder,
-                    style: TextStyle(fontSize: widget.placeholderSize),
-                  )
-                // value
-                : Wrap(
-                    spacing: 7,
-                    children: selectedItems()
-                        .expand((item) => widget.items
-                            .where((element) => element.value == item))
-                        .map((e) => e.child)
-                        .toList(),
-                  ),
-        iconColor: getValue.isNotEmpty && widget.indicator
-            ? ThemeApp.colors(context).primary
-            : null,
+                Text(
+                  widget.placeholder ?? "",
+                  textAlign: widget.textAlignPlaceHolder,
+                  style: TextStyle(fontSize: widget.placeholderSize),
+                ),
+        iconColor:
+            getValue.value != null ? ThemeApp.colors(context).primary : null,
         trailing: widget.hideTrailing
             ? null
             : widget.trailing ??
@@ -181,17 +165,13 @@ class _MultiSelectFieldState<T> extends State<MultipleSelectField<T>> {
 
           setState(() => isOpen = true);
 
-          await BottomSheetListMultiple.showModal(
+          await BottomSheetList.showModal<T>(
             context,
             items: widget.items,
-            initialItems: selectedItems(),
-            labelText: widget.dialogTittle,
-            maxLenght: widget.maxLenght,
             emptyDataText: widget.emptyDataMessage,
-            onComplete: (items) {
-              getValue.clear();
-              getValue.addAll(items.map((e) => e.value!).toList());
-              if (widget.onChanged != null) widget.onChanged!(getValue);
+            onTap: (item) {
+              getValue.value = item.value;
+              if (widget.onChanged != null) widget.onChanged!(getValue.value);
             },
           );
 
