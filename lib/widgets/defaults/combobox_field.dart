@@ -1,8 +1,9 @@
-import 'package:flutter_detextre4/utils/config/theme.dart';
-import 'package:flutter_detextre4/utils/extensions/type_extensions.dart';
-import 'package:flutter_detextre4/widgets/defaults/button_aspect.dart';
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_detextre4/utils/config/theme.dart';
+import 'package:flutter_detextre4/utils/extensions/type_extensions.dart';
+import 'package:flutter_detextre4/utils/general/variables.dart';
+import 'package:flutter_detextre4/widgets/defaults/button_aspect.dart';
 
 class ComboboxField<T> extends StatefulWidget {
   const ComboboxField({
@@ -128,7 +129,8 @@ class _ComboboxFieldState<T> extends State<ComboboxField<T>> {
             ? SizedBox(
                 width: widget.width,
                 child: LinearProgressIndicator(
-                  borderRadius: const BorderRadius.all(Radius.circular(12)),
+                  borderRadius: const BorderRadius.all(
+                      Radius.circular(Variables.radius12)),
                   color: ThemeApp.colors(context).primary,
                   minHeight: widget.loaderHeight,
                 ),

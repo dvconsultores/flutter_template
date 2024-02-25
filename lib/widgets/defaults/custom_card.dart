@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_detextre4/utils/general/variables.dart';
 
 class CustomCard extends StatelessWidget {
   const CustomCard({
@@ -10,7 +11,8 @@ class CustomCard extends StatelessWidget {
     this.width,
     this.height,
     this.shape,
-    this.borderRadius = const BorderRadius.all(Radius.circular(20)),
+    this.borderRadius =
+        const BorderRadius.all(Radius.circular(Variables.radius20)),
     this.borderSide = const BorderSide(width: 1),
     this.borderOnForeground = true,
     this.decorationClipBehavior,

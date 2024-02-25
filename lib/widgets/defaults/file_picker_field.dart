@@ -4,6 +4,7 @@ import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_detextre4/utils/config/theme.dart';
 import 'package:flutter_detextre4/utils/extensions/type_extensions.dart';
+import 'package:flutter_detextre4/utils/general/variables.dart';
 import 'package:path/path.dart';
 
 class FilePickerField extends StatefulWidget {
@@ -83,7 +84,8 @@ class _FilePickerFieldState extends State<FilePickerField> {
         clipBehavior: Clip.antiAlias,
         decoration: BoxDecoration(
           color: ThemeApp.colors(context).background,
-          borderRadius: const BorderRadius.all(Radius.circular(12)),
+          borderRadius:
+              const BorderRadius.all(Radius.circular(Variables.radius12)),
           border: Border.all(
             width: widget.borderWidth,
             color: widget.borderColor ?? Theme.of(context).colorScheme.outline,

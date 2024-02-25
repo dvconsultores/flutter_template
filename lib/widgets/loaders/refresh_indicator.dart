@@ -7,6 +7,7 @@ import 'package:flutter/scheduler.dart';
 import 'package:flutter_detextre4/painters/sky_painter.dart';
 import 'package:flutter_detextre4/painters/triangule_painter.dart';
 import 'package:flutter_detextre4/utils/config/theme.dart';
+import 'package:flutter_detextre4/utils/general/variables.dart';
 import 'package:liquid_pull_to_refresh/liquid_pull_to_refresh.dart' as liq;
 
 /// A `RefreshIndicator` with Custom app loader on refresh list.
@@ -149,7 +150,7 @@ class AppRefreshIndicator extends StatelessWidget {
                   child: Container(
                 height: 42,
                 width: 42,
-                padding: const EdgeInsets.all(10),
+                padding: const EdgeInsets.all(Variables.gapMedium),
                 decoration: const BoxDecoration(
                   color: Colors.white,
                   shape: BoxShape.circle,

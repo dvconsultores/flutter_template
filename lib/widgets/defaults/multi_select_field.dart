@@ -132,7 +132,8 @@ class _MultiSelectFieldState<T> extends State<MultiSelectField<T>> {
             ? SizedBox(
                 width: widget.width,
                 child: LinearProgressIndicator(
-                  borderRadius: const BorderRadius.all(Radius.circular(12)),
+                  borderRadius: const BorderRadius.all(
+                      Radius.circular(Variables.radius12)),
                   color: ThemeApp.colors(context).primary,
                   minHeight: widget.loaderHeight,
                 ),
@@ -244,7 +245,7 @@ class _ShowModalState<T> extends State<_ShowModal<T>> {
           Text(widget.title ?? '',
               style:
                   const TextStyle(fontSize: 16, fontWeight: FontWeight.w700)),
-          const Gap(10).column,
+          const Gap(Variables.gapMedium).column,
           Expanded(
             child: widget.items.isEmpty
                 ? Padding(
@@ -291,7 +292,7 @@ class _ShowModalState<T> extends State<_ShowModal<T>> {
                         .toList(),
                   ),
           ),
-          const Gap(10).column,
+          const Gap(Variables.gapMedium).column,
           Button(
             margin: EdgeInsets.symmetric(
               horizontal: MediaQuery.of(context).size.width * 0.1,

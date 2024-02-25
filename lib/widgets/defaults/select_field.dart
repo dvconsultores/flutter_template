@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_detextre4/main.dart';
 import 'package:flutter_detextre4/utils/config/theme.dart';
 import 'package:flutter_detextre4/utils/extensions/type_extensions.dart';
+import 'package:flutter_detextre4/utils/general/variables.dart';
 
 class SelectField<T> extends StatefulWidget {
   const SelectField({
@@ -357,7 +358,8 @@ class _SelectFieldState<T> extends State<SelectField<T>> {
         focusNode: widget.focusNode,
         customButton: widget.loading
             ? LinearProgressIndicator(
-                borderRadius: const BorderRadius.all(Radius.circular(12)),
+                borderRadius:
+                    const BorderRadius.all(Radius.circular(Variables.radius12)),
                 color: ThemeApp.colors(context).primary,
                 minHeight: widget.loaderHeight,
               )
@@ -432,7 +434,8 @@ class _SelectFieldState<T> extends State<SelectField<T>> {
             useSafeArea: widget.dropdownStyleData?.useSafeArea ?? true,
             decoration: widget.dropdownStyleData?.decoration ??
                 BoxDecoration(
-                  borderRadius: const BorderRadius.all(Radius.circular(12)),
+                  borderRadius: const BorderRadius.all(
+                      Radius.circular(Variables.radius12)),
                   border: Border.all(
                       width: 1, color: ThemeApp.colors(context).primary),
                 )),

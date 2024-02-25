@@ -7,6 +7,7 @@ mixin Variables {
 
   // * Sizing
   static const mSize = Size(360, 690);
+
   static const paddingScaffold = EdgeInsets.symmetric(
     vertical: 16,
     horizontal: 24,
@@ -14,13 +15,17 @@ mixin Variables {
 
   static const double gapXLow = 2,
       gapLow = 4,
-      gapMedium = 8,
+      gapNormal = 8,
+      gapMedium = 10,
       gapLarge = 12,
       gapXLarge = 16,
       gapMax = 20;
+
   static const double radius50 = 50,
       radius30 = 30,
+      radius20 = 20,
       radius15 = 15,
+      radius12 = 12,
       radius10 = 10;
 
   // * others
