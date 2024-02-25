@@ -39,7 +39,7 @@ class FilePickerField extends StatefulWidget {
 }
 
 class _FilePickerFieldState extends State<FilePickerField> {
-  bool focused = false;
+  bool isOpen = false;
 
   final docsAllowed = ["pdf", "doc"],
       imagesAllowed = ["png", "jpg", "bmp", "webp", "tiff"];
@@ -49,7 +49,7 @@ class _FilePickerFieldState extends State<FilePickerField> {
   File? get getFile => widget.controller?.value ?? file;
 
   Future<void> pickFile() async {
-    setState(() => focused = true);
+    setState(() => isOpen = true);
 
     final allowedExtensions = [...docsAllowed, ...imagesAllowed];
 
@@ -64,7 +64,7 @@ class _FilePickerFieldState extends State<FilePickerField> {
       fileExtension = result.files.single.extension;
     }
 
-    setState(() => focused = false);
+    setState(() => isOpen = false);
 
     if (widget.onChanged != null) widget.onChanged!(getFile);
   }
@@ -94,7 +94,7 @@ class _FilePickerFieldState extends State<FilePickerField> {
             widget.disabled
                 ? widget.borderDisabled ??
                     BorderSide(color: Theme.of(context).disabledColor)
-                : focused
+                : isOpen
                     ? widget.borderFocused ??
                         BorderSide(color: Theme.of(context).focusColor)
                     : widget.border ??

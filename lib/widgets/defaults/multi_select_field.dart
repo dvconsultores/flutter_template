@@ -81,7 +81,7 @@ class MultiSelectField<T> extends StatefulWidget {
 }
 
 class _MultiSelectFieldState<T> extends State<MultiSelectField<T>> {
-  bool focused = false;
+  bool isOpen = false;
 
   List<T>? selectedItems;
 
@@ -118,7 +118,7 @@ class _MultiSelectFieldState<T> extends State<MultiSelectField<T>> {
                 widget.disabled
                     ? widget.borderDisabled ??
                         BorderSide(color: Theme.of(context).disabledColor)
-                    : focused
+                    : isOpen
                         ? widget.borderFocused ??
                             BorderSide(color: Theme.of(context).focusColor)
                         : widget.border ??
@@ -170,7 +170,7 @@ class _MultiSelectFieldState<T> extends State<MultiSelectField<T>> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Transform.rotate(
-                        angle: focused ? 22 : 0,
+                        angle: isOpen ? 22 : 0,
                         child: const Icon(
                           Icons.keyboard_arrow_down,
                           color: Colors.black,
@@ -186,7 +186,7 @@ class _MultiSelectFieldState<T> extends State<MultiSelectField<T>> {
           }
           if (widget.disabled || widget.loading) return;
 
-          setState(() => focused = true);
+          setState(() => isOpen = true);
 
           final result = await BottomSheetListMultiple.showModal(
             context,
@@ -202,7 +202,7 @@ class _MultiSelectFieldState<T> extends State<MultiSelectField<T>> {
             if (widget.onChanged != null) widget.onChanged!(getValue.value);
           }
 
-          setState(() => focused = false);
+          setState(() => isOpen = false);
         },
       ),
     );

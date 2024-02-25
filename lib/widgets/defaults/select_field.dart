@@ -435,8 +435,7 @@ class _SelectFieldState<T> extends State<SelectField<T>> {
               decoration: widget.dropdownStyleData?.decoration ??
                   BoxDecoration(
                     borderRadius: const BorderRadius.all(Radius.circular(12)),
-                    border: Border.all(
-                        width: 1, color: ThemeApp.colors(context).primary),
+                    border: Border.all(color: ThemeApp.colors(context).primary),
                   )),
           menuItemStyleData: widget.menuItemStyleData,
           items: widget.items,
