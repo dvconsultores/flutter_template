@@ -1,7 +1,7 @@
-import 'package:flutter/material.dart';
 import 'package:flutter_detextre4/utils/general/variables.dart';
 import 'package:flutter_detextre4/widgets/defaults/button.dart';
 import 'package:flutter_detextre4/widgets/defaults/snackbar.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_gap/flutter_gap.dart';
 
 class ModalWidget extends StatelessWidget {
@@ -23,6 +23,7 @@ class ModalWidget extends StatelessWidget {
     this.insetPadding =
         const EdgeInsets.symmetric(horizontal: 40.0, vertical: 24.0),
     this.actionButtonsHeight = 40,
+    this.shrinkWrap = false,
   });
   final String textTitle;
   final Widget? body;
@@ -39,9 +40,12 @@ class ModalWidget extends StatelessWidget {
   final EdgeInsetsGeometry? actionsPadding;
   final EdgeInsets insetPadding;
   final double actionButtonsHeight;
+  final bool shrinkWrap;
 
   @override
   Widget build(BuildContext context) {
+    final bodyWidget = body ?? const SizedBox.shrink();
+
     return AlertDialog(
         actionsAlignment: MainAxisAlignment.center,
         alignment: Alignment.center,
@@ -57,9 +61,7 @@ class ModalWidget extends StatelessWidget {
           textAlign: TextAlign.center,
           style: const TextStyle(fontWeight: FontWeight.w700),
         )),
-        content: IntrinsicWidth(
-          child: body ?? const SizedBox.shrink(),
-        ),
+        content: shrinkWrap ? IntrinsicHeight(child: bodyWidget) : bodyWidget,
         contentPadding: contentPadding ??
             Variables.paddingScaffold.copyWith(top: 0, bottom: 0),
         actionsPadding: actionsPadding ??
