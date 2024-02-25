@@ -22,6 +22,7 @@ mixin Variables {
       gapMax = 20;
 
   static const double radius50 = 50,
+      radius40 = 40,
       radius30 = 30,
       radius20 = 20,
       radius15 = 15,
@@ -40,5 +41,11 @@ mixin Variables {
         spreadRadius: 0,
         blurRadius: 6,
         offset: Offset(0, 3),
+      ),
+      boxShadow3 = BoxShadow(
+        offset: Offset(-1, 6),
+        blurRadius: 3,
+        spreadRadius: 0,
+        color: Color.fromRGBO(0, 0, 0, 0.2),
       );
 }

@@ -3,10 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_detextre4/utils/config/theme.dart';
 import 'package:flutter_detextre4/utils/extensions/type_extensions.dart';
 import 'package:flutter_detextre4/utils/general/variables.dart';
-import 'package:flutter_detextre4/widgets/defaults/button.dart';
 import 'package:flutter_detextre4/widgets/defaults/snackbar.dart';
 import 'package:flutter_detextre4/widgets/sheets/bottom_sheet_card.dart';
-import 'package:flutter_gap/flutter_gap.dart';
 
 class MultiSelectField<T> extends StatefulWidget {
   const MultiSelectField({
@@ -34,8 +32,11 @@ class MultiSelectField<T> extends StatefulWidget {
     this.emptyDataMessage,
     this.hideTrailing = false,
     this.placeholderSize,
-    this.borderRadius = const BorderRadius.all(Radius.circular(15)),
-    this.borderSide = const BorderSide(width: 1),
+    this.borderRadius =
+        const BorderRadius.all(Radius.circular(Variables.radius15)),
+    this.border,
+    this.borderDisabled,
+    this.borderFocused,
     this.bgColor,
     this.boxShadow,
     this.gap = 5,
@@ -65,7 +66,9 @@ class MultiSelectField<T> extends StatefulWidget {
   final bool hideTrailing;
   final double? placeholderSize;
   final BorderRadiusGeometry borderRadius;
-  final BorderSide borderSide;
+  final BorderSide? border;
+  final BorderSide? borderDisabled;
+  final BorderSide? borderFocused;
   final Color? bgColor;
   final List<BoxShadow>? boxShadow;
   final double gap;
@@ -78,7 +81,7 @@ class MultiSelectField<T> extends StatefulWidget {
 }
 
 class _MultiSelectFieldState<T> extends State<MultiSelectField<T>> {
-  bool isOpen = false;
+  bool focused = false;
 
   List<T>? selectedItems;
 
@@ -108,18 +111,20 @@ class _MultiSelectFieldState<T> extends State<MultiSelectField<T>> {
       height: widget.height,
       decoration: widget.decoration ??
           BoxDecoration(
-            borderRadius: widget.borderRadius,
-            color: widget.bgColor ?? Theme.of(context).colorScheme.background,
-            boxShadow: widget.boxShadow ??
-                [
-                  const BoxShadow(
-                    color: Colors.black26,
-                    offset: Offset(0, 6),
-                    blurRadius: 10,
-                  )
-                ],
-            border: Border.fromBorderSide(widget.borderSide),
-          ),
+              borderRadius: widget.borderRadius,
+              color: widget.bgColor ?? Theme.of(context).colorScheme.background,
+              boxShadow: widget.boxShadow ?? [Variables.boxShadow2],
+              border: Border.fromBorderSide(
+                widget.disabled
+                    ? widget.borderDisabled ??
+                        BorderSide(color: Theme.of(context).disabledColor)
+                    : focused
+                        ? widget.borderFocused ??
+                            BorderSide(color: Theme.of(context).focusColor)
+                        : widget.border ??
+                            BorderSide(
+                                color: Theme.of(context).colorScheme.outline),
+              )),
       child: ListTile(
         minLeadingWidth: 20,
         leading: widget.loading ? null : widget.leading,
@@ -132,8 +137,7 @@ class _MultiSelectFieldState<T> extends State<MultiSelectField<T>> {
             ? SizedBox(
                 width: widget.width,
                 child: LinearProgressIndicator(
-                  borderRadius: const BorderRadius.all(
-                      Radius.circular(Variables.radius12)),
+                  borderRadius: const BorderRadius.all(Radius.circular(12)),
                   color: ThemeApp.colors(context).primary,
                   minHeight: widget.loaderHeight,
                 ),
@@ -166,7 +170,7 @@ class _MultiSelectFieldState<T> extends State<MultiSelectField<T>> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Transform.rotate(
-                        angle: isOpen ? 22 : 0,
+                        angle: focused ? 22 : 0,
                         child: const Icon(
                           Icons.keyboard_arrow_down,
                           color: Colors.black,
@@ -182,125 +186,24 @@ class _MultiSelectFieldState<T> extends State<MultiSelectField<T>> {
           }
           if (widget.disabled || widget.loading) return;
 
-          setState(() => isOpen = true);
+          setState(() => focused = true);
 
-          final List<T>? result = await BottomSheetCard.showModal(
+          final result = await BottomSheetListMultiple.showModal(
             context,
-            builder: (context) => _ShowModal<T>(
-              items: widget.items,
-              controllerValue: controllerValue(),
-              title: widget.dialogTittle,
-              maxLenght: widget.maxLenght,
-              emptyDataMessage: widget.emptyDataMessage,
-            ),
+            items: widget.items,
+            initialItems: controllerValue(),
+            labelText: widget.dialogTittle,
+            maxLenght: widget.maxLenght,
+            emptyDataText: widget.emptyDataMessage,
           );
 
-          if (result == null) return;
+          if (result != null) {
+            getValue.value = result.map((e) => e.value!).toList();
+            if (widget.onChanged != null) widget.onChanged!(getValue.value);
+          }
 
-          getValue.value = result;
-          if (widget.onChanged != null) widget.onChanged!(getValue.value);
-
-          setState(() => isOpen = false);
+          setState(() => focused = false);
         },
-      ),
-    );
-  }
-}
-
-class _ShowModal<T> extends StatefulWidget {
-  const _ShowModal({
-    required this.items,
-    required this.controllerValue,
-    required this.title,
-    this.maxLenght,
-    this.emptyDataMessage,
-  });
-  final List<DropdownMenuItem<T>> items;
-  final List<T> controllerValue;
-  final String? title;
-  final int? maxLenght;
-  final String? emptyDataMessage;
-
-  @override
-  State<_ShowModal> createState() => _ShowModalState<T>();
-}
-
-class _ShowModalState<T> extends State<_ShowModal<T>> {
-  late final selectedItems = List.of(widget.controllerValue);
-
-  @override
-  Widget build(BuildContext context) {
-    bool isSelected(T? item) =>
-        selectedItems.singleWhereOrNull((element) => element == item) != null;
-
-    return BottomSheetCard(
-      initialChildSize: .45,
-      minChildSize: .1,
-      maxChildSize: .45,
-      scrollable: false,
-      padding: const EdgeInsets.all(0),
-      child: Padding(
-        padding: const EdgeInsets.only(bottom: 15),
-        child: Column(children: [
-          Text(widget.title ?? '',
-              style:
-                  const TextStyle(fontSize: 16, fontWeight: FontWeight.w700)),
-          const Gap(Variables.gapMedium).column,
-          Expanded(
-            child: widget.items.isEmpty
-                ? Padding(
-                    padding:
-                        const EdgeInsets.symmetric(vertical: Variables.gapMax),
-                    child: Text(widget.emptyDataMessage ?? "No hay registros"),
-                  )
-                : GridView.count(
-                    crossAxisCount: 2,
-                    childAspectRatio: 20 / 4.8,
-                    crossAxisSpacing: Variables.gapXLarge,
-                    mainAxisSpacing: Variables.gapXLarge,
-                    children: widget.items
-                        .map(
-                          (item) => Button(
-                            borderRadius:
-                                const BorderRadius.all(Radius.circular(10)),
-                            boxShadow: [
-                              if (!isSelected(item.value)) Variables.boxShadow2,
-                            ],
-                            borderSide: BorderSide(
-                              width: 1.3,
-                              color: isSelected(item.value)
-                                  ? ThemeApp.colors(context).primary
-                                  : Colors.transparent,
-                            ),
-                            bgColor: Colors.white,
-                            onPressed: () => setState(() {
-                              if (isSelected(item.value)) {
-                                return selectedItems.removeWhere(
-                                    (element) => element == item.value);
-                              }
-
-                              if (widget.maxLenght == null) {
-                                selectedItems.add(item.value as T);
-                              } else if (selectedItems.length <
-                                  widget.maxLenght!) {
-                                selectedItems.add(item.value as T);
-                              }
-                            }),
-                            child: item.child,
-                          ),
-                        )
-                        .toList(),
-                  ),
-          ),
-          const Gap(Variables.gapMedium).column,
-          Button(
-            margin: EdgeInsets.symmetric(
-              horizontal: MediaQuery.of(context).size.width * 0.1,
-            ),
-            text: "Aceptar",
-            onPressed: () => Navigator.pop(context, selectedItems),
-          ),
-        ]),
       ),
     );
   }

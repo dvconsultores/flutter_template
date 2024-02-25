@@ -11,7 +11,7 @@ class TextDecimal extends StatelessWidget {
     this.style,
     this.styleDecimals,
     this.customPatterm = '#,##0.00 ¤',
-    this.locale = 'es_ES',
+    this.locale = 'en_US',
     this.maxDecimals = 3,
     this.minimumFractionDigits = 0,
     this.recognizer,
@@ -46,7 +46,7 @@ class TextDecimal extends StatelessWidget {
       text: integers,
       children: [
         TextSpan(
-          text: decimals != null ? ",$decimals" : null,
+          text: decimals != null ? "$decimalSeparator$decimals" : null,
           style: styleDecimals ??
               style?.copyWith(
                 fontSize: style!.fontSize != null

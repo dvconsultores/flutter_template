@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_detextre4/main.dart';
 import 'package:flutter_detextre4/utils/config/theme.dart';
 import 'package:flutter_detextre4/utils/extensions/type_extensions.dart';
+import 'package:flutter_detextre4/utils/general/variables.dart';
 import 'package:flutter_gap/flutter_gap.dart';
 
 class ButtonAspect extends StatelessWidget {
@@ -13,16 +14,10 @@ class ButtonAspect extends StatelessWidget {
     this.height = 45,
     this.constraints,
     this.shape,
-    this.borderRadius = const BorderRadius.all(Radius.circular(40)),
+    this.borderRadius =
+        const BorderRadius.all(Radius.circular(Variables.radius40)),
     this.borderSide = BorderSide.none,
-    this.boxShadow = const [
-      BoxShadow(
-        offset: Offset(-1, 6),
-        blurRadius: 3,
-        spreadRadius: 0,
-        color: Color.fromRGBO(0, 0, 0, 0.2),
-      ),
-    ],
+    this.boxShadow = const [Variables.boxShadow3],
     this.color = Colors.white,
     this.bgColor,
     this.bgColorDisabled,
@@ -80,7 +75,8 @@ class ButtonAspect extends StatelessWidget {
     double? width,
     double height = 45,
     BoxConstraints? constraints,
-    BorderRadius borderRadius = const BorderRadius.all(Radius.circular(40)),
+    BorderRadius borderRadius =
+        const BorderRadius.all(Radius.circular(Variables.radius40)),
     BoxShape? shape,
     BorderSide borderSide = const BorderSide(width: 1),
     List<BoxShadow> boxShadow = const [],
@@ -138,17 +134,11 @@ class ButtonAspect extends StatelessWidget {
   static ButtonAspect icon({
     double size = 45,
     BoxConstraints? constraints,
-    BorderRadius borderRadius = const BorderRadius.all(Radius.circular(50)),
+    BorderRadius borderRadius =
+        const BorderRadius.all(Radius.circular(Variables.radius50)),
     BoxShape shape = BoxShape.circle,
     BorderSide borderSide = const BorderSide(width: 1),
-    List<BoxShadow> boxShadow = const [
-      BoxShadow(
-        offset: Offset(0, 6),
-        blurRadius: 3,
-        spreadRadius: 0,
-        color: Color.fromRGBO(0, 0, 0, 0.2),
-      ),
-    ],
+    List<BoxShadow> boxShadow = const [Variables.boxShadow3],
     Color color = Colors.white,
     Color? bgColor,
     Color? bgColorDisabled,
@@ -175,7 +165,8 @@ class ButtonAspect extends StatelessWidget {
   static ButtonAspect iconVariant({
     double size = 45,
     BoxConstraints? constraints,
-    BorderRadius borderRadius = const BorderRadius.all(Radius.circular(50)),
+    BorderRadius borderRadius =
+        const BorderRadius.all(Radius.circular(Variables.radius50)),
     BorderSide borderSide = const BorderSide(width: 1),
     BoxShape shape = BoxShape.circle,
     List<BoxShadow> boxShadow = const [],
@@ -205,21 +196,20 @@ class ButtonAspect extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final ts = textStyle ??
-        TextStyle(
-          color: color,
-          fontSize: 14,
-          letterSpacing: 3.9,
-          fontWeight: FontWeight.w700,
-          fontFamily: FontFamily.lato("700"),
+            TextStyle(
+              color: color,
+              fontSize: 14,
+              letterSpacing: 3.9,
+              fontWeight: FontWeight.w700,
+              fontFamily: FontFamily.lato("700"),
+            ),
+        widgetText = Text(
+          text ?? '',
+          textAlign: textAlign,
+          softWrap: textSoftWrap,
+          overflow: textOverflow,
+          style: ts,
         );
-
-    final widgetText = Text(
-      text ?? '',
-      textAlign: textAlign,
-      softWrap: textSoftWrap,
-      overflow: textOverflow,
-      style: ts,
-    );
 
     return Material(
       shape: ContinuousRectangleBorder(

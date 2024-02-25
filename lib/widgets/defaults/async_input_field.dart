@@ -41,14 +41,14 @@ class AsyncInputField extends AsyncTextFormField {
     this.numeric = false,
     this.formatByComma = false,
     this.maxEntires = 10,
-    this.maxDecimals = 2,
+    this.maxDecimals = 3,
     this.prefixPadding,
-    this.borderRadius = const BorderRadius.all(Radius.circular(15)),
-    this.borderWidth = 1,
-    this.borderColor,
-    this.disabledBorderColor,
-    this.errorBorderColor,
-    this.focusedBorderColor,
+    this.borderRadius =
+        const BorderRadius.all(Radius.circular(Variables.radius15)),
+    this.border,
+    this.borderDisabled,
+    this.borderError,
+    this.borderFocused,
     this.underline = false,
     this.floatingLabelBehavior = FloatingLabelBehavior.never,
     this.contentPadding,
@@ -81,45 +81,36 @@ class AsyncInputField extends AsyncTextFormField {
           ],
           decoration: inputDecoration ??
               buildWidget<InputDecoration>(() {
-                final ts = textStyle ?? _ts;
+                final ts = textStyle ?? _ts,
+                    hs = hintStyle ??
+                        ts.copyWith(
+                            color:
+                                ThemeApp.colors(context).text.withOpacity(.7),
+                            fontSize: 13),
+                    ls = labelStyle ??
+                        ts.copyWith(
+                            color: ThemeApp.colors(context).text, fontSize: 13),
+                    fls = floatingLabelStyle ?? ls;
 
-                final hs = hintStyle ??
-                    ts.copyWith(
-                        color: ThemeApp.colors(context).text.withOpacity(.7),
-                        fontSize: 12);
-                final ls = labelStyle ??
-                    ts.copyWith(
-                        color: ThemeApp.colors(context).text, fontSize: 12);
-                final fls = floatingLabelStyle ?? ls;
-
-                InputBorder checkBorder(Color color) => DecoratedInputBorder(
+                InputBorder checkBorder(BorderSide border) =>
+                    DecoratedInputBorder(
                       child: underline
                           ? UnderlineInputBorder(
-                              borderSide:
-                                  BorderSide(width: borderWidth, color: color),
-                              borderRadius: borderRadius,
-                            )
+                              borderSide: border, borderRadius: borderRadius)
                           : OutlineInputBorder(
-                              borderSide:
-                                  BorderSide(width: borderWidth, color: color),
-                              borderRadius: borderRadius,
-                            ),
-                      shadow: shadow ??
-                          const BoxShadow(
-                            color: Colors.black26,
-                            offset: Offset(0, 6),
-                            blurRadius: 10,
-                          ),
+                              borderSide: border, borderRadius: borderRadius),
+                      shadow: shadow ?? Variables.boxShadow2,
                     );
 
-                final border =
-                    borderColor ?? Theme.of(context).colorScheme.outline;
-                final disabledBorder =
-                    disabledBorderColor ?? Theme.of(context).disabledColor;
-                final errorBorder =
-                    errorBorderColor ?? Theme.of(context).colorScheme.error;
-                final focusedBorder =
-                    focusedBorderColor ?? Theme.of(context).focusColor;
+                final defaultBorder = border ??
+                        BorderSide(
+                            color: Theme.of(context).colorScheme.outline),
+                    disabledBorder = borderDisabled ??
+                        BorderSide(color: Theme.of(context).disabledColor),
+                    errorBorder = borderError ??
+                        BorderSide(color: Theme.of(context).colorScheme.error),
+                    focusedBorder = borderFocused ??
+                        BorderSide(color: Theme.of(context).focusColor);
 
                 return InputDecoration(
                   prefixIconConstraints:
@@ -134,8 +125,8 @@ class AsyncInputField extends AsyncTextFormField {
                   floatingLabelBehavior: floatingLabelBehavior,
                   filled: filled,
                   fillColor: color ?? ThemeApp.colors(context).background,
-                  border: checkBorder(border),
-                  enabledBorder: checkBorder(border),
+                  border: checkBorder(defaultBorder),
+                  enabledBorder: checkBorder(defaultBorder),
                   disabledBorder: checkBorder(disabledBorder),
                   errorBorder: checkBorder(errorBorder),
                   focusedBorder: checkBorder(focusedBorder),
@@ -185,11 +176,10 @@ class AsyncInputField extends AsyncTextFormField {
   final int maxDecimals;
   final EdgeInsetsGeometry? prefixPadding;
   final BorderRadius borderRadius;
-  final double borderWidth;
-  final Color? borderColor;
-  final Color? disabledBorderColor;
-  final Color? errorBorderColor;
-  final Color? focusedBorderColor;
+  final BorderSide? border;
+  final BorderSide? borderDisabled;
+  final BorderSide? borderError;
+  final BorderSide? borderFocused;
   final bool underline;
   final FloatingLabelBehavior floatingLabelBehavior;
   final EdgeInsets? contentPadding;
@@ -233,12 +223,12 @@ class AsyncInputField extends AsyncTextFormField {
     List<TextInputFormatter>? inputFormatters,
     bool obscureText = false,
     EdgeInsetsGeometry? prefixPadding,
-    BorderRadius borderRadius = const BorderRadius.all(Radius.circular(15)),
-    double borderWidth = 1,
-    Color? borderColor,
-    Color? disabledBorderColor,
-    Color? errorBorderColor,
-    Color? focusedBorderColor,
+    BorderRadius borderRadius =
+        const BorderRadius.all(Radius.circular(Variables.radius15)),
+    BorderSide? border,
+    BorderSide? borderDisabled,
+    BorderSide? borderError,
+    BorderSide? borderFocused,
     bool underline = false,
     FloatingLabelBehavior floatingLabelBehavior = FloatingLabelBehavior.auto,
     EdgeInsets? contentPadding,
@@ -288,11 +278,10 @@ class AsyncInputField extends AsyncTextFormField {
         autovalidateMode:
             autovalidateMode ?? AutovalidateMode.onUserInteraction,
         borderRadius: borderRadius,
-        borderWidth: borderWidth,
-        borderColor: borderColor,
-        disabledBorderColor: disabledBorderColor,
-        errorBorderColor: errorBorderColor,
-        focusedBorderColor: focusedBorderColor,
+        border: border,
+        borderDisabled: borderDisabled,
+        borderError: borderError,
+        borderFocused: borderFocused,
         underline: underline,
         contentPadding: contentPadding,
         floatingLabelBehavior: floatingLabelBehavior,

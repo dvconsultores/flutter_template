@@ -72,7 +72,7 @@ class _SystemAlertWidgetState extends State<SystemAlertWidget> {
               side: BorderSide(
                   color: ThemeApp.colors(context).secondary, width: 2),
             ),
-            title: Text(widget.title),
+            title: Text(widget.title, textAlign: TextAlign.center),
             content:
                 widget.textContent != null ? Text(widget.textContent!) : null,
             actionsAlignment: MainAxisAlignment.center,

@@ -11,35 +11,36 @@ class FilePickerField extends StatefulWidget {
   const FilePickerField({
     super.key,
     this.controller,
-    this.borderRadius = const BorderRadius.all(Radius.circular(15)),
-    this.borderWidth = 1,
-    this.borderColor,
-    this.boxShadow = const [
-      BoxShadow(
-        color: Colors.black26,
-        offset: Offset(0, 6),
-        blurRadius: 10,
-      )
-    ],
+    this.borderRadius =
+        const BorderRadius.all(Radius.circular(Variables.radius15)),
+    this.border,
+    this.borderDisabled,
+    this.borderFocused,
+    this.boxShadow = const [Variables.boxShadow2],
     this.placeholderText,
     this.placeholder,
     this.onChanged,
+    this.disabled = false,
   });
 
   final ValueNotifier<File?>? controller;
   final BorderRadius borderRadius;
-  final double borderWidth;
-  final Color? borderColor;
+  final BorderSide? border;
+  final BorderSide? borderDisabled;
+  final BorderSide? borderFocused;
   final List<BoxShadow> boxShadow;
   final String? placeholderText;
   final Widget? placeholder;
   final void Function(File? value)? onChanged;
+  final bool disabled;
 
   @override
   State<FilePickerField> createState() => _FilePickerFieldState();
 }
 
 class _FilePickerFieldState extends State<FilePickerField> {
+  bool focused = false;
+
   final docsAllowed = ["pdf", "doc"],
       imagesAllowed = ["png", "jpg", "bmp", "webp", "tiff"];
 
@@ -48,18 +49,22 @@ class _FilePickerFieldState extends State<FilePickerField> {
   File? get getFile => widget.controller?.value ?? file;
 
   Future<void> pickFile() async {
+    setState(() => focused = true);
+
     final allowedExtensions = [...docsAllowed, ...imagesAllowed];
 
     FilePickerResult? result = await FilePicker.platform
         .pickFiles(allowedExtensions: allowedExtensions, type: FileType.custom);
-    if (result == null ||
-        !allowedExtensions.contains(result.files.single.extension)) return;
 
-    widget.controller?.value = File(result.files.single.path!);
-    file = File(result.files.single.path!);
+    if (result != null &&
+        allowedExtensions.contains(result.files.single.extension)) {
+      widget.controller?.value = File(result.files.single.path!);
+      file = File(result.files.single.path!);
 
-    fileExtension = result.files.single.extension;
-    setState(() {});
+      fileExtension = result.files.single.extension;
+    }
+
+    setState(() => focused = false);
 
     if (widget.onChanged != null) widget.onChanged!(getFile);
   }
@@ -77,18 +82,24 @@ class _FilePickerFieldState extends State<FilePickerField> {
     final ps = TextStyle(color: ThemeApp.colors(context).label);
 
     return GestureDetector(
-      onTap: pickFile,
+      onTap: widget.disabled ? null : pickFile,
       child: Container(
         width: double.maxFinite,
         height: 150,
         clipBehavior: Clip.antiAlias,
         decoration: BoxDecoration(
           color: ThemeApp.colors(context).background,
-          borderRadius:
-              const BorderRadius.all(Radius.circular(Variables.radius12)),
-          border: Border.all(
-            width: widget.borderWidth,
-            color: widget.borderColor ?? Theme.of(context).colorScheme.outline,
+          borderRadius: const BorderRadius.all(Radius.circular(12)),
+          border: Border.fromBorderSide(
+            widget.disabled
+                ? widget.borderDisabled ??
+                    BorderSide(color: Theme.of(context).disabledColor)
+                : focused
+                    ? widget.borderFocused ??
+                        BorderSide(color: Theme.of(context).focusColor)
+                    : widget.border ??
+                        BorderSide(
+                            color: Theme.of(context).colorScheme.outline),
           ),
           boxShadow: widget.boxShadow,
         ),

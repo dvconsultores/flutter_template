@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_detextre4/main.dart';
 import 'package:flutter_detextre4/utils/config/theme.dart';
 import 'package:flutter_detextre4/utils/extensions/type_extensions.dart';
+import 'package:flutter_detextre4/utils/general/variables.dart';
 import 'package:flutter_gap/flutter_gap.dart';
+import 'package:lottie/lottie.dart';
 
 class Button extends StatelessWidget {
   const Button({
@@ -11,22 +13,16 @@ class Button extends StatelessWidget {
     this.text,
     this.textStyle,
     this.loading = false,
-    this.loaderSize = 25,
+    this.loaderSize = 30,
     this.disabled = false,
     this.width,
     this.height = 45,
     this.constraints,
     this.shape,
-    this.borderRadius = const BorderRadius.all(Radius.circular(40)),
+    this.borderRadius =
+        const BorderRadius.all(Radius.circular(Variables.radius40)),
     this.borderSide = BorderSide.none,
-    this.boxShadow = const [
-      BoxShadow(
-        offset: Offset(-1, 6),
-        blurRadius: 3,
-        spreadRadius: 0,
-        color: Color.fromRGBO(0, 0, 0, 0.2),
-      ),
-    ],
+    this.boxShadow = const [Variables.boxShadow3],
     this.color = Colors.white,
     this.bgColor,
     this.bgColorDisabled,
@@ -48,6 +44,7 @@ class Button extends StatelessWidget {
     this.content,
     this.textAlign = TextAlign.center,
     this.textExpanded = false,
+    this.customLoader,
   });
   static final context = globalNavigatorKey.currentContext!;
 
@@ -83,6 +80,7 @@ class Button extends StatelessWidget {
   final TextOverflow? textOverflow;
   final TextAlign textAlign;
   final bool textExpanded;
+  final Widget? customLoader;
   final Widget? content;
   final Widget? child;
 
@@ -94,19 +92,13 @@ class Button extends StatelessWidget {
     bool disabled = false,
     double? width,
     double? height = 45,
-    double? loaderSize = 25,
+    double? loaderSize = 30,
     BoxConstraints? constraints,
-    BorderRadius borderRadius = const BorderRadius.all(Radius.circular(40)),
+    BorderRadius borderRadius =
+        const BorderRadius.all(Radius.circular(Variables.radius40)),
     BorderSide borderSide = BorderSide.none,
     OutlinedBorder? shape,
-    List<BoxShadow> boxShadow = const [
-      BoxShadow(
-        offset: Offset(-1, 6),
-        blurRadius: 3,
-        spreadRadius: 0,
-        color: Color.fromRGBO(0, 0, 0, 0.2),
-      ),
-    ],
+    List<BoxShadow> boxShadow = const [Variables.boxShadow3],
     Color? color,
     Color? bgColor,
     Color? bgColorDisabled,
@@ -126,6 +118,7 @@ class Button extends StatelessWidget {
     TextOverflow? textOverflow,
     TextAlign textAlign = TextAlign.center,
     bool textExpanded = false,
+    Widget? customLoader,
     Widget? content,
     Widget? child,
   }) =>
@@ -164,6 +157,8 @@ class Button extends StatelessWidget {
         content: content,
         textAlign: textAlign,
         textExpanded: textExpanded,
+        customLoader: customLoader ??
+            Lottie.asset("assets/animation/loader-primary.json"),
         child: child,
       );
 
@@ -175,9 +170,10 @@ class Button extends StatelessWidget {
     bool disabled = false,
     double? width,
     double? height = 45,
-    double? loaderSize = 25,
+    double? loaderSize = 30,
     BoxConstraints? constraints,
-    BorderRadius borderRadius = const BorderRadius.all(Radius.circular(40)),
+    BorderRadius borderRadius =
+        const BorderRadius.all(Radius.circular(Variables.radius40)),
     BorderSide borderSide = BorderSide.none,
     OutlinedBorder? shape,
     List<BoxShadow> boxShadow = const [],
@@ -200,6 +196,7 @@ class Button extends StatelessWidget {
     TextOverflow? textOverflow,
     TextAlign textAlign = TextAlign.center,
     bool textExpanded = false,
+    Widget? customLoader,
     Widget? content,
     Widget? child,
   }) =>
@@ -238,6 +235,8 @@ class Button extends StatelessWidget {
         content: content,
         textAlign: textAlign,
         textExpanded: textExpanded,
+        customLoader: customLoader ??
+            Lottie.asset("assets/animation/loader-bicolor.json"),
         child: child,
       );
 
@@ -245,20 +244,13 @@ class Button extends StatelessWidget {
     required void Function()? onPressed,
     bool loading = false,
     bool disabled = false,
-    double? loaderSize = 25,
+    double? loaderSize = 30,
     double size = 45,
     BoxConstraints? constraints,
     BorderRadius borderRadius = const BorderRadius.all(Radius.circular(100)),
     BorderSide borderSide = BorderSide.none,
     OutlinedBorder? shape,
-    List<BoxShadow> boxShadow = const [
-      BoxShadow(
-        offset: Offset(0, 6),
-        blurRadius: 3,
-        spreadRadius: 0,
-        color: Color.fromRGBO(0, 0, 0, 0.2),
-      ),
-    ],
+    List<BoxShadow> boxShadow = const [Variables.boxShadow3],
     Color color = Colors.white,
     Color? bgColor,
     Color? bgColorDisabled,
@@ -266,6 +258,7 @@ class Button extends StatelessWidget {
     Color? overlayColor,
     EdgeInsets padding = const EdgeInsets.all(0),
     EdgeInsets? margin,
+    Widget? customLoader,
     required Widget? icon,
   }) =>
       Button(
@@ -288,6 +281,7 @@ class Button extends StatelessWidget {
         padding: padding,
         onPressed: onPressed,
         constraints: constraints,
+        customLoader: customLoader,
         child: icon,
       );
 
@@ -296,7 +290,7 @@ class Button extends StatelessWidget {
     bool loading = false,
     bool disabled = false,
     double size = 45,
-    double? loaderSize = 25,
+    double? loaderSize = 30,
     BoxConstraints? constraints,
     BorderRadius borderRadius = const BorderRadius.all(Radius.circular(100)),
     BorderSide borderSide = const BorderSide(width: 1),
@@ -309,6 +303,7 @@ class Button extends StatelessWidget {
     Color? overlayColor,
     EdgeInsets padding = const EdgeInsets.all(0),
     EdgeInsets? margin,
+    Widget? customLoader,
     required Widget? icon,
   }) =>
       Button(
@@ -331,26 +326,26 @@ class Button extends StatelessWidget {
         padding: padding,
         onPressed: onPressed,
         constraints: constraints,
+        customLoader: customLoader ??
+            Lottie.asset("assets/animation/loader-primary.json"),
         child: icon,
       );
 
   @override
   Widget build(BuildContext context) {
     final ts = textStyle ??
-        TextStyle(
-          fontSize: 14,
-          letterSpacing: 3.9,
-          fontWeight: FontWeight.w700,
-          fontFamily: FontFamily.lato("700"),
+            TextStyle(
+              fontSize: 14,
+              fontWeight: FontWeight.w500,
+              fontFamily: FontFamily.lato("500"),
+            ),
+        widgetText = Text(
+          text ?? '',
+          textAlign: textAlign,
+          softWrap: textSoftWrap,
+          overflow: textOverflow,
+          style: ts,
         );
-
-    final widgetText = Text(
-      text ?? '',
-      textAlign: textAlign,
-      softWrap: textSoftWrap,
-      overflow: textOverflow,
-      style: ts,
-    );
 
     return Container(
       margin: margin,
@@ -376,7 +371,7 @@ class Button extends StatelessWidget {
                   bgColor ?? ThemeApp.colors(context).primary),
           shape: MaterialStatePropertyAll(
             shape ??
-                ContinuousRectangleBorder(
+                RoundedRectangleBorder(
                     borderRadius: borderRadius, side: borderSide),
           ),
         ),
@@ -384,7 +379,8 @@ class Button extends StatelessWidget {
             ? SizedBox(
                 width: loaderSize ?? (width! / 2),
                 height: loaderSize ?? (height! / 2),
-                child: const CircularProgressIndicator(strokeWidth: 3),
+                child: customLoader ??
+                    Lottie.asset("assets/animation/loader-secondary.json"),
               )
             : child ??
                 Row(

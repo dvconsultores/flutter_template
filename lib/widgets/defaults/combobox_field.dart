@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_detextre4/utils/config/theme.dart';
 import 'package:flutter_detextre4/utils/extensions/type_extensions.dart';
 import 'package:flutter_detextre4/utils/general/variables.dart';
-import 'package:flutter_detextre4/widgets/defaults/button_aspect.dart';
+import 'package:flutter_detextre4/widgets/defaults/button.dart';
 
 class ComboboxField<T> extends StatefulWidget {
   const ComboboxField({
@@ -24,8 +24,11 @@ class ComboboxField<T> extends StatefulWidget {
     this.loaderHeight = 20,
     this.disabled = false,
     this.placeholderSize,
-    this.borderRadius = const BorderRadius.all(Radius.circular(15)),
-    this.borderSide = const BorderSide(width: 1),
+    this.borderRadius =
+        const BorderRadius.all(Radius.circular(Variables.radius15)),
+    this.border,
+    this.borderDisabled,
+    this.borderFocused,
     this.bgColor,
     this.boxShadow,
     this.gap = 5,
@@ -33,6 +36,7 @@ class ComboboxField<T> extends StatefulWidget {
     this.dense = true,
     this.onSubmit,
     this.onTap,
+    this.onTapItem,
   });
   final ValueNotifier<List<T>> value;
   final Widget Function(T value)? itemBuilder;
@@ -50,7 +54,9 @@ class ComboboxField<T> extends StatefulWidget {
   final bool disabled;
   final double? placeholderSize;
   final BorderRadiusGeometry borderRadius;
-  final BorderSide borderSide;
+  final BorderSide? border;
+  final BorderSide? borderDisabled;
+  final BorderSide? borderFocused;
   final Color? bgColor;
   final List<BoxShadow>? boxShadow;
   final double gap;
@@ -59,6 +65,7 @@ class ComboboxField<T> extends StatefulWidget {
   final bool dense;
   final void Function(String value)? onSubmit;
   final void Function()? onTap;
+  final void Function(T item)? onTapItem;
 
   @override
   State<ComboboxField> createState() => _ComboboxFieldState<T>();
@@ -107,15 +114,18 @@ class _ComboboxFieldState<T> extends State<ComboboxField<T>> {
           BoxDecoration(
             borderRadius: widget.borderRadius,
             color: widget.bgColor ?? Theme.of(context).colorScheme.background,
-            boxShadow: widget.boxShadow ??
-                [
-                  const BoxShadow(
-                    color: Colors.black26,
-                    offset: Offset(0, 6),
-                    blurRadius: 10,
-                  )
-                ],
-            border: Border.fromBorderSide(widget.borderSide),
+            boxShadow: widget.boxShadow ?? [Variables.boxShadow2],
+            border: Border.fromBorderSide(
+              widget.disabled
+                  ? widget.borderDisabled ??
+                      BorderSide(color: Theme.of(context).disabledColor)
+                  : focusNode.hasFocus
+                      ? widget.borderFocused ??
+                          BorderSide(color: Theme.of(context).focusColor)
+                      : widget.border ??
+                          BorderSide(
+                              color: Theme.of(context).colorScheme.outline),
+            ),
           ),
       child: ListTile(
         minLeadingWidth: 20,
@@ -129,8 +139,7 @@ class _ComboboxFieldState<T> extends State<ComboboxField<T>> {
             ? SizedBox(
                 width: widget.width,
                 child: LinearProgressIndicator(
-                  borderRadius: const BorderRadius.all(
-                      Radius.circular(Variables.radius12)),
+                  borderRadius: const BorderRadius.all(Radius.circular(12)),
                   color: ThemeApp.colors(context).primary,
                   minHeight: widget.loaderHeight,
                 ),
@@ -166,7 +175,10 @@ class _ComboboxFieldState<T> extends State<ComboboxField<T>> {
                           ),
                         ...widget.value.value
                             .mapIndexed((index, item) => IntrinsicWidth(
-                                  child: ButtonAspect(
+                                  child: Button(
+                                    onPressed: widget.onTapItem != null
+                                        ? () => widget.onTapItem!(item)
+                                        : null,
                                     padding: const EdgeInsets.symmetric(
                                         horizontal: Variables.gapMedium),
                                     height: 35,
