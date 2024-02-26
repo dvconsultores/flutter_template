@@ -832,7 +832,8 @@ class _SecondaryRefreshIndicatorState extends State<SecondaryRefreshIndicator> {
   Widget build(BuildContext context) {
     void resetPixels([_]) {
       totalPixels = 0;
-      setState(() => showSecondaryRefresh = false);
+      showSecondaryRefresh = false;
+      if (mounted) setState(() {});
     }
 
     return Listener(
@@ -844,7 +845,7 @@ class _SecondaryRefreshIndicatorState extends State<SecondaryRefreshIndicator> {
         if (getController.value.isArmed) {
           if (draggingUp) totalPixels--;
           if (draggingDown) totalPixels++;
-          setState(() {});
+          if (mounted) setState(() {});
         }
 
         lastOffsetProcessed = offset;
@@ -859,7 +860,8 @@ class _SecondaryRefreshIndicatorState extends State<SecondaryRefreshIndicator> {
 
           if (totalPixels > widget.secondaryIndicatorLimit &&
               getController.value.isArmed) {
-            setState(() => showSecondaryRefresh = true);
+            showSecondaryRefresh = true;
+            if (mounted) setState(() {});
           }
 
           return widget.notificationPredicate(scrollNotification);
