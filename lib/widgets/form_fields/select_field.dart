@@ -33,7 +33,10 @@ class SelectField<T> extends StatefulWidget {
     this.borderFocused,
     this.iconEnabledColor,
     this.underline = false,
-    this.contentPadding,
+    this.contentPadding = const EdgeInsets.symmetric(
+      horizontal: Variables.gapMedium,
+      vertical: Variables.gapLarge,
+    ),
     this.prefixPadding,
     this.maxWidthPrefix = double.infinity,
     this.prefixIcon,
@@ -124,7 +127,9 @@ class SelectField<T> extends StatefulWidget {
     Color? iconEnabledColor,
     bool underline = false,
     EdgeInsetsGeometry contentPadding = const EdgeInsets.symmetric(
-        horizontal: Variables.gapMedium, vertical: Variables.gapLarge),
+      horizontal: Variables.gapMedium,
+      vertical: Variables.gapLarge,
+    ),
     EdgeInsetsGeometry? prefixPadding,
     double maxWidthPrefix = double.infinity,
     Widget? prefixIcon,
@@ -145,7 +150,7 @@ class SelectField<T> extends StatefulWidget {
   }) =>
       SelectField<T>(
         value: value,
-        textStyle: textStyle ?? Theme.of(_context).textTheme.bodyMedium!,
+        textStyle: textStyle,
         items: items,
         onChanged: onChanged,
         autovalidateMode: autovalidateMode,
@@ -191,6 +196,7 @@ class SelectField<T> extends StatefulWidget {
   static Widget sizedBox<T>({
     double? width,
     double? height,
+    bool dense = false,
     T? value,
     TextStyle? textStyle,
     List<DropdownMenuItem<T>>? items,
@@ -234,11 +240,10 @@ class SelectField<T> extends StatefulWidget {
     Widget? openedIcon,
     Widget? closedIcon,
   }) {
-    final expanded = height != null;
-
     return SizedBox(
       width: width,
-      height: height,
+      height: height ??
+          (dense ? Variables.minInputHeight : Variables.maxInputHeight),
       child: SelectField<T>(
         value: value,
         focusNode: focusNode,
@@ -251,11 +256,10 @@ class SelectField<T> extends StatefulWidget {
         labelStyle: labelStyle,
         floatingLabelStyle: floatingLabelStyle,
         floatingLabelBehavior: floatingLabelBehavior,
-        isExpanded: expanded,
+        isExpanded: true,
         buttonStyleData: ButtonStyleData(
           width: buttonStyleData?.width,
-          height:
-              buttonStyleData?.height ?? (expanded ? double.maxFinite : null),
+          height: buttonStyleData?.height ?? double.maxFinite,
           elevation: buttonStyleData?.elevation,
           overlayColor: buttonStyleData?.overlayColor,
           padding: buttonStyleData?.padding,
@@ -306,13 +310,7 @@ class _SelectFieldState<T> extends State<SelectField<T>> {
     final colorSwither = isMenuOpen
             ? ThemeApp.colors(context).primary
             : ThemeApp.colors(context).text,
-        ts = widget.textStyle ??
-            TextStyle(
-              color: colorSwither,
-              fontSize: 13,
-              fontWeight: FontWeight.w700,
-              fontFamily: FontFamily.lato("700"),
-            ),
+        ts = widget.textStyle ?? Theme.of(context).textTheme.bodyMedium!,
         hs = widget.hintStyle ??
             ts.copyWith(
               color: ThemeApp.colors(context).text.withOpacity(.7),
@@ -329,10 +327,10 @@ class _SelectFieldState<T> extends State<SelectField<T>> {
         : OutlineInputBorder(
             borderSide: border, borderRadius: widget.borderRadius);
 
-    final defaultBorder = widget.border ??
-            BorderSide(color: Theme.of(context).colorScheme.outline),
+    final defaultBorder =
+            widget.border ?? const BorderSide(color: Colors.transparent),
         disabledBorder = widget.borderDisabled ??
-            BorderSide(color: Theme.of(context).disabledColor),
+            const BorderSide(color: Colors.transparent),
         errorBorder = widget.borderError ??
             BorderSide(color: Theme.of(context).colorScheme.error),
         focusedBorder = widget.borderFocused ??
@@ -355,7 +353,8 @@ class _SelectFieldState<T> extends State<SelectField<T>> {
           focusNode: widget.focusNode,
           customButton: widget.loading
               ? LinearProgressIndicator(
-                  borderRadius: const BorderRadius.all(Radius.circular(12)),
+                  borderRadius: const BorderRadius.all(
+                      Radius.circular(Variables.radius10)),
                   color: ThemeApp.colors(context).primary,
                   minHeight: widget.loaderHeight,
                 )
@@ -399,7 +398,8 @@ class _SelectFieldState<T> extends State<SelectField<T>> {
                     child: Padding(
                       padding: widget.prefixPadding ??
                           const EdgeInsets.symmetric(
-                              horizontal: Variables.gapMedium),
+                            horizontal: Variables.gapMedium,
+                          ),
                       child: widget.prefixIcon,
                     ),
                   )
@@ -409,8 +409,9 @@ class _SelectFieldState<T> extends State<SelectField<T>> {
             isDense: true,
             contentPadding: widget.contentPadding ??
                 const EdgeInsets.symmetric(
-                    horizontal: Variables.gapMedium,
-                    vertical: Variables.gapMedium),
+                  horizontal: Variables.gapMedium,
+                  vertical: Variables.gapMedium,
+                ),
           ),
           dropdownStyleData: DropdownStyleData(
               direction: widget.dropdownStyleData?.direction ??
@@ -434,7 +435,8 @@ class _SelectFieldState<T> extends State<SelectField<T>> {
               useSafeArea: widget.dropdownStyleData?.useSafeArea ?? true,
               decoration: widget.dropdownStyleData?.decoration ??
                   BoxDecoration(
-                    borderRadius: const BorderRadius.all(Radius.circular(12)),
+                    borderRadius: const BorderRadius.all(
+                        Radius.circular(Variables.radius10)),
                     border: Border.all(color: ThemeApp.colors(context).primary),
                   )),
           menuItemStyleData: widget.menuItemStyleData,

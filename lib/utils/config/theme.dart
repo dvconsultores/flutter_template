@@ -34,6 +34,7 @@ class ThemeApp {
         textTheme: GoogleFonts.latoTextTheme(ligthTheme.textTheme.copyWith(
           bodyMedium: ligthTheme.textTheme.bodyLarge?.copyWith(fontSize: 16),
         )),
+        visualDensity: VisualDensity.compact,
 
         // color config
         primaryColor: Colors.amber,

@@ -102,11 +102,10 @@ class AsyncInputField extends AsyncTextFormField {
                       shadow: shadow ?? Variables.boxShadow2,
                     );
 
-                final defaultBorder = border ??
-                        BorderSide(
-                            color: Theme.of(context).colorScheme.outline),
+                final defaultBorder =
+                        border ?? const BorderSide(color: Colors.transparent),
                     disabledBorder = borderDisabled ??
-                        BorderSide(color: Theme.of(context).disabledColor),
+                        const BorderSide(color: Colors.transparent),
                     errorBorder = borderError ??
                         BorderSide(color: Theme.of(context).colorScheme.error),
                     focusedBorder = borderFocused ??
@@ -137,7 +136,8 @@ class AsyncInputField extends AsyncTextFormField {
                           child: Padding(
                             padding: prefixPadding ??
                                 const EdgeInsets.symmetric(
-                                    horizontal: Variables.gapMedium),
+                                  horizontal: Variables.gapMedium,
+                                ),
                             child: prefixIcon,
                           ),
                         )
@@ -148,18 +148,19 @@ class AsyncInputField extends AsyncTextFormField {
                   isDense: true,
                   contentPadding: contentPadding ??
                       const EdgeInsets.symmetric(
-                          horizontal: Variables.gapMedium,
-                          vertical: Variables.gapMedium),
+                        horizontal: Variables.gapMedium,
+                        vertical: Variables.gapMax,
+                      ),
                 );
               }),
         );
-  static final context = globalNavigatorKey.currentContext!;
-  static final _ts = TextStyle(
-    color: ThemeApp.colors(context).text.withOpacity(.75),
-    fontSize: 16,
-    fontWeight: FontWeight.w400,
-    fontFamily: FontFamily.lato("400"),
-  );
+  static final context = globalNavigatorKey.currentContext!,
+      _ts = TextStyle(
+        color: ThemeApp.colors(context).text.withOpacity(.75),
+        fontSize: 16,
+        fontWeight: FontWeight.w400,
+        fontFamily: FontFamily.lato("400"),
+      );
 
   final String? labelText;
   final String? hintText;
@@ -199,6 +200,7 @@ class AsyncInputField extends AsyncTextFormField {
   static Widget sizedBox({
     double? width,
     double? height,
+    bool dense = false,
     TextEditingController? controller,
     String? labelText,
     String? hintText,
@@ -253,7 +255,8 @@ class AsyncInputField extends AsyncTextFormField {
 
     return SizedBox(
       width: width,
-      height: height,
+      height: height ??
+          (dense ? Variables.minInputHeight : Variables.maxInputHeight),
       child: AsyncInputField(
         onTapOutside: onTapOutside,
         onTap: onTap,

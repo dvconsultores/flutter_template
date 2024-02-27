@@ -10,7 +10,7 @@ class AsyncTextFormField extends StatefulWidget {
     super.key,
     this.validator,
     this.onChanged,
-    this.validationDebounce = const Duration(milliseconds: 200),
+    this.validationDebounce = Durations.short4,
     this.onLoading,
     this.suffixLoader = true,
     this.autocorrect = true,

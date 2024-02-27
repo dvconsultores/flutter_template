@@ -57,4 +57,6 @@ mixin Variables {
         spreadRadius: 0,
         color: Color.fromRGBO(0, 0, 0, 0.2),
       );
+
+  static const double minInputHeight = 42, maxInputHeight = 50;
 }

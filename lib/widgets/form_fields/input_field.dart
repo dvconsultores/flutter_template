@@ -27,42 +27,42 @@ class InputField extends TextFormField {
     super.onFieldSubmitted,
     super.autocorrect,
     super.autofocus,
-    this.keyboardType,
-    this.inputFormatters,
-    this.labelText,
-    this.hintText,
-    this.disabled = false,
-    this.prefixIcon,
-    this.prefix,
-    this.suffixIcon,
-    this.suffix,
-    this.maxWidthPrefix = double.infinity,
-    this.numeric = false,
-    this.formatByComma = true,
-    this.maxEntires = 10,
-    this.maxDecimals = 3,
-    this.prefixPadding,
-    this.borderRadius =
+    String? labelText,
+    String? hintText,
+    bool disabled = false,
+    Widget? prefixIcon,
+    Widget? prefix,
+    Widget? suffixIcon,
+    Widget? suffix,
+    double maxWidthPrefix = double.infinity,
+    bool numeric = false,
+    List<TextInputFormatter>? inputFormatters,
+    bool formatByComma = true,
+    int maxEntires = 10,
+    int maxDecimals = 3,
+    EdgeInsetsGeometry? prefixPadding,
+    BorderRadius borderRadius =
         const BorderRadius.all(Radius.circular(Variables.radius15)),
-    this.border,
-    this.borderDisabled,
-    this.borderError,
-    this.borderFocused,
-    this.underline = false,
-    this.floatingLabelBehavior = FloatingLabelBehavior.never,
-    this.contentPadding,
-    this.textStyle,
-    this.hintStyle,
-    this.labelStyle,
-    this.floatingLabelStyle,
-    this.filled = true,
-    this.color,
-    this.decoration,
-    this.errorMaxLines,
-    this.shadow,
-    this.counterText,
-    this.isCollapsed = false,
-    this.suffixIconConstraints,
+    BorderSide? border,
+    BorderSide? borderDisabled,
+    BorderSide? borderError,
+    BorderSide? borderFocused,
+    bool underline = false,
+    FloatingLabelBehavior floatingLabelBehavior = FloatingLabelBehavior.never,
+    EdgeInsets? contentPadding,
+    TextStyle? textStyle,
+    TextStyle? hintStyle,
+    TextStyle? labelStyle,
+    TextStyle? floatingLabelStyle,
+    bool filled = true,
+    Color? color,
+    TextInputType? keyboardType,
+    InputDecoration? decoration,
+    int? errorMaxLines,
+    BoxShadow? shadow,
+    String? counterText,
+    bool isCollapsed = false,
+    BoxConstraints? suffixIconConstraints,
   }) : super(
           style: textStyle ?? _ts,
           keyboardType: numeric
@@ -103,11 +103,10 @@ class InputField extends TextFormField {
                       shadow: shadow ?? Variables.boxShadow2,
                     );
 
-                final defaultBorder = border ??
-                        BorderSide(
-                            color: Theme.of(context).colorScheme.outline),
+                final defaultBorder =
+                        border ?? const BorderSide(color: Colors.transparent),
                     disabledBorder = borderDisabled ??
-                        BorderSide(color: Theme.of(context).disabledColor),
+                        const BorderSide(color: Colors.transparent),
                     errorBorder = borderError ??
                         BorderSide(color: Theme.of(context).colorScheme.error),
                     focusedBorder = borderFocused ??
@@ -138,7 +137,8 @@ class InputField extends TextFormField {
                           child: Padding(
                             padding: prefixPadding ??
                                 const EdgeInsets.symmetric(
-                                    horizontal: Variables.gapMedium),
+                                  horizontal: Variables.gapMedium,
+                                ),
                             child: prefixIcon,
                           ),
                         )
@@ -150,8 +150,9 @@ class InputField extends TextFormField {
                   isDense: true,
                   contentPadding: contentPadding ??
                       const EdgeInsets.symmetric(
-                          horizontal: Variables.gapMedium,
-                          vertical: Variables.gapMedium),
+                        horizontal: Variables.gapMedium,
+                        vertical: Variables.gapMax,
+                      ),
                 );
               }),
         );
@@ -163,45 +164,10 @@ class InputField extends TextFormField {
         fontFamily: FontFamily.lato("400"),
       );
 
-  final String? labelText;
-  final String? hintText;
-  final bool disabled;
-  final Widget? prefixIcon;
-  final Widget? prefix;
-  final Widget? suffixIcon;
-  final Widget? suffix;
-  final double maxWidthPrefix;
-  final bool numeric;
-  final List<TextInputFormatter>? inputFormatters;
-  final bool formatByComma;
-  final int maxEntires;
-  final int maxDecimals;
-  final EdgeInsetsGeometry? prefixPadding;
-  final BorderRadius borderRadius;
-  final BorderSide? border;
-  final BorderSide? borderDisabled;
-  final BorderSide? borderError;
-  final BorderSide? borderFocused;
-  final bool underline;
-  final FloatingLabelBehavior floatingLabelBehavior;
-  final EdgeInsets? contentPadding;
-  final TextStyle? textStyle;
-  final TextStyle? hintStyle;
-  final TextStyle? labelStyle;
-  final TextStyle? floatingLabelStyle;
-  final bool filled;
-  final Color? color;
-  final TextInputType? keyboardType;
-  final InputDecoration? decoration;
-  final int? errorMaxLines;
-  final BoxShadow? shadow;
-  final String? counterText;
-  final bool isCollapsed;
-  final BoxConstraints? suffixIconConstraints;
-
   static Widget sizedBox({
     double? width,
     double? height,
+    bool dense = false,
     TextEditingController? controller,
     String? labelText,
     String? hintText,
@@ -212,7 +178,7 @@ class InputField extends TextFormField {
     TextInputType? keyboardType,
     Widget? prefixIcon,
     Widget? suffixIcon,
-    int maxLines = 1,
+    int? maxLines,
     int? minLines,
     int? maxLength,
     FocusNode? focusNode,
@@ -234,7 +200,10 @@ class InputField extends TextFormField {
     BorderSide? borderFocused,
     bool underline = false,
     FloatingLabelBehavior floatingLabelBehavior = FloatingLabelBehavior.auto,
-    EdgeInsets? contentPadding,
+    EdgeInsets? contentPadding = const EdgeInsets.symmetric(
+      vertical: Variables.gapMedium,
+      horizontal: Variables.gapMedium,
+    ),
     bool formatByComma = true,
     double maxWidthPrefix = double.infinity,
     TextStyle? textStyle,
@@ -253,11 +222,12 @@ class InputField extends TextFormField {
     bool isCollapsed = false,
     BoxConstraints? suffixIconConstraints,
   }) {
-    final expanded = height != null;
+    final expanded = maxLines == null;
 
     return SizedBox(
       width: width,
-      height: height,
+      height: height ??
+          (dense ? Variables.minInputHeight : Variables.maxInputHeight),
       child: InputField(
         onTapOutside: onTapOutside,
         onTap: onTap,
@@ -272,7 +242,7 @@ class InputField extends TextFormField {
             : expanded && keyboardType == null
                 ? TextInputType.text
                 : keyboardType,
-        maxLines: expanded ? null : maxLines,
+        maxLines: maxLines,
         minLines: minLines,
         labelText: labelText,
         maxLength: maxLength,

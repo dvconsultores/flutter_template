@@ -242,6 +242,7 @@ class BottomSheetListMultiple<T> extends StatefulWidget {
     this.contextPadding,
     this.initialItems,
     required this.items,
+    this.itemforegroundColor,
     this.itemBuilder,
     this.onComplete,
     this.expand = false,
@@ -267,6 +268,7 @@ class BottomSheetListMultiple<T> extends StatefulWidget {
   final EdgeInsetsGeometry? contextPadding;
   final List<T>? initialItems;
   final List<DropdownMenuItem<T>> items;
+  final Color? itemforegroundColor;
   final Widget Function(BuildContext context, Widget item)? itemBuilder;
   final void Function(List<DropdownMenuItem<T>> item)? onComplete;
   final bool expand;
@@ -305,6 +307,7 @@ class BottomSheetListMultiple<T> extends StatefulWidget {
     bool isDismissible = true,
     List<DropdownMenuItem<T>>? items,
     List<T>? initialItems,
+    Color? itemforegroundColor,
     void Function(List<DropdownMenuItem<T>> bottomSheetListItem)? onComplete,
     Widget Function(BuildContext context, VoidCallback onComplete)?
         buttonBuilder,
@@ -337,6 +340,7 @@ class BottomSheetListMultiple<T> extends StatefulWidget {
             ),
         builder: (context) => BottomSheetListMultiple<T>(
           items: items ?? [],
+          itemforegroundColor: itemforegroundColor,
           itemBuilder: itemBuilder,
           onComplete: onComplete,
           expand: expand,
@@ -455,6 +459,7 @@ class _BottomSheetListMultipleState<T>
                                         : Colors.transparent,
                                   ),
                                   bgColor: Colors.white,
+                                  color: widget.itemforegroundColor,
                                   onPressed: () => onPressed(item),
                                   child: item.child,
                                 ),

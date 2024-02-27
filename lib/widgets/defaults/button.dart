@@ -23,7 +23,7 @@ class Button extends StatelessWidget {
         const BorderRadius.all(Radius.circular(Variables.radius40)),
     this.borderSide = BorderSide.none,
     this.boxShadow = const [Variables.boxShadow3],
-    this.color = Colors.white,
+    this.color,
     this.bgColor,
     this.bgColorDisabled,
     this.splashFactory,
@@ -61,7 +61,7 @@ class Button extends StatelessWidget {
   final BorderSide borderSide;
   final OutlinedBorder? shape;
   final List<BoxShadow> boxShadow;
-  final Color color;
+  final Color? color;
   final Color? bgColor;
   final Color? bgColorDisabled;
   final InteractiveInkFeatureFactory? splashFactory;
@@ -136,7 +136,7 @@ class Button extends StatelessWidget {
         borderRadius: borderRadius,
         borderSide: borderSide,
         boxShadow: boxShadow,
-        color: color ?? Colors.white,
+        color: color,
         bgColor: bgColor ?? ThemeApp.colors(context).secondary,
         bgColorDisabled: bgColorDisabled ??
             ThemeApp.colors(context).secondary.withOpacity(.4),
@@ -251,7 +251,7 @@ class Button extends StatelessWidget {
     BorderSide borderSide = BorderSide.none,
     OutlinedBorder? shape,
     List<BoxShadow> boxShadow = const [Variables.boxShadow3],
-    Color color = Colors.white,
+    Color? color,
     Color? bgColor,
     Color? bgColorDisabled,
     InteractiveInkFeatureFactory? splashFactory,
@@ -361,7 +361,7 @@ class Button extends StatelessWidget {
         style: ButtonStyle(
           elevation: const MaterialStatePropertyAll(0),
           padding: MaterialStatePropertyAll(padding),
-          foregroundColor: MaterialStatePropertyAll(color),
+          foregroundColor: MaterialStatePropertyAll(color ?? Colors.white),
           splashFactory: splashFactory,
           overlayColor: MaterialStatePropertyAll(overlayColor),
           backgroundColor: disabled
