@@ -75,6 +75,7 @@ class _FilePickerFieldState extends State<FilePickerField> {
 
     final allowedExtensions = [...docsAllowed, ...imagesAllowed],
         result = await FilePicker.platform.pickFiles(
+          allowCompression: true,
           allowedExtensions: allowedExtensions,
           type: FileType.custom,
         ),

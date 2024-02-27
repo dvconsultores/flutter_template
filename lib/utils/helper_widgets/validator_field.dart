@@ -1,15 +1,43 @@
+import 'dart:io';
+
 import 'package:flutter_detextre4/utils/extensions/type_extensions.dart';
 
 class ValidatorField {
-  const ValidatorField(this.value);
+  const ValidatorField(this.value, [this.validators]);
   final Object? value;
+  final List<String? Function()> Function(ValidatorField instance)? validators;
 
   /// Main method used to inizialize [ValidatorField] and get the instance
-  static String? validate(Object? value,
-      List<String? Function()> Function(ValidatorField instance) validators) {
+  String? validate() {
+    for (final validator in validators!(ValidatorField(value))) {
+      if (validator() == null) continue;
+      return validator();
+    }
+
+    return null;
+  }
+
+  /// Main method used to inizialize [ValidatorField] and get the instance
+  static String? evaluate(
+    Object? value,
+    List<String? Function()> Function(ValidatorField instance) validators,
+  ) {
     for (final validator in validators(ValidatorField(value))) {
       if (validator() == null) continue;
       return validator();
+    }
+
+    return null;
+  }
+
+  /// Main method used to validate multiple [ValidatorField] instance
+  static String? evaluateMultiple(List<ValidatorField> validations) {
+    for (final validation in validations) {
+      for (final validator
+          in validation.validators!(ValidatorField(validation.value))) {
+        if (validator() == null) continue;
+        return validator();
+      }
     }
 
     return null;
@@ -61,6 +89,12 @@ class ValidatorField {
         ? null
         : customMessage ??
             (_isIterable ? "Options limit is $l" : "Characters limit is $l");
+  }
+
+  String? maxFileLength([int bytes = 3000000]) {
+    final fileLength = (value as File?)?.lengthSync() ?? 0;
+
+    return fileLength > bytes ? "maximum file size is 3mb" : null;
   }
 
   String? email() => RegExp(r'^[a-zA-Z\-\_0-9.]+@[a-zA-Z0-9]+\.[a-zA-Z]+')
