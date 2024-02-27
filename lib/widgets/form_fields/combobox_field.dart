@@ -263,43 +263,46 @@ class _ComboboxFieldState<T> extends State<ComboboxField<T>> {
           child:
               Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
             // field
-            Container(
-              width: widget.width,
-              constraints: BoxConstraints(
-                  minHeight: widget.height ??
-                      (widget.dense
-                          ? Variables.minInputHeight
-                          : Variables.maxInputHeight)),
-              padding: widget.padding,
-              decoration: widget.decoration ??
-                  BoxDecoration(
-                    borderRadius: widget.borderRadius,
-                    color: widget.bgColor ??
-                        Theme.of(context).colorScheme.background,
-                    boxShadow: widget.boxShadow ?? [Variables.boxShadow2],
-                    border: Border.fromBorderSide(
-                      widget.disabled
-                          ? widget.borderDisabled ??
-                              const BorderSide(color: Colors.transparent)
-                          : focusNode.hasFocus
-                              ? widget.borderFocused ??
-                                  BorderSide(
-                                      color: Theme.of(context).focusColor)
-                              : widget.border ??
-                                  const BorderSide(color: Colors.transparent),
+            GestureDetector(
+              onTap: onTap,
+              child: Container(
+                width: widget.width,
+                constraints: BoxConstraints(
+                    minHeight: widget.height ??
+                        (widget.dense
+                            ? Variables.minInputHeight
+                            : Variables.maxInputHeight)),
+                padding: widget.padding,
+                decoration: widget.decoration ??
+                    BoxDecoration(
+                      borderRadius: widget.borderRadius,
+                      color: widget.bgColor ??
+                          Theme.of(context).colorScheme.background,
+                      boxShadow: widget.boxShadow ?? [Variables.boxShadow2],
+                      border: Border.fromBorderSide(
+                        widget.disabled
+                            ? widget.borderDisabled ??
+                                const BorderSide(color: Colors.transparent)
+                            : focusNode.hasFocus
+                                ? widget.borderFocused ??
+                                    BorderSide(
+                                        color: Theme.of(context).focusColor)
+                                : widget.border ??
+                                    const BorderSide(color: Colors.transparent),
+                      ),
                     ),
-                  ),
-              child: Row(children: [
-                if (widget.leading != null) ...[
-                  widget.leading!,
-                  Gap(widget.gap).row
-                ],
-                Expanded(child: contentWidget),
-                if (widget.trailing != null) ...[
-                  Gap(widget.gap).row,
-                  widget.trailing!
-                ]
-              ]),
+                child: Row(children: [
+                  if (widget.leading != null) ...[
+                    widget.leading!,
+                    Gap(widget.gap).row
+                  ],
+                  Expanded(child: contentWidget),
+                  if (widget.trailing != null) ...[
+                    Gap(widget.gap).row,
+                    widget.trailing!
+                  ]
+                ]),
+              ),
             ),
 
             // error text
