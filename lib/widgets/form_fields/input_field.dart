@@ -37,7 +37,6 @@ class InputField extends TextFormField {
     double maxWidthPrefix = double.infinity,
     bool numeric = false,
     List<TextInputFormatter>? inputFormatters,
-    bool formatByComma = true,
     int maxEntires = 10,
     int maxDecimals = 3,
     EdgeInsetsGeometry? prefixPadding,
@@ -72,7 +71,6 @@ class InputField extends TextFormField {
           inputFormatters: [
             if (numeric) ...[
               DecimalTextInputFormatter(
-                formatByComma: formatByComma,
                 maxEntires: maxEntires,
                 maxDecimals: maxDecimals,
               ),
@@ -204,7 +202,6 @@ class InputField extends TextFormField {
       vertical: Variables.gapMedium,
       horizontal: Variables.gapMedium,
     ),
-    bool formatByComma = true,
     double maxWidthPrefix = double.infinity,
     TextStyle? textStyle,
     TextStyle? hintStyle,
@@ -258,7 +255,6 @@ class InputField extends TextFormField {
         underline: underline,
         contentPadding: contentPadding,
         floatingLabelBehavior: floatingLabelBehavior,
-        formatByComma: formatByComma,
         inputFormatters: inputFormatters,
         maxWidthPrefix: maxWidthPrefix,
         numeric: numeric,

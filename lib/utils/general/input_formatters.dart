@@ -2,16 +2,17 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_detextre4/utils/config/config.dart';
 import 'package:intl/intl.dart';
 
 // ? Decimal text input formatter
 class DecimalTextInputFormatter extends TextInputFormatter {
   DecimalTextInputFormatter({
-    this.formatByComma = false,
+    this.locale = "en_US",
     this.maxEntires = 4,
-    this.maxDecimals = 2,
+    this.maxDecimals = 3,
   });
-  final bool formatByComma;
+  final String locale;
   final int maxEntires;
   final int maxDecimals;
 
@@ -20,17 +21,17 @@ class DecimalTextInputFormatter extends TextInputFormatter {
     TextEditingValue oldValue,
     TextEditingValue newValue,
   ) {
-    final isCommaOrDot = formatByComma ? "," : ".";
-    final contraryToIsCommaOrDot = formatByComma ? "." : ",";
-    final regEx = RegExp('^\\d{0,$maxEntires}[\\.\\,]?\\d{0,$maxDecimals}');
-    final String newString = regEx.stringMatch(newValue.text) ?? "";
+    final decimalSeparator = LanguageList.get(locale).decimalSeparator,
+        invertedDecimalSeparator = decimalSeparator == ',' ? "." : ",",
+        regEx = RegExp('^\\d{0,$maxEntires}[\\.\\,]?\\d{0,$maxDecimals}'),
+        newString = regEx.stringMatch(newValue.text) ?? "";
 
     // if string match to format.
     if (newString == newValue.text) {
       // if string match start with dot or comma.
       if (RegExp("^[\\.\\,]").hasMatch(newValue.text)) {
         return newValue.copyWith(
-            text: '0$isCommaOrDot${newValue.text.substring(1)}',
+            text: '0$decimalSeparator${newValue.text.substring(1)}',
             selection: TextSelection.collapsed(
               offset: newValue.text.length + 1,
             ));
@@ -41,11 +42,11 @@ class DecimalTextInputFormatter extends TextInputFormatter {
             selection: TextSelection.collapsed(
               offset: newValue.text.split("0").join("").length,
             ));
-        // else if contains contrary to [isCommaOrDot].
-      } else if (newValue.text.contains(contraryToIsCommaOrDot)) {
+        // else if contains contrary to [decimalSeparator].
+      } else if (newValue.text.contains(invertedDecimalSeparator)) {
         return newValue.copyWith(
-            text:
-                newValue.text.replaceAll(contraryToIsCommaOrDot, isCommaOrDot),
+            text: newValue.text
+                .replaceAll(invertedDecimalSeparator, decimalSeparator),
             selection: TextSelection.collapsed(
               offset: newValue.text.length,
             ));
@@ -209,6 +210,17 @@ class CurrencyInputFormatter extends TextInputFormatter {
   static bool _lastCharacterIsDigit(String text) {
     final String lastChar = text.substring(text.length - 1);
     return RegExp('[0-9]').hasMatch(lastChar);
+  }
+}
+
+class LowerCaseTextFormatter extends TextInputFormatter {
+  @override
+  TextEditingValue formatEditUpdate(
+      TextEditingValue oldValue, TextEditingValue newValue) {
+    return TextEditingValue(
+      text: newValue.text.toLowerCase(),
+      selection: newValue.selection,
+    );
   }
 }
 

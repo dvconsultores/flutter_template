@@ -39,7 +39,6 @@ class AsyncInputField extends AsyncTextFormField {
     this.suffix,
     this.maxWidthPrefix = double.infinity,
     this.numeric = false,
-    this.formatByComma = false,
     this.maxEntires = 10,
     this.maxDecimals = 3,
     this.prefixPadding,
@@ -72,7 +71,6 @@ class AsyncInputField extends AsyncTextFormField {
           inputFormatters: [
             if (numeric) ...[
               DecimalTextInputFormatter(
-                formatByComma: formatByComma,
                 maxEntires: maxEntires,
                 maxDecimals: maxDecimals,
               ),
@@ -172,7 +170,6 @@ class AsyncInputField extends AsyncTextFormField {
   final double maxWidthPrefix;
   final bool numeric;
   final List<TextInputFormatter>? formatters;
-  final bool formatByComma;
   final int maxEntires;
   final int maxDecimals;
   final EdgeInsetsGeometry? prefixPadding;
@@ -234,7 +231,6 @@ class AsyncInputField extends AsyncTextFormField {
     bool underline = false,
     FloatingLabelBehavior floatingLabelBehavior = FloatingLabelBehavior.auto,
     EdgeInsets? contentPadding,
-    bool formatByComma = true,
     double maxWidthPrefix = double.infinity,
     TextStyle? textStyle,
     TextStyle? hintStyle,
@@ -288,7 +284,6 @@ class AsyncInputField extends AsyncTextFormField {
         underline: underline,
         contentPadding: contentPadding,
         floatingLabelBehavior: floatingLabelBehavior,
-        formatByComma: formatByComma,
         formatters: inputFormatters,
         maxWidthPrefix: maxWidthPrefix,
         numeric: numeric,
