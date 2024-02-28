@@ -48,6 +48,7 @@ class ComboboxField<T> extends StatefulWidget {
     this.onTap,
     this.onTapItem,
     this.onRemoveItem,
+    this.maxLength,
   });
   final String? restorationId;
   final void Function(List<T>? value)? onSaved;
@@ -84,6 +85,7 @@ class ComboboxField<T> extends StatefulWidget {
   final void Function(FormFieldState<List<T>> state)? onTap;
   final void Function(T item)? onTapItem;
   final void Function(T item, int index)? onRemoveItem;
+  final int? maxLength;
 
   @override
   State<ComboboxField<T>> createState() => _ComboboxFieldState<T>();
@@ -94,6 +96,11 @@ class _ComboboxFieldState<T> extends State<ComboboxField<T>> {
 
   final focusNode = FocusNode(),
       textEditingController = TextEditingController();
+
+  bool get hasReachedMaxLength {
+    if (widget.maxLength == null) return false;
+    return widget.maxLength! <= (formState?.value?.length ?? 0);
+  }
 
   void onSubmit(String value) {
     if (value.isEmpty) return;
@@ -191,7 +198,9 @@ class _ComboboxFieldState<T> extends State<ComboboxField<T>> {
                     runSpacing: 3,
                     children: [
                         // textField
-                        if (!widget.disabled && !widget.readOnly ||
+                        if (!hasReachedMaxLength &&
+                                !widget.disabled &&
+                                !widget.readOnly ||
                             state.value.hasNotValue)
                           SizedBox(
                             width: state.value.hasNotValue || focusNode.hasFocus
