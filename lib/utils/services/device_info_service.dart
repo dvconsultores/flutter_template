@@ -1,8 +1,8 @@
 import 'dart:io' as io;
 
 import 'package:device_info_plus/device_info_plus.dart';
+import 'package:disk_space_update/disk_space_update.dart';
 import 'package:flutter/material.dart';
-import 'package:system_info_plus/system_info_plus.dart';
 
 /// Physical memory state collection
 enum PhysicalMemoryState {
@@ -12,16 +12,16 @@ enum PhysicalMemoryState {
   unknow(0);
 
   const PhysicalMemoryState(this.value);
-  final int value;
+  final double value;
 
-  static PhysicalMemoryState fromInt(int? value) {
+  static PhysicalMemoryState fromDouble(double? value) {
     if (value == null) {
       return unknow;
-    } else if (value >= high.value) {
+    } else if (value > medium.value) {
       return high;
-    } else if (value >= medium.value) {
+    } else if (value > low.value) {
       return medium;
-    } else if (value >= low.value) {
+    } else if (value > unknow.value) {
       return low;
     }
 
@@ -32,11 +32,11 @@ enum PhysicalMemoryState {
 /// Instance of Physical memory state
 class PhysicalMemory {
   const PhysicalMemory({this.memory, required this.state});
-  final int? memory;
+  final double? memory;
   final PhysicalMemoryState state;
 
-  factory PhysicalMemory.fromInt(int? value) =>
-      PhysicalMemory(memory: value, state: PhysicalMemoryState.fromInt(value));
+  factory PhysicalMemory.fromDouble(double? value) => PhysicalMemory(
+      memory: value, state: PhysicalMemoryState.fromDouble(value));
 }
 
 class DeviceInfo {
@@ -50,9 +50,9 @@ class DeviceInfo {
   /// IOS module info
   static final ios = _IOS(instance);
 
-  /// Getter to device [PhysicalMemory] using [SystemInfoPlus.physicalMemory] package
+  /// Getter to device [PhysicalMemory] using [DiskSpace] package
   static Future<PhysicalMemory> get physicalMemory async =>
-      PhysicalMemory.fromInt(await SystemInfoPlus.physicalMemory);
+      PhysicalMemory.fromDouble(await DiskSpace.getFreeDiskSpace);
 }
 
 class _Android {

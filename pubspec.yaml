@@ -88,8 +88,11 @@ dependencies:
   csv: ^5.0.2
   share_plus: ^7.0.0
   vibration: ^1.7.7
-  flutter_keyboard_visibility: ^5.4.1
   device_info_plus: ^9.0.2
+  package_info_plus: ^5.0.1
+  version: ^3.0.2
+  disk_space_update : 0.0.2
+  flutter_keyboard_visibility: ^5.4.1
   custom_refresh_indicator: ^2.0.1
   audioplayers: ^4.1.0
   widget_mask: ^1.0.0+0
@@ -102,9 +105,6 @@ dependencies:
   double_back_to_exit: ^1.0.3
   responsive_mixin_layout: ^1.0.3
   flutter_gap: ^1.0.0
-  system_info_plus: ^0.0.5
-  version: ^3.0.2
-  package_info_plus: ^5.0.1
   launch_review: ^3.0.1
 
 
