@@ -2,8 +2,44 @@ import 'dart:io' as io;
 
 import 'package:device_info_plus/device_info_plus.dart';
 import 'package:flutter/material.dart';
+import 'package:system_info_plus/system_info_plus.dart';
 
-class DeviceInfoService {
+/// Physical memory state collection
+enum PhysicalMemoryState {
+  low(1024),
+  medium(2048),
+  high(3072),
+  unknow(0);
+
+  const PhysicalMemoryState(this.value);
+  final int value;
+
+  static PhysicalMemoryState fromInt(int? value) {
+    if (value == null) {
+      return unknow;
+    } else if (value >= high.value) {
+      return high;
+    } else if (value >= medium.value) {
+      return medium;
+    } else if (value >= low.value) {
+      return low;
+    }
+
+    return unknow;
+  }
+}
+
+/// Instance of Physical memory state
+class PhysicalMemory {
+  const PhysicalMemory({this.memory, required this.state});
+  final int? memory;
+  final PhysicalMemoryState state;
+
+  factory PhysicalMemory.fromInt(int? value) =>
+      PhysicalMemory(memory: value, state: PhysicalMemoryState.fromInt(value));
+}
+
+class DeviceInfo {
   /// No work is done when instantiating the plugin. It's safe to call this
   /// repeatedly or in performance-sensitive blocks.
   static final instance = DeviceInfoPlugin();
@@ -13,6 +49,10 @@ class DeviceInfoService {
 
   /// IOS module info
   static final ios = _IOS(instance);
+
+  /// Getter to device [PhysicalMemory] using [SystemInfoPlus.physicalMemory] package
+  static Future<PhysicalMemory> get physicalMemory async =>
+      PhysicalMemory.fromInt(await SystemInfoPlus.physicalMemory);
 }
 
 class _Android {

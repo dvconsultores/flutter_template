@@ -41,7 +41,7 @@ class _Page1 extends StatefulWidget {
 class _Page1State extends State<_Page1> {
   int _counter = 0;
 
-  void _incrementCounter() {
+  Future<void> _incrementCounter() async {
     setState(() => _counter++);
     showSnackbar("El contador ha incrementado");
   }

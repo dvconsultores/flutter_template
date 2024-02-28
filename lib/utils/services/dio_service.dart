@@ -8,7 +8,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_detextre4/main.dart';
 import 'package:flutter_detextre4/main_provider.dart';
 import 'package:flutter_detextre4/utils/extensions/type_extensions.dart';
-import 'package:flutter_detextre4/utils/general/variables.dart';
 import 'package:flutter_detextre4/utils/services/local_data/env_service.dart';
 import 'package:flutter_detextre4/utils/services/local_data/secure_storage_service.dart';
 import 'package:flutter_detextre4/widgets/dialogs/system_alert_widget.dart';
@@ -59,10 +58,8 @@ class DioService {
     dio.interceptors.add(InterceptorsWrapper(
       onRequest: (options, handler) async {
         //* set default header auth
-        final optionToken = options.headers['Authorization'];
-        final tokenAuth = await SecureStorage.read(SecureCollection.tokenAuth)
-            .timeout(const Duration(seconds: Variables.requestTiming))
-            .catchError((_) => null);
+        final optionToken = options.headers['Authorization'],
+            tokenAuth = await SecureStorage.read(SecureCollection.tokenAuth);
 
         if (tokenAuth != null && optionToken == null) {
           options.headers['Authorization'] = 'Token $tokenAuth';

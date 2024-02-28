@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_detextre4/main.dart';
 import 'package:flutter_detextre4/widgets/dialogs/system_alert_widget.dart';
+import 'package:flutter_gap/flutter_gap.dart';
 import 'package:gallery_saver/gallery_saver.dart';
 import 'package:http/http.dart' show Response, get;
 import 'package:launch_review/launch_review.dart';
@@ -37,6 +38,8 @@ Future<dynamic> capturePng(Uint8List imageBytes) async {
   return file;
 }
 
+void unfocus(BuildContext context) => FocusScope.of(context).unfocus();
+
 /// Read JSON asset file
 Future<T> getJsonFile<T>(String path) async =>
     jsonDecode(await rootBundle.loadString(path));
@@ -62,18 +65,18 @@ T buildWidget<T>(T Function() callback) => callback();
 
 /// A global menu that can be invoked onto whatever widget.
 Future<String?> showPopup(Map<String, IconData> items) async {
-  final context = globalNavigatorKey.currentContext!;
+  final context = globalNavigatorKey.currentContext!,
 
-  //*get the render box from the context
-  final RenderBox renderBox = context.findRenderObject() as RenderBox;
-  //*get the global position, from the widget local position
-  final offset = renderBox.localToGlobal(Offset.zero);
+      //*get the render box from the context
+      renderBox = context.findRenderObject() as RenderBox,
+      //*get the global position, from the widget local position
+      offset = renderBox.localToGlobal(Offset.zero),
 
-  //*calculate the start point in this case, below the button
-  final left = offset.dx;
-  final top = offset.dy + renderBox.size.height;
-  //*The right does not indicates the width
-  final right = left + renderBox.size.width;
+      //*calculate the start point in this case, below the button
+      left = offset.dx,
+      top = offset.dy + renderBox.size.height,
+      //*The right does not indicates the width
+      right = left + renderBox.size.width;
 
   return await showMenu<String>(
       context: context,
@@ -83,13 +86,11 @@ Future<String?> showPopup(Map<String, IconData> items) async {
           value: entry.key,
           child: SizedBox(
             // width: 200, //*width of popup
-            child: Row(
-              children: [
-                Icon(entry.value, color: Colors.redAccent),
-                const SizedBox(width: 10.0),
-                Text(entry.key)
-              ],
-            ),
+            child: Row(children: [
+              Icon(entry.value, color: Colors.redAccent),
+              const Gap(10.0).row,
+              Text(entry.key)
+            ]),
           ),
         );
       }).toList());
@@ -99,12 +100,12 @@ Future<void> checkVersion(BuildContext context) =>
     PackageInfo.fromPlatform().then((packageInfo) async {
       final (minVersion, currentVersion) =
           ("1.0.0", "1.0.0"); //? implement fetch to get version 🖊️
-      final packageVersion = packageInfo.version;
 
-      final hasUpdate =
-          Version.parse(packageVersion) < Version.parse(currentVersion);
-      final requireUpdate =
-          Version.parse(packageVersion) < Version.parse(minVersion);
+      final packageVersion = packageInfo.version,
+          hasUpdate =
+              Version.parse(packageVersion) < Version.parse(currentVersion),
+          requireUpdate =
+              Version.parse(packageVersion) < Version.parse(minVersion);
 
       if (context.mounted && hasUpdate) {
         await showDialog(
