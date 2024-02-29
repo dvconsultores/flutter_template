@@ -37,6 +37,7 @@ class ButtonAspect extends StatelessWidget {
     this.content,
     this.textAlign = TextAlign.center,
     this.textExpanded = false,
+    this.textFitted,
   });
   static final context = globalNavigatorKey.currentContext!;
 
@@ -66,6 +67,7 @@ class ButtonAspect extends StatelessWidget {
   final TextOverflow? textOverflow;
   final TextAlign textAlign;
   final bool textExpanded;
+  final BoxFit? textFitted;
   final Widget? content;
   final Widget? child;
 
@@ -97,6 +99,7 @@ class ButtonAspect extends StatelessWidget {
     TextOverflow? textOverflow,
     TextAlign textAlign = TextAlign.center,
     bool textExpanded = false,
+    BoxFit? textFitted,
     Widget? content,
     Widget? child,
   }) =>
@@ -128,6 +131,7 @@ class ButtonAspect extends StatelessWidget {
         content: content,
         textAlign: textAlign,
         textExpanded: textExpanded,
+        textFitted: textFitted,
         child: child,
       );
 
@@ -203,7 +207,7 @@ class ButtonAspect extends StatelessWidget {
               fontWeight: FontWeight.w700,
               fontFamily: FontFamily.lato("700"),
             ),
-        widgetText = Text(
+        textWidget = Text(
           text ?? '',
           textAlign: textAlign,
           softWrap: textSoftWrap,
@@ -242,7 +246,16 @@ class ButtonAspect extends StatelessWidget {
                   if (content != null)
                     content!
                   else if (text.hasValue)
-                    textExpanded ? Expanded(child: widgetText) : widgetText,
+                    textExpanded || textFitted != null
+                        ? Expanded(
+                            child: textFitted != null
+                                ? FittedBox(
+                                    fit: textFitted!,
+                                    child: textWidget,
+                                  )
+                                : textWidget,
+                          )
+                        : textWidget,
                   //
                   if (trailingSpacer)
                     const Spacer()

@@ -44,6 +44,7 @@ class Button extends StatelessWidget {
     this.content,
     this.textAlign = TextAlign.center,
     this.textExpanded = false,
+    this.textFitted,
     this.customLoader,
   });
   static final context = globalNavigatorKey.currentContext!;
@@ -80,6 +81,7 @@ class Button extends StatelessWidget {
   final TextOverflow? textOverflow;
   final TextAlign textAlign;
   final bool textExpanded;
+  final BoxFit? textFitted;
   final Widget? customLoader;
   final Widget? content;
   final Widget? child;
@@ -118,6 +120,7 @@ class Button extends StatelessWidget {
     TextOverflow? textOverflow,
     TextAlign textAlign = TextAlign.center,
     bool textExpanded = false,
+    BoxFit? textFitted,
     Widget? customLoader,
     Widget? content,
     Widget? child,
@@ -157,6 +160,7 @@ class Button extends StatelessWidget {
         content: content,
         textAlign: textAlign,
         textExpanded: textExpanded,
+        textFitted: textFitted,
         customLoader: customLoader ??
             Lottie.asset("assets/animation/loader-primary.json"),
         child: child,
@@ -196,6 +200,7 @@ class Button extends StatelessWidget {
     TextOverflow? textOverflow,
     TextAlign textAlign = TextAlign.center,
     bool textExpanded = false,
+    BoxFit? textFitted,
     Widget? customLoader,
     Widget? content,
     Widget? child,
@@ -235,6 +240,7 @@ class Button extends StatelessWidget {
         content: content,
         textAlign: textAlign,
         textExpanded: textExpanded,
+        textFitted: textFitted,
         customLoader: customLoader ??
             Lottie.asset("assets/animation/loader-bicolor.json"),
         child: child,
@@ -339,7 +345,7 @@ class Button extends StatelessWidget {
               fontWeight: FontWeight.w500,
               fontFamily: FontFamily.lato("500"),
             ),
-        widgetText = Text(
+        textWidget = Text(
           text ?? '',
           textAlign: textAlign,
           softWrap: textSoftWrap,
@@ -397,7 +403,16 @@ class Button extends StatelessWidget {
                       if (content != null)
                         content!
                       else if (text.hasValue)
-                        textExpanded ? Expanded(child: widgetText) : widgetText,
+                        textExpanded || textFitted != null
+                            ? Expanded(
+                                child: textFitted != null
+                                    ? FittedBox(
+                                        fit: textFitted!,
+                                        child: textWidget,
+                                      )
+                                    : textWidget,
+                              )
+                            : textWidget,
                       //
                       if (trailingSpacer)
                         const Spacer()
