@@ -81,12 +81,10 @@ class InputField extends TextFormField {
           onChanged: (value) {
             if (onChanged == null) return;
 
-            var newValue = value;
-            if ((keyboardType?.decimal ?? numeric) && value.contains(',')) {
-              newValue = value.split(',').join('.');
-            }
+            final haveDecimals =
+                (keyboardType?.decimal ?? numeric) && value.contains(',');
 
-            onChanged(newValue);
+            onChanged(haveDecimals ? value.split(',').join('.') : value);
           },
           decoration: decoration ??
               buildWidget<InputDecoration>(() {
