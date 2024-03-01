@@ -481,6 +481,18 @@ extension NullableStringExtension on String? {
 
 // ? String extension
 extension StringExtension on String {
+  /// Return a string representing [date] formatted according to our locale and internal format.
+  String formatTime({
+    String? pattern = 'dd/MM/yyyy HH:mm',
+    bool toLocal = false,
+    String? locale,
+  }) =>
+      DateTime.parse(this).formatTime(
+        locale: locale,
+        pattern: pattern,
+        toLocal: toLocal,
+      );
+
   /// Limit characters length to value provided.
   ///
   /// in case the current string is not long enough, an unmutated value will
