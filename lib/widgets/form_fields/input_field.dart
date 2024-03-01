@@ -22,7 +22,7 @@ class InputField extends TextFormField {
     super.maxLines,
     super.minLines,
     super.maxLength,
-    super.onChanged,
+    void Function(String value)? onChanged,
     super.textAlign = TextAlign.start,
     super.onFieldSubmitted,
     super.autocorrect,
@@ -78,6 +78,16 @@ class InputField extends TextFormField {
             if (inputFormatters != null && inputFormatters.isNotEmpty)
               ...inputFormatters
           ],
+          onChanged: (value) {
+            if (onChanged == null) return;
+
+            var newValue = value;
+            if ((keyboardType?.decimal ?? numeric) && value.contains(',')) {
+              newValue = value.split(',').join('.');
+            }
+
+            onChanged(newValue);
+          },
           decoration: decoration ??
               buildWidget<InputDecoration>(() {
                 final ts = textStyle ?? _ts,
