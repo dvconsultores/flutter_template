@@ -37,8 +37,9 @@ class TextDecimal extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    const defaultDecimalsSize = 14.0;
+
     final decimalSeparator = LanguageList.get(locale).decimalSeparator,
-        defaultDecimalsSize = 14.0,
         formatted = value.formatAmount(
           symbol: symbol,
           customPattern: customPatterm,
@@ -46,11 +47,10 @@ class TextDecimal extends StatelessWidget {
           maxDecimals: maxDecimals,
           minimumFractionDigits: minimumFractionDigits,
           useUnitFormat: useUnitFormat,
-        );
-
-    final [integers, decimals] = minimumFractionDigits > 0
-        ? formatted.split(decimalSeparator)
-        : [formatted, null];
+        ),
+        values = formatted.split(decimalSeparator),
+        integers = values.first,
+        decimals = values.elementAtOrNull(1);
 
     return Text.rich(TextSpan(
       text: integers,
@@ -64,7 +64,7 @@ class TextDecimal extends StatelessWidget {
                     ? style!.fontSize! - defaultDecimalRedux
                     : defaultDecimalsSize,
               ) ??
-              TextStyle(fontSize: defaultDecimalsSize),
+              const TextStyle(fontSize: defaultDecimalsSize),
         ),
       ],
       recognizer: recognizer,

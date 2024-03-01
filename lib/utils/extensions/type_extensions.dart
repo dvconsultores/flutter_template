@@ -278,7 +278,10 @@ extension IntExtension on int {
 
     // If unit formatting is enabled...
     if (useUnitFormat) {
+      maxDecimals = 1;
+      minimumFractionDigits = 0;
       String unit = '';
+
       if (value >= 1000000000) {
         unit = 'b';
         value /= 1000000000;
@@ -372,7 +375,10 @@ extension DoubleExtension on double {
 
     // If unit formatting is enabled...
     if (useUnitFormat) {
+      maxDecimals = 1;
+      minimumFractionDigits = 0;
       String unit = '';
+
       if (value >= 1000000000) {
         unit = 'b';
         value /= 1000000000;
@@ -611,7 +617,10 @@ extension StringExtension on String {
 
     // If unit formatting is enabled...
     if (useUnitFormat) {
+      maxDecimals = 1;
+      minimumFractionDigits = 0;
       String unit = '';
+
       if (value >= 1000000000) {
         unit = 'b';
         value /= 1000000000;
