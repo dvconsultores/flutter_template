@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_detextre4/utils/config/theme.dart';
 import 'package:flutter_detextre4/utils/extensions/type_extensions.dart';
-import 'package:flutter_detextre4/utils/general/variables.dart';
+import 'package:flutter_detextre4/utils/general/Variables.dart';
 import 'package:flutter_detextre4/utils/helper_widgets/custom_animated_builder.dart';
 import 'package:flutter_detextre4/widgets/defaults/button.dart';
 import 'package:flutter_gap/flutter_gap.dart';
@@ -18,7 +18,7 @@ class ComboboxField<T> extends StatefulWidget {
     this.value,
     this.initialValue,
     this.width = double.maxFinite,
-    this.height = Variables.maxInputHeight,
+    this.height = Vars.maxInputHeight,
     this.decoration,
     this.leading,
     this.trailing,
@@ -31,8 +31,7 @@ class ComboboxField<T> extends StatefulWidget {
     this.errorText,
     this.hintStyle,
     this.errorStyle,
-    this.borderRadius =
-        const BorderRadius.all(Radius.circular(Variables.radius15)),
+    this.borderRadius = const BorderRadius.all(Radius.circular(Vars.radius15)),
     this.border,
     this.borderDisabled,
     this.borderFocused,
@@ -40,8 +39,8 @@ class ComboboxField<T> extends StatefulWidget {
     this.boxShadow,
     this.gap = 5,
     this.padding = const EdgeInsets.symmetric(
-      horizontal: Variables.gapMedium,
-      vertical: Variables.gapMedium,
+      horizontal: Vars.gapMedium,
+      vertical: Vars.gapMedium,
     ),
     this.dense = false,
     this.onSubmit,
@@ -231,7 +230,7 @@ class _ComboboxFieldState<T> extends State<ComboboxField<T>> {
                                   ? () => widget.onTapItem!(state.value![i])
                                   : null,
                               padding: const EdgeInsets.symmetric(
-                                  horizontal: Variables.gapMedium),
+                                  horizontal: Vars.gapMedium),
                               height: 35,
                               bgColor: ThemeApp.colors(context)
                                   .primary
@@ -279,15 +278,15 @@ class _ComboboxFieldState<T> extends State<ComboboxField<T>> {
                 constraints: BoxConstraints(
                     minHeight: widget.height ??
                         (widget.dense
-                            ? Variables.minInputHeight
-                            : Variables.maxInputHeight)),
+                            ? Vars.minInputHeight
+                            : Vars.maxInputHeight)),
                 padding: widget.padding,
                 decoration: widget.decoration ??
                     BoxDecoration(
                       borderRadius: widget.borderRadius,
                       color: widget.bgColor ??
                           Theme.of(context).colorScheme.background,
-                      boxShadow: widget.boxShadow ?? [Variables.boxShadow2],
+                      boxShadow: widget.boxShadow ?? [Vars.boxShadow2],
                       border: Border.fromBorderSide(
                         widget.disabled
                             ? widget.borderDisabled ??

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_detextre4/utils/config/theme.dart';
-import 'package:flutter_detextre4/utils/general/variables.dart';
+import 'package:flutter_detextre4/utils/general/Variables.dart';
 import 'package:flutter_detextre4/utils/helper_widgets/custom_animated_builder.dart';
 import 'package:flutter_gap/flutter_gap.dart';
 
@@ -24,14 +24,14 @@ class CheckboxField extends StatefulWidget {
     this.errorStyle,
     this.errorWidth,
     this.padding = const EdgeInsets.symmetric(
-      horizontal: Variables.gapMedium,
-      vertical: Variables.gapMedium,
+      horizontal: Vars.gapMedium,
+      vertical: Vars.gapMedium,
     ),
-    this.gap = Variables.gapMedium,
+    this.gap = Vars.gapMedium,
     this.expanded = false,
     this.crossAxisAlignment = CrossAxisAlignment.center,
     this.mainAxisAlignment = MainAxisAlignment.start,
-    this.borderRadius = Variables.radius40,
+    this.borderRadius = Vars.radius40,
   });
   final String? restorationId;
   final void Function(bool? value)? onSaved;

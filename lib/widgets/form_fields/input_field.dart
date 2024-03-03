@@ -3,9 +3,9 @@ import 'package:flutter/services.dart';
 import 'package:flutter_detextre4/main.dart';
 import 'package:flutter_detextre4/painters/decorated_input_border.dart';
 import 'package:flutter_detextre4/utils/config/theme.dart';
+import 'package:flutter_detextre4/utils/general/Variables.dart';
 import 'package:flutter_detextre4/utils/general/functions.dart';
 import 'package:flutter_detextre4/utils/general/input_formatters.dart';
-import 'package:flutter_detextre4/utils/general/variables.dart';
 
 class InputField extends TextFormField {
   InputField({
@@ -41,7 +41,7 @@ class InputField extends TextFormField {
     int maxDecimals = 3,
     EdgeInsetsGeometry? prefixPadding,
     BorderRadius borderRadius =
-        const BorderRadius.all(Radius.circular(Variables.radius15)),
+        const BorderRadius.all(Radius.circular(Vars.radius15)),
     BorderSide? border,
     BorderSide? borderDisabled,
     BorderSide? borderError,
@@ -106,7 +106,7 @@ class InputField extends TextFormField {
                               borderSide: border, borderRadius: borderRadius)
                           : OutlineInputBorder(
                               borderSide: border, borderRadius: borderRadius),
-                      shadow: shadow ?? Variables.boxShadow2,
+                      shadow: shadow ?? Vars.boxShadow2,
                     );
 
                 final defaultBorder =
@@ -143,7 +143,7 @@ class InputField extends TextFormField {
                           child: Padding(
                             padding: prefixPadding ??
                                 const EdgeInsets.symmetric(
-                                  horizontal: Variables.gapMedium,
+                                  horizontal: Vars.gapMedium,
                                 ),
                             child: prefixIcon,
                           ),
@@ -156,8 +156,8 @@ class InputField extends TextFormField {
                   isDense: true,
                   contentPadding: contentPadding ??
                       const EdgeInsets.symmetric(
-                        horizontal: Variables.gapMedium,
-                        vertical: Variables.gapMax,
+                        horizontal: Vars.gapMedium,
+                        vertical: Vars.gapMax,
                       ),
                 );
               }),
@@ -199,7 +199,7 @@ class InputField extends TextFormField {
     bool obscureText = false,
     EdgeInsetsGeometry? prefixPadding,
     BorderRadius borderRadius =
-        const BorderRadius.all(Radius.circular(Variables.radius15)),
+        const BorderRadius.all(Radius.circular(Vars.radius15)),
     BorderSide? border,
     BorderSide? borderDisabled,
     BorderSide? borderError,
@@ -207,8 +207,8 @@ class InputField extends TextFormField {
     bool underline = false,
     FloatingLabelBehavior floatingLabelBehavior = FloatingLabelBehavior.auto,
     EdgeInsets? contentPadding = const EdgeInsets.symmetric(
-      vertical: Variables.gapMedium,
-      horizontal: Variables.gapMedium,
+      vertical: Vars.gapMedium,
+      horizontal: Vars.gapMedium,
     ),
     double maxWidthPrefix = double.infinity,
     TextStyle? textStyle,
@@ -231,8 +231,7 @@ class InputField extends TextFormField {
 
     return SizedBox(
       width: width,
-      height: height ??
-          (dense ? Variables.minInputHeight : Variables.maxInputHeight),
+      height: height ?? (dense ? Vars.minInputHeight : Vars.maxInputHeight),
       child: InputField(
         onTapOutside: onTapOutside,
         onTap: onTap,

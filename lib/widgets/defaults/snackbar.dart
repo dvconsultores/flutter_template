@@ -6,7 +6,7 @@ import 'package:flutter_detextre4/main.dart';
 import 'package:flutter_detextre4/main_provider.dart';
 import 'package:flutter_detextre4/utils/config/theme.dart';
 import 'package:flutter_detextre4/utils/extensions/type_extensions.dart';
-import 'package:flutter_detextre4/utils/general/variables.dart';
+import 'package:flutter_detextre4/utils/general/Variables.dart';
 import 'package:provider/provider.dart';
 
 final _context = globalNavigatorKey.currentContext!;
@@ -93,7 +93,7 @@ void showSnackbar(
     titleColor: ThemeApp.colors(_context).text,
     messageColor: ThemeApp.colors(_context).text,
     backgroundColor: ThemeApp.colors(_context).background,
-    borderRadius: const BorderRadius.all(Radius.circular(Variables.radius20)),
+    borderRadius: const BorderRadius.all(Radius.circular(Vars.radius20)),
     borderColor: getValueByType().$1,
     borderWidth: 2.5,
     dismissDirection: dismissDirection,
@@ -106,8 +106,7 @@ void showSnackbar(
         : null,
     positionOffset: 20,
     flushbarPosition: flushbarPosition ?? getValueByType().$3,
-    margin: const EdgeInsets.only(
-        left: Variables.gapMedium, right: Variables.gapMedium),
+    margin: const EdgeInsets.only(left: Vars.gapMedium, right: Vars.gapMedium),
     duration: duration,
     flushbarStyle: flushbarStyle,
   );

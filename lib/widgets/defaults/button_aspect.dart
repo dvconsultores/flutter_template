@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_detextre4/main.dart';
 import 'package:flutter_detextre4/utils/config/theme.dart';
 import 'package:flutter_detextre4/utils/extensions/type_extensions.dart';
-import 'package:flutter_detextre4/utils/general/variables.dart';
+import 'package:flutter_detextre4/utils/general/Variables.dart';
 import 'package:flutter_gap/flutter_gap.dart';
 
 class ButtonAspect extends StatelessWidget {
@@ -14,10 +14,9 @@ class ButtonAspect extends StatelessWidget {
     this.height = 45,
     this.constraints,
     this.shape,
-    this.borderRadius =
-        const BorderRadius.all(Radius.circular(Variables.radius40)),
+    this.borderRadius = const BorderRadius.all(Radius.circular(Vars.radius40)),
     this.borderSide = BorderSide.none,
-    this.boxShadow = const [Variables.boxShadow3],
+    this.boxShadow = const [Vars.boxShadow3],
     this.color = Colors.white,
     this.bgColor,
     this.bgColorDisabled,
@@ -78,7 +77,7 @@ class ButtonAspect extends StatelessWidget {
     double height = 45,
     BoxConstraints? constraints,
     BorderRadius borderRadius =
-        const BorderRadius.all(Radius.circular(Variables.radius40)),
+        const BorderRadius.all(Radius.circular(Vars.radius40)),
     BoxShape? shape,
     BorderSide borderSide = const BorderSide(width: 1),
     List<BoxShadow> boxShadow = const [],
@@ -139,10 +138,10 @@ class ButtonAspect extends StatelessWidget {
     double size = 45,
     BoxConstraints? constraints,
     BorderRadius borderRadius =
-        const BorderRadius.all(Radius.circular(Variables.radius50)),
+        const BorderRadius.all(Radius.circular(Vars.radius50)),
     BoxShape shape = BoxShape.circle,
     BorderSide borderSide = const BorderSide(width: 1),
-    List<BoxShadow> boxShadow = const [Variables.boxShadow3],
+    List<BoxShadow> boxShadow = const [Vars.boxShadow3],
     Color color = Colors.white,
     Color? bgColor,
     Color? bgColorDisabled,
@@ -170,7 +169,7 @@ class ButtonAspect extends StatelessWidget {
     double size = 45,
     BoxConstraints? constraints,
     BorderRadius borderRadius =
-        const BorderRadius.all(Radius.circular(Variables.radius50)),
+        const BorderRadius.all(Radius.circular(Vars.radius50)),
     BorderSide borderSide = const BorderSide(width: 1),
     BoxShape shape = BoxShape.circle,
     List<BoxShadow> boxShadow = const [],

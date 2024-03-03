@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_detextre4/utils/config/config.dart';
 import 'package:flutter_detextre4/utils/config/theme.dart';
 import 'package:flutter_detextre4/utils/extensions/widget_extensions.dart';
-import 'package:flutter_detextre4/utils/general/variables.dart';
+import 'package:flutter_detextre4/utils/general/Variables.dart';
 import 'package:flutter_detextre4/widgets/defaults/button.dart';
 import 'package:flutter_detextre4/widgets/defaults/scaffold.dart';
 import 'package:flutter_detextre4/widgets/defaults/snackbar.dart';
@@ -60,13 +60,13 @@ class _Page1State extends State<_Page1> {
                   : AppLocale.changeLanguage(LanguageList.en);
             },
           ),
-          const Gap(Variables.gapMax).column,
+          const Gap(Vars.gapMax).column,
           const Text('You have pushed the button this many times:'),
           Text(
             '$_counter',
             style: Theme.of(context).textTheme.headlineMedium,
           ),
-          const Gap(Variables.gapMax).column,
+          const Gap(Vars.gapMax).column,
           Container(
               margin: const EdgeInsets.only(bottom: 50),
               child: FloatingActionButton(
@@ -87,7 +87,7 @@ class _Page1State extends State<_Page1> {
                 color: ThemeApp.colors(context).tertiary,
               ),
             ),
-            const Gap(Variables.gapMax).row,
+            const Gap(Vars.gapMax).row,
             Button.icon(
               onPressed: () => ThemeApp.switchTheme(context, ThemeType.dark),
               icon: Icon(

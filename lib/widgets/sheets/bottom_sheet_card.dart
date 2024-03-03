@@ -1,7 +1,7 @@
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_detextre4/utils/config/theme.dart';
-import 'package:flutter_detextre4/utils/general/variables.dart';
+import 'package:flutter_detextre4/utils/general/Variables.dart';
 import 'package:flutter_detextre4/widgets/defaults/button.dart';
 import 'package:flutter_detextre4/widgets/defaults/snackbar.dart';
 import 'package:flutter_detextre4/widgets/sheets/card_widget.dart';
@@ -51,8 +51,8 @@ class BottomSheetCard extends StatelessWidget {
         shape: shape ??
             const RoundedRectangleBorder(
               borderRadius: BorderRadius.only(
-                topLeft: Radius.circular(Variables.radius50),
-                topRight: Radius.circular(Variables.radius50),
+                topLeft: Radius.circular(Vars.radius50),
+                topRight: Radius.circular(Vars.radius50),
               ),
             ),
         builder: builder ??
@@ -81,16 +81,14 @@ class BottomSheetCard extends StatelessWidget {
               child: SingleChildScrollView(
                 controller: scrollController,
                 physics: const BouncingScrollPhysics(),
-                padding:
-                    padding ?? Variables.paddingScaffold.copyWith(bottom: 0),
+                padding: padding ?? Vars.paddingScaffold.copyWith(bottom: 0),
                 child: child,
               ),
             )
           else
             Expanded(
               child: Padding(
-                padding:
-                    padding ?? Variables.paddingScaffold.copyWith(bottom: 0),
+                padding: padding ?? Vars.paddingScaffold.copyWith(bottom: 0),
                 child: child,
               ),
             ),
@@ -159,8 +157,8 @@ class BottomSheetList<T> extends StatelessWidget {
         shape: shape ??
             const RoundedRectangleBorder(
               borderRadius: BorderRadius.only(
-                topLeft: Radius.circular(Variables.radius50),
-                topRight: Radius.circular(Variables.radius50),
+                topLeft: Radius.circular(Vars.radius50),
+                topRight: Radius.circular(Vars.radius50),
               ),
             ),
         builder: (context) => BottomSheetList<T>(
@@ -191,8 +189,7 @@ class BottomSheetList<T> extends StatelessWidget {
           Expanded(
             child: items.isEmpty
                 ? Padding(
-                    padding:
-                        const EdgeInsets.symmetric(vertical: Variables.gapMax),
+                    padding: const EdgeInsets.symmetric(vertical: Vars.gapMax),
                     child: emptyData ??
                         Text(
                           emptyDataText ?? "No hay registros",
@@ -201,12 +198,12 @@ class BottomSheetList<T> extends StatelessWidget {
                   )
                 : ListView.separated(
                     padding: padding ??
-                        Variables.paddingScaffold.copyWith(top: 0, bottom: 0),
+                        Vars.paddingScaffold.copyWith(top: 0, bottom: 0),
                     controller: scrollController,
                     physics: const BouncingScrollPhysics(),
                     itemCount: items.length,
                     separatorBuilder: (context, index) =>
-                        Gap(itemsGap ?? Variables.gapXLarge).column,
+                        Gap(itemsGap ?? Vars.gapXLarge).column,
                     itemBuilder: (context, index) {
                       final item = items[index];
 
@@ -221,8 +218,8 @@ class BottomSheetList<T> extends StatelessWidget {
                             : CardWidget(
                                 elevation: 5,
                                 padding: const EdgeInsets.symmetric(
-                                  horizontal: Variables.gapMedium,
-                                  vertical: Variables.gapXLarge,
+                                  horizontal: Vars.gapMedium,
+                                  vertical: Vars.gapXLarge,
                                 ),
                                 child: item.child,
                               ),
@@ -261,8 +258,8 @@ class BottomSheetListMultiple<T> extends StatefulWidget {
     this.buttonTextStyle,
     this.crossAxisCount = 2,
     this.childAspectRatio = 20 / 4.8,
-    this.crossAxisSpacing = Variables.gapXLarge,
-    this.mainAxisSpacing = Variables.gapXLarge,
+    this.crossAxisSpacing = Vars.gapXLarge,
+    this.mainAxisSpacing = Vars.gapXLarge,
   });
 
   final EdgeInsetsGeometry? contextPadding;
@@ -322,8 +319,8 @@ class BottomSheetListMultiple<T> extends StatefulWidget {
     TextStyle? labelStyle,
     int crossAxisCount = 2,
     double childAspectRatio = 20 / 4.8,
-    double crossAxisSpacing = Variables.gapXLarge,
-    double mainAxisSpacing = Variables.gapXLarge,
+    double crossAxisSpacing = Vars.gapXLarge,
+    double mainAxisSpacing = Vars.gapXLarge,
   }) async =>
       await showModalBottomSheet<List<DropdownMenuItem<T>>>(
         context: context,
@@ -334,8 +331,8 @@ class BottomSheetListMultiple<T> extends StatefulWidget {
         shape: shape ??
             const RoundedRectangleBorder(
               borderRadius: BorderRadius.only(
-                topLeft: Radius.circular(Variables.radius50),
-                topRight: Radius.circular(Variables.radius50),
+                topLeft: Radius.circular(Vars.radius50),
+                topRight: Radius.circular(Vars.radius50),
               ),
             ),
         builder: (context) => BottomSheetListMultiple<T>(
@@ -414,8 +411,7 @@ class _BottomSheetListMultipleState<T>
             widget.label!
           else if (widget.labelText != null)
             Padding(
-                padding: Variables.paddingScaffold
-                    .copyWith(bottom: Variables.gapXLarge),
+                padding: Vars.paddingScaffold.copyWith(bottom: Vars.gapXLarge),
                 child: Text(
                   widget.labelText!,
                   style: widget.labelStyle ??
@@ -424,8 +420,7 @@ class _BottomSheetListMultipleState<T>
           Expanded(
             child: widget.items.isEmpty
                 ? Padding(
-                    padding:
-                        const EdgeInsets.symmetric(vertical: Variables.gapMax),
+                    padding: const EdgeInsets.symmetric(vertical: Vars.gapMax),
                     child: widget.emptyData ??
                         Text(widget.emptyDataText ?? "No hay registros",
                             style: widget.emptyDataStyle),
@@ -437,7 +432,7 @@ class _BottomSheetListMultipleState<T>
                     mainAxisSpacing: widget.mainAxisSpacing,
                     physics: const BouncingScrollPhysics(),
                     padding: widget.contextPadding ??
-                        Variables.paddingScaffold.copyWith(top: 0),
+                        Vars.paddingScaffold.copyWith(top: 0),
                     children: widget.items
                         .map(
                           (item) => widget.itemBuilder != null
@@ -448,9 +443,9 @@ class _BottomSheetListMultipleState<T>
                                 )
                               : Button(
                                   borderRadius: const BorderRadius.all(
-                                      Radius.circular(Variables.radius10)),
+                                      Radius.circular(Vars.radius10)),
                                   boxShadow: [
-                                    if (!isSelected(item)) Variables.boxShadow2
+                                    if (!isSelected(item)) Vars.boxShadow2
                                   ],
                                   borderSide: BorderSide(
                                     width: 1.3,
@@ -471,7 +466,7 @@ class _BottomSheetListMultipleState<T>
             widget.buttonBuilder!(context, onComplete)
           else
             Button(
-              margin: Variables.paddingScaffold,
+              margin: Vars.paddingScaffold,
               text: widget.buttonText ?? "Aceptar",
               onPressed: onComplete,
             ),

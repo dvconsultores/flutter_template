@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_detextre4/main.dart';
 import 'package:flutter_detextre4/utils/config/theme.dart';
 import 'package:flutter_detextre4/utils/extensions/type_extensions.dart';
-import 'package:flutter_detextre4/utils/general/variables.dart';
+import 'package:flutter_detextre4/utils/general/Variables.dart';
 import 'package:flutter_gap/flutter_gap.dart';
 import 'package:lottie/lottie.dart';
 
@@ -19,10 +19,9 @@ class Button extends StatelessWidget {
     this.height = 45,
     this.constraints,
     this.shape,
-    this.borderRadius =
-        const BorderRadius.all(Radius.circular(Variables.radius40)),
+    this.borderRadius = const BorderRadius.all(Radius.circular(Vars.radius40)),
     this.borderSide = BorderSide.none,
-    this.boxShadow = const [Variables.boxShadow3],
+    this.boxShadow = const [Vars.boxShadow3],
     this.color,
     this.bgColor,
     this.bgColorDisabled,
@@ -97,10 +96,10 @@ class Button extends StatelessWidget {
     double? loaderSize = 30,
     BoxConstraints? constraints,
     BorderRadius borderRadius =
-        const BorderRadius.all(Radius.circular(Variables.radius40)),
+        const BorderRadius.all(Radius.circular(Vars.radius40)),
     BorderSide borderSide = BorderSide.none,
     OutlinedBorder? shape,
-    List<BoxShadow> boxShadow = const [Variables.boxShadow3],
+    List<BoxShadow> boxShadow = const [Vars.boxShadow3],
     Color? color,
     Color? bgColor,
     Color? bgColorDisabled,
@@ -177,7 +176,7 @@ class Button extends StatelessWidget {
     double? loaderSize = 30,
     BoxConstraints? constraints,
     BorderRadius borderRadius =
-        const BorderRadius.all(Radius.circular(Variables.radius40)),
+        const BorderRadius.all(Radius.circular(Vars.radius40)),
     BorderSide borderSide = BorderSide.none,
     OutlinedBorder? shape,
     List<BoxShadow> boxShadow = const [],
@@ -256,7 +255,7 @@ class Button extends StatelessWidget {
     BorderRadius borderRadius = const BorderRadius.all(Radius.circular(100)),
     BorderSide borderSide = BorderSide.none,
     OutlinedBorder? shape,
-    List<BoxShadow> boxShadow = const [Variables.boxShadow3],
+    List<BoxShadow> boxShadow = const [Vars.boxShadow3],
     Color? color,
     Color? bgColor,
     Color? bgColorDisabled,

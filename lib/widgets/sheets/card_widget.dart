@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_detextre4/utils/general/variables.dart';
+import 'package:flutter_detextre4/utils/general/Variables.dart';
 
 class CardWidget extends StatelessWidget {
   const CardWidget({
@@ -10,7 +10,7 @@ class CardWidget extends StatelessWidget {
     this.constraints,
     this.height,
     this.width,
-    this.padding = const EdgeInsets.all(Variables.gapMedium),
+    this.padding = const EdgeInsets.all(Vars.gapMedium),
     this.margin = const EdgeInsets.all(0),
     this.child,
   });
@@ -34,7 +34,7 @@ class CardWidget extends StatelessWidget {
         color: color ?? Colors.white,
         shadowColor: Colors.black54,
         shape: ContinuousRectangleBorder(
-            borderRadius: BorderRadius.circular(Variables.radius30)),
+            borderRadius: BorderRadius.circular(Vars.radius30)),
         clipBehavior: Clip.antiAliasWithSaveLayer,
         elevation: elevation,
         child: Container(

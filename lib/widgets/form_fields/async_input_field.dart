@@ -3,9 +3,9 @@ import 'package:flutter/services.dart';
 import 'package:flutter_detextre4/main.dart';
 import 'package:flutter_detextre4/painters/decorated_input_border.dart';
 import 'package:flutter_detextre4/utils/config/theme.dart';
+import 'package:flutter_detextre4/utils/general/Variables.dart';
 import 'package:flutter_detextre4/utils/general/functions.dart';
 import 'package:flutter_detextre4/utils/general/input_formatters.dart';
-import 'package:flutter_detextre4/utils/general/variables.dart';
 import 'package:flutter_detextre4/utils/helper_widgets/async_text_form_field.dart';
 
 class AsyncInputField extends AsyncTextFormField {
@@ -42,8 +42,7 @@ class AsyncInputField extends AsyncTextFormField {
     this.maxEntires = 10,
     this.maxDecimals = 3,
     this.prefixPadding,
-    this.borderRadius =
-        const BorderRadius.all(Radius.circular(Variables.radius15)),
+    this.borderRadius = const BorderRadius.all(Radius.circular(Vars.radius15)),
     this.border,
     this.borderDisabled,
     this.borderError,
@@ -97,7 +96,7 @@ class AsyncInputField extends AsyncTextFormField {
                               borderSide: border, borderRadius: borderRadius)
                           : OutlineInputBorder(
                               borderSide: border, borderRadius: borderRadius),
-                      shadow: shadow ?? Variables.boxShadow2,
+                      shadow: shadow ?? Vars.boxShadow2,
                     );
 
                 final defaultBorder =
@@ -134,7 +133,7 @@ class AsyncInputField extends AsyncTextFormField {
                           child: Padding(
                             padding: prefixPadding ??
                                 const EdgeInsets.symmetric(
-                                  horizontal: Variables.gapMedium,
+                                  horizontal: Vars.gapMedium,
                                 ),
                             child: prefixIcon,
                           ),
@@ -146,8 +145,8 @@ class AsyncInputField extends AsyncTextFormField {
                   isDense: true,
                   contentPadding: contentPadding ??
                       const EdgeInsets.symmetric(
-                        horizontal: Variables.gapMedium,
-                        vertical: Variables.gapMax,
+                        horizontal: Vars.gapMedium,
+                        vertical: Vars.gapMax,
                       ),
                 );
               }),
@@ -223,7 +222,7 @@ class AsyncInputField extends AsyncTextFormField {
     bool obscureText = false,
     EdgeInsetsGeometry? prefixPadding,
     BorderRadius borderRadius =
-        const BorderRadius.all(Radius.circular(Variables.radius15)),
+        const BorderRadius.all(Radius.circular(Vars.radius15)),
     BorderSide? border,
     BorderSide? borderDisabled,
     BorderSide? borderError,
@@ -251,8 +250,7 @@ class AsyncInputField extends AsyncTextFormField {
 
     return SizedBox(
       width: width,
-      height: height ??
-          (dense ? Variables.minInputHeight : Variables.maxInputHeight),
+      height: height ?? (dense ? Vars.minInputHeight : Vars.maxInputHeight),
       child: AsyncInputField(
         onTapOutside: onTapOutside,
         onTap: onTap,

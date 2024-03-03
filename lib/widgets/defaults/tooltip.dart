@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_detextre4/utils/config/theme.dart';
-import 'package:flutter_detextre4/utils/general/variables.dart';
+import 'package:flutter_detextre4/utils/general/Variables.dart';
 
 class AppTooltip extends StatelessWidget {
   const AppTooltip({
@@ -20,10 +20,10 @@ class AppTooltip extends StatelessWidget {
     return Tooltip(
       message: message,
       triggerMode: TooltipTriggerMode.longPress,
-      margin: Variables.paddingScaffold.copyWith(top: 0),
+      margin: Vars.paddingScaffold.copyWith(top: 0),
       padding: const EdgeInsets.symmetric(
-        horizontal: Variables.gapLarge,
-        vertical: Variables.gapMedium,
+        horizontal: Vars.gapLarge,
+        vertical: Vars.gapMedium,
       ),
       textStyle: TextStyle(
         fontSize: 12,

@@ -3,7 +3,7 @@ import 'dart:math' as math;
 import 'package:flutter/material.dart';
 import 'package:flutter_detextre4/utils/config/router_config.dart';
 import 'package:flutter_detextre4/utils/config/theme.dart';
-import 'package:flutter_detextre4/utils/general/variables.dart';
+import 'package:flutter_detextre4/utils/general/Variables.dart';
 
 class SplashPage extends StatefulWidget {
   const SplashPage({super.key});
@@ -95,7 +95,7 @@ class _SplashPageState extends State<SplashPage>
             width: 60,
             height: 60,
             decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(Variables.gapMax),
+              borderRadius: BorderRadius.circular(Vars.gapMax),
               color: ThemeApp.colors(context).accent,
             ),
           ),
@@ -156,7 +156,7 @@ class _SplashPageState extends State<SplashPage>
               width: 150,
               height: 150,
               decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(Variables.radius20),
+                borderRadius: BorderRadius.circular(Vars.radius20),
                 color: ThemeApp.colors(context).focusColor,
               )),
         ),

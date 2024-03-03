@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_detextre4/utils/general/variables.dart';
+import 'package:flutter_detextre4/utils/general/Variables.dart';
 import 'package:flutter_detextre4/widgets/defaults/button.dart';
 import 'package:flutter_detextre4/widgets/defaults/snackbar.dart';
 import 'package:flutter_gap/flutter_gap.dart';
@@ -52,9 +52,9 @@ class ModalWidget extends StatelessWidget {
         shape: const ContinuousRectangleBorder(
           borderRadius: BorderRadius.all(Radius.circular(40)),
         ),
-        titlePadding: Variables.paddingScaffold
+        titlePadding: Vars.paddingScaffold
             .copyWith(bottom: 0)
-            .add(const EdgeInsets.only(top: Variables.gapLow)),
+            .add(const EdgeInsets.only(top: Vars.gapLow)),
         title: Center(
             child: Text(
           textTitle,
@@ -62,11 +62,11 @@ class ModalWidget extends StatelessWidget {
           style: const TextStyle(fontWeight: FontWeight.w700),
         )),
         content: shrinkWrap ? IntrinsicHeight(child: bodyWidget) : bodyWidget,
-        contentPadding: contentPadding ??
-            Variables.paddingScaffold.copyWith(top: 0, bottom: 0),
+        contentPadding:
+            contentPadding ?? Vars.paddingScaffold.copyWith(top: 0, bottom: 0),
         actionsPadding: actionsPadding ??
-            Variables.paddingScaffold
-                .add(const EdgeInsets.only(bottom: Variables.gapLow)),
+            Vars.paddingScaffold
+                .add(const EdgeInsets.only(bottom: Vars.gapLow)),
         insetPadding: insetPadding,
         actions: [
           Row(children: [
@@ -94,7 +94,7 @@ class ModalWidget extends StatelessWidget {
                       Navigator.pop(context);
                     },
               )),
-              const Gap(Variables.gapXLarge).row,
+              const Gap(Vars.gapXLarge).row,
               Expanded(
                   child: Button(
                 height: actionButtonsHeight,

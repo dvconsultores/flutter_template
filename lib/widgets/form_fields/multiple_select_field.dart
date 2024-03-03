@@ -3,8 +3,8 @@ import 'package:easy_debounce/easy_debounce.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_detextre4/utils/config/theme.dart';
 import 'package:flutter_detextre4/utils/extensions/type_extensions.dart';
+import 'package:flutter_detextre4/utils/general/Variables.dart';
 import 'package:flutter_detextre4/utils/general/functions.dart';
-import 'package:flutter_detextre4/utils/general/variables.dart';
 import 'package:flutter_detextre4/utils/helper_widgets/custom_animated_builder.dart';
 import 'package:flutter_detextre4/widgets/sheets/bottom_sheet_card.dart';
 import 'package:flutter_gap/flutter_gap.dart';
@@ -39,15 +39,14 @@ class MultipleSelectField<T> extends StatefulWidget {
     this.textAlignHint,
     this.errorText,
     this.errorStyle,
-    this.borderRadius =
-        const BorderRadius.all(Radius.circular(Variables.radius15)),
+    this.borderRadius = const BorderRadius.all(Radius.circular(Vars.radius15)),
     this.border,
     this.borderDisabled,
     this.borderFocused,
     this.bgColor,
     this.boxShadow,
-    this.gap = Variables.gapLow,
-    this.padding = const EdgeInsets.symmetric(horizontal: Variables.gapMedium),
+    this.gap = Vars.gapLow,
+    this.padding = const EdgeInsets.symmetric(horizontal: Vars.gapMedium),
     this.dense = false,
     this.dropdownInitialChildSize = .45,
     this.dropdownMaxChildSize = .45,
@@ -211,9 +210,9 @@ class _MultiSelectFieldState<T> extends State<MultipleSelectField<T>> {
                             separatorBuilder: (context, index) =>
                                 const VerticalDivider(
                               thickness: 2,
-                              indent: Variables.gapMedium,
-                              endIndent: Variables.gapMedium,
-                              width: Variables.gapXLarge,
+                              indent: Vars.gapMedium,
+                              endIndent: Vars.gapMedium,
+                              width: Vars.gapXLarge,
                             ),
                             itemBuilder: (context, index) =>
                                 Center(child: items[index].child),
@@ -231,16 +230,14 @@ class _MultiSelectFieldState<T> extends State<MultipleSelectField<T>> {
               child: Container(
                 width: widget.width,
                 height: widget.height ??
-                    (widget.dense
-                        ? Variables.minInputHeight
-                        : Variables.maxInputHeight),
+                    (widget.dense ? Vars.minInputHeight : Vars.maxInputHeight),
                 padding: widget.padding,
                 decoration: widget.decoration ??
                     BoxDecoration(
                         borderRadius: widget.borderRadius,
                         color: widget.bgColor ??
                             Theme.of(context).colorScheme.background,
-                        boxShadow: widget.boxShadow ?? [Variables.boxShadow2],
+                        boxShadow: widget.boxShadow ?? [Vars.boxShadow2],
                         border: Border.fromBorderSide(
                           widget.disabled
                               ? widget.borderDisabled ??

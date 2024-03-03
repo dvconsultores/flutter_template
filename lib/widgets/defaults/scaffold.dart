@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_detextre4/utils/general/variables.dart';
+import 'package:flutter_detextre4/utils/general/Variables.dart';
 import 'package:responsive_mixin_layout/responsive_mixin_layout.dart';
 
 // * Custom background styled
@@ -13,7 +13,7 @@ class _BackgroundStyled extends StatelessWidget {
     return Container(
       width: double.maxFinite,
       height: double.maxFinite,
-      padding: padding ?? Variables.paddingScaffold,
+      padding: padding ?? Vars.paddingScaffold,
       decoration: const BoxDecoration(
         gradient: SweepGradient(
           center: Alignment.center,
@@ -51,7 +51,7 @@ class _BodyBackgroundStyled extends StatelessWidget {
         alignment: Alignment.centerLeft,
         child: Container(
           color: color ?? Theme.of(context).scaffoldBackgroundColor,
-          padding: padding ?? Variables.paddingScaffold,
+          padding: padding ?? Vars.paddingScaffold,
           child: child,
         ));
 

@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_detextre4/main.dart';
 import 'package:flutter_detextre4/utils/config/theme.dart';
 import 'package:flutter_detextre4/utils/extensions/type_extensions.dart';
-import 'package:flutter_detextre4/utils/general/variables.dart';
+import 'package:flutter_detextre4/utils/general/Variables.dart';
 
 class SelectField<T> extends StatefulWidget {
   const SelectField({
@@ -25,8 +25,7 @@ class SelectField<T> extends StatefulWidget {
     this.buttonStyleData,
     this.filled = true,
     this.color,
-    this.borderRadius =
-        const BorderRadius.all(Radius.circular(Variables.radius15)),
+    this.borderRadius = const BorderRadius.all(Radius.circular(Vars.radius15)),
     this.border,
     this.borderDisabled,
     this.borderError,
@@ -34,8 +33,8 @@ class SelectField<T> extends StatefulWidget {
     this.iconEnabledColor,
     this.underline = false,
     this.contentPadding = const EdgeInsets.symmetric(
-      horizontal: Variables.gapMedium,
-      vertical: Variables.gapLarge,
+      horizontal: Vars.gapMedium,
+      vertical: Vars.gapLarge,
     ),
     this.prefixPadding,
     this.maxWidthPrefix = double.infinity,
@@ -119,7 +118,7 @@ class SelectField<T> extends StatefulWidget {
     bool filled = true,
     Color? color,
     BorderRadius borderRadius =
-        const BorderRadius.all(Radius.circular(Variables.radius15)),
+        const BorderRadius.all(Radius.circular(Vars.radius15)),
     BorderSide? border,
     BorderSide? borderDisabled,
     BorderSide? borderError,
@@ -127,8 +126,8 @@ class SelectField<T> extends StatefulWidget {
     Color? iconEnabledColor,
     bool underline = false,
     EdgeInsetsGeometry contentPadding = const EdgeInsets.symmetric(
-      horizontal: Variables.gapMedium,
-      vertical: Variables.gapLarge,
+      horizontal: Vars.gapMedium,
+      vertical: Vars.gapLarge,
     ),
     EdgeInsetsGeometry? prefixPadding,
     double maxWidthPrefix = double.infinity,
@@ -214,7 +213,7 @@ class SelectField<T> extends StatefulWidget {
     bool filled = true,
     Color? color,
     BorderRadius borderRadius =
-        const BorderRadius.all(Radius.circular(Variables.radius15)),
+        const BorderRadius.all(Radius.circular(Vars.radius15)),
     BorderSide? border,
     BorderSide? borderDisabled,
     BorderSide? borderError,
@@ -242,8 +241,7 @@ class SelectField<T> extends StatefulWidget {
   }) {
     return SizedBox(
       width: width,
-      height: height ??
-          (dense ? Variables.minInputHeight : Variables.maxInputHeight),
+      height: height ?? (dense ? Vars.minInputHeight : Vars.maxInputHeight),
       child: SelectField<T>(
         value: value,
         focusNode: focusNode,
@@ -340,7 +338,7 @@ class _SelectFieldState<T> extends State<SelectField<T>> {
       ignoring: widget.loading || widget.disabled,
       child: Container(
         decoration: BoxDecoration(
-          boxShadow: widget.boxShadow ?? [Variables.boxShadow2],
+          boxShadow: widget.boxShadow ?? [Vars.boxShadow2],
           borderRadius: widget.borderRadius,
         ),
         child: DropdownButtonFormField2<T>(
@@ -353,8 +351,8 @@ class _SelectFieldState<T> extends State<SelectField<T>> {
           focusNode: widget.focusNode,
           customButton: widget.loading
               ? LinearProgressIndicator(
-                  borderRadius: const BorderRadius.all(
-                      Radius.circular(Variables.radius10)),
+                  borderRadius:
+                      const BorderRadius.all(Radius.circular(Vars.radius10)),
                   color: ThemeApp.colors(context).primary,
                   minHeight: widget.loaderHeight,
                 )
@@ -398,7 +396,7 @@ class _SelectFieldState<T> extends State<SelectField<T>> {
                     child: Padding(
                       padding: widget.prefixPadding ??
                           const EdgeInsets.symmetric(
-                            horizontal: Variables.gapMedium,
+                            horizontal: Vars.gapMedium,
                           ),
                       child: widget.prefixIcon,
                     ),
@@ -409,8 +407,8 @@ class _SelectFieldState<T> extends State<SelectField<T>> {
             isDense: true,
             contentPadding: widget.contentPadding ??
                 const EdgeInsets.symmetric(
-                  horizontal: Variables.gapMedium,
-                  vertical: Variables.gapMedium,
+                  horizontal: Vars.gapMedium,
+                  vertical: Vars.gapMedium,
                 ),
           ),
           dropdownStyleData: DropdownStyleData(
@@ -435,8 +433,8 @@ class _SelectFieldState<T> extends State<SelectField<T>> {
               useSafeArea: widget.dropdownStyleData?.useSafeArea ?? true,
               decoration: widget.dropdownStyleData?.decoration ??
                   BoxDecoration(
-                    borderRadius: const BorderRadius.all(
-                        Radius.circular(Variables.radius10)),
+                    borderRadius:
+                        const BorderRadius.all(Radius.circular(Vars.radius10)),
                     border: Border.all(color: ThemeApp.colors(context).primary),
                   )),
           menuItemStyleData: widget.menuItemStyleData,

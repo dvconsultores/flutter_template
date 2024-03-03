@@ -7,7 +7,7 @@ import 'package:flutter_detextre4/utils/config/config.dart';
 import 'package:flutter_detextre4/utils/config/router_config.dart';
 import 'package:flutter_detextre4/utils/config/session_timeout_config.dart';
 import 'package:flutter_detextre4/utils/config/theme.dart';
-import 'package:flutter_detextre4/utils/general/variables.dart';
+import 'package:flutter_detextre4/utils/general/Variables.dart';
 import 'package:flutter_detextre4/utils/helper_widgets/restart_widget.dart';
 import 'package:flutter_detextre4/utils/services/dio_service.dart';
 import 'package:flutter_detextre4/utils/services/local_data/hive_data_service.dart';
@@ -91,7 +91,7 @@ class _AppState extends State<App> {
           sessionConfig: sessionTimeoutConfig.instance,
           child: ScreenSizes(
             child: ScreenUtilInit(
-                designSize: Variables.mSize,
+                designSize: Vars.mSize,
                 builder: (context, child) {
                   return MaterialApp.router(
                     scaffoldMessengerKey: globalScaffoldMessengerKey,
