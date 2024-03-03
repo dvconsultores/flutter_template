@@ -3,16 +3,17 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_detextre4/utils/config/config.dart';
+import 'package:flutter_detextre4/utils/general/variables.dart';
 import 'package:intl/intl.dart';
 
 // ? Decimal text input formatter
 class DecimalTextInputFormatter extends TextInputFormatter {
   DecimalTextInputFormatter({
-    this.locale = "en_US",
+    this.locale,
     this.maxEntires = 4,
-    this.maxDecimals = 3,
+    this.maxDecimals = Vars.maxDecimals,
   });
-  final String locale;
+  final String? locale;
   final int maxEntires;
   final int maxDecimals;
 
@@ -21,7 +22,9 @@ class DecimalTextInputFormatter extends TextInputFormatter {
     TextEditingValue oldValue,
     TextEditingValue newValue,
   ) {
-    final decimalSeparator = LanguageList.get(locale).decimalSeparator,
+    final decimalSeparator =
+            LanguageList.get(locale ?? AppLocale.locale.languageCode)
+                .decimalSeparator,
         invertedDecimalSeparator = decimalSeparator == ',' ? "." : ",",
         regEx = RegExp('^\\d{0,$maxEntires}[\\.\\,]?\\d{0,$maxDecimals}'),
         newString = regEx.stringMatch(newValue.text) ?? "";
@@ -67,7 +70,7 @@ class CurrencyInputFormatter extends TextInputFormatter {
     this.locale,
     this.name,
     this.symbol,
-    this.decimalDigits,
+    this.decimalDigits = Vars.maxDecimals,
     this.customPattern,
     this.turnOffGrouping = false,
     this.enableNegative = true,
@@ -120,7 +123,7 @@ class CurrencyInputFormatter extends TextInputFormatter {
 
   void _formatter(String newText) {
     final NumberFormat format = NumberFormat.currency(
-      locale: locale,
+      locale: locale ?? AppLocale.locale.languageCode,
       name: name ?? "",
       symbol: symbol,
       decimalDigits: decimalDigits,

@@ -2,6 +2,7 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_detextre4/utils/config/config.dart';
 import 'package:flutter_detextre4/utils/extensions/type_extensions.dart';
+import 'package:flutter_detextre4/utils/general/variables.dart';
 
 /// Widget to transform [Text] to decimal format with currency or not.
 ///
@@ -14,9 +15,9 @@ class TextDecimal extends StatelessWidget {
     this.style,
     this.styleDecimals,
     this.customPatterm = '#,##0.00 ¤',
-    this.locale = 'en_US',
-    this.maxDecimals = 3,
-    this.minimumFractionDigits = 3,
+    this.locale,
+    this.maxDecimals = Vars.maxDecimals,
+    this.minimumFractionDigits = Vars.maxDecimals,
     this.defaultDecimalRedux = 2,
     this.recognizer,
     this.decimalRecognizer,
@@ -38,12 +39,13 @@ class TextDecimal extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     const defaultDecimalsSize = 14.0;
-
-    final decimalSeparator = LanguageList.get(locale).decimalSeparator,
+    final defaultLocale = AppLocale.locale.languageCode,
+        decimalSeparator =
+            LanguageList.get(locale ?? defaultLocale).decimalSeparator,
         formatted = value.formatAmount(
           symbol: symbol,
           customPattern: customPatterm,
-          locale: locale,
+          locale: locale ?? defaultLocale,
           maxDecimals: maxDecimals,
           minimumFractionDigits: minimumFractionDigits,
           useUnitFormat: useUnitFormat,

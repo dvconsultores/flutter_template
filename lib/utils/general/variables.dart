@@ -5,6 +5,9 @@ mixin Vars {
   // * fetching
   static const requestTiming = 10;
 
+  // * values
+  static const maxDecimals = 3;
+
   // * Sizing
   static const mSize = Size(360, 690);
 

@@ -8,6 +8,7 @@ import 'package:dio/dio.dart' as dio;
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_detextre4/utils/config/config.dart';
+import 'package:flutter_detextre4/utils/general/variables.dart';
 import 'package:flutter_detextre4/utils/services/local_data/env_service.dart';
 import 'package:flutter_detextre4/widgets/defaults/snackbar.dart';
 import 'package:gallery_saver/gallery_saver.dart';
@@ -263,13 +264,13 @@ extension IntExtension on int {
 
   /// Format `String` to decimal number system with nested currency.
   ///
-  /// by default [locale] has ['en_US'] value and 2 decimals max.
+  /// by default [locale] has deviceLanguage value and 2 decimals max.
   String formatAmount({
     String? name,
     String? symbol,
-    String? locale = 'en_US',
-    int maxDecimals = 3,
-    int minimumFractionDigits = 3,
+    String? locale,
+    int maxDecimals = Vars.maxDecimals,
+    int minimumFractionDigits = Vars.maxDecimals,
     String? customPattern = '#,##0.00 ¤',
     bool useUnitFormat = false,
   }) {
@@ -298,7 +299,7 @@ extension IntExtension on int {
     }
 
     final formatter = NumberFormat.currency(
-      locale: locale,
+      locale: locale ?? AppLocale.locale.languageCode,
       name: name ?? "",
       symbol: symbol,
       decimalDigits: maxDecimals,
@@ -360,13 +361,13 @@ extension DoubleExtension on double {
 
   /// Format `String` to decimal number system with nested currency.
   ///
-  /// by default [locale] has ['en_US'] value and 2 decimals max.
+  /// by default [locale] has deviceLanguage value and 2 decimals max.
   String formatAmount({
     String? name,
     String? symbol,
-    String? locale = 'en_US',
-    int maxDecimals = 3,
-    int minimumFractionDigits = 3,
+    String? locale,
+    int maxDecimals = Vars.maxDecimals,
+    int minimumFractionDigits = Vars.maxDecimals,
     String? customPattern = '#,##0.00 ¤',
     bool useUnitFormat = false,
   }) {
@@ -395,7 +396,7 @@ extension DoubleExtension on double {
     }
 
     final formatter = NumberFormat.currency(
-      locale: locale,
+      locale: locale ?? AppLocale.locale.languageCode,
       name: name ?? "",
       symbol: symbol,
       decimalDigits: maxDecimals,
@@ -597,18 +598,21 @@ extension StringExtension on String {
   /// value = '  3.14 \xA0'.toDouble(); // 3.14
   /// value = '0xFF'.toDouble(); // fallback ?? 0.0
   /// ```
-  double toDouble({double? fallback}) =>
-      double.tryParse(commasToDot()) ?? fallback ?? 0.0;
+  double toDouble({int? withMaxDecimals, double? fallback}) {
+    final value = double.tryParse(commasToDot()) ?? fallback ?? 0.0;
+
+    return withMaxDecimals != null ? value.maxDecimals(withMaxDecimals) : value;
+  }
 
   /// Format `String` to decimal number system with nested currency.
   ///
-  /// by default [locale] has ['en_US'] value and 2 decimals max.
+  /// by default [locale] has deviceLanguage value and 2 decimals max.
   String formatAmount({
     String? name,
     String? symbol,
-    String? locale = 'en_US',
-    int maxDecimals = 3,
-    int minimumFractionDigits = 3,
+    String? locale,
+    int maxDecimals = Vars.maxDecimals,
+    int minimumFractionDigits = Vars.maxDecimals,
     String? customPattern = '#,##0.00 ¤',
     bool useUnitFormat = false,
   }) {
@@ -637,7 +641,7 @@ extension StringExtension on String {
     }
 
     final formatter = NumberFormat.currency(
-      locale: locale,
+      locale: locale ?? AppLocale.locale.languageCode,
       name: name ?? "",
       symbol: symbol,
       decimalDigits: maxDecimals,
@@ -676,17 +680,6 @@ extension StringExtension on String {
     return value;
   }
 
-  /// Used to limit decimal characters in `double`
-  String maxDecimals(int max, {String locale = 'en_US'}) {
-    final splitted =
-            toString().split(LanguageList.get(locale).decimalSeparator),
-        decimalsFiltered = splitted.last.substring(
-            0, splitted.last.length > max ? max : splitted.last.length);
-    splitted.removeLast();
-    splitted.add(decimalsFiltered);
-    return splitted.join(LanguageList.get(locale).decimalSeparator);
-  }
-
   /// Converts first character from `string` in uppercase.
   String toCapitalize() =>
       "${this[0].toUpperCase()}${substring(1).toLowerCase()}";
@@ -706,15 +699,6 @@ extension StringExtension on String {
                 type: SnackbarType.info, duration: messageDuration)
             : null)
         .catchError((onError) => debugPrint("${onError.toString()} ⭕"));
-  }
-
-  /// Converts all commas inside `string` to dots
-  /// and vice versa
-  ///
-  /// if has multiple commas / dots will be removes and just stay the first.
-  String invertDecimal({String? locale = 'en_US'}) {
-    final decimalSeparator = LanguageList.get(locale).decimalSeparator;
-    return split(decimalSeparator).join(decimalSeparator == ',' ? '.' : ',');
   }
 
   /// Converts all commas inside `string` to dots
