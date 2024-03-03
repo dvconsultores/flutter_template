@@ -7,7 +7,7 @@ import 'package:flutter/scheduler.dart';
 import 'package:flutter_detextre4/painters/sky_painter.dart';
 import 'package:flutter_detextre4/painters/triangule_painter.dart';
 import 'package:flutter_detextre4/utils/config/theme.dart';
-import 'package:flutter_detextre4/utils/general/Variables.dart';
+import 'package:flutter_detextre4/utils/general/variables.dart';
 import 'package:liquid_pull_to_refresh/liquid_pull_to_refresh.dart' as liq;
 
 /// A `RefreshIndicator` with Custom app loader on refresh list.

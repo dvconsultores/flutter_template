@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_detextre4/main.dart';
 import 'package:flutter_detextre4/utils/config/theme.dart';
 import 'package:flutter_detextre4/utils/extensions/type_extensions.dart';
-import 'package:flutter_detextre4/utils/general/Variables.dart';
+import 'package:flutter_detextre4/utils/general/variables.dart';
 
 class SelectField<T> extends StatefulWidget {
   const SelectField({

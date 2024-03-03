@@ -1,7 +1,7 @@
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_detextre4/utils/config/theme.dart';
-import 'package:flutter_detextre4/utils/general/Variables.dart';
+import 'package:flutter_detextre4/utils/general/variables.dart';
 import 'package:flutter_detextre4/widgets/defaults/button.dart';
 import 'package:flutter_detextre4/widgets/defaults/snackbar.dart';
 import 'package:flutter_detextre4/widgets/sheets/card_widget.dart';

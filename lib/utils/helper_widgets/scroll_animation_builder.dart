@@ -1,34 +1,34 @@
 import 'package:flutter/material.dart';
 
-class ScrollAnimationOptions {
-  const ScrollAnimationOptions(
+class ScrollAnimatedOptions {
+  const ScrollAnimatedOptions(
     this.offset,
     this.scrollDirection,
   );
   final double offset;
-  final ScrollAnimationDirection scrollDirection;
+  final ScrollAnimatedDirection scrollDirection;
 }
 
-enum ScrollAnimationDirection {
+enum ScrollAnimatedDirection {
   leading,
   trailling;
 }
 
-class ScrollAnimationBuilder extends StatefulWidget {
-  const ScrollAnimationBuilder({
+class ScrollAnimatedBuilder extends StatefulWidget {
+  const ScrollAnimatedBuilder({
     super.key,
     required this.controller,
     required this.builder,
   });
   final ScrollController controller;
-  final Widget Function(BuildContext context, ScrollAnimationOptions options)
+  final Widget Function(BuildContext context, ScrollAnimatedOptions options)
       builder;
 
   @override
-  State<ScrollAnimationBuilder> createState() => _ScrollAnimationWidgetState();
+  State<ScrollAnimatedBuilder> createState() => _ScrollAnimatedWidgetState();
 }
 
-class _ScrollAnimationWidgetState extends State<ScrollAnimationBuilder> {
+class _ScrollAnimatedWidgetState extends State<ScrollAnimatedBuilder> {
   double lastOffsetProcessed = 0.0;
 
   @override
@@ -37,12 +37,12 @@ class _ScrollAnimationWidgetState extends State<ScrollAnimationBuilder> {
       builder: (context, snapshot) {
         final offset = widget.controller.offset,
             scrollDirection = offset < lastOffsetProcessed
-                ? ScrollAnimationDirection.leading
-                : ScrollAnimationDirection.trailling;
+                ? ScrollAnimatedDirection.leading
+                : ScrollAnimatedDirection.trailling;
 
         lastOffsetProcessed = offset;
 
         return widget.builder(
-            context, ScrollAnimationOptions(offset, scrollDirection));
+            context, ScrollAnimatedOptions(offset, scrollDirection));
       });
 }

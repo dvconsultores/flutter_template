@@ -5,7 +5,7 @@ import 'package:flutter/scheduler.dart';
 import 'package:flutter_detextre4/main.dart';
 import 'package:flutter_detextre4/main_provider.dart';
 import 'package:flutter_detextre4/utils/config/theme.dart';
-import 'package:flutter_detextre4/utils/general/Variables.dart';
+import 'package:flutter_detextre4/utils/general/variables.dart';
 import 'package:flutter_detextre4/utils/helper_widgets/will_pop_custom.dart';
 import 'package:flutter_detextre4/widgets/defaults/button.dart';
 import 'package:flutter_gap/flutter_gap.dart';

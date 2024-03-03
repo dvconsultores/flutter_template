@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_detextre4/utils/config/theme.dart';
 
 /// Used to storage a collection of global constant Vars.
 mixin Vars {
@@ -10,6 +11,8 @@ mixin Vars {
 
   // * Sizing
   static const mSize = Size(360, 690);
+
+  static const bottomNavbarHeight = 75.0;
 
   static double getBodyHeight(
     BuildContext context, {
@@ -41,6 +44,16 @@ mixin Vars {
       radius12 = 12,
       radius10 = 10;
 
+  // gradient
+  static LinearGradient getGradient(BuildContext context) => LinearGradient(
+          transform: const GradientRotation(-30),
+          tileMode: TileMode.mirror,
+          colors: [
+            ThemeApp.colors(context).tertiary.withOpacity(.2),
+            ThemeApp.colors(context).primary.withOpacity(.3),
+            ThemeApp.colors(context).tertiary.withOpacity(.2),
+          ]);
+
   // * others
   static const boxShadow1 = BoxShadow(
         color: Color.fromRGBO(172, 194, 212, 1),
@@ -59,6 +72,12 @@ mixin Vars {
         blurRadius: 3,
         spreadRadius: 0,
         color: Color.fromRGBO(0, 0, 0, 0.2),
+      ),
+      boxShadow4 = BoxShadow(
+        offset: Offset(0, 3),
+        blurRadius: 9,
+        spreadRadius: -3,
+        color: Color(0xffE15517),
       );
 
   static const double minInputHeight = 42, maxInputHeight = 50;

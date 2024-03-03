@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_detextre4/utils/general/Variables.dart';
+import 'package:flutter_detextre4/utils/general/variables.dart';
 import 'package:responsive_mixin_layout/responsive_mixin_layout.dart';
 
 // * Custom background styled

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_detextre4/utils/config/theme.dart';
-import 'package:flutter_detextre4/utils/general/Variables.dart';
+import 'package:flutter_detextre4/utils/general/variables.dart';
 
 class AppTooltip extends StatelessWidget {
   const AppTooltip({

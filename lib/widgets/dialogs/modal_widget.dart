@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_detextre4/utils/general/Variables.dart';
+import 'package:flutter_detextre4/utils/general/variables.dart';
 import 'package:flutter_detextre4/widgets/defaults/button.dart';
 import 'package:flutter_detextre4/widgets/defaults/snackbar.dart';
 import 'package:flutter_gap/flutter_gap.dart';

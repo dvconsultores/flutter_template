@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_detextre4/utils/config/config.dart';
 import 'package:flutter_detextre4/utils/config/theme.dart';
 import 'package:flutter_detextre4/utils/extensions/widget_extensions.dart';
-import 'package:flutter_detextre4/utils/general/Variables.dart';
+import 'package:flutter_detextre4/utils/general/variables.dart';
 import 'package:flutter_detextre4/widgets/defaults/button.dart';
 import 'package:flutter_detextre4/widgets/defaults/scaffold.dart';
 import 'package:flutter_detextre4/widgets/defaults/snackbar.dart';
