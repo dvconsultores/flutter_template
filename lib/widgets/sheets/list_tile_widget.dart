@@ -163,9 +163,14 @@ class _ListTileExpandedWidgetState extends State<ListTileExpandedWidget>
           title: widget.title,
           subtitle: widget.subTitle,
           trailing: widget.trailing ??
-              Icon(animController.isCompleted
-                  ? Icons.arrow_drop_up
-                  : Icons.arrow_drop_down),
+              AnimatedBuilder(
+                animation: animController,
+                builder: (context, child) => Icon(
+                  animController.isCompleted
+                      ? Icons.arrow_drop_up
+                      : Icons.arrow_drop_down,
+                ),
+              ),
         ),
       ),
       if (widget.desplegableBuilder != null)
