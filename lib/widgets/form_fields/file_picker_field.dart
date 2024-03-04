@@ -5,7 +5,7 @@ import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_detextre4/utils/config/theme.dart';
 import 'package:flutter_detextre4/utils/extensions/type_extensions.dart';
-import 'package:flutter_detextre4/utils/general/variables.dart';
+import 'package:flutter_detextre4/utils/general/Variables.dart';
 import 'package:flutter_detextre4/utils/helper_widgets/custom_animated_builder.dart';
 import 'package:flutter_gap/flutter_gap.dart';
 import 'package:path/path.dart';
@@ -60,9 +60,16 @@ class FilePickerField extends StatefulWidget {
   State<FilePickerField> createState() => _FilePickerFieldState();
 }
 
-class _FilePickerFieldState extends State<FilePickerField> {
+class _FilePickerFieldState extends State<FilePickerField>
+    with SingleTickerProviderStateMixin {
   FormFieldState<File>? formState;
-  bool isOpen = false;
+
+  late final AnimationController animation;
+
+  final localController = ValueNotifier<File?>(null);
+
+  ValueNotifier<File?> get getController =>
+      widget.controller ?? localController;
 
   final docsAllowed = ["pdf", "doc"],
       imagesAllowed = ["png", "jpg", "bmp", "webp", "tiff"];
@@ -70,7 +77,7 @@ class _FilePickerFieldState extends State<FilePickerField> {
   String? fileExtension;
 
   Future<void> pickFile() async {
-    setState(() => isOpen = true);
+    animation.forward();
 
     final allowedExtensions = [...docsAllowed, ...imagesAllowed],
         result = await FilePicker.platform.pickFiles(
@@ -83,17 +90,12 @@ class _FilePickerFieldState extends State<FilePickerField> {
     if (platformFile != null &&
         allowedExtensions.contains(platformFile.extension)) {
       fileExtension = platformFile.extension;
-      formState!.didChange(File(platformFile.path!));
+
+      animation.reverse();
+      getController.value = File(platformFile.path!);
     } else {
-      formState!.didChange(formState?.value);
-    }
-
-    isOpen = false;
-    setState(() {});
-
-    if (widget.onChanged != null) {
-      EasyDebounce.debounce("onChanged", Durations.short4,
-          () => widget.onChanged!(formState!.value));
+      animation.reverse();
+      getController.value = formState?.value;
     }
   }
 
@@ -107,17 +109,27 @@ class _FilePickerFieldState extends State<FilePickerField> {
     }
   }
 
-  void initNotifierListener() => widget.controller?.addListener(() {
-        if (widget.controller!.value == null ||
-            formState!.value == widget.controller!.value) return;
+  void onListen() {
+    if (formState!.value == getController.value) return;
 
-        formState!.didChange(widget.controller!.value);
-      });
+    formState!.didChange(getController.value);
+
+    if (widget.onChanged != null) widget.onChanged!(formState!.value);
+  }
 
   @override
   void initState() {
-    initNotifierListener();
+    animation = AnimationController(vsync: this, duration: Durations.short1);
+    getController.addListener(onListen);
     super.initState();
+  }
+
+  @override
+  void dispose() {
+    animation.dispose();
+    getController.removeListener(onListen);
+    localController.dispose();
+    super.dispose();
   }
 
   @override
@@ -154,99 +166,113 @@ class _FilePickerFieldState extends State<FilePickerField> {
           child:
               Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
             // field
-            GestureDetector(
-              onTap: widget.disabled ? null : pickFile,
-              child: Container(
-                width: widget.width,
-                height: widget.height,
-                clipBehavior: Clip.antiAlias,
-                decoration: BoxDecoration(
-                  color: ThemeApp.colors(context).background,
-                  borderRadius:
-                      const BorderRadius.all(Radius.circular(Vars.radius15)),
-                  border: Border.fromBorderSide(
-                    widget.disabled
-                        ? widget.borderDisabled ??
-                            BorderSide(
-                                width: 0,
-                                color: Theme.of(context).disabledColor)
-                        : isOpen
-                            ? widget.borderFocused ??
-                                BorderSide(color: Theme.of(context).focusColor)
-                            : widget.border ??
-                                const BorderSide(
-                                    width: 0, color: Colors.transparent),
-                  ),
-                  boxShadow: widget.boxShadow,
-                ),
-                child: Row(children: [
-                  Expanded(
+            AnimatedBuilder(
+                animation: animation,
+                builder: (context, child) {
+                  final isOpen = animation.isCompleted;
+
+                  return GestureDetector(
+                    onTap: widget.disabled ? null : pickFile,
                     child: Container(
-                      height: double.maxFinite,
+                      width: widget.width,
+                      height: widget.height,
                       clipBehavior: Clip.antiAlias,
                       decoration: BoxDecoration(
-                        color: state.value != null
-                            ? ThemeApp.colors(context).label.withAlpha(180)
-                            : ThemeApp.colors(context).label.withAlpha(100),
-                        borderRadius: widget.borderRadius.subtract(
-                          const BorderRadius.all(Radius.circular(4)),
+                        color: ThemeApp.colors(context).background,
+                        borderRadius: const BorderRadius.all(
+                            Radius.circular(Vars.radius15)),
+                        border: Border.fromBorderSide(
+                          widget.disabled
+                              ? widget.borderDisabled ??
+                                  BorderSide(
+                                      width: 0,
+                                      color: Theme.of(context).disabledColor)
+                              : isOpen
+                                  ? widget.borderFocused ??
+                                      BorderSide(
+                                          color: Theme.of(context).focusColor)
+                                  : widget.border ??
+                                      const BorderSide(
+                                          width: 0, color: Colors.transparent),
                         ),
+                        boxShadow: widget.boxShadow,
                       ),
-                      child: Stack(alignment: Alignment.center, children: [
-                        if (state.value != null) ...[
-                          if (imagesAllowed.contains(fileExtension!))
-                            Image.file(state.value!, fit: BoxFit.contain)
-                          else
-                            Transform.translate(
-                              offset: const Offset(-4, 0),
-                              child: FractionallySizedBox(
-                                widthFactor: .9,
-                                child: Row(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                      const Expanded(
-                                        child: Icon(Icons.file_copy_rounded),
-                                      ),
-                                      Expanded(
-                                        flex: 6,
-                                        child: Text(
-                                          basename(state.value!.path)
-                                              .split(".$fileExtension")
-                                              .first,
-                                          textAlign: TextAlign.right,
-                                          overflow: TextOverflow.ellipsis,
-                                        ),
-                                      ),
-                                      Text(".$fileExtension")
-                                    ]),
+                      child: Row(children: [
+                        Expanded(
+                          child: Container(
+                            height: double.maxFinite,
+                            clipBehavior: Clip.antiAlias,
+                            decoration: BoxDecoration(
+                              color: state.value != null
+                                  ? ThemeApp.colors(context)
+                                      .label
+                                      .withAlpha(180)
+                                  : ThemeApp.colors(context)
+                                      .label
+                                      .withAlpha(100),
+                              borderRadius: widget.borderRadius.subtract(
+                                const BorderRadius.all(Radius.circular(4)),
                               ),
                             ),
-                          Positioned(
-                              right: 0,
-                              bottom: 0,
-                              child: Chip(
-                                visualDensity: VisualDensity.compact,
-                                label: Text(
-                                  state.value!.lengthSync().formatBytes(),
-                                  textAlign: TextAlign.center,
-                                  style: ps.copyWith(fontSize: 13),
-                                ),
-                              ))
-                        ] else if (widget.placeholder != null ||
-                            widget.placeholderText != null)
-                          widget.placeholder ?? placeholderWidget,
+                            child:
+                                Stack(alignment: Alignment.center, children: [
+                              if (state.value != null) ...[
+                                if (imagesAllowed.contains(fileExtension!))
+                                  Image.file(state.value!, fit: BoxFit.contain)
+                                else
+                                  Transform.translate(
+                                    offset: const Offset(-4, 0),
+                                    child: FractionallySizedBox(
+                                      widthFactor: .9,
+                                      child: Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.center,
+                                          children: [
+                                            const Expanded(
+                                              child:
+                                                  Icon(Icons.file_copy_rounded),
+                                            ),
+                                            Expanded(
+                                              flex: 6,
+                                              child: Text(
+                                                basename(state.value!.path)
+                                                    .split(".$fileExtension")
+                                                    .first,
+                                                textAlign: TextAlign.right,
+                                                overflow: TextOverflow.ellipsis,
+                                              ),
+                                            ),
+                                            Text(".$fileExtension")
+                                          ]),
+                                    ),
+                                  ),
+                                Positioned(
+                                    right: 0,
+                                    bottom: 0,
+                                    child: Chip(
+                                      visualDensity: VisualDensity.compact,
+                                      label: Text(
+                                        state.value!.lengthSync().formatBytes(),
+                                        textAlign: TextAlign.center,
+                                        style: ps.copyWith(fontSize: 13),
+                                      ),
+                                    ))
+                              ] else if (widget.placeholder != null ||
+                                  widget.placeholderText != null)
+                                widget.placeholder ?? placeholderWidget,
+                            ]),
+                          ),
+                        ),
+                        if (state.value != null)
+                          IconButton(
+                            onPressed: clear,
+                            visualDensity: VisualDensity.compact,
+                            icon: const Icon(Icons.close_sharp),
+                          )
                       ]),
                     ),
-                  ),
-                  if (state.value != null)
-                    IconButton(
-                      onPressed: clear,
-                      visualDensity: VisualDensity.compact,
-                      icon: const Icon(Icons.close_sharp),
-                    )
-                ]),
-              ),
-            ),
+                  );
+                }),
 
             // error text
             if (state.hasError && (widget.errorText?.isNotEmpty ?? true)) ...[

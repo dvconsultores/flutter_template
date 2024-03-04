@@ -1,8 +1,7 @@
 import 'package:collection/collection.dart';
-import 'package:easy_debounce/easy_debounce.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_detextre4/utils/config/theme.dart';
-import 'package:flutter_detextre4/utils/general/variables.dart';
+import 'package:flutter_detextre4/utils/general/Variables.dart';
 import 'package:flutter_detextre4/utils/helper_widgets/custom_animated_builder.dart';
 import 'package:flutter_detextre4/widgets/sheets/bottom_sheet_card.dart';
 import 'package:flutter_gap/flutter_gap.dart';
@@ -96,12 +95,17 @@ class BottomSelectField<T> extends StatefulWidget {
 class _BottomSelectFieldState<T> extends State<BottomSelectField<T>>
     with SingleTickerProviderStateMixin {
   FormFieldState<T>? formState;
-  bool isOpen = false;
+
+  late final AnimationController animation;
+
+  final localController = ValueNotifier<T?>(null);
+
+  ValueNotifier<T?> get getController => widget.controller ?? localController;
 
   Future<void> onTap() async {
     if (widget.loading) return;
 
-    setState(() => isOpen = true);
+    animation.forward();
 
     final item = await BottomSheetList.showModal<T>(
       context,
@@ -112,27 +116,31 @@ class _BottomSelectFieldState<T> extends State<BottomSelectField<T>>
       minChildSize: widget.dropdownMinChildSize,
     );
 
-    formState!.didChange(item?.value ?? formState!.value);
-    isOpen = false;
-    if (mounted) setState(() {});
-
-    if (widget.onChanged != null) {
-      EasyDebounce.debounce("onChanged", Durations.short4,
-          () => widget.onChanged!(formState!.value));
-    }
+    getController.value = item?.value ?? formState!.value;
+    animation.reverse();
   }
 
-  void initNotifierListener() => widget.controller?.addListener(() {
-        if (widget.controller!.value == null ||
-            formState!.value == widget.controller!.value) return;
+  void onListen() {
+    if (formState!.value == getController.value) return;
 
-        formState!.didChange(widget.controller!.value);
-      });
+    formState!.didChange(getController.value);
+
+    if (widget.onChanged != null) widget.onChanged!(formState!.value);
+  }
 
   @override
   void initState() {
-    initNotifierListener();
+    animation = AnimationController(vsync: this, duration: Durations.short1);
+    getController.addListener(onListen);
     super.initState();
+  }
+
+  @override
+  void dispose() {
+    animation.dispose();
+    getController.removeListener(onListen);
+    localController.dispose();
+    super.dispose();
   }
 
   @override
@@ -191,51 +199,60 @@ class _BottomSelectFieldState<T> extends State<BottomSelectField<T>>
           child:
               Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
             // field
-            GestureDetector(
-              onTap: onTap,
-              child: Container(
-                  width: widget.width,
-                  height: widget.height ??
-                      (widget.dense
-                          ? Vars.minInputHeight
-                          : Vars.maxInputHeight),
-                  padding: widget.padding,
-                  decoration: widget.decoration ??
-                      BoxDecoration(
-                          borderRadius: widget.borderRadius,
-                          color: widget.bgColor ??
-                              Theme.of(context).colorScheme.background,
-                          boxShadow: widget.boxShadow ?? [Vars.boxShadow2],
-                          border: Border.fromBorderSide(
-                            widget.disabled
-                                ? widget.borderDisabled ??
-                                    const BorderSide(color: Colors.transparent)
-                                : isOpen
-                                    ? widget.borderFocused ??
-                                        BorderSide(
-                                            color: Theme.of(context).focusColor)
-                                    : widget.border ??
-                                        const BorderSide(
-                                            color: Colors.transparent),
-                          )),
-                  child: Row(children: [
-                    if (widget.leading != null) ...[
-                      widget.leading!,
-                      Gap(widget.gap).row,
-                    ],
-                    widget.isExpanded
-                        ? Expanded(child: contentWidget)
-                        : contentWidget,
-                    if (!widget.isExpanded) const Spacer(),
-                    if (!widget.hideTrailing) ...[
-                      Gap(widget.gap).row,
-                      widget.trailing ??
-                          (isOpen
-                              ? const Icon(Icons.arrow_drop_up_rounded)
-                              : const Icon(Icons.arrow_drop_down_rounded))
-                    ]
-                  ])),
-            ),
+            AnimatedBuilder(
+                animation: animation,
+                builder: (context, child) {
+                  final isOpen = animation.isCompleted;
+
+                  return GestureDetector(
+                    onTap: onTap,
+                    child: Container(
+                        width: widget.width,
+                        height: widget.height ??
+                            (widget.dense
+                                ? Vars.minInputHeight
+                                : Vars.maxInputHeight),
+                        padding: widget.padding,
+                        decoration: widget.decoration ??
+                            BoxDecoration(
+                                borderRadius: widget.borderRadius,
+                                color: widget.bgColor ??
+                                    Theme.of(context).colorScheme.background,
+                                boxShadow:
+                                    widget.boxShadow ?? [Vars.boxShadow2],
+                                border: Border.fromBorderSide(
+                                  widget.disabled
+                                      ? widget.borderDisabled ??
+                                          const BorderSide(
+                                              color: Colors.transparent)
+                                      : isOpen
+                                          ? widget.borderFocused ??
+                                              BorderSide(
+                                                  color: Theme.of(context)
+                                                      .focusColor)
+                                          : widget.border ??
+                                              const BorderSide(
+                                                  color: Colors.transparent),
+                                )),
+                        child: Row(children: [
+                          if (widget.leading != null) ...[
+                            widget.leading!,
+                            Gap(widget.gap).row,
+                          ],
+                          widget.isExpanded
+                              ? Expanded(child: contentWidget)
+                              : contentWidget,
+                          if (!widget.isExpanded) const Spacer(),
+                          if (!widget.hideTrailing) ...[
+                            Gap(widget.gap).row,
+                            widget.trailing ??
+                                (isOpen
+                                    ? const Icon(Icons.arrow_drop_up_rounded)
+                                    : const Icon(Icons.arrow_drop_down_rounded))
+                          ]
+                        ])),
+                  );
+                }),
 
             // error text
             if (state.hasError && (widget.errorText?.isNotEmpty ?? true)) ...[
