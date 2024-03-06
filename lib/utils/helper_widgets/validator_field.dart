@@ -94,7 +94,9 @@ class ValidatorField {
   String? maxFileLength([int bytes = 3000000]) {
     final fileLength = (value as File?)?.lengthSync() ?? 0;
 
-    return fileLength > bytes ? "maximum file size is 3mb" : null;
+    return fileLength > bytes
+        ? "maximum file size is ${bytes.formatBytes()}"
+        : null;
   }
 
   String? email() => RegExp(r'^[a-zA-Z\-\_0-9.]+@[a-zA-Z0-9]+\.[a-zA-Z]+')
