@@ -81,4 +81,10 @@ mixin Vars {
       );
 
   static const double minInputHeight = 42, maxInputHeight = 50;
+
+  // RegExps
+  static final nicknameRegExp = RegExp(r'^[a-zA-ZñÑ0-9_-]{5,12}$'),
+      emailRegExp = RegExp(r'^[a-zA-Z\-\_0-9.]+@[a-zA-Z0-9]+\.[a-zA-Z]+'),
+      passwordRegExp = RegExp(
+          r'^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%&*-]).{6,}$');
 }
