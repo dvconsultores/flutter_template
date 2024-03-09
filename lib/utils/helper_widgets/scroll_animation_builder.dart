@@ -19,10 +19,13 @@ class ScrollAnimatedBuilder extends StatefulWidget {
     super.key,
     required this.controller,
     required this.builder,
+    this.child,
   });
   final ScrollController controller;
-  final Widget Function(BuildContext context, ScrollAnimatedOptions options)
+  final Widget Function(
+          BuildContext context, Widget? child, ScrollAnimatedOptions options)
       builder;
+  final Widget? child;
 
   @override
   State<ScrollAnimatedBuilder> createState() => _ScrollAnimatedWidgetState();
@@ -43,6 +46,9 @@ class _ScrollAnimatedWidgetState extends State<ScrollAnimatedBuilder> {
         lastOffsetProcessed = offset;
 
         return widget.builder(
-            context, ScrollAnimatedOptions(offset, scrollDirection));
+          context,
+          widget.child,
+          ScrollAnimatedOptions(offset, scrollDirection),
+        );
       });
 }

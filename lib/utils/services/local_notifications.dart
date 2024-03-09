@@ -33,6 +33,16 @@ class LocalNotifications {
   static final flutterLocalNotificationsPlugin =
       FlutterLocalNotificationsPlugin();
 
+  /// Channels registered
+  static const channelId = 'push_notifications',
+      channelName = 'Push notifications',
+      channelDescription =
+          'This channel is used for firebase push notifications',
+      campaignChannelId = 'campaign_notifications',
+      campaignChannelName = 'Campaign notifications',
+      campaignChannelDescription =
+          'This channel is used for firebase campaign notifications';
+
   static Future<void> initializeNotifications() async {
     // initialise the plugin.
     // app_icon needs to be a added as a drawable resource to the Android head project
@@ -93,6 +103,8 @@ class LocalNotifications {
     String? avatarUrl,
     String? summaryText,
     String? payload,
+    FLNClickAction? clickAction,
+    bool isCampaign = false,
   }) async {
     final uniqueId = UniqueKey();
 
@@ -101,33 +113,88 @@ class LocalNotifications {
       title,
       body,
       NotificationDetails(
-        android: await _androidPlatformChannelSpecifics(
+        android: await androidPlatformChannelSpecifics(
           title: title!,
           body: body!,
           imageUrl: imageUrl,
           avatarUrl: avatarUrl,
           summaryText: summaryText,
+          clickAction: clickAction,
+          isCampaign: isCampaign,
         ),
-        iOS: await _iosPlatformChannelSpecifics(
+        iOS: await iosPlatformChannelSpecifics(
           imageUrl: imageUrl,
-          fileName: uniqueId.hashCode.toString(),
+          fileName: (summaryText ?? title).hashCode.toString(),
+          threadIdentifier: summaryText.hashCode.toString(),
+          isCampaign: isCampaign,
         ),
       ),
       payload: payload,
     );
+
+    if (Platform.isAndroid) {
+      await showGroupNotification(
+        summaryText: summaryText,
+        isCampaign: isCampaign,
+      );
+    }
   }
 
-  static Future<AndroidNotificationDetails?> _androidPlatformChannelSpecifics({
+  static Future<void> showGroupNotification({
+    String? summaryText,
+    bool isCampaign = false,
+  }) async {
+    final groupKey = summaryText.hashCode.toString(),
+        activeNotifications = await flutterLocalNotificationsPlugin
+            .resolvePlatformSpecificImplementation<
+                AndroidFlutterLocalNotificationsPlugin>()
+            ?.getActiveNotifications(),
+        groupNotifications =
+            activeNotifications?.where((e) => e.groupKey == groupKey);
+
+    final styleInformation = InboxStyleInformation(
+      groupNotifications!.map((e) => e.title!).toList(),
+      summaryText: "${groupNotifications.length - 1} $summaryText",
+    );
+
+    final groupNotificationDetails = isCampaign
+        ? AndroidNotificationDetails(
+            campaignChannelId,
+            campaignChannelName,
+            channelDescription: campaignChannelDescription,
+            styleInformation: styleInformation,
+            setAsGroupSummary: true,
+            groupKey: groupKey,
+            // onlyAlertOnce: true,
+          )
+        : AndroidNotificationDetails(
+            channelId,
+            channelName,
+            channelDescription: channelDescription,
+            styleInformation: styleInformation,
+            setAsGroupSummary: true,
+            groupKey: groupKey,
+            // onlyAlertOnce: true,
+          );
+
+    await flutterLocalNotificationsPlugin.show(
+        0, '', '', NotificationDetails(android: groupNotificationDetails));
+  }
+
+  static Future<AndroidNotificationDetails?> androidPlatformChannelSpecifics({
     required String title,
     required String body,
     String? imageUrl,
     String? avatarUrl,
     String? summaryText,
+    FLNClickAction? clickAction,
+    bool isCampaign = false,
   }) async {
     if (!Platform.isAndroid) return null;
 
     final avatarIcon = await buildAndroidBitmap(avatarUrl),
-        imageIcon = await buildAndroidBitmap(imageUrl);
+        imageIcon = await buildAndroidBitmap(imageUrl),
+        groupKey = summaryText.hashCode.toString();
 
     // Create information style
     final styleInformation = imageIcon != null
@@ -144,37 +211,53 @@ class LocalNotifications {
 
         // Create notification actions
         notificationActions = <AndroidNotificationAction>[
-          // if (message.data['click_action'] == FLNClickAction.chat.name)
-          //   AndroidNotificationAction(
-          //     FLNActionId.answerAction.name,
-          //     "Responder",
-          //     showsUserInterface: true,
-          //     inputs: [
-          //       const AndroidNotificationActionInput(
-          //           label: "Escribe una respuesta..")
-          //     ],
-          //   )
+          if (clickAction == FLNClickAction.chat)
+            AndroidNotificationAction(
+                FLNActionId.answerAction.name, "Responder",
+                showsUserInterface: true,
+                inputs: [
+                  const AndroidNotificationActionInput(
+                      label: "Escribe una respuesta..")
+                ])
         ];
 
-    return AndroidNotificationDetails(
-      'push_notifications',
-      'Push notifications',
-      channelDescription:
-          'This channel is used for firebase push notifications',
-      color: const Color(0xFF02A6D0),
-      icon: '@app_icon',
-      largeIcon: avatarIcon,
-      priority: Priority.high,
-      importance: Importance.high,
-      styleInformation: styleInformation,
-      actions: notificationActions,
-    );
+    return isCampaign
+        ? AndroidNotificationDetails(
+            campaignChannelId,
+            campaignChannelName,
+            channelDescription: campaignChannelDescription,
+            color: const Color(0xFF02A6D0),
+            icon: '@app_icon',
+            largeIcon: avatarIcon,
+            priority: Priority.low,
+            importance: Importance.low,
+            styleInformation: styleInformation,
+            actions: notificationActions,
+            groupAlertBehavior: GroupAlertBehavior.children,
+            groupKey: groupKey,
+          )
+        : AndroidNotificationDetails(
+            channelId,
+            channelName,
+            channelDescription: channelDescription,
+            color: const Color(0xFF02A6D0),
+            icon: '@app_icon',
+            largeIcon: avatarIcon,
+            priority: Priority.high,
+            importance: Importance.high,
+            styleInformation: styleInformation,
+            actions: notificationActions,
+            groupAlertBehavior: GroupAlertBehavior.children,
+            groupKey: groupKey,
+          );
   }
 
   // TODO here testing this
-  static Future<DarwinNotificationDetails?> _iosPlatformChannelSpecifics({
+  static Future<DarwinNotificationDetails?> iosPlatformChannelSpecifics({
     String? imageUrl,
     String fileName = 'image',
+    String? threadIdentifier,
+    bool isCampaign = false,
   }) async {
     if (!Platform.isIOS) return null;
 
@@ -183,14 +266,24 @@ class LocalNotifications {
             ? [DarwinNotificationAttachment(savedImage)]
             : null;
 
-    return DarwinNotificationDetails(
-      categoryIdentifier: 'push_notifications',
-      threadIdentifier: 'Push notifications',
-      presentAlert: true,
-      presentSound: true,
-      presentBanner: true,
-      interruptionLevel: InterruptionLevel.active,
-      attachments: attachments,
-    );
+    return isCampaign
+        ? DarwinNotificationDetails(
+            categoryIdentifier: campaignChannelId,
+            presentAlert: true,
+            presentSound: true,
+            presentBanner: true,
+            interruptionLevel: InterruptionLevel.passive,
+            attachments: attachments,
+            threadIdentifier: threadIdentifier,
+          )
+        : DarwinNotificationDetails(
+            categoryIdentifier: channelId,
+            presentAlert: true,
+            presentSound: true,
+            presentBanner: true,
+            interruptionLevel: InterruptionLevel.active,
+            attachments: attachments,
+            threadIdentifier: threadIdentifier,
+          );
   }
 }
