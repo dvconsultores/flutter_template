@@ -4,8 +4,10 @@ import 'dart:io' show Directory, File, FileMode;
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_detextre4/main.dart';
+import 'package:flutter_detextre4/utils/extensions/type_extensions.dart';
 import 'package:flutter_detextre4/widgets/dialogs/system_alert_widget.dart';
 import 'package:flutter_gap/flutter_gap.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:gallery_saver/gallery_saver.dart';
 import 'package:http/http.dart' show Response, get;
 import 'package:launch_review/launch_review.dart';
@@ -15,11 +17,20 @@ import 'package:share_plus/share_plus.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:version/version.dart';
 
+Future<ByteArrayAndroidBitmap?> buildAndroidBitmap(String? imageUrl) async {
+  if (imageUrl.hasNotValue) return null;
+
+  final byteData = await NetworkAssetBundle(Uri.parse(imageUrl!)).load(""),
+      bytes = byteData.buffer.asUint8List(),
+      base64 = base64Encode(bytes);
+  return ByteArrayAndroidBitmap.fromBase64String(base64);
+}
+
 Future<String?> downloadAndSavePicture(String? url, String fileName) async {
-  if (url == null) return null;
+  if (url.hasNotValue) return null;
   final Directory directory = await getApplicationDocumentsDirectory();
   final String filePath = '${directory.path}/$fileName';
-  final Response response = await get(Uri.parse(url));
+  final Response response = await get(Uri.parse(url!));
   final File file = File(filePath);
   await file.writeAsBytes(response.bodyBytes);
   return filePath;

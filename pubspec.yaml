@@ -67,6 +67,7 @@ dependencies:
   flutter_screenutil: ^5.8.4
   url_launcher: ^6.1.12
   external_app_launcher: ^3.1.0
+  flutter_local_notifications: ^16.3.3
   # ? -- web3 packages ⬇️ --
   # pointycastle: ^3.7.3
   # encrypt: ^5.0.1
