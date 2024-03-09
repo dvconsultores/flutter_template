@@ -734,6 +734,9 @@ extension StringExtension on String {
       return splitted.join(",");
     }
   }
+
+  /// Remove query parameters from any url
+  String removeQuery() => split('?')[0];
 }
 
 // ? Unused
