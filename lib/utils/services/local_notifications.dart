@@ -5,6 +5,7 @@ import 'dart:io' show Platform;
 import 'package:collection/collection.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_detextre4/utils/extensions/type_extensions.dart';
 import 'package:flutter_detextre4/utils/general/functions.dart';
 import 'package:flutter_detextre4/utils/services/local_data/secure_storage_service.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
@@ -154,7 +155,8 @@ class LocalNotifications {
 
     final styleInformation = InboxStyleInformation(
       groupNotifications!.map((e) => e.title!).toList(),
-      summaryText: "${groupNotifications.length - 1} $summaryText",
+      summaryText:
+          "${groupNotifications.length - 1} ${summaryText ?? 'Updates'}",
     );
 
     final groupNotificationDetails = isCampaign
@@ -163,8 +165,8 @@ class LocalNotifications {
             campaignChannelName,
             channelDescription: campaignChannelDescription,
             styleInformation: styleInformation,
-            setAsGroupSummary: true,
             groupKey: groupKey,
+            setAsGroupSummary: true,
             // onlyAlertOnce: true,
           )
         : AndroidNotificationDetails(
@@ -172,13 +174,13 @@ class LocalNotifications {
             channelName,
             channelDescription: channelDescription,
             styleInformation: styleInformation,
-            setAsGroupSummary: true,
             groupKey: groupKey,
+            setAsGroupSummary: true,
             // onlyAlertOnce: true,
           );
 
-    await flutterLocalNotificationsPlugin.show(
-        0, '', '', NotificationDetails(android: groupNotificationDetails));
+    await flutterLocalNotificationsPlugin.show(groupKey.toInt(), '', '',
+        NotificationDetails(android: groupNotificationDetails));
   }
 
   static Future<AndroidNotificationDetails?> androidPlatformChannelSpecifics({
@@ -234,7 +236,6 @@ class LocalNotifications {
             importance: Importance.low,
             styleInformation: styleInformation,
             actions: notificationActions,
-            groupAlertBehavior: GroupAlertBehavior.children,
             groupKey: groupKey,
           )
         : AndroidNotificationDetails(
@@ -248,7 +249,6 @@ class LocalNotifications {
             importance: Importance.high,
             styleInformation: styleInformation,
             actions: notificationActions,
-            groupAlertBehavior: GroupAlertBehavior.children,
             groupKey: groupKey,
           );
   }
