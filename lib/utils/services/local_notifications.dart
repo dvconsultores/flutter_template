@@ -192,7 +192,8 @@ class LocalNotifications {
   }) async {
     if (!Platform.isAndroid) return null;
 
-    final avatarIcon = await buildAndroidBitmap(avatarUrl),
+    final avatarIcon =
+            await buildAndroidBitmap(avatarUrl, size: const Size(50, 50)),
         imageIcon = await buildAndroidBitmap(imageUrl),
         groupKey = summaryText.hashCode.toString();
 

@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:io' show Directory, File, FileMode;
+import 'dart:ui' as ui;
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -17,13 +18,30 @@ import 'package:share_plus/share_plus.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:version/version.dart';
 
-Future<ByteArrayAndroidBitmap?> buildAndroidBitmap(String? imageUrl) async {
-  if (imageUrl.hasNotValue) return null;
+Future<ByteArrayAndroidBitmap?> buildAndroidBitmap(
+  String? imageUrl, {
+  Size? size,
+}) async {
+  if (imageUrl == null) return null;
 
-  final byteData = await NetworkAssetBundle(Uri.parse(imageUrl!)).load(""),
-      bytes = byteData.buffer.asUint8List(),
-      base64 = base64Encode(bytes);
-  return ByteArrayAndroidBitmap.fromBase64String(base64);
+  final byteData = await NetworkAssetBundle(Uri.parse(imageUrl)).load("");
+  var bytes = byteData.buffer.asUint8List();
+
+  if (size != null) {
+    final codec = await ui.instantiateImageCodec(
+          bytes,
+          targetWidth: size.width.toInt(),
+          targetHeight: size.height.toInt(),
+          allowUpscaling: true,
+        ),
+        frame = await codec.getNextFrame();
+
+    bytes = (await frame.image.toByteData(format: ui.ImageByteFormat.png))!
+        .buffer
+        .asUint8List();
+  }
+
+  return ByteArrayAndroidBitmap.fromBase64String(base64Encode(bytes));
 }
 
 Future<String?> downloadAndSavePicture(String? url, String fileName) async {
