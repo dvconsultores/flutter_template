@@ -21,7 +21,8 @@ class TextDecimal extends StatelessWidget {
     this.defaultDecimalRedux = 2,
     this.recognizer,
     this.decimalRecognizer,
-    this.useUnitFormat = false,
+    this.compact = false,
+    this.textAlign,
   });
   final String value;
   final String? symbol;
@@ -34,11 +35,13 @@ class TextDecimal extends StatelessWidget {
   final int defaultDecimalRedux;
   final GestureRecognizer? recognizer;
   final GestureRecognizer? decimalRecognizer;
-  final bool useUnitFormat;
+  final bool compact;
+  final TextAlign? textAlign;
 
   @override
   Widget build(BuildContext context) {
     const defaultDecimalsSize = 14.0;
+
     final defaultLocale = AppLocale.locale.languageCode,
         decimalSeparator =
             LanguageList.get(locale ?? defaultLocale).decimalSeparator,
@@ -48,29 +51,32 @@ class TextDecimal extends StatelessWidget {
           locale: locale ?? defaultLocale,
           maxDecimals: maxDecimals,
           minimumFractionDigits: minimumFractionDigits,
-          useUnitFormat: useUnitFormat,
+          compact: compact,
         ),
         values = formatted.split(decimalSeparator),
         integers = values.first,
         decimals = values.elementAtOrNull(1);
 
-    return Text.rich(TextSpan(
-      text: integers,
-      children: [
-        TextSpan(
-          text: decimals != null ? "$decimalSeparator$decimals" : null,
-          recognizer: decimalRecognizer,
-          style: styleDecimals ??
-              style?.copyWith(
-                fontSize: style!.fontSize != null
-                    ? style!.fontSize! - defaultDecimalRedux
-                    : defaultDecimalsSize,
-              ) ??
-              const TextStyle(fontSize: defaultDecimalsSize),
-        ),
-      ],
-      recognizer: recognizer,
-      style: style,
-    ));
+    return Text.rich(
+      TextSpan(
+        text: integers,
+        children: [
+          TextSpan(
+            text: decimals != null ? "$decimalSeparator$decimals" : null,
+            recognizer: decimalRecognizer,
+            style: styleDecimals ??
+                style?.copyWith(
+                  fontSize: style!.fontSize != null
+                      ? style!.fontSize! - defaultDecimalRedux
+                      : defaultDecimalsSize,
+                ) ??
+                const TextStyle(fontSize: defaultDecimalsSize),
+          ),
+        ],
+        recognizer: recognizer,
+        style: style,
+      ),
+      textAlign: textAlign,
+    );
   }
 }

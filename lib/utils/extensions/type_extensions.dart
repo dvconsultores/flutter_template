@@ -262,9 +262,9 @@ extension IntExtension on int {
     return '${(this / math.pow(1024, i)).toStringAsFixed(decimals)} ${suffixes[i]}';
   }
 
-  /// Format `String` to decimal number system with nested currency.
+  /// Format `int` to decimal number system with nested currency.
   ///
-  /// by default [locale] has deviceLanguage value and 2 decimals max.
+  /// by default [locale] has deviceLanguage value and 3 decimals max.
   String formatAmount({
     String? name,
     String? symbol,
@@ -272,70 +272,33 @@ extension IntExtension on int {
     int maxDecimals = Vars.maxDecimals,
     int minimumFractionDigits = Vars.maxDecimals,
     String? customPattern = '#,##0.00 ¤',
-    bool useUnitFormat = false,
+    bool compact = false,
   }) {
     // Parse the string as a double. If parsing fails, use 0.0.
     double value = double.tryParse(toString().replaceAll(",", "")) ?? 0.0;
 
-    // If unit formatting is enabled...
-    if (useUnitFormat) {
-      maxDecimals = 1;
-      minimumFractionDigits = 0;
-      String unit = '';
+    late NumberFormat formatter;
 
-      if (value >= 1000000000) {
-        unit = 'b';
-        value /= 1000000000;
-      } else if (value >= 1000000) {
-        unit = 'm';
-        value /= 1000000;
-      } else if (value >= 1000) {
-        unit = 'k';
-        value /= 1000;
-      }
+    if (compact) {
+      formatter = NumberFormat.compactCurrency(
+        locale: "en_US",
+        name: name ?? "",
+        symbol: symbol,
+        decimalDigits: maxDecimals,
+      );
+    } else {
+      formatter = NumberFormat.currency(
+        locale: locale ?? AppLocale.locale.languageCode,
+        name: name ?? "",
+        symbol: symbol,
+        decimalDigits: maxDecimals,
+        customPattern: customPattern,
+      );
 
-      customPattern = customPattern!.replaceAllMapped(
-          RegExp(r'0\.0'), (match) => '0.${"0" * maxDecimals}$unit');
+      formatter.minimumFractionDigits = minimumFractionDigits;
     }
 
-    final formatter = NumberFormat.currency(
-      locale: locale ?? AppLocale.locale.languageCode,
-      name: name ?? "",
-      symbol: symbol,
-      decimalDigits: maxDecimals,
-      customPattern: customPattern,
-    );
-    formatter.minimumFractionDigits = minimumFractionDigits;
     return formatter.format(value).trim();
-  }
-
-  // This function "unformats" a currency amount string.
-  double unformatAmount() {
-    var amount = toString();
-
-    // Remove the currency symbol and trim whitespace.
-    amount = amount.replaceAll(RegExp(r'[^\d.,kmb]'), '').trim();
-
-    String unit = amount[amount.length - 1];
-    // Remove the unit from the string.
-    amount = amount.substring(0, amount.length - 1);
-
-    // Parse the string as a double. If parsing fails, return 0.0.
-    double value = double.tryParse(amount.replaceAll(",", ".")) ?? 0.0;
-
-    switch (unit) {
-      case 'k':
-        value *= 1000;
-        break;
-      case 'm':
-        value *= 1000000;
-        break;
-      case 'b':
-        value *= 1000000000;
-        break;
-    }
-
-    return value;
   }
 }
 
@@ -359,9 +322,9 @@ extension DoubleExtension on double {
     return invert ? toMax + toMin - mappedValue : mappedValue;
   }
 
-  /// Format `String` to decimal number system with nested currency.
+  /// Format `double` to decimal number system with nested currency.
   ///
-  /// by default [locale] has deviceLanguage value and 2 decimals max.
+  /// by default [locale] has deviceLanguage value and 3 decimals max.
   String formatAmount({
     String? name,
     String? symbol,
@@ -369,70 +332,33 @@ extension DoubleExtension on double {
     int maxDecimals = Vars.maxDecimals,
     int minimumFractionDigits = Vars.maxDecimals,
     String? customPattern = '#,##0.00 ¤',
-    bool useUnitFormat = false,
+    bool compact = false,
   }) {
     // Parse the string as a double. If parsing fails, use 0.0.
     double value = double.tryParse(toString().replaceAll(",", "")) ?? 0.0;
 
-    // If unit formatting is enabled...
-    if (useUnitFormat) {
-      maxDecimals = 1;
-      minimumFractionDigits = 0;
-      String unit = '';
+    late NumberFormat formatter;
 
-      if (value >= 1000000000) {
-        unit = 'b';
-        value /= 1000000000;
-      } else if (value >= 1000000) {
-        unit = 'm';
-        value /= 1000000;
-      } else if (value >= 1000) {
-        unit = 'k';
-        value /= 1000;
-      }
+    if (compact) {
+      formatter = NumberFormat.compactCurrency(
+        locale: "en_US",
+        name: name ?? "",
+        symbol: symbol,
+        decimalDigits: maxDecimals,
+      );
+    } else {
+      formatter = NumberFormat.currency(
+        locale: locale ?? AppLocale.locale.languageCode,
+        name: name ?? "",
+        symbol: symbol,
+        decimalDigits: maxDecimals,
+        customPattern: customPattern,
+      );
 
-      customPattern = customPattern!.replaceAllMapped(
-          RegExp(r'0\.0'), (match) => '0.${"0" * maxDecimals}$unit');
+      formatter.minimumFractionDigits = minimumFractionDigits;
     }
 
-    final formatter = NumberFormat.currency(
-      locale: locale ?? AppLocale.locale.languageCode,
-      name: name ?? "",
-      symbol: symbol,
-      decimalDigits: maxDecimals,
-      customPattern: customPattern,
-    );
-    formatter.minimumFractionDigits = minimumFractionDigits;
     return formatter.format(value).trim();
-  }
-
-  // This function "unformats" a currency amount string.
-  double unformatAmount() {
-    var amount = toString();
-
-    // Remove the currency symbol and trim whitespace.
-    amount = amount.replaceAll(RegExp(r'[^\d.,kmb]'), '').trim();
-
-    String unit = amount[amount.length - 1];
-    // Remove the unit from the string.
-    amount = amount.substring(0, amount.length - 1);
-
-    // Parse the string as a double. If parsing fails, return 0.0.
-    double value = double.tryParse(amount.replaceAll(",", ".")) ?? 0.0;
-
-    switch (unit) {
-      case 'k':
-        value *= 1000;
-        break;
-      case 'm':
-        value *= 1000000;
-        break;
-      case 'b':
-        value *= 1000000000;
-        break;
-    }
-
-    return value;
   }
 
   /// Used to limit decimal characters in `double`
@@ -604,9 +530,9 @@ extension StringExtension on String {
     return withMaxDecimals != null ? value.maxDecimals(withMaxDecimals) : value;
   }
 
-  /// Format `String` to decimal number system with nested currency.
+  /// Format `string` to decimal number system with nested currency.
   ///
-  /// by default [locale] has deviceLanguage value and 2 decimals max.
+  /// by default [locale] has deviceLanguage value and 3 decimals max.
   String formatAmount({
     String? name,
     String? symbol,
@@ -614,70 +540,51 @@ extension StringExtension on String {
     int maxDecimals = Vars.maxDecimals,
     int minimumFractionDigits = Vars.maxDecimals,
     String? customPattern = '#,##0.00 ¤',
-    bool useUnitFormat = false,
+    bool compact = false,
   }) {
     // Parse the string as a double. If parsing fails, use 0.0.
     double value = double.tryParse(replaceAll(",", "")) ?? 0.0;
 
-    // If unit formatting is enabled...
-    if (useUnitFormat) {
-      maxDecimals = 1;
-      minimumFractionDigits = 0;
-      String unit = '';
+    late NumberFormat formatter;
 
-      if (value >= 1000000000) {
-        unit = 'b';
-        value /= 1000000000;
-      } else if (value >= 1000000) {
-        unit = 'm';
-        value /= 1000000;
-      } else if (value >= 1000) {
-        unit = 'k';
-        value /= 1000;
-      }
+    if (compact) {
+      formatter = NumberFormat.compactCurrency(
+        locale: "en_US",
+        name: name ?? "",
+        symbol: symbol,
+        decimalDigits: maxDecimals,
+      );
+    } else {
+      formatter = NumberFormat.currency(
+        locale: locale ?? AppLocale.locale.languageCode,
+        name: name ?? "",
+        symbol: symbol,
+        decimalDigits: maxDecimals,
+        customPattern: customPattern,
+      );
 
-      customPattern = customPattern!.replaceAllMapped(
-          RegExp(r'0\.0'), (match) => '0.${"0" * maxDecimals}$unit');
+      formatter.minimumFractionDigits = minimumFractionDigits;
     }
 
-    final formatter = NumberFormat.currency(
-      locale: locale ?? AppLocale.locale.languageCode,
-      name: name ?? "",
-      symbol: symbol,
-      decimalDigits: maxDecimals,
-      customPattern: customPattern,
-    );
-    formatter.minimumFractionDigits = minimumFractionDigits;
     return formatter.format(value).trim();
   }
 
   // This function "unformats" a currency amount string.
-  double unformatAmount() {
-    var amount = this;
+  double unformatAmount([String? locale]) {
+    final decimalSeparator =
+            LanguageList.get(locale ?? AppLocale.locale.languageCode)
+                .decimalSeparator,
+        thousandsSeparator = decimalSeparator == '.' ? ',' : '.';
 
-    // Remove the currency symbol and trim whitespace.
-    amount = amount.replaceAll(RegExp(r'[^\d.,kmb]'), '').trim();
-
-    String unit = amount[amount.length - 1];
-    // Remove the unit from the string.
-    amount = amount.substring(0, amount.length - 1);
+    // Remove the currency symbol and compact notation (like 'K', 'M', etc.)
+    //
+    // Later replace the thousand and decimal separators to get simple value.
+    String value = replaceAll(RegExp(r'[^\d.,]'), "")
+        .replaceAll(thousandsSeparator, "")
+        .replaceAll(decimalSeparator, ".");
 
     // Parse the string as a double. If parsing fails, return 0.0.
-    double value = double.tryParse(amount.replaceAll(",", ".")) ?? 0.0;
-
-    switch (unit) {
-      case 'k':
-        value *= 1000;
-        break;
-      case 'm':
-        value *= 1000000;
-        break;
-      case 'b':
-        value *= 1000000000;
-        break;
-    }
-
-    return value;
+    return double.tryParse(value) ?? 0.0;
   }
 
   /// Converts first character from `string` in uppercase.
