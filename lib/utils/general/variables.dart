@@ -20,7 +20,7 @@ mixin Vars {
     double other = 0,
   }) {
     final media = MediaQuery.of(context);
-    return media.size.height - (headerHeight + media.viewInsets.top + other);
+    return media.size.height - (headerHeight + media.viewPadding.top + other);
   }
 
   static const paddingScaffold = EdgeInsets.symmetric(
