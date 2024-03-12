@@ -125,8 +125,7 @@ class LocalNotifications {
         ),
         iOS: await iosPlatformChannelSpecifics(
           imageUrl: imageUrl,
-          fileName: (summaryText ?? title).hashCode.toString(),
-          threadIdentifier: summaryText.hashCode.toString(),
+          subtitle: summaryText,
           isCampaign: isCampaign,
         ),
       ),
@@ -165,6 +164,7 @@ class LocalNotifications {
             campaignChannelName,
             channelDescription: campaignChannelDescription,
             enableLights: true,
+            channelShowBadge: false,
             color: const Color.fromRGBO(6, 71, 125, 1),
             styleInformation: styleInformation,
             groupKey: groupKey,
@@ -239,6 +239,7 @@ class LocalNotifications {
             priority: Priority.low,
             importance: Importance.low,
             enableLights: true,
+            channelShowBadge: false,
             styleInformation: styleInformation,
             actions: notificationActions,
             groupKey: groupKey,
@@ -259,16 +260,14 @@ class LocalNotifications {
           );
   }
 
-  // TODO here testing this
   static Future<DarwinNotificationDetails?> iosPlatformChannelSpecifics({
     String? imageUrl,
-    String fileName = 'image',
-    String? threadIdentifier,
+    String? subtitle,
     bool isCampaign = false,
   }) async {
     if (!Platform.isIOS) return null;
 
-    final savedImage = await downloadAndSavePicture(imageUrl, fileName),
+    final savedImage = await downloadAndSavePicture(imageUrl),
         attachments = savedImage != null
             ? [DarwinNotificationAttachment(savedImage)]
             : null;
@@ -281,16 +280,19 @@ class LocalNotifications {
             presentBanner: true,
             interruptionLevel: InterruptionLevel.passive,
             attachments: attachments,
-            threadIdentifier: threadIdentifier,
+            threadIdentifier: subtitle?.hashCode.toString(),
+            subtitle: subtitle,
           )
         : DarwinNotificationDetails(
             categoryIdentifier: channelId,
             presentAlert: true,
             presentSound: true,
             presentBanner: true,
+            presentBadge: true,
             interruptionLevel: InterruptionLevel.active,
             attachments: attachments,
-            threadIdentifier: threadIdentifier,
+            threadIdentifier: subtitle?.hashCode.toString(),
+            subtitle: subtitle,
           );
   }
 }
