@@ -274,9 +274,6 @@ extension IntExtension on int {
     String? customPattern = '#,##0.00 ¤',
     bool compact = false,
   }) {
-    // Parse the string as a double. If parsing fails, use 0.0.
-    double value = double.tryParse(toString().replaceAll(",", "")) ?? 0.0;
-
     late NumberFormat formatter;
 
     if (compact) {
@@ -284,8 +281,10 @@ extension IntExtension on int {
         locale: "en_US",
         name: name ?? "",
         symbol: symbol,
-        decimalDigits: maxDecimals,
+        decimalDigits: 1,
       );
+
+      formatter.minimumFractionDigits = 0;
     } else {
       formatter = NumberFormat.currency(
         locale: locale ?? AppLocale.locale.languageCode,
@@ -298,7 +297,7 @@ extension IntExtension on int {
       formatter.minimumFractionDigits = minimumFractionDigits;
     }
 
-    return formatter.format(value).trim();
+    return formatter.format(this).trim();
   }
 }
 
@@ -334,9 +333,6 @@ extension DoubleExtension on double {
     String? customPattern = '#,##0.00 ¤',
     bool compact = false,
   }) {
-    // Parse the string as a double. If parsing fails, use 0.0.
-    double value = double.tryParse(toString().replaceAll(",", "")) ?? 0.0;
-
     late NumberFormat formatter;
 
     if (compact) {
@@ -344,8 +340,10 @@ extension DoubleExtension on double {
         locale: "en_US",
         name: name ?? "",
         symbol: symbol,
-        decimalDigits: maxDecimals,
+        decimalDigits: 1,
       );
+
+      formatter.minimumFractionDigits = 0;
     } else {
       formatter = NumberFormat.currency(
         locale: locale ?? AppLocale.locale.languageCode,
@@ -358,7 +356,7 @@ extension DoubleExtension on double {
       formatter.minimumFractionDigits = minimumFractionDigits;
     }
 
-    return formatter.format(value).trim();
+    return formatter.format(this).trim();
   }
 
   /// Used to limit decimal characters in `double`
@@ -542,9 +540,6 @@ extension StringExtension on String {
     String? customPattern = '#,##0.00 ¤',
     bool compact = false,
   }) {
-    // Parse the string as a double. If parsing fails, use 0.0.
-    double value = double.tryParse(replaceAll(",", "")) ?? 0.0;
-
     late NumberFormat formatter;
 
     if (compact) {
@@ -552,8 +547,10 @@ extension StringExtension on String {
         locale: "en_US",
         name: name ?? "",
         symbol: symbol,
-        decimalDigits: maxDecimals,
+        decimalDigits: 1,
       );
+
+      formatter.minimumFractionDigits = 0;
     } else {
       formatter = NumberFormat.currency(
         locale: locale ?? AppLocale.locale.languageCode,
@@ -566,7 +563,7 @@ extension StringExtension on String {
       formatter.minimumFractionDigits = minimumFractionDigits;
     }
 
-    return formatter.format(value).trim();
+    return formatter.format(toDouble()).trim();
   }
 
   // This function "unformats" a currency amount string.
