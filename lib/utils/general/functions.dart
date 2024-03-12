@@ -1,5 +1,5 @@
 import 'dart:convert';
-import 'dart:io' show Directory, File, FileMode;
+import 'dart:io' show Directory, File;
 import 'dart:ui' as ui;
 
 import 'package:flutter/material.dart';
@@ -22,7 +22,7 @@ Future<ByteArrayAndroidBitmap?> buildAndroidBitmap(
   String? imageUrl, {
   Size? size,
 }) async {
-  if (imageUrl == null) return null;
+  if (imageUrl == null || !imageUrl.hasNetworkPath) return null;
 
   final byteData = await NetworkAssetBundle(Uri.parse(imageUrl)).load("");
   var bytes = byteData.buffer.asUint8List();
@@ -32,7 +32,6 @@ Future<ByteArrayAndroidBitmap?> buildAndroidBitmap(
           bytes,
           targetWidth: size.width.toInt(),
           targetHeight: size.height.toInt(),
-          allowUpscaling: true,
         ),
         frame = await codec.getNextFrame();
 
@@ -44,24 +43,32 @@ Future<ByteArrayAndroidBitmap?> buildAndroidBitmap(
   return ByteArrayAndroidBitmap.fromBase64String(base64Encode(bytes));
 }
 
-Future<String?> downloadAndSavePicture(String? url, String fileName) async {
+Future<String?> downloadAndSavePicture(
+  String? url, {
+  String? fileName,
+  String extensionType = 'png',
+}) async {
   if (url.hasNotValue) return null;
   final Directory directory = await getApplicationDocumentsDirectory();
-  final String filePath = '${directory.path}/$fileName';
+  final filePath =
+      '${directory.path}/${fileName ?? "file-${DateTime.now()}"}.$extensionType';
+
   final Response response = await get(Uri.parse(url!));
-  final File file = File(filePath);
-  await file.writeAsBytes(response.bodyBytes);
+  await File(filePath).writeAsBytes(response.bodyBytes);
   return filePath;
 }
 
-Future<dynamic> capturePng(Uint8List imageBytes) async {
+Future<File> capturePng(
+  Uint8List imageBytes, {
+  String? fileName,
+  String extensionType = 'png',
+}) async {
   final Directory directory = await getApplicationDocumentsDirectory();
-  final String path = directory.path;
-  final String imagePath = '$path/screenshot${DateTime.now()}.png';
-  final File file = File(imagePath);
-  await file.writeAsBytes(imageBytes, mode: FileMode.write);
-  debugPrint(
-      'Image saved to $imagePath (size: ${file.lengthSync()} bytes) ${file.path} ⬅️');
+  final filePath =
+          '${directory.path}/${fileName ?? "screenshot-${DateTime.now()}"}.$extensionType',
+      file = File(filePath);
+
+  await file.writeAsBytes(imageBytes);
   await GallerySaver.saveImage(file.path);
   Share.shareXFiles([XFile(file.path)]);
   return file;
@@ -142,13 +149,13 @@ Future<void> checkVersion(BuildContext context) =>
             barrierColor: Colors.black.withOpacity(.1),
             barrierDismissible: !requireUpdate,
             builder: (context) => SystemAlertWidget(
-                  title: "Actualización disponible!",
+                  title: "Update Available!",
                   textContent: requireUpdate
-                      ? "Debes actualizar tu applicación de Apolo Pay para poder continuar"
-                      : "Tenemos una nueva versión de Apolo Pay disponible para ti en la tienda",
+                      ? "You must to update the application to continue"
+                      : "We have a new version available to you on the store",
                   dismissible: !requireUpdate,
-                  textButton: requireUpdate ? null : "Continuar",
-                  textButton2: "Actualizar",
+                  textButton: requireUpdate ? null : "Continue",
+                  textButton2: "Update",
                   onPressedButton2: () => LaunchReview.launch(
                       androidAppId: packageInfo.packageName),
                 ));
