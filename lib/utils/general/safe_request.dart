@@ -3,7 +3,7 @@ import 'package:flutter_detextre4/widgets/dialogs/alert_to_continue.dart';
 import 'package:flutter_detextre4/widgets/loaders/loader.dart';
 
 class SafeRequest {
-  static Future<T?> retryOnFailure<T>(
+  static Future<T> retryOnFailure<T>(
     Future<T> Function() future, {
     int maxAttempts = 3,
     Duration delay = Durations.medium2,
@@ -14,10 +14,11 @@ class SafeRequest {
       } catch (error) {
         debugPrint("$error ⭕");
         await Future.delayed(delay);
+        if (attempt == maxAttempts - 1) rethrow;
       }
     }
 
-    return null;
+    throw "Max attemps reached on fetch";
   }
 
   static Future<T?> retryOnFailureWithRequest<T>(

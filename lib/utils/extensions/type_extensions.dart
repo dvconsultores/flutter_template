@@ -568,17 +568,14 @@ extension StringExtension on String {
 
   // This function "unformats" a currency amount string.
   double unformatAmount([String? locale]) {
-    final decimalSeparator =
-            LanguageList.get(locale ?? AppLocale.locale.languageCode)
-                .decimalSeparator,
-        thousandsSeparator = decimalSeparator == '.' ? ',' : '.';
+    final language = LanguageList.get(locale ?? AppLocale.locale.languageCode);
 
     // Remove the currency symbol and compact notation (like 'K', 'M', etc.)
     //
     // Later replace the thousand and decimal separators to get simple value.
     String value = replaceAll(RegExp(r'[^\d.,]'), "")
-        .replaceAll(thousandsSeparator, "")
-        .replaceAll(decimalSeparator, ".");
+        .replaceAll(language.thousandsSeparator, "")
+        .replaceAll(language.decimalSeparator, ".");
 
     // Parse the string as a double. If parsing fails, return 0.0.
     return double.tryParse(value) ?? 0.0;

@@ -22,10 +22,9 @@ class DecimalTextInputFormatter extends TextInputFormatter {
     TextEditingValue oldValue,
     TextEditingValue newValue,
   ) {
-    final decimalSeparator =
-            LanguageList.get(locale ?? AppLocale.locale.languageCode)
-                .decimalSeparator,
-        invertedDecimalSeparator = decimalSeparator == ',' ? "." : ",",
+    final language = LanguageList.get(locale ?? AppLocale.locale.languageCode),
+        decimalSeparator = language.decimalSeparator,
+        thousandsSeparator = language.thousandsSeparator,
         regEx = RegExp('^\\d{0,$maxEntires}[\\.\\,]?\\d{0,$maxDecimals}'),
         newString = regEx.stringMatch(newValue.text) ?? "";
 
@@ -46,10 +45,10 @@ class DecimalTextInputFormatter extends TextInputFormatter {
               offset: newValue.text.split("0").join("").length,
             ));
         // else if contains contrary to [decimalSeparator].
-      } else if (newValue.text.contains(invertedDecimalSeparator)) {
+      } else if (newValue.text.contains(thousandsSeparator)) {
         return newValue.copyWith(
-            text: newValue.text
-                .replaceAll(invertedDecimalSeparator, decimalSeparator),
+            text:
+                newValue.text.replaceAll(thousandsSeparator, decimalSeparator),
             selection: TextSelection.collapsed(
               offset: newValue.text.length,
             ));
