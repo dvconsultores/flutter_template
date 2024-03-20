@@ -25,6 +25,39 @@ enum FLNActionId {
       .singleWhereOrNull((element) => element.name == actionId);
 }
 
+enum NotificationChannel {
+  push(
+    "push_notifications",
+    "Push notifications",
+    "This channel is used for firebase push notifications",
+    Priority.high,
+    Importance.high,
+  ),
+  campign(
+    "campaign_notifications",
+    "Campaign notifications",
+    "This channel is used for firebase campaign notifications",
+    Priority.low,
+    Importance.low,
+  );
+
+  const NotificationChannel(
+    this.id,
+    this.nameText,
+    this.descriptionText,
+    this.priority,
+    this.importance,
+  );
+  final String id;
+  final String nameText;
+  final String descriptionText;
+  final Priority priority;
+  final Importance importance;
+
+  static NotificationChannel get(String channel) =>
+      values.singleWhere((element) => element.name == channel);
+}
+
 ///! Warn: this is a implementation of local notifications. Can't be used by self
 /// to send push notifications to other device.
 ///
@@ -34,36 +67,39 @@ class LocalNotifications {
   static final flutterLocalNotificationsPlugin =
       FlutterLocalNotificationsPlugin();
 
-  /// Channels registered
-  static const channelId = 'push_notifications',
-      channelName = 'Push notifications',
-      channelDescription =
-          'This channel is used for firebase push notifications',
-      campaignChannelId = 'campaign_notifications',
-      campaignChannelName = 'Campaign notifications',
-      campaignChannelDescription =
-          'This channel is used for firebase campaign notifications';
+  /// Topics registered
+  static const globalTopic = "global", testingTopic = "testing";
+
+  static bool haveTopics(String? from) => [globalTopic, testingTopic]
+      .any((value) => from?.contains(value) ?? false);
 
   static Future<void> initializeNotifications() async {
     // initialise the plugin.
     // app_icon needs to be a added as a drawable resource to the Android head project
-    const initializationSettingsAndroid =
-            AndroidInitializationSettings('@app_icon'),
+    final initializationSettingsAndroid =
+            const AndroidInitializationSettings('@app_icon'),
         initializationSettingsDarwin = DarwinInitializationSettings(
             requestSoundPermission: false,
             requestBadgePermission: false,
             requestAlertPermission: false,
             notificationCategories: [
               DarwinNotificationCategory(
-                'push_notifications',
+                NotificationChannel.campign.id,
                 options: {
-                  DarwinNotificationCategoryOption.hiddenPreviewShowTitle
+                  DarwinNotificationCategoryOption.allowInCarPlay,
+                },
+              ),
+              DarwinNotificationCategory(
+                NotificationChannel.push.id,
+                options: {
+                  DarwinNotificationCategoryOption.allowAnnouncement,
+                  DarwinNotificationCategoryOption.allowInCarPlay,
                 },
               )
             ]);
 
     final initialized = await flutterLocalNotificationsPlugin.initialize(
-      const InitializationSettings(
+      InitializationSettings(
         android: initializationSettingsAndroid,
         iOS: initializationSettingsDarwin,
       ),
@@ -104,10 +140,14 @@ class LocalNotifications {
     String? avatarUrl,
     String? summaryText,
     String? payload,
+    String? from,
     FLNClickAction? clickAction,
     bool isCampaign = false,
   }) async {
     final uniqueId = UniqueKey();
+
+    final channel =
+        NotificationChannel.get(haveTopics(from) ? 'campign' : 'push');
 
     await flutterLocalNotificationsPlugin.show(
       uniqueId.hashCode,
@@ -121,12 +161,12 @@ class LocalNotifications {
           avatarUrl: avatarUrl,
           summaryText: summaryText,
           clickAction: clickAction,
-          isCampaign: isCampaign,
+          channel: channel,
         ),
         iOS: await iosPlatformChannelSpecifics(
           imageUrl: imageUrl,
           subtitle: summaryText,
-          isCampaign: isCampaign,
+          channel: channel,
         ),
       ),
       payload: payload,
@@ -135,14 +175,14 @@ class LocalNotifications {
     if (Platform.isAndroid) {
       await showGroupNotification(
         summaryText: summaryText,
-        isCampaign: isCampaign,
+        channel: channel,
       );
     }
   }
 
   static Future<void> showGroupNotification({
     String? summaryText,
-    bool isCampaign = false,
+    required NotificationChannel channel,
   }) async {
     final groupKey = summaryText.hashCode.toString(),
         activeNotifications = await flutterLocalNotificationsPlugin
@@ -158,30 +198,18 @@ class LocalNotifications {
           "${groupNotifications.length - 1} ${summaryText ?? 'Updates'}",
     );
 
-    final groupNotificationDetails = isCampaign
-        ? AndroidNotificationDetails(
-            campaignChannelId,
-            campaignChannelName,
-            channelDescription: campaignChannelDescription,
-            enableLights: true,
-            channelShowBadge: false,
-            color: const Color.fromRGBO(6, 71, 125, 1),
-            styleInformation: styleInformation,
-            groupKey: groupKey,
-            setAsGroupSummary: true,
-            // onlyAlertOnce: true,
-          )
-        : AndroidNotificationDetails(
-            channelId,
-            channelName,
-            channelDescription: channelDescription,
-            enableLights: true,
-            color: const Color.fromRGBO(6, 71, 125, 1),
-            styleInformation: styleInformation,
-            groupKey: groupKey,
-            setAsGroupSummary: true,
-            // onlyAlertOnce: true,
-          );
+    final groupNotificationDetails = AndroidNotificationDetails(
+      channel.id,
+      channel.nameText,
+      channelDescription: channel.descriptionText,
+      enableLights: true,
+      channelShowBadge: channel.name != 'campaign',
+      color: const Color.fromRGBO(6, 71, 125, 1),
+      styleInformation: styleInformation,
+      groupKey: groupKey,
+      setAsGroupSummary: true,
+      // onlyAlertOnce: true,
+    );
 
     await flutterLocalNotificationsPlugin.show(groupKey.toInt(), '', '',
         NotificationDetails(android: groupNotificationDetails));
@@ -194,7 +222,7 @@ class LocalNotifications {
     String? avatarUrl,
     String? summaryText,
     FLNClickAction? clickAction,
-    bool isCampaign = false,
+    required NotificationChannel channel,
   }) async {
     if (!Platform.isAndroid) return null;
 
@@ -228,42 +256,27 @@ class LocalNotifications {
                 ])
         ];
 
-    return isCampaign
-        ? AndroidNotificationDetails(
-            campaignChannelId,
-            campaignChannelName,
-            channelDescription: campaignChannelDescription,
-            subText: summaryText,
-            color: const Color(0xFF02A6D0),
-            largeIcon: avatarIcon,
-            priority: Priority.low,
-            importance: Importance.low,
-            enableLights: true,
-            channelShowBadge: false,
-            styleInformation: styleInformation,
-            actions: notificationActions,
-            groupKey: groupKey,
-          )
-        : AndroidNotificationDetails(
-            channelId,
-            channelName,
-            channelDescription: channelDescription,
-            subText: summaryText,
-            color: const Color(0xFF02A6D0),
-            largeIcon: avatarIcon,
-            priority: Priority.high,
-            importance: Importance.high,
-            enableLights: true,
-            styleInformation: styleInformation,
-            actions: notificationActions,
-            groupKey: groupKey,
-          );
+    return AndroidNotificationDetails(
+      channel.id,
+      channel.nameText,
+      channelDescription: channel.descriptionText,
+      subText: summaryText,
+      color: const Color(0xFF02A6D0),
+      largeIcon: avatarIcon,
+      priority: channel.priority,
+      importance: channel.importance,
+      enableLights: true,
+      channelShowBadge: channel.name != 'campaign',
+      styleInformation: styleInformation,
+      actions: notificationActions,
+      groupKey: groupKey,
+    );
   }
 
   static Future<DarwinNotificationDetails?> iosPlatformChannelSpecifics({
     String? imageUrl,
     String? subtitle,
-    bool isCampaign = false,
+    required NotificationChannel channel,
   }) async {
     if (!Platform.isIOS) return null;
 
@@ -272,27 +285,17 @@ class LocalNotifications {
             ? [DarwinNotificationAttachment(savedImage)]
             : null;
 
-    return isCampaign
-        ? DarwinNotificationDetails(
-            categoryIdentifier: campaignChannelId,
-            presentAlert: true,
-            presentSound: true,
-            presentBanner: true,
-            interruptionLevel: InterruptionLevel.passive,
-            attachments: attachments,
-            threadIdentifier: subtitle?.hashCode.toString(),
-            subtitle: subtitle,
-          )
-        : DarwinNotificationDetails(
-            categoryIdentifier: channelId,
-            presentAlert: true,
-            presentSound: true,
-            presentBanner: true,
-            presentBadge: true,
-            interruptionLevel: InterruptionLevel.active,
-            attachments: attachments,
-            threadIdentifier: subtitle?.hashCode.toString(),
-            subtitle: subtitle,
-          );
+    return DarwinNotificationDetails(
+      categoryIdentifier: channel.id,
+      presentAlert: true,
+      presentSound: true,
+      presentBanner: true,
+      interruptionLevel: channel.name == 'campign'
+          ? InterruptionLevel.passive
+          : InterruptionLevel.active,
+      attachments: attachments,
+      threadIdentifier: subtitle?.hashCode.toString(),
+      subtitle: subtitle,
+    );
   }
 }
