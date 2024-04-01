@@ -278,7 +278,7 @@ extension MultipartResponded on http.MultipartRequest {
   /// [RFC 2616]: http://www.w3.org/Protocols/rfc2616/rfc2616-sec3.html
   Future<http.Response> sendDebug({
     List<int> acceptedStatus = const [200, 201, 204],
-    String fallback = "",
+    String? fallback,
     String connectionFallback = "Connection error, try it later",
     String? requestRef,
     bool showRequest = false,
@@ -477,13 +477,15 @@ extension DioResponseExtension on Response? {
   /// Will return the `error message` from the api request.
   ///
   /// in case not be founded will return a custom default message.
-  String catchErrorMessage({String fallback = ''}) {
+  String catchErrorMessage({String? fallback}) {
+    fallback ??=
+        "${this?.statusCode ?? 'Error'}: Ha ocurrido un error inesperado";
     final response = this?.data.toString() ?? '';
 
     debugPrint("statusCode: ${this?.statusCode} ⭕");
     debugPrint("data: ${this?.data} ⭕");
 
-    return response.isNotEmpty ? response : fallback;
+    return response.isNotEmpty || !response.isHtml() ? response : fallback;
   }
 }
 
@@ -492,12 +494,13 @@ extension ResponseExtension on http.Response {
   /// Will return the `error message` from the api request.
   ///
   /// in case not be founded will return a custom default message.
-  String catchErrorMessage({String fallback = ''}) {
+  String catchErrorMessage({String? fallback}) {
+    fallback ??= "$statusCode: Ha ocurrido un error inesperado";
     final response = body.toString();
 
     debugPrint("statusCode: $statusCode ⭕");
     debugPrint("body: $body ⭕");
 
-    return response.isNotEmpty ? response : fallback;
+    return response.isNotEmpty || !response.isHtml() ? response : fallback;
   }
 }

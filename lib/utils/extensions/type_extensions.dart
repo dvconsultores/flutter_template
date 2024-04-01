@@ -412,6 +412,9 @@ extension NullableStringExtension on String? {
 
 // ? String extension
 extension StringExtension on String {
+  // returns bool to know if string is html
+  bool isHtml() => RegExp(r'<[^>]+>').hasMatch(this);
+
   /// Return a string representing [date] formatted according to our locale and internal format.
   String formatTime({
     String? pattern = 'dd/MM/yyyy HH:mm',
