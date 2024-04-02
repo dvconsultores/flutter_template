@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_detextre4/utils/config/theme.dart';
 import 'package:flutter_detextre4/utils/general/variables.dart';
-import 'package:flutter_detextre4/utils/helper_widgets/custom_animated_builder.dart';
+import 'package:flutter_detextre4/widgets/defaults/error_text.dart';
 import 'package:flutter_gap/flutter_gap.dart';
 
+// TODO checkout troubles in logic here
 class CheckboxField extends StatefulWidget {
   const CheckboxField({
     super.key,
@@ -57,10 +58,10 @@ class CheckboxField extends StatefulWidget {
   final double borderRadius;
 
   @override
-  State<CheckboxField> createState() => _AppCheckboxState();
+  State<CheckboxField> createState() => _CheckboxFieldState();
 }
 
-class _AppCheckboxState extends State<CheckboxField> {
+class _CheckboxFieldState extends State<CheckboxField> {
   FormFieldState<bool>? formState;
 
   bool getValue(FormFieldState<bool> state) => state.value ?? false;
@@ -72,16 +73,22 @@ class _AppCheckboxState extends State<CheckboxField> {
     if (widget.onChanged != null) widget.onChanged!(getValue(formState!));
   }
 
-  void initNotifierListener() => widget.controller?.addListener(() {
-        if (getValue(formState!) == widget.controller!.value) return;
+  void onListen() {
+    if (getValue(formState!) == widget.controller!.value) return;
 
-        formState!.didChange(widget.controller!.value);
-      });
+    formState!.didChange(widget.controller!.value);
+  }
 
   @override
   void initState() {
-    initNotifierListener();
+    widget.controller?.addListener(onListen);
     super.initState();
+  }
+
+  @override
+  void dispose() {
+    widget.controller?.removeListener(onListen);
+    super.dispose();
   }
 
   @override
@@ -99,15 +106,7 @@ class _AppCheckboxState extends State<CheckboxField> {
 
         widget.controller?.value = getValue(state);
 
-        final labelWidget = widget.label ?? Text(widget.labelText ?? ''),
-            errorWidget = Text(
-              widget.errorText ?? state.errorText ?? '',
-              style: widget.errorStyle ??
-                  Theme.of(context)
-                      .textTheme
-                      .labelMedium
-                      ?.copyWith(color: Theme.of(context).colorScheme.error),
-            );
+        final labelWidget = widget.label ?? Text(widget.labelText ?? '');
 
         return Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
           // field
@@ -160,35 +159,136 @@ class _AppCheckboxState extends State<CheckboxField> {
           ),
 
           // error text
-          if (state.hasError && (widget.errorText?.isNotEmpty ?? true)) ...[
-            SingleAnimatedBuilder(
-              animationSettings: CustomAnimationSettings(
-                duration: Durations.short4,
-              ),
-              builder: (context, child, parent) {
-                return SlideTransition(
-                  position: Tween<Offset>(
-                    begin: const Offset(0, -.2),
-                    end: const Offset(0, 0),
-                  ).animate(parent),
-                  child: FadeTransition(
-                    opacity: Tween<double>(begin: 0, end: 1).animate(parent),
-                    child: child,
-                  ),
-                );
-              },
-              child: SizedBox(
-                width: widget.errorWidth,
-                child: Padding(
-                  padding: EdgeInsets.symmetric(
-                      horizontal: widget.padding.horizontal / 2),
-                  child: Column(children: [const Gap(8).column, errorWidget]),
-                ),
-              ),
-            ),
-          ]
+          if (state.hasError && (widget.errorText?.isNotEmpty ?? true))
+            ErrorText(
+              widget.errorText ?? state.errorText ?? '',
+              style: widget.errorStyle ??
+                  Theme.of(context)
+                      .textTheme
+                      .labelMedium
+                      ?.copyWith(color: Theme.of(context).colorScheme.error),
+            )
         ]);
       },
+    );
+  }
+}
+
+/// version without formState
+class CheckboxFieldV2 extends StatefulWidget {
+  const CheckboxFieldV2({
+    super.key,
+    this.restorationId,
+    this.onSaved,
+    this.validator,
+    this.autovalidateMode,
+    this.controller,
+    this.initialValue,
+    this.disabled = false,
+    this.onChanged,
+    this.splashRadius = 16,
+    this.size,
+    this.label,
+    this.labelText,
+    this.textStyle,
+    this.errorText,
+    this.errorStyle,
+    this.errorWidth,
+    this.padding = const EdgeInsets.symmetric(
+      horizontal: Vars.gapMedium,
+      vertical: Vars.gapMedium,
+    ),
+    this.gap = Vars.gapMedium,
+    this.expanded = false,
+    this.crossAxisAlignment = CrossAxisAlignment.center,
+    this.mainAxisAlignment = MainAxisAlignment.start,
+    this.borderRadius = Vars.radius40,
+  });
+  final String? restorationId;
+  final void Function(bool? value)? onSaved;
+  final String? Function(bool? value)? validator;
+  final AutovalidateMode? autovalidateMode;
+  final ValueNotifier<bool>? controller;
+  final void Function(bool? value)? onChanged;
+  final bool? initialValue;
+  final bool disabled;
+  final double splashRadius;
+  final double? size;
+  final Widget? label;
+  final String? labelText;
+  final TextStyle? textStyle;
+  final String? errorText;
+  final TextStyle? errorStyle;
+  final double? errorWidth;
+  final EdgeInsetsGeometry padding;
+  final double gap;
+  final bool expanded;
+  final CrossAxisAlignment crossAxisAlignment;
+  final MainAxisAlignment mainAxisAlignment;
+  final double borderRadius;
+
+  @override
+  State<CheckboxFieldV2> createState() => _CheckboxFieldV2State();
+}
+
+class _CheckboxFieldV2State extends State<CheckboxFieldV2> {
+  FormFieldState<bool>? formState;
+
+  bool get getValue => widget.controller?.value ?? false;
+
+  void onPressed() {
+    widget.controller?.value = !getValue;
+    setState(() {});
+
+    if (widget.onChanged != null) widget.onChanged!(getValue);
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final labelWidget = widget.label ?? Text(widget.labelText ?? '');
+
+    return TextButton(
+      onPressed: onPressed,
+      style: ButtonStyle(
+        padding: MaterialStatePropertyAll(widget.padding),
+        textStyle: MaterialStatePropertyAll(
+            widget.textStyle ?? const TextStyle(fontSize: 12)),
+        shape: MaterialStatePropertyAll(RoundedRectangleBorder(
+          borderRadius: BorderRadius.all(Radius.circular(widget.borderRadius)),
+        )),
+        overlayColor: MaterialStatePropertyAll(
+            ThemeApp.colors(context).secondary.withOpacity(.3)),
+        foregroundColor: MaterialStatePropertyAll(
+            widget.textStyle?.color ?? ThemeApp.colors(context).text),
+      ),
+      child: Row(
+          crossAxisAlignment: widget.crossAxisAlignment,
+          mainAxisAlignment: widget.mainAxisAlignment,
+          children: [
+            SizedBox(
+              width: widget.size != null ? widget.size! * 2 : null,
+              height: widget.size != null ? widget.size! * 2 : null,
+              child: Material(
+                  elevation: 7,
+                  shadowColor: ThemeApp.colors(context).secondary,
+                  shape: const CircleBorder(),
+                  child: Checkbox(
+                    value: getValue,
+                    onChanged: null,
+                    side: BorderSide.none,
+                    splashRadius: widget.splashRadius,
+                    fillColor:
+                        MaterialStateProperty.all<Color>(Colors.transparent),
+                    checkColor: ThemeApp.colors(context).secondary,
+                    materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                    visualDensity: VisualDensity.compact,
+                  )),
+            ),
+            if (widget.label != null || widget.labelText != null) ...[
+              Gap(widget.gap).row,
+              widget.expanded ? Expanded(child: labelWidget) : labelWidget,
+            ]
+          ]),
     );
   }
 }

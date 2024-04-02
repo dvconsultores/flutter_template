@@ -2,7 +2,7 @@ import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_detextre4/utils/config/theme.dart';
 import 'package:flutter_detextre4/utils/general/Variables.dart';
-import 'package:flutter_detextre4/utils/helper_widgets/custom_animated_builder.dart';
+import 'package:flutter_detextre4/widgets/defaults/error_text.dart';
 import 'package:flutter_detextre4/widgets/sheets/bottom_sheet_card.dart';
 import 'package:flutter_gap/flutter_gap.dart';
 
@@ -168,14 +168,6 @@ class _BottomSelectFieldState<T> extends State<BottomSelectField<T>>
                     fontFamily: FontFamily.lato("400"),
                   ),
             ),
-            errorWidget = Text(
-              widget.errorText ?? state.errorText ?? '',
-              style: widget.errorStyle ??
-                  Theme.of(context)
-                      .textTheme
-                      .labelMedium
-                      ?.copyWith(color: Theme.of(context).colorScheme.error),
-            ),
             contentWidget = widget.loading
                 ? SizedBox(
                     width: widget.width,
@@ -255,31 +247,15 @@ class _BottomSelectFieldState<T> extends State<BottomSelectField<T>>
                 }),
 
             // error text
-            if (state.hasError && (widget.errorText?.isNotEmpty ?? true)) ...[
-              SingleAnimatedBuilder(
-                animationSettings: CustomAnimationSettings(
-                  duration: Durations.short4,
-                ),
-                builder: (context, child, parent) {
-                  return SlideTransition(
-                    position: Tween<Offset>(
-                      begin: const Offset(0, -.2),
-                      end: const Offset(0, 0),
-                    ).animate(parent),
-                    child: FadeTransition(
-                      opacity: Tween<double>(begin: 0, end: 1).animate(parent),
-                      child: child,
-                    ),
-                  );
-                },
-                child: Padding(
-                  padding: EdgeInsets.symmetric(
-                    horizontal: widget.padding.horizontal / 2,
-                  ),
-                  child: Column(children: [const Gap(8).column, errorWidget]),
-                ),
-              ),
-            ]
+            if (state.hasError && (widget.errorText?.isNotEmpty ?? true))
+              ErrorText(
+                widget.errorText ?? state.errorText ?? '',
+                style: widget.errorStyle ??
+                    Theme.of(context)
+                        .textTheme
+                        .labelMedium
+                        ?.copyWith(color: Theme.of(context).colorScheme.error),
+              )
           ]),
         );
       },

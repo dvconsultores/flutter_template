@@ -3,11 +3,11 @@ import 'dart:io';
 import 'package:easy_debounce/easy_debounce.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:flutter_detextre4/utils/config/theme.dart';
 import 'package:flutter_detextre4/utils/extensions/type_extensions.dart';
-import 'package:flutter_detextre4/utils/general/Variables.dart';
-import 'package:flutter_detextre4/utils/helper_widgets/custom_animated_builder.dart';
-import 'package:flutter_gap/flutter_gap.dart';
+import 'package:flutter_detextre4/utils/general/variables.dart';
+import 'package:flutter_detextre4/widgets/defaults/error_text.dart';
 import 'package:path/path.dart';
 
 class FilePickerField extends StatefulWidget {
@@ -120,6 +120,11 @@ class _FilePickerFieldState extends State<FilePickerField>
   @override
   void initState() {
     animation = AnimationController(vsync: this, duration: Durations.short1);
+
+    SchedulerBinding.instance.addPostFrameCallback((_) {
+      fileExtension = formState!.value?.path.split('.').last;
+      setState(() {});
+    });
     getController.addListener(onListen);
     super.initState();
   }
@@ -151,14 +156,6 @@ class _FilePickerFieldState extends State<FilePickerField>
               widget.placeholderText ?? '',
               textAlign: TextAlign.center,
               style: ps,
-            ),
-            errorWidget = Text(
-              widget.errorText ?? state.errorText ?? '',
-              style: widget.errorStyle ??
-                  Theme.of(context)
-                      .textTheme
-                      .labelMedium
-                      ?.copyWith(color: Theme.of(context).colorScheme.error),
             );
 
         return SizedBox(
@@ -217,7 +214,7 @@ class _FilePickerFieldState extends State<FilePickerField>
                             child:
                                 Stack(alignment: Alignment.center, children: [
                               if (state.value != null) ...[
-                                if (imagesAllowed.contains(fileExtension!))
+                                if (imagesAllowed.contains(fileExtension))
                                   Image.file(state.value!, fit: BoxFit.contain)
                                 else
                                   Transform.translate(
@@ -275,31 +272,15 @@ class _FilePickerFieldState extends State<FilePickerField>
                 }),
 
             // error text
-            if (state.hasError && (widget.errorText?.isNotEmpty ?? true)) ...[
-              SingleAnimatedBuilder(
-                animationSettings: CustomAnimationSettings(
-                  duration: Durations.short4,
-                ),
-                builder: (context, child, parent) {
-                  return SlideTransition(
-                    position: Tween<Offset>(
-                      begin: const Offset(0, -.2),
-                      end: const Offset(0, 0),
-                    ).animate(parent),
-                    child: FadeTransition(
-                      opacity: Tween<double>(begin: 0, end: 1).animate(parent),
-                      child: child,
-                    ),
-                  );
-                },
-                child: Padding(
-                  padding: EdgeInsets.symmetric(
-                    horizontal: widget.padding.horizontal / 2,
-                  ),
-                  child: Column(children: [const Gap(8).column, errorWidget]),
-                ),
-              ),
-            ]
+            if (state.hasError && (widget.errorText?.isNotEmpty ?? true))
+              ErrorText(
+                widget.errorText ?? state.errorText ?? '',
+                style: widget.errorStyle ??
+                    Theme.of(context)
+                        .textTheme
+                        .labelMedium
+                        ?.copyWith(color: Theme.of(context).colorScheme.error),
+              )
           ]),
         );
       },

@@ -4,10 +4,9 @@ import 'dart:ui' as ui;
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_detextre4/main.dart';
 import 'package:flutter_detextre4/utils/extensions/type_extensions.dart';
+import 'package:flutter_detextre4/utils/general/variables.dart';
 import 'package:flutter_detextre4/widgets/dialogs/system_alert_widget.dart';
-import 'package:flutter_gap/flutter_gap.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:gallery_saver/gallery_saver.dart';
 import 'package:http/http.dart' show Response, get;
@@ -100,36 +99,49 @@ Future<void> openUrl(String url) async {
 T buildWidget<T>(T Function() callback) => callback();
 
 /// A global menu that can be invoked onto whatever widget.
-Future<String?> showPopup(Map<String, IconData> items) async {
-  final context = globalNavigatorKey.currentContext!,
+Future<String?> showPopup(
+  BuildContext context, {
+  required List<PopupMenuItem<String>> items,
+  double? offsetY,
+  ShapeBorder? shape,
+  BoxConstraints? constraints,
+  clipBehavior = Clip.none,
+  String? initialValue,
+  double? elevation,
+  Color? shadowColor,
+  Color? color = Colors.white,
+  bool useRootNavigator = false,
+  RouteSettings? routeSettings,
+}) async {
+  //*get the render box from the context
+  final RenderBox renderBox = context.findRenderObject() as RenderBox;
+  //*get the global position, from the widget local position
+  final offset = renderBox.localToGlobal(Offset.zero);
 
-      //*get the render box from the context
-      renderBox = context.findRenderObject() as RenderBox,
-      //*get the global position, from the widget local position
-      offset = renderBox.localToGlobal(Offset.zero),
-
-      //*calculate the start point in this case, below the button
-      left = offset.dx,
-      top = offset.dy + renderBox.size.height,
-      //*The right does not indicates the width
-      right = left + renderBox.size.width;
+  //*calculate the start point in this case, below the button
+  final left = offset.dx;
+  final top = offset.dy /* + renderBox.size.height */ + (offsetY ?? 0);
+  //*The right does not indicates the width
+  final right = left + renderBox.size.width;
 
   return await showMenu<String>(
-      context: context,
-      position: RelativeRect.fromLTRB(left, top, right, 0.0),
-      items: items.entries.map<PopupMenuEntry<String>>((entry) {
-        return PopupMenuItem(
-          value: entry.key,
-          child: SizedBox(
-            // width: 200, //*width of popup
-            child: Row(children: [
-              Icon(entry.value, color: Colors.redAccent),
-              const Gap(10.0).row,
-              Text(entry.key)
-            ]),
-          ),
-        );
-      }).toList());
+    context: context,
+    clipBehavior: clipBehavior,
+    initialValue: initialValue,
+    shadowColor: shadowColor,
+    routeSettings: routeSettings,
+    useRootNavigator: useRootNavigator,
+    shape: shape ??
+        const RoundedRectangleBorder(
+          borderRadius: BorderRadius.all(Radius.circular(Vars.radius15)),
+        ),
+    color: color,
+    elevation: elevation,
+    constraints:
+        constraints ?? BoxConstraints(minWidth: context.size?.width ?? 100),
+    position: RelativeRect.fromLTRB(left, top, right, 0.0),
+    items: items,
+  );
 }
 
 Future<void> checkVersion(BuildContext context) =>

@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_detextre4/utils/config/theme.dart';
 import 'package:flutter_detextre4/utils/extensions/type_extensions.dart';
 import 'package:flutter_detextre4/utils/general/variables.dart';
-import 'package:flutter_detextre4/utils/helper_widgets/custom_animated_builder.dart';
 import 'package:flutter_detextre4/widgets/defaults/button.dart';
+import 'package:flutter_detextre4/widgets/defaults/error_text.dart';
 import 'package:flutter_gap/flutter_gap.dart';
 
 class ComboboxField<T> extends StatefulWidget {
@@ -15,7 +15,7 @@ class ComboboxField<T> extends StatefulWidget {
     this.autovalidateMode,
     this.itemBuilder,
     this.onChanged,
-    this.value,
+    this.controller,
     this.initialValue,
     this.width = double.maxFinite,
     this.height = Vars.maxInputHeight,
@@ -54,14 +54,16 @@ class ComboboxField<T> extends StatefulWidget {
   final String? Function(List<T>? value)? validator;
   final AutovalidateMode? autovalidateMode;
   final List<T>? initialValue;
-  final ValueNotifier<List<T>>? value;
+  final ValueNotifier<List<T>>? controller;
   final Widget Function(T value)? itemBuilder;
   final Function(List<T>? value)? onChanged;
   final double? width;
   final double? height;
   final BoxDecoration? decoration;
-  final Widget? leading;
-  final Widget? trailing;
+  final Widget Function(BuildContext context, FormFieldState<List<T>> state)?
+      leading;
+  final Widget Function(BuildContext context, FormFieldState<List<T>> state)?
+      trailing;
   final bool loading;
   final bool disabled;
   final bool readOnly;
@@ -92,6 +94,12 @@ class ComboboxField<T> extends StatefulWidget {
 
 class _ComboboxFieldState<T> extends State<ComboboxField<T>> {
   FormFieldState<List<T>>? formState;
+  bool initialLoading = true;
+
+  final localController = ValueNotifier<List<T>>([]);
+
+  ValueNotifier<List<T>> get getController =>
+      widget.controller ?? localController;
 
   final focusNode = FocusNode(),
       textEditingController = TextEditingController();
@@ -106,11 +114,10 @@ class _ComboboxFieldState<T> extends State<ComboboxField<T>> {
 
     final newValue = formState!.value ?? [];
     newValue.add(value as T);
-    formState!.didChange(newValue);
+    getController.value = newValue;
 
     textEditingController.clear();
     focusNode.requestFocus();
-    setState(() {});
 
     if (widget.onChanged != null) widget.onChanged!(formState!.value);
   }
@@ -122,34 +129,37 @@ class _ComboboxFieldState<T> extends State<ComboboxField<T>> {
 
   void removeItem(int index) {
     final newValue = formState!.value, item = newValue!.removeAt(index);
-    formState!.didChange(newValue);
-    setState(() {});
+    getController.value = newValue;
 
     if (widget.onRemoveItem != null) widget.onRemoveItem!(item, index);
   }
 
-  void initFocusListener() => focusNode.addListener(() {
-        if (!focusNode.hasFocus) textEditingController.clear();
-        setState(() {});
-      });
+  void onFocusListen() {
+    if (!focusNode.hasFocus) textEditingController.clear();
+    setState(() {});
+  }
 
-  void initNotifierListener() => widget.value?.addListener(() {
-        if (widget.value!.value.isEmpty ||
-            formState!.value == widget.value!.value) return;
+  void onListen() {
+    if (formState!.value == getController.value) return;
 
-        formState!.didChange(widget.value!.value);
-      });
+    formState!.didChange(getController.value);
+    setState(() {});
+
+    if (widget.onChanged != null) widget.onChanged!(formState!.value);
+  }
 
   @override
   void initState() {
-    initFocusListener();
-    initNotifierListener();
+    focusNode.addListener(onFocusListen);
+    getController.addListener(onListen);
     super.initState();
   }
 
   @override
   void dispose() {
     focusNode.dispose();
+    getController.removeListener(onListen);
+    localController.dispose();
     super.dispose();
   }
 
@@ -165,7 +175,7 @@ class _ComboboxFieldState<T> extends State<ComboboxField<T>> {
       builder: (state) {
         // set values
         formState ??= state;
-        widget.value?.value = state.value ?? [];
+        if (state.value != null) getController.value = state.value!;
 
         final hs = widget.hintStyle ??
                 TextStyle(
@@ -174,14 +184,6 @@ class _ComboboxFieldState<T> extends State<ComboboxField<T>> {
                   fontWeight: FontWeight.w400,
                   fontFamily: FontFamily.lato("400"),
                 ),
-            errorWidget = Text(
-              widget.errorText ?? state.errorText ?? '',
-              style: widget.errorStyle ??
-                  Theme.of(context)
-                      .textTheme
-                      .labelMedium
-                      ?.copyWith(color: Theme.of(context).colorScheme.error),
-            ),
             contentWidget = widget.loading
                 ? SizedBox(
                     width: widget.width,
@@ -231,7 +233,7 @@ class _ComboboxFieldState<T> extends State<ComboboxField<T>> {
                                   : null,
                               padding: const EdgeInsets.symmetric(
                                   horizontal: Vars.gapMedium),
-                              height: 35,
+                              height: 30,
                               bgColor: ThemeApp.colors(context)
                                   .primary
                                   .withAlpha(200),
@@ -259,7 +261,7 @@ class _ComboboxFieldState<T> extends State<ComboboxField<T>> {
                               text: state.value![i] is String
                                   ? state.value![i] as String
                                   : null,
-                              content: state.value![i] is! String
+                              content: widget.itemBuilder != null
                                   ? widget.itemBuilder!(state.value![i])
                                   : null,
                             ),
@@ -301,44 +303,28 @@ class _ComboboxFieldState<T> extends State<ComboboxField<T>> {
                     ),
                 child: Row(children: [
                   if (widget.leading != null) ...[
-                    widget.leading!,
+                    widget.leading!(context, state),
                     Gap(widget.gap).row
                   ],
                   Expanded(child: contentWidget),
                   if (widget.trailing != null) ...[
                     Gap(widget.gap).row,
-                    widget.trailing!
+                    widget.trailing!(context, state)
                   ]
                 ]),
               ),
             ),
 
             // error text
-            if (state.hasError && (widget.errorText?.isNotEmpty ?? true)) ...[
-              SingleAnimatedBuilder(
-                animationSettings: CustomAnimationSettings(
-                  duration: Durations.short4,
-                ),
-                builder: (context, child, parent) {
-                  return SlideTransition(
-                    position: Tween<Offset>(
-                      begin: const Offset(0, -.2),
-                      end: const Offset(0, 0),
-                    ).animate(parent),
-                    child: FadeTransition(
-                      opacity: Tween<double>(begin: 0, end: 1).animate(parent),
-                      child: child,
-                    ),
-                  );
-                },
-                child: Padding(
-                  padding: EdgeInsets.symmetric(
-                    horizontal: widget.padding.horizontal / 2,
-                  ),
-                  child: Column(children: [const Gap(8).column, errorWidget]),
-                ),
-              ),
-            ]
+            if (state.hasError && (widget.errorText?.isNotEmpty ?? true))
+              ErrorText(
+                widget.errorText ?? state.errorText ?? '',
+                style: widget.errorStyle ??
+                    Theme.of(context)
+                        .textTheme
+                        .labelMedium
+                        ?.copyWith(color: Theme.of(context).colorScheme.error),
+              )
           ]),
         );
       },

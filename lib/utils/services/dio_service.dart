@@ -485,7 +485,8 @@ extension DioResponseExtension on Response? {
     debugPrint("statusCode: ${this?.statusCode} ⭕");
     debugPrint("data: ${this?.data} ⭕");
 
-    return response.isNotEmpty || !response.isHtml() ? response : fallback;
+    if (response.isHtml()) return fallback;
+    return response.isNotEmpty ? response : fallback;
   }
 }
 
@@ -501,6 +502,7 @@ extension ResponseExtension on http.Response {
     debugPrint("statusCode: $statusCode ⭕");
     debugPrint("body: $body ⭕");
 
-    return response.isNotEmpty || !response.isHtml() ? response : fallback;
+    if (response.isHtml()) return fallback;
+    return response.isNotEmpty ? response : fallback;
   }
 }

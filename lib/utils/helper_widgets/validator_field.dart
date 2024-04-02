@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:flutter_detextre4/utils/extensions/type_extensions.dart';
+import 'package:flutter_detextre4/utils/general/variables.dart';
 
 class ValidatorField {
   const ValidatorField(this.value, [this.validators]);
@@ -99,16 +100,18 @@ class ValidatorField {
         : null;
   }
 
-  String? email() => RegExp(r'^[a-zA-Z\-\_0-9.]+@[a-zA-Z0-9]+\.[a-zA-Z]+')
-          .hasMatch(value as String? ?? '')
+  String? email() => Vars.emailRegExp.hasMatch(value as String? ?? '')
       ? null
       : 'Join a valid email';
 
-  String? password() => RegExp(
-              r'^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%&*-]).{6,}$')
-          .hasMatch(value as String? ?? '')
+  String? password() => Vars.passwordRegExp.hasMatch(value as String? ?? '')
       ? null
       : 'The password must have at least one uppercase letter, one lowercase letter, one number, and one special character';
+
+  String? isValidPhoneNumber() =>
+      Vars.phoneRegExp.hasMatch(value as String? ?? '')
+          ? null
+          : "Phone invalid";
 
   String? walletValidator(String blockchainAsset, [String? customMessage]) {
     final v = value as String? ?? '';

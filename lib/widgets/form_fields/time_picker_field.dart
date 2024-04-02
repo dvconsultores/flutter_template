@@ -1,13 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_detextre4/main.dart';
-import 'package:flutter_detextre4/utils/extensions/type_extensions.dart';
 import 'package:flutter_detextre4/utils/general/functions.dart';
 import 'package:flutter_detextre4/utils/general/variables.dart';
 import 'package:flutter_detextre4/widgets/form_fields/input_field.dart';
 
-class DatePickerField extends InputField {
-  DatePickerField({
+class TimePickerField extends InputField {
+  TimePickerField({
     super.key,
     required super.controller,
     super.validator,
@@ -58,31 +57,26 @@ class DatePickerField extends InputField {
     super.isCollapsed,
     super.suffixIconConstraints,
     bool toLocal = true,
-    required DateTime firstDate,
-    required DateTime lastDate,
+    required TimeOfDay initialTime,
     Offset? anchorPoint,
     Color? barrierColor,
-    EdgeInsets? contentPadding,
     bool barrierDismissible = true,
     String? barrierLabel,
+    EdgeInsets? contentPadding,
     Widget Function(BuildContext context, Widget? child)? pickerBuilder,
     String? cancelText,
     String? confirmText,
-    DateTime? currentDate,
     String? errorFormatText,
     String? errorInvalidText,
     String? fieldHintText,
     String? fieldLabelText,
     String? helpText,
-    DateTime? initialDate,
-    DatePickerMode initialDatePickerMode = DatePickerMode.day,
-    DatePickerEntryMode initialEntryMode = DatePickerEntryMode.calendar,
+    TimePickerEntryMode initialEntryMode = TimePickerEntryMode.dial,
     TextInputType? pickerKeyboardType,
     Locale? locale,
-    void Function(DatePickerEntryMode datePickerEntryMode)?
-        onDatePickerModeChange,
+    void Function(TimePickerEntryMode timePickerEntryMode)?
+        onTimePickerModeChange,
     RouteSettings? routeSettings,
-    bool Function(DateTime dateTime)? selectableDayPredicate,
     Icon? switchToCalendarEntryModeIcon,
     Icon? switchToInputEntryModeIcon,
     TextDirection? textDirection,
@@ -99,7 +93,7 @@ class DatePickerField extends InputField {
               offset: const Offset(0, 4),
               child:
                   Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-                const Icon(Icons.calendar_today),
+                const Icon(Icons.timer_outlined),
                 if (suffixIcon != null) suffixIcon,
               ]),
             ),
@@ -107,10 +101,9 @@ class DatePickerField extends InputField {
           onTap: () async {
             if (onTap != null) onTap();
 
-            final dateTime = await showDatePicker(
+            final time = await showTimePicker(
               context: globalNavigatorKey.currentContext!,
-              firstDate: firstDate,
-              lastDate: lastDate,
+              initialTime: initialTime,
               anchorPoint: anchorPoint,
               barrierColor: barrierColor,
               barrierDismissible: barrierDismissible,
@@ -118,30 +111,18 @@ class DatePickerField extends InputField {
               builder: pickerBuilder,
               cancelText: cancelText,
               confirmText: confirmText,
-              currentDate: currentDate,
-              errorFormatText: errorFormatText,
               errorInvalidText: errorInvalidText,
-              fieldHintText: fieldHintText,
-              fieldLabelText: fieldLabelText,
               helpText: helpText,
-              initialDate: initialDate,
-              initialDatePickerMode: initialDatePickerMode,
               initialEntryMode: initialEntryMode,
-              keyboardType: pickerKeyboardType,
-              locale: locale,
-              onDatePickerModeChange: onDatePickerModeChange,
               routeSettings: routeSettings,
-              selectableDayPredicate: selectableDayPredicate,
-              switchToCalendarEntryModeIcon: switchToCalendarEntryModeIcon,
-              switchToInputEntryModeIcon: switchToInputEntryModeIcon,
-              textDirection: textDirection,
               useRootNavigator: useRootNavigator,
             );
             unfocus(globalNavigatorKey.currentContext!);
-            if (dateTime == null) return;
+            if (time == null || !globalNavigatorKey.currentContext!.mounted) {
+              return;
+            }
 
-            controller!.text =
-                dateTime.formatTime(pattern: 'dd/MM/yyyy', toLocal: toLocal);
+            controller!.text = time.format(globalNavigatorKey.currentContext!);
           },
         );
 
@@ -202,8 +183,6 @@ class DatePickerField extends InputField {
     bool isCollapsed = false,
     BoxConstraints? suffixIconConstraints,
     bool toLocal = true,
-    required DateTime firstDate,
-    required DateTime lastDate,
     Offset? anchorPoint,
     Color? barrierColor,
     bool barrierDismissible = true,
@@ -211,21 +190,18 @@ class DatePickerField extends InputField {
     Widget Function(BuildContext context, Widget? child)? pickerBuilder,
     String? cancelText,
     String? confirmText,
-    DateTime? currentDate,
     String? errorFormatText,
     String? errorInvalidText,
     String? fieldHintText,
     String? fieldLabelText,
     String? helpText,
-    DateTime? initialDate,
-    DatePickerMode initialDatePickerMode = DatePickerMode.day,
-    DatePickerEntryMode initialEntryMode = DatePickerEntryMode.calendar,
+    required TimeOfDay initialTime,
+    TimePickerEntryMode initialEntryMode = TimePickerEntryMode.dial,
     TextInputType? pickerKeyboardType,
     Locale? locale,
-    void Function(DatePickerEntryMode datePickerEntryMode)?
-        onDatePickerModeChange,
+    void Function(TimePickerEntryMode timePickerEntryMode)?
+        onTimePickerModeChange,
     RouteSettings? routeSettings,
-    bool Function(DateTime dateTime)? selectableDayPredicate,
     Icon? switchToCalendarEntryModeIcon,
     Icon? switchToInputEntryModeIcon,
     TextDirection? textDirection,
@@ -236,7 +212,7 @@ class DatePickerField extends InputField {
     return SizedBox(
       width: width,
       height: height ?? (dense ? Vars.minInputHeight : Vars.maxInputHeight),
-      child: DatePickerField(
+      child: TimePickerField(
         onTapOutside: onTapOutside,
         onTap: onTap,
         onChanged: onChanged,
@@ -288,8 +264,7 @@ class DatePickerField extends InputField {
         counterText: counterText,
         isCollapsed: isCollapsed,
         suffixIconConstraints: suffixIconConstraints,
-        firstDate: firstDate,
-        lastDate: lastDate,
+        initialTime: initialTime,
         anchorPoint: anchorPoint,
         barrierColor: barrierColor,
         barrierDismissible: barrierDismissible,
@@ -297,20 +272,16 @@ class DatePickerField extends InputField {
         pickerBuilder: pickerBuilder,
         cancelText: cancelText,
         confirmText: confirmText,
-        currentDate: currentDate,
         errorFormatText: errorFormatText,
         errorInvalidText: errorInvalidText,
         fieldHintText: fieldHintText,
         fieldLabelText: fieldLabelText,
         helpText: helpText,
-        initialDate: initialDate,
-        initialDatePickerMode: initialDatePickerMode,
         initialEntryMode: initialEntryMode,
         pickerKeyboardType: pickerKeyboardType,
         locale: locale,
-        onDatePickerModeChange: onDatePickerModeChange,
+        onTimePickerModeChange: onTimePickerModeChange,
         routeSettings: routeSettings,
-        selectableDayPredicate: selectableDayPredicate,
         switchToCalendarEntryModeIcon: switchToCalendarEntryModeIcon,
         switchToInputEntryModeIcon: switchToInputEntryModeIcon,
         textDirection: textDirection,

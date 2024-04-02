@@ -18,7 +18,7 @@ class TextDecimal extends StatelessWidget {
     this.locale,
     this.maxDecimals = Vars.maxDecimals,
     this.minimumFractionDigits = Vars.maxDecimals,
-    this.defaultDecimalRedux = 2,
+    this.defaultDecimalRedux = 3,
     this.recognizer,
     this.decimalRecognizer,
     this.compact = false,
@@ -32,7 +32,7 @@ class TextDecimal extends StatelessWidget {
   final String? locale;
   final int maxDecimals;
   final int minimumFractionDigits;
-  final int defaultDecimalRedux;
+  final double defaultDecimalRedux;
   final GestureRecognizer? recognizer;
   final GestureRecognizer? decimalRecognizer;
   final bool compact;
@@ -40,7 +40,7 @@ class TextDecimal extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    const defaultDecimalsSize = 14.0;
+    const defaultDecimalsSize = 13.0;
 
     final defaultLocale = AppLocale.locale.languageCode,
         decimalSeparator =
@@ -69,8 +69,12 @@ class TextDecimal extends StatelessWidget {
                   fontSize: style!.fontSize != null
                       ? style!.fontSize! - defaultDecimalRedux
                       : defaultDecimalsSize,
+                  fontWeight: FontWeight.normal,
                 ) ??
-                const TextStyle(fontSize: defaultDecimalsSize),
+                const TextStyle(
+                  fontSize: defaultDecimalsSize,
+                  fontWeight: FontWeight.normal,
+                ),
           ),
         ],
         recognizer: recognizer,

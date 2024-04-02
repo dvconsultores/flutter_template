@@ -3,9 +3,9 @@ import 'package:flutter/services.dart';
 import 'package:flutter_detextre4/main.dart';
 import 'package:flutter_detextre4/painters/decorated_input_border.dart';
 import 'package:flutter_detextre4/utils/config/theme.dart';
-import 'package:flutter_detextre4/utils/general/variables.dart';
 import 'package:flutter_detextre4/utils/general/functions.dart';
 import 'package:flutter_detextre4/utils/general/input_formatters.dart';
+import 'package:flutter_detextre4/utils/general/variables.dart';
 
 class InputField extends TextFormField {
   InputField({
@@ -86,59 +86,63 @@ class InputField extends TextFormField {
 
             onChanged(haveDecimals ? value.split(',').join('.') : value);
           },
-          decoration: decoration ??
-              buildWidget<InputDecoration>(() {
-                final ts = textStyle ?? _ts,
-                    hs = hintStyle ??
-                        ts.copyWith(
-                            color:
-                                ThemeApp.colors(context).text.withOpacity(.7),
-                            fontSize: 13),
-                    ls = labelStyle ??
-                        ts.copyWith(
-                            color: ThemeApp.colors(context).text, fontSize: 13),
-                    fls = floatingLabelStyle ?? ls;
+          decoration: buildWidget<InputDecoration>(() {
+            final ts = textStyle ?? _ts,
+                hs = hintStyle ??
+                    ts.copyWith(
+                        color: ThemeApp.colors(context).text.withOpacity(.7),
+                        fontSize: 13),
+                ls = labelStyle ??
+                    ts.copyWith(
+                        color: ThemeApp.colors(context).text, fontSize: 13),
+                fls = floatingLabelStyle ?? ls;
 
-                InputBorder checkBorder(BorderSide border) =>
-                    DecoratedInputBorder(
-                      child: underline
-                          ? UnderlineInputBorder(
-                              borderSide: border, borderRadius: borderRadius)
-                          : OutlineInputBorder(
-                              borderSide: border, borderRadius: borderRadius),
-                      shadow: shadow ?? Vars.boxShadow2,
-                    );
+            InputBorder checkBorder(BorderSide border) => DecoratedInputBorder(
+                  child: underline
+                      ? UnderlineInputBorder(
+                          borderSide: border, borderRadius: borderRadius)
+                      : OutlineInputBorder(
+                          borderSide: border, borderRadius: borderRadius),
+                  shadow: shadow ?? Vars.boxShadow2,
+                );
 
-                final defaultBorder =
-                        border ?? const BorderSide(color: Colors.transparent),
-                    disabledBorder = borderDisabled ??
-                        const BorderSide(color: Colors.transparent),
-                    errorBorder = borderError ??
-                        BorderSide(color: Theme.of(context).colorScheme.error),
-                    focusedBorder = borderFocused ??
-                        BorderSide(color: Theme.of(context).focusColor);
+            final defaultBorder =
+                    border ?? const BorderSide(color: Colors.transparent),
+                disabledBorder = borderDisabled ??
+                    const BorderSide(color: Colors.transparent),
+                errorBorder = borderError ??
+                    BorderSide(color: Theme.of(context).colorScheme.error),
+                focusedBorder = borderFocused ??
+                    BorderSide(color: Theme.of(context).focusColor);
 
-                return InputDecoration(
-                  prefixIconConstraints:
-                      BoxConstraints(maxWidth: maxWidthPrefix),
-                  enabled: !disabled,
-                  counterText: counterText,
-                  hintText: hintText,
-                  hintStyle: hs,
-                  labelText: labelText,
-                  labelStyle: ls,
-                  floatingLabelStyle: fls,
-                  floatingLabelBehavior: floatingLabelBehavior,
-                  filled: filled,
-                  fillColor: color ?? ThemeApp.colors(context).background,
-                  border: checkBorder(defaultBorder),
-                  enabledBorder: checkBorder(defaultBorder),
-                  disabledBorder: checkBorder(disabledBorder),
-                  errorBorder: checkBorder(errorBorder),
-                  focusedBorder: checkBorder(focusedBorder),
-                  errorMaxLines: errorMaxLines,
-                  prefix: prefix,
-                  prefixIcon: prefixIcon != null
+            return InputDecoration(
+              prefixIconConstraints: decoration?.prefixIconConstraints ??
+                  BoxConstraints(maxWidth: maxWidthPrefix),
+              enabled: decoration?.enabled ?? !disabled,
+              counterText: decoration?.counterText ?? counterText,
+              hintText: decoration?.hintText ?? hintText,
+              hintStyle: decoration?.hintStyle ?? hs,
+              labelText: decoration?.labelText ?? labelText,
+              labelStyle: decoration?.labelStyle ?? ls,
+              floatingLabelStyle: decoration?.floatingLabelStyle ?? fls,
+              floatingLabelBehavior:
+                  decoration?.floatingLabelBehavior ?? floatingLabelBehavior,
+              filled: decoration?.filled ?? filled,
+              fillColor: decoration?.fillColor ??
+                  color ??
+                  ThemeApp.colors(context).background,
+              border: decoration?.border ?? checkBorder(defaultBorder),
+              enabledBorder:
+                  decoration?.enabledBorder ?? checkBorder(defaultBorder),
+              disabledBorder:
+                  decoration?.disabledBorder ?? checkBorder(disabledBorder),
+              errorBorder: decoration?.errorBorder ?? checkBorder(errorBorder),
+              focusedBorder:
+                  decoration?.focusedBorder ?? checkBorder(focusedBorder),
+              errorMaxLines: decoration?.errorMaxLines ?? errorMaxLines,
+              prefix: decoration?.prefix ?? prefix,
+              prefixIcon: decoration?.prefixIcon ??
+                  (prefixIcon != null
                       ? IntrinsicWidth(
                           child: Padding(
                             padding: prefixPadding ??
@@ -148,19 +152,47 @@ class InputField extends TextFormField {
                             child: prefixIcon,
                           ),
                         )
-                      : null,
-                  suffix: suffix,
-                  suffixIcon: suffixIcon,
-                  suffixIconConstraints: suffixIconConstraints,
-                  isCollapsed: isCollapsed,
-                  isDense: true,
-                  contentPadding: contentPadding ??
-                      const EdgeInsets.symmetric(
-                        horizontal: Vars.gapMedium,
-                        vertical: Vars.gapMax,
-                      ),
-                );
-              }),
+                      : null),
+              suffix: decoration?.suffix ?? suffix,
+              suffixIcon: decoration?.suffixIcon ?? suffixIcon,
+              suffixIconConstraints:
+                  decoration?.suffixIconConstraints ?? suffixIconConstraints,
+              isCollapsed: decoration?.isCollapsed ?? isCollapsed,
+              isDense: decoration?.isDense ?? true,
+              contentPadding: contentPadding ??
+                  const EdgeInsets.symmetric(
+                    horizontal: Vars.gapMedium,
+                    vertical: Vars.gapMax,
+                  ),
+              alignLabelWithHint: decoration?.alignLabelWithHint,
+              constraints: decoration?.constraints,
+              counter: decoration?.counter,
+              counterStyle: decoration?.counterStyle,
+              error: decoration?.error,
+              errorStyle: decoration?.errorStyle,
+              errorText: decoration?.errorText,
+              floatingLabelAlignment: decoration?.floatingLabelAlignment,
+              focusColor: decoration?.focusColor,
+              focusedErrorBorder: decoration?.focusedErrorBorder,
+              helperMaxLines: decoration?.helperMaxLines,
+              helperStyle: decoration?.helperStyle,
+              helperText: decoration?.helperText,
+              hintFadeDuration: decoration?.hintFadeDuration,
+              hintMaxLines: decoration?.hintMaxLines,
+              hintTextDirection: decoration?.hintTextDirection,
+              hoverColor: decoration?.hoverColor,
+              icon: decoration?.icon,
+              iconColor: decoration?.iconColor,
+              label: decoration?.label,
+              prefixIconColor: decoration?.prefixIconColor,
+              prefixStyle: decoration?.prefixStyle,
+              prefixText: decoration?.prefixText,
+              semanticCounterText: decoration?.semanticCounterText,
+              suffixIconColor: decoration?.suffixIconColor,
+              suffixStyle: decoration?.suffixStyle,
+              suffixText: decoration?.suffixText,
+            );
+          }),
         );
   static final context = globalNavigatorKey.currentContext!,
       _ts = TextStyle(
