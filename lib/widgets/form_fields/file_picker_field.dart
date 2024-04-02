@@ -33,6 +33,10 @@ class FilePickerField extends StatefulWidget {
     this.onChanged,
     this.disabled = false,
     this.padding = const EdgeInsets.symmetric(horizontal: Vars.gapMedium),
+    this.showClearButton = true,
+    this.clearButtonInside = true,
+    this.chipPositionRight = 0,
+    this.chipPositionBottom = 0,
   });
 
   final String? restorationId;
@@ -55,6 +59,10 @@ class FilePickerField extends StatefulWidget {
   final void Function(File? value)? onChanged;
   final bool disabled;
   final EdgeInsetsGeometry padding;
+  final bool showClearButton;
+  final bool clearButtonInside;
+  final double chipPositionRight;
+  final double chipPositionBottom;
 
   @override
   State<FilePickerField> createState() => _FilePickerFieldState();
@@ -139,6 +147,12 @@ class _FilePickerFieldState extends State<FilePickerField>
 
   @override
   Widget build(BuildContext context) {
+    final clearButtonWidget = IconButton(
+      onPressed: clear,
+      visualDensity: VisualDensity.compact,
+      icon: const Icon(Icons.close_sharp),
+    );
+
     return FormField<File>(
       restorationId: widget.restorationId,
       onSaved: widget.onSaved,
@@ -158,131 +172,139 @@ class _FilePickerFieldState extends State<FilePickerField>
               style: ps,
             );
 
-        return SizedBox(
-          width: widget.width,
-          child:
-              Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-            // field
-            AnimatedBuilder(
-                animation: animation,
-                builder: (context, child) {
-                  final isOpen = animation.isCompleted;
+        return Row(children: [
+          SizedBox(
+            width: widget.width,
+            child:
+                Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+              // field
+              AnimatedBuilder(
+                  animation: animation,
+                  builder: (context, child) {
+                    final isOpen = animation.isCompleted;
 
-                  return GestureDetector(
-                    onTap: widget.disabled ? null : pickFile,
-                    child: Container(
-                      width: widget.width,
-                      height: widget.height,
-                      clipBehavior: Clip.antiAlias,
-                      decoration: BoxDecoration(
-                        color: ThemeApp.colors(context).background,
-                        borderRadius: const BorderRadius.all(
-                            Radius.circular(Vars.radius15)),
-                        border: Border.fromBorderSide(
-                          widget.disabled
-                              ? widget.borderDisabled ??
-                                  BorderSide(
-                                      width: 0,
-                                      color: Theme.of(context).disabledColor)
-                              : isOpen
-                                  ? widget.borderFocused ??
-                                      BorderSide(
-                                          color: Theme.of(context).focusColor)
-                                  : widget.border ??
-                                      const BorderSide(
-                                          width: 0, color: Colors.transparent),
-                        ),
-                        boxShadow: widget.boxShadow,
-                      ),
-                      child: Row(children: [
-                        Expanded(
-                          child: Container(
-                            height: double.maxFinite,
-                            clipBehavior: Clip.antiAlias,
-                            decoration: BoxDecoration(
-                              color: state.value != null
-                                  ? ThemeApp.colors(context)
-                                      .label
-                                      .withAlpha(180)
-                                  : ThemeApp.colors(context)
-                                      .label
-                                      .withAlpha(100),
-                              borderRadius: widget.borderRadius.subtract(
-                                const BorderRadius.all(Radius.circular(4)),
-                              ),
-                            ),
-                            child:
-                                Stack(alignment: Alignment.center, children: [
-                              if (state.value != null) ...[
-                                if (imagesAllowed.contains(fileExtension))
-                                  Image.file(state.value!, fit: BoxFit.contain)
-                                else
-                                  Transform.translate(
-                                    offset: const Offset(-4, 0),
-                                    child: FractionallySizedBox(
-                                      widthFactor: .9,
-                                      child: Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.center,
-                                          children: [
-                                            const Expanded(
-                                              child:
-                                                  Icon(Icons.file_copy_rounded),
-                                            ),
-                                            Expanded(
-                                              flex: 6,
-                                              child: Text(
-                                                basename(state.value!.path)
-                                                    .split(".$fileExtension")
-                                                    .first,
-                                                textAlign: TextAlign.right,
-                                                overflow: TextOverflow.ellipsis,
-                                              ),
-                                            ),
-                                            Text(".$fileExtension")
-                                          ]),
-                                    ),
-                                  ),
-                                Positioned(
-                                    right: 0,
-                                    bottom: 0,
-                                    child: Chip(
-                                      visualDensity: VisualDensity.compact,
-                                      label: Text(
-                                        state.value!.lengthSync().formatBytes(),
-                                        textAlign: TextAlign.center,
-                                        style: ps.copyWith(fontSize: 13),
-                                      ),
-                                    ))
-                              ] else if (widget.placeholder != null ||
-                                  widget.placeholderText != null)
-                                widget.placeholder ?? placeholderWidget,
-                            ]),
+                    return GestureDetector(
+                      onTap: widget.disabled ? null : pickFile,
+                      child: Container(
+                        width: widget.width,
+                        height: widget.height,
+                        clipBehavior: Clip.antiAlias,
+                        decoration: BoxDecoration(
+                          color: ThemeApp.colors(context).background,
+                          borderRadius: widget.borderRadius,
+                          border: Border.fromBorderSide(
+                            widget.disabled
+                                ? widget.borderDisabled ??
+                                    BorderSide(
+                                        width: 0,
+                                        color: Theme.of(context).disabledColor)
+                                : isOpen
+                                    ? widget.borderFocused ??
+                                        BorderSide(
+                                            color: Theme.of(context).focusColor)
+                                    : widget.border ??
+                                        const BorderSide(
+                                            width: 0,
+                                            color: Colors.transparent),
                           ),
+                          boxShadow: widget.boxShadow,
                         ),
-                        if (state.value != null)
-                          IconButton(
-                            onPressed: clear,
-                            visualDensity: VisualDensity.compact,
-                            icon: const Icon(Icons.close_sharp),
-                          )
-                      ]),
-                    ),
-                  );
-                }),
+                        child: Row(children: [
+                          Expanded(
+                            child: Container(
+                              height: double.maxFinite,
+                              clipBehavior: Clip.antiAlias,
+                              decoration: BoxDecoration(
+                                color: state.value != null
+                                    ? ThemeApp.colors(context)
+                                        .label
+                                        .withAlpha(180)
+                                    : ThemeApp.colors(context)
+                                        .label
+                                        .withAlpha(100),
+                                borderRadius: widget.borderRadius.subtract(
+                                  const BorderRadius.all(Radius.circular(4)),
+                                ),
+                              ),
+                              child:
+                                  Stack(alignment: Alignment.center, children: [
+                                if (state.value != null) ...[
+                                  if (imagesAllowed.contains(fileExtension))
+                                    Image.file(
+                                      state.value!,
+                                      fit: BoxFit.contain,
+                                    )
+                                  else
+                                    Transform.translate(
+                                      offset: const Offset(-4, 0),
+                                      child: FractionallySizedBox(
+                                        widthFactor: .9,
+                                        child: Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.center,
+                                            children: [
+                                              const Expanded(
+                                                child: Icon(
+                                                    Icons.file_copy_rounded),
+                                              ),
+                                              Expanded(
+                                                flex: 6,
+                                                child: Text(
+                                                  basename(state.value!.path)
+                                                      .split(".$fileExtension")
+                                                      .first,
+                                                  textAlign: TextAlign.right,
+                                                  overflow:
+                                                      TextOverflow.ellipsis,
+                                                ),
+                                              ),
+                                              Text(".$fileExtension")
+                                            ]),
+                                      ),
+                                    ),
+                                  Positioned(
+                                      right: widget.chipPositionRight,
+                                      bottom: widget.chipPositionBottom,
+                                      child: Chip(
+                                        visualDensity: VisualDensity.compact,
+                                        label: Text(
+                                          state.value!
+                                              .lengthSync()
+                                              .formatBytes(),
+                                          textAlign: TextAlign.center,
+                                          style: ps.copyWith(fontSize: 13),
+                                        ),
+                                      ))
+                                ] else if (widget.placeholder != null ||
+                                    widget.placeholderText != null)
+                                  widget.placeholder ?? placeholderWidget,
+                              ]),
+                            ),
+                          ),
+                          if (widget.showClearButton &&
+                              widget.clearButtonInside &&
+                              state.value != null)
+                            clearButtonWidget
+                        ]),
+                      ),
+                    );
+                  }),
 
-            // error text
-            if (state.hasError && (widget.errorText?.isNotEmpty ?? true))
-              ErrorText(
-                widget.errorText ?? state.errorText ?? '',
-                style: widget.errorStyle ??
-                    Theme.of(context)
-                        .textTheme
-                        .labelMedium
-                        ?.copyWith(color: Theme.of(context).colorScheme.error),
-              )
-          ]),
-        );
+              // error text
+              if (state.hasError && (widget.errorText?.isNotEmpty ?? true))
+                ErrorText(
+                  widget.errorText ?? state.errorText ?? '',
+                  style: widget.errorStyle ??
+                      Theme.of(context).textTheme.labelMedium?.copyWith(
+                          color: Theme.of(context).colorScheme.error),
+                )
+            ]),
+          ),
+          if (widget.showClearButton &&
+              !widget.clearButtonInside &&
+              state.value != null)
+            clearButtonWidget
+        ]);
       },
     );
   }
