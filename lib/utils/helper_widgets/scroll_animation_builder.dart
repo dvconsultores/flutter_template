@@ -4,9 +4,11 @@ class ScrollAnimatedOptions {
   const ScrollAnimatedOptions(
     this.offset,
     this.scrollDirection,
+    this.maxScroll,
   );
   final double offset;
   final ScrollAnimatedDirection scrollDirection;
+  final double maxScroll;
 }
 
 enum ScrollAnimatedDirection {
@@ -48,7 +50,11 @@ class _ScrollAnimatedWidgetState extends State<ScrollAnimatedBuilder> {
         return widget.builder(
           context,
           widget.child,
-          ScrollAnimatedOptions(offset, scrollDirection),
+          ScrollAnimatedOptions(
+            offset,
+            scrollDirection,
+            widget.controller.position.maxScrollExtent,
+          ),
         );
       });
 }
