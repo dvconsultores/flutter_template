@@ -160,7 +160,6 @@ extension ListExtension<T> on List<T> {
       String csv =
           const ListToCsvConverter().convert(this as List<List<dynamic>>);
       await file.writeAsString(csv);
-      debugPrint("$csv ⭐");
 
       if (message != null) {
         showSnackbar(
@@ -686,8 +685,6 @@ extension ScreenshotExtension on ScreenshotController {
     final String imagePath = '$path/screenshot${DateTime.now()}.png';
     final io.File file = io.File(imagePath);
     await file.writeAsBytes(imageBytes!, mode: io.FileMode.write);
-    debugPrint(
-        'Image saved to: $imagePath (size: ${file.lengthSync()} bytes) ${file.path} ⭐');
     await GallerySaver.saveImage(file.path);
 
     if (message != null) {
@@ -707,8 +704,6 @@ extension ScreenshotExtension on ScreenshotController {
     final String imagePath = '$path/screenshot${DateTime.now()}.png';
     final io.File file = io.File(imagePath);
     await file.writeAsBytes(imageBytes!, mode: io.FileMode.write);
-    debugPrint(
-        'Image saved to: $imagePath (size: ${file.lengthSync()} bytes) ${file.path} ⭐');
     Share.shareXFiles([XFile(file.path)]);
   }
 }

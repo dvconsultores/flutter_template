@@ -168,7 +168,6 @@ class _AsyncTextFormFieldState extends State<AsyncTextFormField> {
           _validatingController.sink.add(true);
           validatorMessage =
               widget.validator != null ? await widget.validator!(value) : null;
-          debugPrint("validator message: $validatorMessage");
           _validatingController.sink.add(false);
         });
 

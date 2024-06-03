@@ -28,9 +28,7 @@ Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   // ? -- config to dotenv 🖊️ --
-  await dotenv
-      .load(fileName: '.env')
-      .catchError((error) => debugPrint('Error loading .env file: $error ㊗️'));
+  await dotenv.load(fileName: '.env');
 
   await Hive.initFlutter();
   await Hive.openBox(HiveData.boxName);

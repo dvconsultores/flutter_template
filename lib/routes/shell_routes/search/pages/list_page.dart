@@ -25,13 +25,11 @@ class _ListViewExampleState extends State<ListPage> {
     if (mounted) {
       setState(() => items.add("random-${math.Random().nextInt(100)}"));
     }
-    debugPrint("refreshed");
   }
 
   Future<void> onPullDown() async {
     await Future.delayed(const Duration(seconds: 1));
     setState(() => items.add("random-${math.Random().nextInt(100)}"));
-    debugPrint("charged");
   }
 
   @override

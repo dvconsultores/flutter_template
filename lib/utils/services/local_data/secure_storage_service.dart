@@ -1,6 +1,5 @@
 import 'dart:convert';
 
-import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 ///? Collection used to know storage elements into secure storage.
@@ -31,7 +30,6 @@ class SecureStorage {
         webOptions: getWebOptions(),
       );
 
-      debugPrint("${key.name}: $value - readed from Secure storage 🛡️");
       return jsonDecode(value ?? "null") as T;
     } catch (_) {
       delete(key);
@@ -47,29 +45,24 @@ class SecureStorage {
       webOptions: getWebOptions(),
     );
 
-    debugPrint("$allValues - all readed from Secure storage 🛡️");
     return allValues;
   }
 
   /// Delete a value from secure storage using [SecureCollection] key.
-  static Future<void> delete(SecureCollection key) async => await storage
-      .delete(
+  static Future<void> delete(SecureCollection key) async =>
+      await storage.delete(
         key: key.name,
         aOptions: getAndroidOptions(),
         iOptions: getIOSOptions(),
         webOptions: getWebOptions(),
-      )
-      .whenComplete(
-          () => debugPrint("${key.name} - deleted from Secure storage 🛡️"));
+      );
 
   /// Delete all values from secure storage.
-  static Future<void> deleteAll() async => await storage
-      .deleteAll(
+  static Future<void> deleteAll() async => await storage.deleteAll(
         aOptions: getAndroidOptions(),
         iOptions: getIOSOptions(),
         webOptions: getWebOptions(),
-      )
-      .whenComplete(() => debugPrint("Secure storage cleared 🛡️"));
+      );
 
   /// Write/storage a value into secure storage using [SecureCollection] key.
   static Future<void> write(SecureCollection key, dynamic value) async =>
@@ -81,8 +74,6 @@ class SecureStorage {
             iOptions: getIOSOptions(),
             webOptions: getWebOptions(),
           )
-          .then((_) => debugPrint(
-              "${key.name}: $value - written from Secure storage 🛡️"))
           .catchError((onError) => throw onError);
 
   /// Read and write modifying key / values into hive data elements using [SecureCollection] key.
@@ -109,8 +100,6 @@ class SecureStorage {
           iOptions: getIOSOptions(),
           webOptions: getWebOptions(),
         )
-        .then((_) => debugPrint(
-            "${key.name}: $storedElement - updated from Secure storage 🛡️"))
         .catchError((onError) => throw onError);
   }
 }
