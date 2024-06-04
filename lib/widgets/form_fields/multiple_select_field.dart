@@ -24,6 +24,7 @@ class MultipleSelectField<T> extends StatefulWidget {
     this.initialValue,
     this.width = double.maxFinite,
     this.height,
+    this.intrinsictWidth = false,
     this.decoration,
     this.leading,
     this.trailing,
@@ -64,6 +65,7 @@ class MultipleSelectField<T> extends StatefulWidget {
   final ValueNotifier<List<T>>? controller;
   final double width;
   final double? height;
+  final bool intrinsictWidth;
   final BoxDecoration? decoration;
   final Widget? leading;
   final Widget? trailing;
@@ -223,88 +225,99 @@ class _MultiSelectFieldState<T> extends State<MultipleSelectField<T>>
                                 Center(child: items[index].child),
                           );
                         },
-                      );
+                      ),
+            widgetField = SizedBox(
+              child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    // field
+                    AnimatedBuilder(
+                        animation: animation,
+                        builder: (context, child) {
+                          final isOpen = animation.isCompleted;
 
-        return SizedBox(
-          width: widget.width,
-          child:
-              Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-            // field
-            AnimatedBuilder(
-                animation: animation,
-                builder: (context, child) {
-                  final isOpen = animation.isCompleted;
+                          return GestureDetector(
+                            onTap: onTap,
+                            child: Container(
+                              width:
+                                  widget.intrinsictWidth ? null : widget.width,
+                              height: widget.height ??
+                                  (widget.dense
+                                      ? Vars.minInputHeight
+                                      : Vars.maxInputHeight),
+                              padding: widget.padding,
+                              decoration: widget.decoration ??
+                                  BoxDecoration(
+                                      borderRadius: widget.borderRadius,
+                                      color: widget.bgColor ??
+                                          Theme.of(context)
+                                              .colorScheme
+                                              .background,
+                                      boxShadow:
+                                          widget.boxShadow ?? [Vars.boxShadow2],
+                                      border: Border.fromBorderSide(
+                                        widget.disabled
+                                            ? widget.borderDisabled ??
+                                                const BorderSide(
+                                                    color: Colors.transparent)
+                                            : isOpen
+                                                ? widget.borderFocused ??
+                                                    BorderSide(
+                                                        color: Theme.of(context)
+                                                            .focusColor)
+                                                : widget.border ??
+                                                    const BorderSide(
+                                                        color:
+                                                            Colors.transparent),
+                                      )),
+                              child: Row(
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  children: [
+                                    if (widget.leading != null) ...[
+                                      widget.leading!,
+                                      Gap(widget.gap).row,
+                                    ] else if (widget.indicator) ...[
+                                      Icon(
+                                        Icons.filter_alt_rounded,
+                                        size: 16,
+                                        color: state.value.hasValue
+                                            ? Theme.of(context).focusColor
+                                            : null,
+                                      ),
+                                      Gap(widget.gap).row,
+                                    ],
+                                    Expanded(child: contentWidget),
+                                    if (!widget.hideOpenIcon) ...[
+                                      Gap(widget.gap).row,
+                                      isOpen
+                                          ? const Icon(
+                                              Icons.arrow_drop_up_rounded)
+                                          : const Icon(
+                                              Icons.arrow_drop_down_rounded)
+                                    ],
+                                    if (widget.trailing != null)
+                                      widget.trailing!
+                                  ]),
+                            ),
+                          );
+                        }),
 
-                  return GestureDetector(
-                    onTap: onTap,
-                    child: Container(
-                      width: widget.width,
-                      height: widget.height ??
-                          (widget.dense
-                              ? Vars.minInputHeight
-                              : Vars.maxInputHeight),
-                      padding: widget.padding,
-                      decoration: widget.decoration ??
-                          BoxDecoration(
-                              borderRadius: widget.borderRadius,
-                              color: widget.bgColor ??
-                                  Theme.of(context).colorScheme.background,
-                              boxShadow: widget.boxShadow ?? [Vars.boxShadow2],
-                              border: Border.fromBorderSide(
-                                widget.disabled
-                                    ? widget.borderDisabled ??
-                                        const BorderSide(
-                                            color: Colors.transparent)
-                                    : isOpen
-                                        ? widget.borderFocused ??
-                                            BorderSide(
-                                                color: Theme.of(context)
-                                                    .focusColor)
-                                        : widget.border ??
-                                            const BorderSide(
-                                                color: Colors.transparent),
-                              )),
-                      child: Row(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            if (widget.leading != null) ...[
-                              widget.leading!,
-                              Gap(widget.gap).row,
-                            ] else if (widget.indicator) ...[
-                              Icon(
-                                Icons.filter_alt_rounded,
-                                size: 16,
-                                color: state.value.hasValue
-                                    ? Theme.of(context).focusColor
-                                    : null,
-                              ),
-                              Gap(widget.gap).row,
-                            ],
-                            Expanded(child: contentWidget),
-                            if (!widget.hideOpenIcon) ...[
-                              Gap(widget.gap).row,
-                              isOpen
-                                  ? const Icon(Icons.arrow_drop_up_rounded)
-                                  : const Icon(Icons.arrow_drop_down_rounded)
-                            ],
-                            if (widget.trailing != null) widget.trailing!
-                          ]),
-                    ),
-                  );
-                }),
+                    // error text
+                    if (state.hasError &&
+                        (widget.errorText?.isNotEmpty ?? true))
+                      ErrorText(
+                        widget.errorText ?? state.errorText ?? '',
+                        style: widget.errorStyle ??
+                            Theme.of(context).textTheme.labelMedium?.copyWith(
+                                color: Theme.of(context).colorScheme.error),
+                      )
+                  ]),
+            );
 
-            // error text
-            if (state.hasError && (widget.errorText?.isNotEmpty ?? true))
-              ErrorText(
-                widget.errorText ?? state.errorText ?? '',
-                style: widget.errorStyle ??
-                    Theme.of(context)
-                        .textTheme
-                        .labelMedium
-                        ?.copyWith(color: Theme.of(context).colorScheme.error),
-              )
-          ]),
-        );
+        // final render
+        return widget.intrinsictWidth
+            ? IntrinsicWidth(child: widgetField)
+            : widgetField;
       },
     );
   }
