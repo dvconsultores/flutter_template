@@ -17,6 +17,7 @@ class BottomSheetCard extends StatelessWidget {
     this.maxChildSize = .45,
     required this.child,
     this.scrollable = true,
+    this.topWidget,
   });
   final EdgeInsetsGeometry? padding;
   final bool expand;
@@ -25,6 +26,7 @@ class BottomSheetCard extends StatelessWidget {
   final double maxChildSize;
   final bool scrollable;
   final Widget child;
+  final Widget? topWidget;
 
   static Future<T?> showModal<T>(
     BuildContext context, {
@@ -41,6 +43,7 @@ class BottomSheetCard extends StatelessWidget {
     Clip? clipBehavior,
     bool isDismissible = true,
     Widget? child,
+    Widget? topWidget,
   }) async =>
       await showModalBottomSheet<T>(
         context: context,
@@ -63,6 +66,7 @@ class BottomSheetCard extends StatelessWidget {
                   minChildSize: minChildSize,
                   padding: padding,
                   scrollable: scrollable,
+                  topWidget: topWidget,
                   child: child ?? const SizedBox.shrink(),
                 ),
       );
@@ -76,19 +80,25 @@ class BottomSheetCard extends StatelessWidget {
       maxChildSize: maxChildSize,
       builder: (context, scrollController) {
         return Column(children: [
+          if (topWidget != null)
+            topWidget!
+          else
+            const Gap(Vars.gapXLarge).column,
           if (scrollable)
             Expanded(
               child: SingleChildScrollView(
                 controller: scrollController,
                 physics: const BouncingScrollPhysics(),
-                padding: padding ?? Vars.paddingScaffold.copyWith(bottom: 0),
+                padding:
+                    padding ?? Vars.paddingScaffold.copyWith(top: 0, bottom: 0),
                 child: child,
               ),
             )
           else
             Expanded(
               child: Padding(
-                padding: padding ?? Vars.paddingScaffold.copyWith(bottom: 0),
+                padding:
+                    padding ?? Vars.paddingScaffold.copyWith(top: 0, bottom: 0),
                 child: child,
               ),
             ),
@@ -113,6 +123,7 @@ class BottomSheetList<T> extends StatelessWidget {
     this.emptyDataText,
     this.emptyDataStyle,
     this.itemsGap,
+    this.topWidget,
   });
   final EdgeInsetsGeometry? padding;
   final List<DropdownMenuItem<T>> items;
@@ -126,6 +137,7 @@ class BottomSheetList<T> extends StatelessWidget {
   final String? emptyDataText;
   final TextStyle? emptyDataStyle;
   final double? itemsGap;
+  final Widget? topWidget;
 
   static Future<DropdownMenuItem<T>?> showModal<T>(
     BuildContext context, {
@@ -147,6 +159,7 @@ class BottomSheetList<T> extends StatelessWidget {
     String? emptyDataText,
     TextStyle? emptyDataStyle,
     double? itemsGap,
+    Widget? topWidget,
   }) async =>
       await showModalBottomSheet<DropdownMenuItem<T>>(
         context: context,
@@ -174,6 +187,7 @@ class BottomSheetList<T> extends StatelessWidget {
           emptyDataStyle: emptyDataStyle,
           padding: padding,
           itemsGap: itemsGap,
+          topWidget: topWidget,
         ),
       );
 
@@ -186,6 +200,10 @@ class BottomSheetList<T> extends StatelessWidget {
       maxChildSize: maxChildSize,
       builder: (context, scrollController) {
         return Column(children: [
+          if (topWidget != null)
+            topWidget!
+          else
+            const Gap(Vars.gapXLarge).column,
           Expanded(
             child: items.isEmpty
                 ? Padding(
@@ -260,6 +278,7 @@ class BottomSheetListMultiple<T> extends StatefulWidget {
     this.childAspectRatio = 20 / 4.8,
     this.crossAxisSpacing = Vars.gapXLarge,
     this.mainAxisSpacing = Vars.gapXLarge,
+    this.topWidget,
   });
 
   final EdgeInsetsGeometry? contextPadding;
@@ -287,6 +306,7 @@ class BottomSheetListMultiple<T> extends StatefulWidget {
   final double childAspectRatio;
   final double crossAxisSpacing;
   final double mainAxisSpacing;
+  final Widget? topWidget;
 
   static Future<List<DropdownMenuItem<T>>?> showModal<T>(
     BuildContext context, {
@@ -321,6 +341,7 @@ class BottomSheetListMultiple<T> extends StatefulWidget {
     double childAspectRatio = 20 / 4.8,
     double crossAxisSpacing = Vars.gapXLarge,
     double mainAxisSpacing = Vars.gapXLarge,
+    Widget? topWidget,
   }) async =>
       await showModalBottomSheet<List<DropdownMenuItem<T>>>(
         context: context,
@@ -360,6 +381,7 @@ class BottomSheetListMultiple<T> extends StatefulWidget {
           childAspectRatio: childAspectRatio,
           crossAxisSpacing: crossAxisSpacing,
           mainAxisSpacing: mainAxisSpacing,
+          topWidget: topWidget,
         ),
       );
 
@@ -407,11 +429,16 @@ class _BottomSheetListMultipleState<T>
             });
 
         return Column(children: [
+          if (widget.topWidget != null)
+            widget.topWidget!
+          else
+            const Gap(Vars.gapXLarge).column,
           if (widget.label != null)
             widget.label!
           else if (widget.labelText != null)
             Padding(
-                padding: Vars.paddingScaffold.copyWith(bottom: Vars.gapXLarge),
+                padding: Vars.paddingScaffold
+                    .copyWith(top: 0, bottom: Vars.gapXLarge),
                 child: Text(
                   widget.labelText!,
                   style: widget.labelStyle ??

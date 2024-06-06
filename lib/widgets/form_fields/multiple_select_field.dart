@@ -28,7 +28,7 @@ class MultipleSelectField<T> extends StatefulWidget {
     this.decoration,
     this.leading,
     this.trailing,
-    this.dialogTittle,
+    this.dropdownTitle,
     this.indicator = false,
     this.disabled = false,
     this.loading = false,
@@ -53,6 +53,7 @@ class MultipleSelectField<T> extends StatefulWidget {
     this.dropdownInitialChildSize = .45,
     this.dropdownMaxChildSize = .45,
     this.dropdownMinChildSize = .2,
+    this.dropdownTopWidget,
   });
   final String? restorationId;
   final void Function(List<T>? value)? onSaved;
@@ -69,7 +70,7 @@ class MultipleSelectField<T> extends StatefulWidget {
   final BoxDecoration? decoration;
   final Widget? leading;
   final Widget? trailing;
-  final String? dialogTittle;
+  final String? dropdownTitle;
   final bool indicator;
   final bool loading;
   final bool disabled;
@@ -94,6 +95,7 @@ class MultipleSelectField<T> extends StatefulWidget {
   final double dropdownInitialChildSize;
   final double dropdownMaxChildSize;
   final double dropdownMinChildSize;
+  final Widget? dropdownTopWidget;
 
   @override
   State<MultipleSelectField<T>> createState() => _MultiSelectFieldState<T>();
@@ -129,10 +131,11 @@ class _MultiSelectFieldState<T> extends State<MultipleSelectField<T>>
       context,
       items: widget.items,
       initialItems: selectedItems(),
-      labelText: widget.dialogTittle,
+      labelText: widget.dropdownTitle,
       maxLenght: widget.maxLenght,
       emptyDataText: widget.emptyDataMessage,
       itemforegroundColor: widget.itemforegroundColor,
+      topWidget: widget.dropdownTopWidget,
     );
 
     getController.value =
