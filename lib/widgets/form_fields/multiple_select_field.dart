@@ -54,6 +54,7 @@ class MultipleSelectField<T> extends StatefulWidget {
     this.dropdownMaxChildSize = .45,
     this.dropdownMinChildSize = .2,
     this.dropdownTopWidget,
+    this.dropdownChildAspectRatio = 20 / 4.8,
   });
   final String? restorationId;
   final void Function(List<T>? value)? onSaved;
@@ -96,6 +97,7 @@ class MultipleSelectField<T> extends StatefulWidget {
   final double dropdownMaxChildSize;
   final double dropdownMinChildSize;
   final Widget? dropdownTopWidget;
+  final double dropdownChildAspectRatio;
 
   @override
   State<MultipleSelectField<T>> createState() => _MultiSelectFieldState<T>();
@@ -139,6 +141,7 @@ class _MultiSelectFieldState<T> extends State<MultipleSelectField<T>>
       minChildSize: widget.dropdownMinChildSize,
       initialChildSize: widget.dropdownInitialChildSize,
       maxChildSize: widget.dropdownMaxChildSize,
+      childAspectRatio: widget.dropdownChildAspectRatio,
     );
 
     getController.value =
