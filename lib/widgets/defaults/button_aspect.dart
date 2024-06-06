@@ -11,15 +11,14 @@ class ButtonAspect extends StatelessWidget {
     this.text,
     this.textStyle,
     this.width,
-    this.height = 45,
+    this.height = Vars.buttonHeight,
     this.constraints,
     this.shape,
     this.borderRadius = const BorderRadius.all(Radius.circular(Vars.radius40)),
     this.borderSide = BorderSide.none,
     this.boxShadow = const [Vars.boxShadow3],
-    this.color = Colors.white,
+    this.color,
     this.bgColor,
-    this.bgColorDisabled,
     this.padding = const EdgeInsets.symmetric(horizontal: 15),
     this.margin,
     this.child,
@@ -49,9 +48,8 @@ class ButtonAspect extends StatelessWidget {
   final BorderSide? borderSide;
   final BoxShape? shape;
   final List<BoxShadow> boxShadow;
-  final Color color;
+  final Color? color;
   final Color? bgColor;
-  final Color? bgColorDisabled;
   final EdgeInsets? padding;
   final EdgeInsets? margin;
   final MainAxisAlignment? buttonAxisAlignment;
@@ -74,16 +72,15 @@ class ButtonAspect extends StatelessWidget {
     String? text,
     TextStyle? textStyle,
     double? width,
-    double height = 45,
+    double height = Vars.buttonHeight,
     BoxConstraints? constraints,
     BorderRadius borderRadius =
         const BorderRadius.all(Radius.circular(Vars.radius40)),
     BoxShape? shape,
-    BorderSide borderSide = const BorderSide(width: 1),
-    List<BoxShadow> boxShadow = const [],
+    BorderSide borderSide = BorderSide.none,
+    List<BoxShadow> boxShadow = const [Vars.boxShadow3],
     Color? color,
     Color? bgColor,
-    Color? bgColorDisabled,
     EdgeInsets? padding,
     EdgeInsets? margin,
     MainAxisAlignment? buttonAxisAlignment,
@@ -114,7 +111,69 @@ class ButtonAspect extends StatelessWidget {
         boxShadow: boxShadow,
         color: color ?? ThemeApp.colors(context).text,
         bgColor: bgColor ?? ThemeApp.colors(context).tertiary,
-        bgColorDisabled: bgColorDisabled,
+        padding: padding,
+        margin: margin,
+        leading: leading,
+        trailing: trailing,
+        buttonAxisAlignment: buttonAxisAlignment,
+        gap: gap,
+        leadingGap: leadingGap,
+        trailingGap: trailingGap,
+        leadingSpacer: leadingSpacer,
+        trailingSpacer: trailingSpacer,
+        textSoftWrap: textSoftWrap,
+        textOverflow: textOverflow,
+        content: content,
+        textAlign: textAlign,
+        textExpanded: textExpanded,
+        textFitted: textFitted,
+        child: child,
+      );
+
+  static ButtonAspect variant2({
+    String? text,
+    TextStyle? textStyle,
+    double? width,
+    double height = Vars.buttonHeight,
+    BoxConstraints? constraints,
+    BorderRadius borderRadius =
+        const BorderRadius.all(Radius.circular(Vars.radius40)),
+    BoxShape? shape,
+    BorderSide? borderSide,
+    List<BoxShadow> boxShadow = const [Vars.boxShadow3],
+    Color? color,
+    Color bgColor = Colors.white,
+    EdgeInsets? padding,
+    EdgeInsets? margin,
+    MainAxisAlignment? buttonAxisAlignment,
+    double? gap,
+    double? leadingGap,
+    double? trailingGap,
+    bool leadingSpacer = false,
+    bool trailingSpacer = false,
+    Widget? leading,
+    Widget? trailing,
+    bool? textSoftWrap,
+    TextOverflow? textOverflow,
+    TextAlign textAlign = TextAlign.center,
+    bool textExpanded = false,
+    BoxFit? textFitted,
+    Widget? content,
+    Widget? child,
+  }) =>
+      ButtonAspect(
+        text: text,
+        textStyle: textStyle,
+        width: width,
+        height: height,
+        constraints: constraints,
+        shape: shape,
+        borderRadius: borderRadius,
+        borderSide: borderSide ??
+            BorderSide(width: 1, color: ThemeApp.colors(context).primary),
+        boxShadow: boxShadow,
+        color: color ?? ThemeApp.colors(context).primary,
+        bgColor: bgColor,
         padding: padding,
         margin: margin,
         leading: leading,
@@ -135,16 +194,14 @@ class ButtonAspect extends StatelessWidget {
       );
 
   static ButtonAspect icon({
-    double size = 45,
+    double size = Vars.buttonHeight,
     BoxConstraints? constraints,
-    BorderRadius borderRadius =
-        const BorderRadius.all(Radius.circular(Vars.radius50)),
+    BorderRadius borderRadius = const BorderRadius.all(Radius.circular(100)),
     BoxShape shape = BoxShape.circle,
-    BorderSide borderSide = const BorderSide(width: 1),
+    BorderSide borderSide = BorderSide.none,
     List<BoxShadow> boxShadow = const [Vars.boxShadow3],
-    Color color = Colors.white,
+    Color? color,
     Color? bgColor,
-    Color? bgColorDisabled,
     EdgeInsets padding = const EdgeInsets.all(0),
     EdgeInsets? margin,
     required Widget? icon,
@@ -159,23 +216,20 @@ class ButtonAspect extends StatelessWidget {
         boxShadow: boxShadow,
         color: color,
         bgColor: bgColor,
-        bgColorDisabled: bgColorDisabled,
         padding: padding,
         constraints: constraints,
         child: icon,
       );
 
   static ButtonAspect iconVariant({
-    double size = 45,
+    double size = Vars.buttonHeight,
     BoxConstraints? constraints,
-    BorderRadius borderRadius =
-        const BorderRadius.all(Radius.circular(Vars.radius50)),
+    BorderRadius borderRadius = const BorderRadius.all(Radius.circular(100)),
     BorderSide borderSide = const BorderSide(width: 1),
     BoxShape shape = BoxShape.circle,
     List<BoxShadow> boxShadow = const [],
     Color? color,
     Color? bgColor,
-    Color? bgColorDisabled,
     EdgeInsets padding = const EdgeInsets.all(0),
     EdgeInsets? margin,
     required Widget? icon,
@@ -190,7 +244,34 @@ class ButtonAspect extends StatelessWidget {
         boxShadow: boxShadow,
         color: color ?? ThemeApp.colors(context).text,
         bgColor: bgColor ?? ThemeApp.colors(context).tertiary,
-        bgColorDisabled: bgColorDisabled,
+        padding: padding,
+        constraints: constraints,
+        child: icon,
+      );
+
+  static ButtonAspect iconVariant2({
+    double size = Vars.buttonHeight,
+    BoxConstraints? constraints,
+    BorderRadius borderRadius = const BorderRadius.all(Radius.circular(100)),
+    BorderSide borderSide = BorderSide.none,
+    BoxShape shape = BoxShape.circle,
+    List<BoxShadow> boxShadow = const [Vars.boxShadow3],
+    Color? color,
+    Color? bgColor,
+    EdgeInsets padding = const EdgeInsets.all(0),
+    EdgeInsets? margin,
+    required Widget? icon,
+  }) =>
+      ButtonAspect(
+        width: size,
+        height: size,
+        shape: shape,
+        borderSide: borderSide,
+        margin: margin,
+        borderRadius: borderRadius,
+        boxShadow: boxShadow,
+        color: color ?? ThemeApp.colors(context).primary,
+        bgColor: bgColor ?? Colors.white,
         padding: padding,
         constraints: constraints,
         child: icon,
@@ -200,11 +281,11 @@ class ButtonAspect extends StatelessWidget {
   Widget build(BuildContext context) {
     final ts = textStyle ??
             TextStyle(
-              color: color,
+              color: color ?? Colors.white,
               fontSize: 14,
               letterSpacing: 3.9,
-              fontWeight: FontWeight.w700,
-              fontFamily: FontFamily.lato("700"),
+              fontWeight: FontWeight.w500,
+              fontFamily: FontFamily.lato("500"),
             ),
         textWidget = Text(
           text ?? '',
@@ -214,56 +295,58 @@ class ButtonAspect extends StatelessWidget {
           style: ts,
         );
 
-    return Material(
-      shape: ContinuousRectangleBorder(
-        borderRadius: borderRadius!,
-        side: borderSide!,
+    return Container(
+      margin: margin,
+      padding: padding,
+      width: width,
+      height: height,
+      constraints: constraints,
+      decoration: BoxDecoration(
+        color: bgColor ?? ThemeApp.colors(context).primary,
+        border: borderSide != null
+            ? Border.all(
+                width: borderSide!.width,
+                color: borderSide!.color,
+                strokeAlign: borderSide!.strokeAlign,
+                style: borderSide!.style,
+              )
+            : null,
+        borderRadius: borderRadius,
+        boxShadow: boxShadow,
       ),
-      clipBehavior: Clip.antiAliasWithSaveLayer,
-      child: Container(
-        margin: margin,
-        padding: padding,
-        width: width,
-        height: height,
-        constraints: constraints,
-        decoration: BoxDecoration(
-          color: bgColor ?? ThemeApp.colors(context).primary,
-          boxShadow: boxShadow,
-        ),
-        child: child ??
-            Row(
-                mainAxisAlignment:
-                    buttonAxisAlignment ?? MainAxisAlignment.center,
-                children: [
-                  if (leading != null) leading!,
-                  //
-                  if (leadingSpacer)
-                    const Spacer()
-                  else if (leadingGap != null || gap != null)
-                    Gap(leadingGap ?? gap!).row,
-                  //
-                  if (content != null)
-                    content!
-                  else if (text.hasValue)
-                    textExpanded || textFitted != null
-                        ? Expanded(
-                            child: textFitted != null
-                                ? FittedBox(
-                                    fit: textFitted!,
-                                    child: textWidget,
-                                  )
-                                : textWidget,
-                          )
-                        : textWidget,
-                  //
-                  if (trailingSpacer)
-                    const Spacer()
-                  else if (trailingGap != null || gap != null)
-                    Gap(trailingGap ?? gap!).row,
-                  //
-                  if (trailing != null) trailing!,
-                ]),
-      ),
+      child: child ??
+          Row(
+              mainAxisAlignment:
+                  buttonAxisAlignment ?? MainAxisAlignment.center,
+              children: [
+                if (leading != null) leading!,
+                //
+                if (leadingSpacer)
+                  const Spacer()
+                else if (leadingGap != null || gap != null)
+                  Gap(leadingGap ?? gap!).row,
+                //
+                if (content != null)
+                  content!
+                else if (text.hasValue)
+                  textExpanded || textFitted != null
+                      ? Expanded(
+                          child: textFitted != null
+                              ? FittedBox(
+                                  fit: textFitted!,
+                                  child: textWidget,
+                                )
+                              : textWidget,
+                        )
+                      : textWidget,
+                //
+                if (trailingSpacer)
+                  const Spacer()
+                else if (trailingGap != null || gap != null)
+                  Gap(trailingGap ?? gap!).row,
+                //
+                if (trailing != null) trailing!,
+              ]),
     );
   }
 }

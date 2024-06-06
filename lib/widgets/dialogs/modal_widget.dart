@@ -50,7 +50,7 @@ class ModalWidget extends StatelessWidget {
         actionsAlignment: MainAxisAlignment.center,
         alignment: Alignment.center,
         shape: const ContinuousRectangleBorder(
-          borderRadius: BorderRadius.all(Radius.circular(40)),
+          borderRadius: BorderRadius.all(Radius.circular(Vars.radius15)),
         ),
         titlePadding: Vars.paddingScaffold
             .copyWith(bottom: 0)

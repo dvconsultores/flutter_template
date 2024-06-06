@@ -19,8 +19,8 @@ class AlertToContinue extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-        shape: const RoundedRectangleBorder(
-          borderRadius: BorderRadius.all(Radius.circular(Vars.radius40)),
+        shape: const ContinuousRectangleBorder(
+          borderRadius: BorderRadius.all(Radius.circular(Vars.radius15)),
         ),
         title: title != null ? Text(title!, textAlign: TextAlign.center) : null,
         content: content != null

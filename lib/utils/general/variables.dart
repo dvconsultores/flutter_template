@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_detextre4/utils/config/theme.dart';
+import 'package:flutter_detextre4/utils/services/local_data/env_service.dart';
 
 /// Used to storage a collection of global constant Vars.
 mixin Vars {
+  static final isProduction = env.environment == "production";
+
   // * fetching
   static const requestTiming = 10;
 
@@ -22,6 +25,8 @@ mixin Vars {
     final media = MediaQuery.of(context);
     return media.size.height - (headerHeight + media.viewPadding.top + other);
   }
+
+  static const double buttonHeight = 45;
 
   static const paddingScaffold = EdgeInsets.symmetric(
     vertical: 16,
@@ -86,7 +91,7 @@ mixin Vars {
   static final nicknameRegExp = RegExp(r'^[a-zA-ZñÑ0-9_-]{5,12}$'),
       emailRegExp = RegExp(r'^[a-zA-Z\-\_0-9.]+@[a-zA-Z0-9]+\.[a-zA-Z]+'),
       passwordRegExp = RegExp(
-          r'^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%&*-]).{6,}$'),
+          r'^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%&*-.]).{6,}$'),
       phoneRegExp = RegExp(
           r'(^[\+]?[(]?[0-9]{3}[)]?[-\s\.]?[0-9]{3}[-\s\.]?[0-9]{4,6}$)');
 }

@@ -11,8 +11,6 @@ import 'package:flutter_detextre4/widgets/defaults/button.dart';
 import 'package:flutter_gap/flutter_gap.dart';
 import 'package:provider/provider.dart';
 
-// TODO migrate and create other general alert based on apolo
-//* plus add to general widgets correct sizings on variables
 class SystemAlertWidget extends StatefulWidget {
   const SystemAlertWidget({
     super.key,
@@ -51,7 +49,7 @@ class _SystemAlertWidgetState extends State<SystemAlertWidget> {
   @override
   void dispose() {
     Future.delayed(
-        const Duration(milliseconds: 500),
+        Durations.long2,
         () => globalNavigatorKey.currentContext!
             .read<MainProvider>()
             .setStopProcess = false);
@@ -68,7 +66,7 @@ class _SystemAlertWidgetState extends State<SystemAlertWidget> {
         filter: ImageFilter.blur(sigmaX: 2, sigmaY: 2),
         child: AlertDialog(
             shape: ContinuousRectangleBorder(
-              borderRadius: BorderRadius.circular(15),
+              borderRadius: BorderRadius.circular(20),
               side: BorderSide(
                   color: ThemeApp.colors(context).secondary, width: 2),
             ),
@@ -76,22 +74,11 @@ class _SystemAlertWidgetState extends State<SystemAlertWidget> {
             content:
                 widget.textContent != null ? Text(widget.textContent!) : null,
             actionsAlignment: MainAxisAlignment.center,
-            titlePadding: const EdgeInsets.only(
-              top: Vars.gapXLarge,
-              bottom: Vars.gapMedium,
-              left: Vars.gapXLarge,
-              right: Vars.gapXLarge,
-            ),
-            contentPadding: const EdgeInsets.symmetric(
-              vertical: 0,
-              horizontal: Vars.gapXLarge,
-            ),
-            actionsPadding: const EdgeInsets.only(
-              top: Vars.gapMedium,
-              bottom: Vars.gapXLarge,
-              left: Vars.gapXLarge,
-              right: Vars.gapXLarge,
-            ),
+            titlePadding: Vars.paddingScaffold
+                .add(const EdgeInsets.only(top: Vars.gapNormal)),
+            contentPadding: Vars.paddingScaffold.copyWith(top: 0, bottom: 0),
+            actionsPadding: Vars.paddingScaffold
+                .add(const EdgeInsets.only(bottom: Vars.gapNormal)),
             actions: [
               Row(children: [
                 if (widget.textButton != null)
@@ -103,7 +90,7 @@ class _SystemAlertWidgetState extends State<SystemAlertWidget> {
                     ),
                   ),
                 if (widget.textButton != null && widget.textButton2 != null)
-                  const Gap(15).row,
+                  const Gap(Vars.gapXLarge).row,
                 if (widget.textButton2 != null)
                   Expanded(
                     child: Button(
