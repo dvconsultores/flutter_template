@@ -25,7 +25,7 @@ class AppTooltip extends StatelessWidget {
       message: message,
       richMessage: richMessage,
       verticalOffset: verticalOffset ?? -50,
-      triggerMode: TooltipTriggerMode.longPress,
+      triggerMode: TooltipTriggerMode.tap,
       margin: Vars.paddingScaffold.copyWith(top: 0),
       padding: const EdgeInsets.symmetric(
         horizontal: Vars.gapLarge,
