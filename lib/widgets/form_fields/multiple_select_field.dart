@@ -136,6 +136,9 @@ class _MultiSelectFieldState<T> extends State<MultipleSelectField<T>>
       emptyDataText: widget.emptyDataMessage,
       itemforegroundColor: widget.itemforegroundColor,
       topWidget: widget.dropdownTopWidget,
+      minChildSize: widget.dropdownMinChildSize,
+      initialChildSize: widget.dropdownInitialChildSize,
+      maxChildSize: widget.dropdownMaxChildSize,
     );
 
     getController.value =
