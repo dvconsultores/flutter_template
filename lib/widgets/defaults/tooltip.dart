@@ -63,14 +63,16 @@ class ButtonTip extends StatelessWidget {
   Widget build(BuildContext context) {
     return AppTooltip(
       message: message,
-      child: IconButton(
-        onPressed: () {},
-        splashRadius: splashRadius,
-        padding: const EdgeInsets.all(0),
-        constraints: constraints,
-        iconSize: iconSize,
-        color: color ?? ThemeApp.colors(context).primary,
-        icon: icon,
+      child: AbsorbPointer(
+        child: IconButton(
+          onPressed: () {},
+          splashRadius: splashRadius,
+          padding: const EdgeInsets.all(0),
+          constraints: constraints,
+          iconSize: iconSize,
+          color: color ?? ThemeApp.colors(context).primary,
+          icon: icon,
+        ),
       ),
     );
   }
