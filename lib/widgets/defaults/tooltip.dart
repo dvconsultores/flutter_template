@@ -10,12 +10,14 @@ class AppTooltip extends StatelessWidget {
     this.message,
     this.richMessage,
     this.verticalOffset,
+    this.triggerMode,
   });
   final Widget child;
   final bool showTooltip;
   final String? message;
   final InlineSpan? richMessage;
   final double? verticalOffset;
+  final TooltipTriggerMode? triggerMode;
 
   @override
   Widget build(BuildContext context) {
@@ -25,7 +27,7 @@ class AppTooltip extends StatelessWidget {
       message: message,
       richMessage: richMessage,
       verticalOffset: verticalOffset ?? -50,
-      triggerMode: TooltipTriggerMode.tap,
+      triggerMode: triggerMode ?? TooltipTriggerMode.tap,
       margin: Vars.paddingScaffold.copyWith(top: 0),
       padding: const EdgeInsets.symmetric(
         horizontal: Vars.gapLarge,
@@ -45,28 +47,32 @@ class AppTooltip extends StatelessWidget {
 class ButtonTip extends StatelessWidget {
   const ButtonTip({
     super.key,
-    this.message,
+    required this.message,
     this.splashRadius = 12,
     this.constraints = const BoxConstraints(maxWidth: 22, maxHeight: 22),
     this.iconSize = 18,
     this.color,
     this.icon = const Icon(Icons.info),
+    this.triggerMode,
   });
-  final String? message;
+  final String message;
   final double splashRadius;
   final BoxConstraints constraints;
   final double iconSize;
   final Color? color;
   final Widget icon;
+  final TooltipTriggerMode? triggerMode;
 
   @override
   Widget build(BuildContext context) {
     return AppTooltip(
       message: message,
+      triggerMode: triggerMode,
       child: AbsorbPointer(
         child: IconButton(
           onPressed: () {},
           splashRadius: splashRadius,
+          visualDensity: VisualDensity.comfortable,
           padding: const EdgeInsets.all(0),
           constraints: constraints,
           iconSize: iconSize,
