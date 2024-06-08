@@ -15,7 +15,15 @@ enum ThemeType {
 /// use like `FontFamily.lato("400")`
 mixin FontFamily {
   static final _conversion = {
-    "400": "regular",
+    "100": "extra_light",
+    "200": "semi_light",
+    "300": "light",
+    "400": "normal",
+    "500": "medium",
+    "600": "semi_bold",
+    "700": "bold",
+    "800": "extra_bold",
+    "900": "black",
   };
 
   static String lato(String value) => 'Lato_${_conversion[value] ?? value}';
