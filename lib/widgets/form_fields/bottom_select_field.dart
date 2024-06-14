@@ -1,7 +1,7 @@
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_detextre4/utils/config/theme.dart';
-import 'package:flutter_detextre4/utils/general/Variables.dart';
+import 'package:flutter_detextre4/utils/general/variables.dart';
 import 'package:flutter_detextre4/widgets/defaults/error_text.dart';
 import 'package:flutter_detextre4/widgets/sheets/bottom_sheet_card.dart';
 import 'package:flutter_gap/flutter_gap.dart';
@@ -33,7 +33,7 @@ class BottomSelectField<T> extends StatefulWidget {
     this.hintStyle,
     this.errorText,
     this.errorStyle,
-    this.borderRadius = const BorderRadius.all(Radius.circular(Vars.radius15)),
+    this.borderRadius = const BorderRadius.all(Radius.circular(Vars.radius10)),
     this.border,
     this.borderDisabled,
     this.borderFocused,

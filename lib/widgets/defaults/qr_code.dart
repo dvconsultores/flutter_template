@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_detextre4/utils/config/theme.dart';
+import 'package:flutter_detextre4/utils/general/variables.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 
 class AppQrCode extends StatelessWidget {
@@ -19,10 +20,10 @@ class AppQrCode extends StatelessWidget {
   Widget build(BuildContext context) {
     return Material(
       elevation: 2,
-      shape: ContinuousRectangleBorder(
-        borderRadius: const BorderRadius.all(Radius.circular(40)),
+      shape: RoundedRectangleBorder(
+        borderRadius: const BorderRadius.all(Radius.circular(Vars.radius15)),
         side: BorderSide(
-          width: 10,
+          width: 4,
           color: colored
               ? ThemeApp.colors(context).primary
               : ThemeApp.colors(context).text,
@@ -46,7 +47,7 @@ class AppQrCode extends StatelessWidget {
           dataModuleShape: QrDataModuleShape.circle,
         ),
         embeddedImage:
-            hideLogo ? null : const AssetImage('assets/images/avatar.png'),
+            hideLogo ? null : const AssetImage('assets/logos/logo_apolo.png'),
       ),
     );
   }

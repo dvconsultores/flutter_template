@@ -22,6 +22,7 @@ enum SnackbarType {
 
 /// A global snackbar that can be invoked onto whatever widget.
 /// To make it indefinite, set messageDuration to null
+/// TODO do implementation to send snackbar with same id and replace old snackbar by id
 void showSnackbar(
   String? message, {
   String? title,

@@ -41,7 +41,7 @@ class InputField extends TextFormField {
     int maxDecimals = 3,
     EdgeInsetsGeometry? prefixPadding,
     BorderRadius borderRadius =
-        const BorderRadius.all(Radius.circular(Vars.radius15)),
+        const BorderRadius.all(Radius.circular(Vars.radius10)),
     BorderSide? border,
     BorderSide? borderDisabled,
     BorderSide? borderError,
@@ -196,7 +196,7 @@ class InputField extends TextFormField {
         );
   static final context = globalNavigatorKey.currentContext!,
       _ts = TextStyle(
-        color: ThemeApp.colors(context).text.withOpacity(.75),
+        color: ThemeApp.colors(context).text,
         fontSize: 16,
         fontWeight: FontWeight.w400,
         fontFamily: FontFamily.lato("400"),
@@ -231,7 +231,7 @@ class InputField extends TextFormField {
     bool obscureText = false,
     EdgeInsetsGeometry? prefixPadding,
     BorderRadius borderRadius =
-        const BorderRadius.all(Radius.circular(Vars.radius15)),
+        const BorderRadius.all(Radius.circular(Vars.radius10)),
     BorderSide? border,
     BorderSide? borderDisabled,
     BorderSide? borderError,

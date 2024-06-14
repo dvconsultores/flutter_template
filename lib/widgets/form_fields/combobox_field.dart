@@ -31,7 +31,7 @@ class ComboboxField<T> extends StatefulWidget {
     this.errorText,
     this.hintStyle,
     this.errorStyle,
-    this.borderRadius = const BorderRadius.all(Radius.circular(Vars.radius15)),
+    this.borderRadius = const BorderRadius.all(Radius.circular(Vars.radius10)),
     this.border,
     this.borderDisabled,
     this.borderFocused,

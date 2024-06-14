@@ -174,7 +174,7 @@ class DatePickerField extends InputField {
     bool obscureText = false,
     EdgeInsetsGeometry? prefixPadding,
     BorderRadius borderRadius =
-        const BorderRadius.all(Radius.circular(Vars.radius15)),
+        const BorderRadius.all(Radius.circular(Vars.radius10)),
     BorderSide? border,
     BorderSide? borderDisabled,
     BorderSide? borderError,

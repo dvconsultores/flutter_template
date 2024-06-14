@@ -3,9 +3,9 @@ import 'package:flutter/services.dart';
 import 'package:flutter_detextre4/main.dart';
 import 'package:flutter_detextre4/painters/decorated_input_border.dart';
 import 'package:flutter_detextre4/utils/config/theme.dart';
-import 'package:flutter_detextre4/utils/general/variables.dart';
 import 'package:flutter_detextre4/utils/general/functions.dart';
 import 'package:flutter_detextre4/utils/general/input_formatters.dart';
+import 'package:flutter_detextre4/utils/general/variables.dart';
 import 'package:flutter_detextre4/utils/helper_widgets/async_text_form_field.dart';
 
 class AsyncInputField extends AsyncTextFormField {
@@ -42,7 +42,7 @@ class AsyncInputField extends AsyncTextFormField {
     this.maxEntires = 10,
     this.maxDecimals = 3,
     this.prefixPadding,
-    this.borderRadius = const BorderRadius.all(Radius.circular(Vars.radius15)),
+    this.borderRadius = const BorderRadius.all(Radius.circular(Vars.radius10)),
     this.border,
     this.borderDisabled,
     this.borderError,
@@ -153,7 +153,7 @@ class AsyncInputField extends AsyncTextFormField {
         );
   static final context = globalNavigatorKey.currentContext!,
       _ts = TextStyle(
-        color: ThemeApp.colors(context).text.withOpacity(.75),
+        color: ThemeApp.colors(context).text,
         fontSize: 16,
         fontWeight: FontWeight.w400,
         fontFamily: FontFamily.lato("400"),
@@ -222,7 +222,7 @@ class AsyncInputField extends AsyncTextFormField {
     bool obscureText = false,
     EdgeInsetsGeometry? prefixPadding,
     BorderRadius borderRadius =
-        const BorderRadius.all(Radius.circular(Vars.radius15)),
+        const BorderRadius.all(Radius.circular(Vars.radius10)),
     BorderSide? border,
     BorderSide? borderDisabled,
     BorderSide? borderError,

@@ -25,7 +25,7 @@ class SelectField<T> extends StatefulWidget {
     this.buttonStyleData,
     this.filled = true,
     this.color,
-    this.borderRadius = const BorderRadius.all(Radius.circular(Vars.radius15)),
+    this.borderRadius = const BorderRadius.all(Radius.circular(Vars.radius10)),
     this.border,
     this.borderDisabled,
     this.borderError,
@@ -118,7 +118,7 @@ class SelectField<T> extends StatefulWidget {
     bool filled = true,
     Color? color,
     BorderRadius borderRadius =
-        const BorderRadius.all(Radius.circular(Vars.radius15)),
+        const BorderRadius.all(Radius.circular(Vars.radius10)),
     BorderSide? border,
     BorderSide? borderDisabled,
     BorderSide? borderError,
@@ -213,7 +213,7 @@ class SelectField<T> extends StatefulWidget {
     bool filled = true,
     Color? color,
     BorderRadius borderRadius =
-        const BorderRadius.all(Radius.circular(Vars.radius15)),
+        const BorderRadius.all(Radius.circular(Vars.radius10)),
     BorderSide? border,
     BorderSide? borderDisabled,
     BorderSide? borderError,

@@ -127,7 +127,7 @@ class BottomSheetList<T> extends StatelessWidget {
   });
   final EdgeInsetsGeometry? padding;
   final List<DropdownMenuItem<T>> items;
-  final Widget Function(BuildContext context, Widget item)? itemBuilder;
+  final Widget Function(BuildContext context, int index)? itemBuilder;
   final void Function(DropdownMenuItem<T> item)? onTap;
   final bool expand;
   final double initialChildSize;
@@ -144,7 +144,7 @@ class BottomSheetList<T> extends StatelessWidget {
     ShapeBorder? shape,
     Color? backgroundColor,
     bool isScrollControlled = true,
-    Widget Function(BuildContext context, Widget item)? itemBuilder,
+    Widget Function(BuildContext context, int index)? itemBuilder,
     bool expand = false,
     double initialChildSize = .45,
     double maxChildSize = .45,
@@ -218,7 +218,6 @@ class BottomSheetList<T> extends StatelessWidget {
                     padding: padding ??
                         Vars.paddingScaffold.copyWith(top: 0, bottom: 0),
                     controller: scrollController,
-                    physics: const BouncingScrollPhysics(),
                     itemCount: items.length,
                     separatorBuilder: (context, index) =>
                         Gap(itemsGap ?? Vars.gapXLarge).column,
@@ -232,7 +231,7 @@ class BottomSheetList<T> extends StatelessWidget {
                           if (onTap != null) onTap!(item);
                         },
                         child: itemBuilder != null
-                            ? itemBuilder!(context, item.child)
+                            ? itemBuilder!(context, index)
                             : CardWidget(
                                 elevation: 5,
                                 padding: const EdgeInsets.symmetric(

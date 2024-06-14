@@ -1,11 +1,13 @@
 import 'dart:io';
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:easy_debounce/easy_debounce.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter_detextre4/utils/config/theme.dart';
 import 'package:flutter_detextre4/utils/extensions/type_extensions.dart';
+import 'package:flutter_detextre4/utils/extensions/widget_extensions.dart';
 import 'package:flutter_detextre4/utils/general/variables.dart';
 import 'package:flutter_detextre4/widgets/defaults/error_text.dart';
 import 'package:path/path.dart';
@@ -21,13 +23,14 @@ class FilePickerField extends StatefulWidget {
     this.initialValue,
     this.width = double.maxFinite,
     this.height = 150,
-    this.borderRadius = const BorderRadius.all(Radius.circular(Vars.radius15)),
+    this.borderRadius = const BorderRadius.all(Radius.circular(Vars.radius10)),
     this.border,
     this.borderDisabled,
     this.borderFocused,
     this.boxShadow = const [Vars.boxShadow2],
     this.placeholderText,
     this.placeholder,
+    this.networkPlaceholder,
     this.errorText,
     this.errorStyle,
     this.onChanged,
@@ -54,6 +57,7 @@ class FilePickerField extends StatefulWidget {
   final List<BoxShadow> boxShadow;
   final String? placeholderText;
   final Widget? placeholder;
+  final String? networkPlaceholder;
   final String? errorText;
   final TextStyle? errorStyle;
   final void Function(File? value)? onChanged;
@@ -166,11 +170,20 @@ class _FilePickerFieldState extends State<FilePickerField>
         widget.controller?.value = state.value;
 
         final ps = TextStyle(color: ThemeApp.colors(context).label),
-            placeholderWidget = Text(
-              widget.placeholderText ?? '',
-              textAlign: TextAlign.center,
-              style: ps,
-            );
+            placeholderWidget =
+                widget.networkPlaceholder != null && state.value == null
+                    ? CachedNetworkImage(
+                        imageUrl: widget.networkPlaceholder!,
+                        width: double.maxFinite,
+                        height: double.maxFinite,
+                        fit: BoxFit.cover,
+                      ).prebuilder()
+                    : widget.placeholder ??
+                        Text(
+                          widget.placeholderText ?? '',
+                          textAlign: TextAlign.center,
+                          style: ps,
+                        );
 
         return Row(children: [
           SizedBox(
@@ -275,9 +288,8 @@ class _FilePickerFieldState extends State<FilePickerField>
                                           style: ps.copyWith(fontSize: 13),
                                         ),
                                       ))
-                                ] else if (widget.placeholder != null ||
-                                    widget.placeholderText != null)
-                                  widget.placeholder ?? placeholderWidget,
+                                ] else
+                                  placeholderWidget,
                               ]),
                             ),
                           ),

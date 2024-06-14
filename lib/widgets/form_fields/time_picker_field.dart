@@ -81,6 +81,7 @@ class TimePickerField extends InputField {
     Icon? switchToInputEntryModeIcon,
     TextDirection? textDirection,
     bool useRootNavigator = true,
+    VoidCallback? onTapClear,
   }) : super(
           readOnly: true,
           contentPadding: contentPadding ??
@@ -94,6 +95,16 @@ class TimePickerField extends InputField {
               child:
                   Row(mainAxisAlignment: MainAxisAlignment.center, children: [
                 const Icon(Icons.timer_outlined),
+                if (onTapClear != null && controller!.text.isNotEmpty)
+                  IconButton(
+                    onPressed: onTapClear,
+                    padding: const EdgeInsets.all(0),
+                    visualDensity: VisualDensity.compact,
+                    constraints:
+                        const BoxConstraints(maxHeight: 20, maxWidth: 20),
+                    splashRadius: 20,
+                    icon: const Icon(Icons.close),
+                  ),
                 if (suffixIcon != null) suffixIcon,
               ]),
             ),
@@ -155,7 +166,7 @@ class TimePickerField extends InputField {
     bool obscureText = false,
     EdgeInsetsGeometry? prefixPadding,
     BorderRadius borderRadius =
-        const BorderRadius.all(Radius.circular(Vars.radius15)),
+        const BorderRadius.all(Radius.circular(Vars.radius10)),
     BorderSide? border,
     BorderSide? borderDisabled,
     BorderSide? borderError,

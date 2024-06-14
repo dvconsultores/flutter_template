@@ -41,7 +41,7 @@ class MultipleSelectField<T> extends StatefulWidget {
     this.textAlignHint,
     this.errorText,
     this.errorStyle,
-    this.borderRadius = const BorderRadius.all(Radius.circular(Vars.radius15)),
+    this.borderRadius = const BorderRadius.all(Radius.circular(Vars.radius10)),
     this.border,
     this.borderDisabled,
     this.borderFocused,

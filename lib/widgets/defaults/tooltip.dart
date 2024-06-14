@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_detextre4/utils/config/theme.dart';
 import 'package:flutter_detextre4/utils/general/variables.dart';
+import 'package:flutter_gap/flutter_gap.dart';
 
 class AppTooltip extends StatelessWidget {
   const AppTooltip({
@@ -27,6 +28,7 @@ class AppTooltip extends StatelessWidget {
       message: message,
       richMessage: richMessage,
       verticalOffset: verticalOffset ?? -50,
+      showDuration: const Duration(seconds: 10),
       triggerMode: triggerMode ?? TooltipTriggerMode.tap,
       margin: Vars.paddingScaffold.copyWith(top: 0),
       padding: const EdgeInsets.symmetric(
@@ -49,25 +51,32 @@ class ButtonTip extends StatelessWidget {
     super.key,
     required this.message,
     this.splashRadius = 12,
+    this.verticalOffset,
     this.constraints = const BoxConstraints(maxWidth: 22, maxHeight: 22),
     this.iconSize = 18,
     this.color,
     this.icon = const Icon(Icons.info),
     this.triggerMode,
+    this.gap = Vars.gapLow,
+    this.child,
   });
   final String message;
   final double splashRadius;
+  final double? verticalOffset;
   final BoxConstraints constraints;
   final double iconSize;
   final Color? color;
   final Widget icon;
   final TooltipTriggerMode? triggerMode;
+  final double gap;
+  final Widget? child;
 
   @override
   Widget build(BuildContext context) {
-    return AppTooltip(
+    final buttonTip = AppTooltip(
       message: message,
       triggerMode: triggerMode,
+      verticalOffset: verticalOffset,
       child: AbsorbPointer(
         child: IconButton(
           onPressed: () {},
@@ -81,5 +90,16 @@ class ButtonTip extends StatelessWidget {
         ),
       ),
     );
+
+    return child != null
+        ? Row(children: [
+            child!,
+            Gap(gap).row,
+            Transform.translate(
+              offset: const Offset(0, -3),
+              child: buttonTip,
+            ),
+          ])
+        : buttonTip;
   }
 }

@@ -85,6 +85,7 @@ class ListTileExpandedWidget extends StatefulWidget {
   final bool dense;
   final ShapeBorder? shape;
   final double? horizontalTitleGap;
+  final AnimationController? expandsController;
   const ListTileExpandedWidget({
     super.key,
     this.onTap,
@@ -101,6 +102,7 @@ class ListTileExpandedWidget extends StatefulWidget {
     this.dense = true,
     this.shape,
     this.horizontalTitleGap,
+    this.expandsController,
   });
 
   @override
@@ -110,6 +112,9 @@ class ListTileExpandedWidget extends StatefulWidget {
 class _ListTileExpandedWidgetState extends State<ListTileExpandedWidget>
     with SingleTickerProviderStateMixin {
   late final AnimationController animController;
+
+  AnimationController get animationController =>
+      widget.expandsController ?? animController;
 
   @override
   void initState() {
@@ -138,9 +143,9 @@ class _ListTileExpandedWidgetState extends State<ListTileExpandedWidget>
         shape: border,
         child: ListTile(
           onTap: () {
-            animController.isCompleted
-                ? animController.reverse()
-                : animController.forward();
+            animationController.isCompleted
+                ? animationController.reverse()
+                : animationController.forward();
 
             if (widget.onTap != null) widget.onTap!();
           },
@@ -164,9 +169,9 @@ class _ListTileExpandedWidgetState extends State<ListTileExpandedWidget>
           subtitle: widget.subTitle,
           trailing: widget.trailing ??
               AnimatedBuilder(
-                animation: animController,
+                animation: animationController,
                 builder: (context, child) => Icon(
-                  animController.isCompleted
+                  animationController.isCompleted
                       ? Icons.arrow_drop_up
                       : Icons.arrow_drop_down,
                 ),
@@ -175,15 +180,16 @@ class _ListTileExpandedWidgetState extends State<ListTileExpandedWidget>
       ),
       if (widget.desplegableBuilder != null)
         AnimatedBuilder(
-          animation: animController,
+          animation: animationController,
           builder: (context, child) {
             final translate =
                     Tween<double>(begin: -widget.desplegableGap, end: 0)
-                        .animate(animController),
-                opacity =
-                    Tween<double>(begin: 0, end: 1).animate(animController);
+                        .animate(animationController),
+                opacity = Tween<double>(begin: 0, end: 1)
+                    .animate(animationController);
 
-            if (animController.isAnimating || animController.isCompleted) {
+            if (animationController.isAnimating ||
+                animationController.isCompleted) {
               return Opacity(
                 opacity: opacity.value,
                 child: Transform.translate(

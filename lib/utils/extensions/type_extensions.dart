@@ -302,6 +302,10 @@ extension IntExtension on int {
 
 // ? Double extension
 extension DoubleExtension on double {
+  // Returns this [num] clamped to be in the range [lowerLimit]-[upperLimit] but inverted.
+  double clampInverted(double lowerLimit, double upperLimit) =>
+      lowerLimit + upperLimit - clamp(lowerLimit, upperLimit);
+
   // Map the value from one range to another
   double clampMapRanged({
     bool invert = false,
@@ -380,7 +384,7 @@ extension NullableStringExtension on String? {
   /// Getter to check if `string` contains `http` inside.
   bool get hasNetworkPath => this?.contains("http") ?? false;
 
-  String splitUrlFile(String by) => this?.split("?")[0] ?? "";
+  String removeQuery() => this?.split('?')[0] ?? '';
 
   /// Add Custom network base url path to `string`.
   ///
@@ -413,6 +417,34 @@ extension NullableStringExtension on String? {
 extension StringExtension on String {
   // returns bool to know if string is html
   bool isHtml() => RegExp(r'<[^>]+>').hasMatch(this);
+
+  // returns current string obfuscated
+  String obfuscateText({
+    bool email = false,
+    int? characters,
+    bool reverse = false,
+  }) {
+    if (email) {
+      var parts = split('@');
+      if (parts.length != 2) return this;
+
+      var name = parts[0].length > 4 ? parts[0].substring(0, 4) : parts[0];
+      var domain = parts[1].length > 3 ? parts[1].substring(0, 3) : parts[1];
+      var obscuredName = name + '*' * (parts[0].length - 4);
+      var obscuredDomain = domain + '*' * (parts[1].length - 3);
+      return '$obscuredName@$obscuredDomain';
+    }
+
+    if (characters != null && characters < length) {
+      if (reverse) {
+        return "*" * (length - characters) + substring(length - characters);
+      } else {
+        return substring(0, characters) + "*" * (length - characters);
+      }
+    }
+
+    return "*" * length;
+  }
 
   /// Return a string representing [date] formatted according to our locale and internal format.
   String formatTime({
@@ -584,8 +616,13 @@ extension StringExtension on String {
   }
 
   /// Converts first character from `string` in uppercase.
-  String toCapitalize() =>
-      "${this[0].toUpperCase()}${substring(1).toLowerCase()}";
+  String toCapitalize() {
+    try {
+      return "${this[0].toUpperCase()}${substring(1).toLowerCase()}";
+    } catch (error) {
+      return "";
+    }
+  }
 
   /// Converts all characters from `string` separated by space in uppercase.
   String toCapitalizeEachFirstWord() =>
@@ -637,9 +674,6 @@ extension StringExtension on String {
       return splitted.join(",");
     }
   }
-
-  /// Remove query parameters from any url
-  String removeQuery() => split('?')[0];
 }
 
 // ? Unused
