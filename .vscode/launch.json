@@ -5,21 +5,65 @@
   "version": "0.2.0",
   "configurations": [
     {
-      "name": "flutte_detextre4",
-      "request": "launch",
-      "type": "dart"
-    },
-    {
-      "name": "flutte_detextre4 (profile mode)",
+      "name": "flutter debug",
       "request": "launch",
       "type": "dart",
-      "flutterMode": "profile"
     },
     {
-      "name": "flutte_detextre4 (release mode)",
+      "name": "flutter profile",
       "request": "launch",
       "type": "dart",
-      "flutterMode": "release"
-    }
+      "flutterMode": "profile",
+    },
+    {
+      "name": "flutter release",
+      "request": "launch",
+      "type": "dart",
+      "flutterMode": "release",
+    },
+
+
+    {
+      "name": "flutter debug (flavor dev)",
+      "request": "launch",
+      "type": "dart",
+      "args": ["--flavor", "dev"]
+    },
+    {
+      "name": "flutter profile (flavor dev)",
+      "request": "launch",
+      "type": "dart",
+      "flutterMode": "profile",
+      "args": ["--flavor", "dev"]
+    },
+    {
+      "name": "flutter release (flavor dev)",
+      "request": "launch",
+      "type": "dart",
+      "flutterMode": "release",
+      "args": ["--flavor", "dev"]
+    },
+
+
+    {
+      "name": "flutter debug (flavor prod)",
+      "request": "launch",
+      "type": "dart",
+      "args": ["--flavor", "prod"]
+    },
+    {
+      "name": "flutter profile (flavor prod)",
+      "request": "launch",
+      "type": "dart",
+      "flutterMode": "profile",
+      "args": ["--flavor", "prod"]
+    },
+    {
+      "name": "flutter release (flavor prod)",
+      "request": "launch",
+      "type": "dart",
+      "flutterMode": "release",
+      "args": ["--flavor", "prod"]
+    },
   ]
 }
