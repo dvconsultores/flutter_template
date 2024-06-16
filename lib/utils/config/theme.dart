@@ -1,5 +1,6 @@
 // * Themes app
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_detextre4/main.dart';
 import 'package:flutter_detextre4/main_provider.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -31,6 +32,19 @@ mixin FontFamily {
 
 /// Themes configuration class from app.
 class ThemeApp {
+  static SystemUiOverlayStyle get systemUiOverlayStyle =>
+      theme == ThemeType.light
+          ? const SystemUiOverlayStyle(
+              statusBarIconBrightness: Brightness.light,
+              systemStatusBarContrastEnforced: true,
+              systemNavigationBarIconBrightness: Brightness.light,
+            )
+          : const SystemUiOverlayStyle(
+              statusBarIconBrightness: Brightness.dark,
+              systemStatusBarContrastEnforced: true,
+              systemNavigationBarIconBrightness: Brightness.dark,
+            );
+
   static Map<ThemeType, ThemeData> get _themes {
     final ligthTheme = ThemeData.light(useMaterial3: false);
     final darkTheme = ThemeData.dark(useMaterial3: false);

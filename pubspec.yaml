@@ -111,6 +111,8 @@ dependencies:
   flutter_gap: ^1.0.0
   flutter_advanced_switch: ^3.1.0
   sticky_headers: ^0.3.0+2
+  video_player: ^2.8.5
+  appinio_video_player: ^1.2.2
 
 
 dev_dependencies:

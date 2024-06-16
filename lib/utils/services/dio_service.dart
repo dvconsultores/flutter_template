@@ -8,6 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_detextre4/main.dart';
 import 'package:flutter_detextre4/main_provider.dart';
 import 'package:flutter_detextre4/utils/extensions/type_extensions.dart';
+import 'package:flutter_detextre4/utils/general/file_type.dart.dart';
 import 'package:flutter_detextre4/utils/services/local_data/env_service.dart';
 import 'package:flutter_detextre4/utils/services/local_data/secure_storage_service.dart';
 import 'package:flutter_detextre4/widgets/dialogs/system_alert_widget.dart';
@@ -371,19 +372,9 @@ class MultipartContructor {
   final String? format;
   final String? type;
 
-  /// Get current format of Uri, if dont match will return null
-  String? getFormat() => file.path.split(".").last;
-
-  /// Get current type of File, if dont match will return null
-  String? getType() {
-    return FilesType.values
-        .firstWhereOrNull((element) => element.listValues.contains(getFormat()))
-        ?.name;
-  }
-
   Future<http.MultipartFile> build() async {
-    final typeFile = type ?? getType() ?? "unknow";
-    final formatFile = format ?? getFormat() ?? "unknow";
+    final typeFile = type ?? FileType.fromPath(file.path)?.name ?? "unknow",
+        formatFile = format ?? FileType.extension(file.path);
 
     return http.MultipartFile.fromBytes(
       name,
@@ -392,84 +383,6 @@ class MultipartContructor {
       filename: basename(file.path),
     );
   }
-}
-
-/// A Collection of formats to diverse file types
-enum FilesType {
-  image([
-    "svg",
-    "jpeg",
-    "jpg",
-    "png",
-    "gif",
-    "tiff",
-    "psd",
-    "pdf",
-    "eps",
-    "ai",
-    "indd",
-    "raw",
-  ]),
-  video([
-    "mp4",
-    "mov",
-    "wmv",
-    "avi",
-    "mkv",
-    "avchd",
-    "flv",
-    "f4v",
-    "swf",
-    "webm",
-    "html5",
-    "mpeg-2",
-  ]),
-  audio([
-    ".aac",
-    "m4a",
-    "flac",
-    "mp3",
-    "wav",
-    "wma",
-    "aac",
-  ]),
-  application([
-    ".abw",
-    ".arc",
-    ".bin",
-    ".bz",
-    ".bz2",
-    ".csh",
-    ".doc",
-    ".epub",
-    ".jar",
-    ".js",
-    ".json",
-    ".mpkg",
-    ".odp",
-    ".ods",
-    ".odt",
-    ".ogx",
-    ".pdf",
-    ".ppt",
-    ".rar",
-    ".rtf",
-    ".sh",
-    ".swf",
-    ".tar",
-    ".vsd",
-    ".xhtml",
-    ".xls",
-    ".xml",
-    ".xul",
-    ".zip",
-    ".7z",
-  ]);
-
-  const FilesType(this.listValues);
-
-  /// List of admitted formats
-  final List<String> listValues;
 }
 
 // ? dio response extension

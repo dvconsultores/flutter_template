@@ -42,9 +42,8 @@ class AppState extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     if (!kIsWeb) {
-      SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
-        systemNavigationBarColor: Colors.amber,
-      ));
+      SystemChrome.setSystemUIOverlayStyle(ThemeApp.systemUiOverlayStyle
+          .copyWith(systemNavigationBarColor: Colors.amber));
     }
 
     // * Route blocs

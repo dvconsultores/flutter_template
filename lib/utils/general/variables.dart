@@ -7,7 +7,7 @@ mixin Vars {
   static final isProduction = env.environment == "production";
 
   // * fetching
-  static const requestTiming = 10;
+  static const requestTiming = 20;
 
   // * values
   static const maxDecimals = 3;
