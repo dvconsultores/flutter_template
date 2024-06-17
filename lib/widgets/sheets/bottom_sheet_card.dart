@@ -18,6 +18,8 @@ class BottomSheetCard extends StatelessWidget {
     required this.child,
     this.scrollable = true,
     this.topWidget,
+    this.floatingActionButton,
+    this.bottomNavigationBar,
   });
   final EdgeInsetsGeometry? padding;
   final bool expand;
@@ -27,6 +29,8 @@ class BottomSheetCard extends StatelessWidget {
   final bool scrollable;
   final Widget child;
   final Widget? topWidget;
+  final Widget? floatingActionButton;
+  final Widget? bottomNavigationBar;
 
   static Future<T?> showModal<T>(
     BuildContext context, {
@@ -44,6 +48,8 @@ class BottomSheetCard extends StatelessWidget {
     bool isDismissible = true,
     Widget? child,
     Widget? topWidget,
+    Widget? floatingActionButton,
+    Widget? bottomNavigationBar,
   }) async =>
       await showModalBottomSheet<T>(
         context: context,
@@ -67,6 +73,8 @@ class BottomSheetCard extends StatelessWidget {
                   padding: padding,
                   scrollable: scrollable,
                   topWidget: topWidget,
+                  floatingActionButton: floatingActionButton,
+                  bottomNavigationBar: bottomNavigationBar,
                   child: child ?? const SizedBox.shrink(),
                 ),
       );
@@ -79,30 +87,34 @@ class BottomSheetCard extends StatelessWidget {
       minChildSize: minChildSize,
       maxChildSize: maxChildSize,
       builder: (context, scrollController) {
-        return Column(children: [
-          if (topWidget != null)
-            topWidget!
-          else
-            const Gap(Vars.gapXLarge).column,
-          if (scrollable)
-            Expanded(
-              child: SingleChildScrollView(
-                controller: scrollController,
-                physics: const BouncingScrollPhysics(),
-                padding:
-                    padding ?? Vars.paddingScaffold.copyWith(top: 0, bottom: 0),
-                child: child,
+        return Scaffold(
+          floatingActionButton: floatingActionButton,
+          bottomNavigationBar: bottomNavigationBar,
+          body: Column(children: [
+            if (topWidget != null)
+              topWidget!
+            else
+              const Gap(Vars.gapXLarge).column,
+            if (scrollable)
+              Expanded(
+                child: SingleChildScrollView(
+                  controller: scrollController,
+                  physics: const BouncingScrollPhysics(),
+                  padding: padding ??
+                      Vars.paddingScaffold.copyWith(top: 0, bottom: 0),
+                  child: child,
+                ),
+              )
+            else
+              Expanded(
+                child: Padding(
+                  padding: padding ??
+                      Vars.paddingScaffold.copyWith(top: 0, bottom: 0),
+                  child: child,
+                ),
               ),
-            )
-          else
-            Expanded(
-              child: Padding(
-                padding:
-                    padding ?? Vars.paddingScaffold.copyWith(top: 0, bottom: 0),
-                child: child,
-              ),
-            ),
-        ]);
+          ]),
+        );
       },
     );
   }
@@ -124,6 +136,8 @@ class BottomSheetList<T> extends StatelessWidget {
     this.emptyDataStyle,
     this.itemsGap,
     this.topWidget,
+    this.floatingActionButton,
+    this.bottomNavigationBar,
   });
   final EdgeInsetsGeometry? padding;
   final List<DropdownMenuItem<T>> items;
@@ -138,6 +152,8 @@ class BottomSheetList<T> extends StatelessWidget {
   final TextStyle? emptyDataStyle;
   final double? itemsGap;
   final Widget? topWidget;
+  final Widget? floatingActionButton;
+  final Widget? bottomNavigationBar;
 
   static Future<DropdownMenuItem<T>?> showModal<T>(
     BuildContext context, {
@@ -160,6 +176,8 @@ class BottomSheetList<T> extends StatelessWidget {
     TextStyle? emptyDataStyle,
     double? itemsGap,
     Widget? topWidget,
+    Widget? floatingActionButton,
+    Widget? bottomNavigationBar,
   }) async =>
       await showModalBottomSheet<DropdownMenuItem<T>>(
         context: context,
@@ -188,6 +206,8 @@ class BottomSheetList<T> extends StatelessWidget {
           padding: padding,
           itemsGap: itemsGap,
           topWidget: topWidget,
+          floatingActionButton: floatingActionButton,
+          bottomNavigationBar: bottomNavigationBar,
         ),
       );
 
@@ -199,52 +219,57 @@ class BottomSheetList<T> extends StatelessWidget {
       minChildSize: minChildSize,
       maxChildSize: maxChildSize,
       builder: (context, scrollController) {
-        return Column(children: [
-          if (topWidget != null)
-            topWidget!
-          else
-            const Gap(Vars.gapXLarge).column,
-          Expanded(
-            child: items.isEmpty
-                ? Padding(
-                    padding: const EdgeInsets.symmetric(vertical: Vars.gapMax),
-                    child: emptyData ??
-                        Text(
-                          emptyDataText ?? "No hay registros",
-                          style: emptyDataStyle,
-                        ),
-                  )
-                : ListView.separated(
-                    padding: padding ??
-                        Vars.paddingScaffold.copyWith(top: 0, bottom: 0),
-                    controller: scrollController,
-                    itemCount: items.length,
-                    separatorBuilder: (context, index) =>
-                        Gap(itemsGap ?? Vars.gapXLarge).column,
-                    itemBuilder: (context, index) {
-                      final item = items[index];
+        return Scaffold(
+          floatingActionButton: floatingActionButton,
+          bottomNavigationBar: bottomNavigationBar,
+          body: Column(children: [
+            if (topWidget != null)
+              topWidget!
+            else
+              const Gap(Vars.gapXLarge).column,
+            Expanded(
+              child: items.isEmpty
+                  ? Padding(
+                      padding:
+                          const EdgeInsets.symmetric(vertical: Vars.gapMax),
+                      child: emptyData ??
+                          Text(
+                            emptyDataText ?? "No records",
+                            style: emptyDataStyle,
+                          ),
+                    )
+                  : ListView.separated(
+                      padding: padding ??
+                          Vars.paddingScaffold.copyWith(top: 0, bottom: 0),
+                      controller: scrollController,
+                      itemCount: items.length,
+                      separatorBuilder: (context, index) =>
+                          Gap(itemsGap ?? Vars.gapXLarge).column,
+                      itemBuilder: (context, index) {
+                        final item = items[index];
 
-                      return GestureDetector(
-                        onTap: () {
-                          clearSnackbars();
-                          Navigator.pop<DropdownMenuItem<T>>(context, item);
-                          if (onTap != null) onTap!(item);
-                        },
-                        child: itemBuilder != null
-                            ? itemBuilder!(context, index)
-                            : CardWidget(
-                                elevation: 5,
-                                padding: const EdgeInsets.symmetric(
-                                  horizontal: Vars.gapMedium,
-                                  vertical: Vars.gapXLarge,
+                        return GestureDetector(
+                          onTap: () {
+                            clearSnackbars();
+                            Navigator.pop<DropdownMenuItem<T>>(context, item);
+                            if (onTap != null) onTap!(item);
+                          },
+                          child: itemBuilder != null
+                              ? itemBuilder!(context, index)
+                              : CardWidget(
+                                  elevation: 5,
+                                  padding: const EdgeInsets.symmetric(
+                                    horizontal: Vars.gapMedium,
+                                    vertical: Vars.gapXLarge,
+                                  ),
+                                  child: item.child,
                                 ),
-                                child: item.child,
-                              ),
-                      );
-                    },
-                  ),
-          ),
-        ]);
+                        );
+                      },
+                    ),
+            ),
+          ]),
+        );
       },
     );
   }
@@ -278,6 +303,8 @@ class BottomSheetListMultiple<T> extends StatefulWidget {
     this.crossAxisSpacing = Vars.gapXLarge,
     this.mainAxisSpacing = Vars.gapXLarge,
     this.topWidget,
+    this.floatingActionButton,
+    this.bottomNavigationBar,
   });
 
   final EdgeInsetsGeometry? contextPadding;
@@ -306,6 +333,8 @@ class BottomSheetListMultiple<T> extends StatefulWidget {
   final double crossAxisSpacing;
   final double mainAxisSpacing;
   final Widget? topWidget;
+  final Widget? floatingActionButton;
+  final Widget? bottomNavigationBar;
 
   static Future<List<DropdownMenuItem<T>>?> showModal<T>(
     BuildContext context, {
@@ -341,6 +370,8 @@ class BottomSheetListMultiple<T> extends StatefulWidget {
     double crossAxisSpacing = Vars.gapXLarge,
     double mainAxisSpacing = Vars.gapXLarge,
     Widget? topWidget,
+    Widget? floatingActionButton,
+    Widget? bottomNavigationBar,
   }) async =>
       await showModalBottomSheet<List<DropdownMenuItem<T>>>(
         context: context,
@@ -381,6 +412,8 @@ class BottomSheetListMultiple<T> extends StatefulWidget {
           crossAxisSpacing: crossAxisSpacing,
           mainAxisSpacing: mainAxisSpacing,
           topWidget: topWidget,
+          floatingActionButton: floatingActionButton,
+          bottomNavigationBar: bottomNavigationBar,
         ),
       );
 
@@ -427,76 +460,81 @@ class _BottomSheetListMultipleState<T>
               }
             });
 
-        return Column(children: [
-          if (widget.topWidget != null)
-            widget.topWidget!
-          else
-            const Gap(Vars.gapXLarge).column,
-          if (widget.label != null)
-            widget.label!
-          else if (widget.labelText != null)
-            Padding(
-                padding: Vars.paddingScaffold
-                    .copyWith(top: 0, bottom: Vars.gapXLarge),
-                child: Text(
-                  widget.labelText!,
-                  style: widget.labelStyle ??
-                      const TextStyle(fontWeight: FontWeight.w700),
-                )),
-          Expanded(
-            child: widget.items.isEmpty
-                ? Padding(
-                    padding: const EdgeInsets.symmetric(vertical: Vars.gapMax),
-                    child: widget.emptyData ??
-                        Text(widget.emptyDataText ?? "No hay registros",
-                            style: widget.emptyDataStyle),
-                  )
-                : GridView.count(
-                    crossAxisCount: widget.crossAxisCount,
-                    childAspectRatio: widget.childAspectRatio,
-                    crossAxisSpacing: widget.crossAxisSpacing,
-                    mainAxisSpacing: widget.mainAxisSpacing,
-                    physics: const BouncingScrollPhysics(),
-                    padding: widget.contextPadding ??
-                        Vars.paddingScaffold.copyWith(top: 0),
-                    children: widget.items
-                        .map(
-                          (item) => widget.itemBuilder != null
-                              ? GestureDetector(
-                                  onTap: () => onPressed(item),
-                                  child:
-                                      widget.itemBuilder!(context, item.child),
-                                )
-                              : Button(
-                                  borderRadius: const BorderRadius.all(
-                                      Radius.circular(Vars.radius10)),
-                                  boxShadow: [
-                                    if (!isSelected(item)) Vars.boxShadow2
-                                  ],
-                                  borderSide: BorderSide(
-                                    width: 1.3,
-                                    color: isSelected(item)
-                                        ? ThemeApp.colors(context).primary
-                                        : Colors.transparent,
+        return Scaffold(
+          floatingActionButton: widget.floatingActionButton,
+          bottomNavigationBar: widget.bottomNavigationBar,
+          body: Column(children: [
+            if (widget.topWidget != null)
+              widget.topWidget!
+            else
+              const Gap(Vars.gapXLarge).column,
+            if (widget.label != null)
+              widget.label!
+            else if (widget.labelText != null)
+              Padding(
+                  padding: Vars.paddingScaffold
+                      .copyWith(top: 0, bottom: Vars.gapXLarge),
+                  child: Text(
+                    widget.labelText!,
+                    style: widget.labelStyle ??
+                        const TextStyle(fontWeight: FontWeight.w700),
+                  )),
+            Expanded(
+              child: widget.items.isEmpty
+                  ? Padding(
+                      padding:
+                          const EdgeInsets.symmetric(vertical: Vars.gapMax),
+                      child: widget.emptyData ??
+                          Text(widget.emptyDataText ?? "No records",
+                              style: widget.emptyDataStyle),
+                    )
+                  : GridView.count(
+                      crossAxisCount: widget.crossAxisCount,
+                      childAspectRatio: widget.childAspectRatio,
+                      crossAxisSpacing: widget.crossAxisSpacing,
+                      mainAxisSpacing: widget.mainAxisSpacing,
+                      physics: const BouncingScrollPhysics(),
+                      padding: widget.contextPadding ??
+                          Vars.paddingScaffold.copyWith(top: 0),
+                      children: widget.items
+                          .map(
+                            (item) => widget.itemBuilder != null
+                                ? GestureDetector(
+                                    onTap: () => onPressed(item),
+                                    child: widget.itemBuilder!(
+                                        context, item.child),
+                                  )
+                                : Button(
+                                    borderRadius: const BorderRadius.all(
+                                        Radius.circular(Vars.radius10)),
+                                    boxShadow: [
+                                      if (!isSelected(item)) Vars.boxShadow2
+                                    ],
+                                    borderSide: BorderSide(
+                                      width: 1.3,
+                                      color: isSelected(item)
+                                          ? ThemeApp.colors(context).primary
+                                          : Colors.transparent,
+                                    ),
+                                    bgColor: Colors.white,
+                                    color: widget.itemforegroundColor,
+                                    onPressed: () => onPressed(item),
+                                    child: item.child,
                                   ),
-                                  bgColor: Colors.white,
-                                  color: widget.itemforegroundColor,
-                                  onPressed: () => onPressed(item),
-                                  child: item.child,
-                                ),
-                        )
-                        .toList(),
-                  ),
-          ),
-          if (widget.buttonBuilder != null)
-            widget.buttonBuilder!(context, onComplete)
-          else
-            Button(
-              margin: Vars.paddingScaffold,
-              text: widget.buttonText ?? "Aceptar",
-              onPressed: onComplete,
+                          )
+                          .toList(),
+                    ),
             ),
-        ]);
+            if (widget.buttonBuilder != null)
+              widget.buttonBuilder!(context, onComplete)
+            else
+              Button(
+                margin: Vars.paddingScaffold,
+                text: widget.buttonText ?? "Accept",
+                onPressed: onComplete,
+              ),
+          ]),
+        );
       },
     );
   }
