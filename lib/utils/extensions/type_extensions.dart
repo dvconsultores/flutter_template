@@ -730,8 +730,8 @@ extension ScreenshotExtension on ScreenshotController {
     }
   }
 
-  Future<void> shareCapture() async {
-    Uint8List? imageBytes = await capture(pixelRatio: 1.5);
+  Future<void> shareCapture({double pixelRatio = 1.5}) async {
+    Uint8List? imageBytes = await capture(pixelRatio: pixelRatio);
 
     final io.Directory directory = await getApplicationDocumentsDirectory();
     final String path = directory.path;
