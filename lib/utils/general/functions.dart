@@ -8,12 +8,10 @@ import 'package:flutter_detextre4/utils/extensions/type_extensions.dart';
 import 'package:flutter_detextre4/utils/general/variables.dart';
 import 'package:flutter_detextre4/widgets/dialogs/system_alert_widget.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
-import 'package:gallery_saver/gallery_saver.dart';
 import 'package:http/http.dart' show Response, get;
 import 'package:launch_review/launch_review.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:path_provider/path_provider.dart';
-import 'package:share_plus/share_plus.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:version/version.dart';
 
@@ -55,22 +53,6 @@ Future<String?> downloadAndSavePicture(
   final Response response = await get(Uri.parse(url!));
   await File(filePath).writeAsBytes(response.bodyBytes);
   return filePath;
-}
-
-Future<File> capturePng(
-  Uint8List imageBytes, {
-  String? fileName,
-  String extensionType = 'png',
-}) async {
-  final Directory directory = await getApplicationDocumentsDirectory();
-  final filePath =
-          '${directory.path}/${fileName ?? "screenshot-${DateTime.now()}"}.$extensionType',
-      file = File(filePath);
-
-  await file.writeAsBytes(imageBytes);
-  await GallerySaver.saveImage(file.path);
-  Share.shareXFiles([XFile(file.path)]);
-  return file;
 }
 
 void unfocus(BuildContext context) => FocusScope.of(context).unfocus();
