@@ -25,7 +25,7 @@ class AppTooltip extends StatelessWidget {
     if (!showTooltip) return child;
 
     return Tooltip(
-      message: message,
+      message: message ?? '',
       richMessage: richMessage,
       verticalOffset: verticalOffset ?? -50,
       showDuration: const Duration(seconds: 10),
