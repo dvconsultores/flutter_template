@@ -226,20 +226,32 @@ class LowerCaseTextFormatter extends TextInputFormatter {
   }
 }
 
-class RestringedCharactersFormatter extends TextInputFormatter {
-  const RestringedCharactersFormatter(this.restrictedCharacters);
+class RestrictedCharactersFormatter extends TextInputFormatter {
+  const RestrictedCharactersFormatter(this.restrictedCharacters);
   final Set<String> restrictedCharacters;
 
   @override
   TextEditingValue formatEditUpdate(
       TextEditingValue oldValue, TextEditingValue newValue) {
-    final replaced = newValue.text.characters
-        .map((char) => restrictedCharacters.contains(char) ? '' : char)
-        .join('');
+    String replaced = '';
+    int cursorPosition = newValue.selection.end;
+    int offset = 0;
+
+    for (final char in newValue.text.characters) {
+      if (!restrictedCharacters.contains(char)) {
+        replaced += char;
+      } else {
+        if (cursorPosition > newValue.text.indexOf(char) - offset) {
+          // Si el caracter restringido está antes del cursor, ajustamos el offset
+          cursorPosition--;
+        }
+        offset++;
+      }
+    }
 
     return TextEditingValue(
       text: replaced,
-      selection: TextSelection.collapsed(offset: replaced.length),
+      selection: TextSelection.collapsed(offset: cursorPosition),
     );
   }
 }
