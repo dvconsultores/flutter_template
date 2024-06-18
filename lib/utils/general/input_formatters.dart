@@ -242,9 +242,10 @@ class RestrictedCharactersFormatter extends TextInputFormatter {
         replaced += char;
       } else {
         if (cursorPosition > newValue.text.indexOf(char) - offset) {
-          // Si el caracter restringido está antes del cursor, ajustamos el offset
+          // If the restricted character is before the cursor, we adjust the offset
           cursorPosition--;
         }
+
         offset++;
       }
     }
