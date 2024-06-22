@@ -55,6 +55,7 @@ class MultipleSelectField<T> extends StatefulWidget {
     this.dropdownMinChildSize = .2,
     this.dropdownTopWidget,
     this.dropdownChildAspectRatio = 20 / 4.8,
+    this.dropdownScrollable = true,
   });
   final String? restorationId;
   final void Function(List<T>? value)? onSaved;
@@ -98,6 +99,7 @@ class MultipleSelectField<T> extends StatefulWidget {
   final double dropdownMinChildSize;
   final Widget? dropdownTopWidget;
   final double dropdownChildAspectRatio;
+  final bool dropdownScrollable;
 
   @override
   State<MultipleSelectField<T>> createState() => _MultiSelectFieldState<T>();
@@ -132,6 +134,7 @@ class _MultiSelectFieldState<T> extends State<MultipleSelectField<T>>
     final items = await BottomSheetListMultiple.showModal(
       context,
       items: widget.items,
+      scrollable: widget.dropdownScrollable,
       initialItems: selectedItems(),
       labelText: widget.dropdownTitle,
       maxLenght: widget.maxLenght,

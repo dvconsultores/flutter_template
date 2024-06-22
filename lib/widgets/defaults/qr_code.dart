@@ -30,24 +30,28 @@ class AppQrCode extends StatelessWidget {
         ),
       ),
       clipBehavior: Clip.antiAliasWithSaveLayer,
-      child: QrImageView(
-        data: data,
-        version: QrVersions.auto,
-        size: size,
-        backgroundColor: Colors.white,
-        eyeStyle: QrEyeStyle(
-          color: colored
-              ? ThemeApp.colors(context).tertiary
-              : ThemeApp.colors(context).text,
-          eyeShape: QrEyeShape.circle,
+      child: SizedBox(
+        width: size,
+        height: size,
+        child: QrImageView(
+          data: data,
+          version: QrVersions.auto,
+          size: size,
+          backgroundColor: Colors.white,
+          eyeStyle: QrEyeStyle(
+            color: colored
+                ? ThemeApp.colors(context).tertiary
+                : ThemeApp.colors(context).text,
+            eyeShape: QrEyeShape.circle,
+          ),
+          gapless: true,
+          dataModuleStyle: QrDataModuleStyle(
+            color: ThemeApp.colors(context).text,
+            dataModuleShape: QrDataModuleShape.circle,
+          ),
+          embeddedImage:
+              hideLogo ? null : const AssetImage('assets/logos/logo_apolo.png'),
         ),
-        gapless: true,
-        dataModuleStyle: QrDataModuleStyle(
-          color: ThemeApp.colors(context).text,
-          dataModuleShape: QrDataModuleShape.circle,
-        ),
-        embeddedImage:
-            hideLogo ? null : const AssetImage('assets/logos/logo_apolo.png'),
       ),
     );
   }

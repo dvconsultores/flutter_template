@@ -1,9 +1,9 @@
-import 'package:collection/collection.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_detextre4/utils/config/theme.dart';
 import 'package:flutter_detextre4/utils/general/variables.dart';
 import 'package:flutter_detextre4/widgets/defaults/error_text.dart';
 import 'package:flutter_detextre4/widgets/sheets/bottom_sheet_card.dart';
+import 'package:collection/collection.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_gap/flutter_gap.dart';
 
 class BottomSelectField<T> extends StatefulWidget {
@@ -49,6 +49,7 @@ class BottomSelectField<T> extends StatefulWidget {
     this.dropdownMaxChildSize = .45,
     this.dropdownMinChildSize = .2,
     this.isExpanded = false,
+    this.dropdownScrollable = true,
   });
   final String? restorationId;
   final void Function(T? value)? onSaved;
@@ -87,6 +88,7 @@ class BottomSelectField<T> extends StatefulWidget {
   final double dropdownMaxChildSize;
   final double dropdownMinChildSize;
   final bool isExpanded;
+  final bool dropdownScrollable;
 
   @override
   State<BottomSelectField<T>> createState() => _BottomSelectFieldState<T>();
@@ -114,6 +116,7 @@ class _BottomSelectFieldState<T> extends State<BottomSelectField<T>>
       initialChildSize: widget.dropdownInitialChildSize,
       maxChildSize: widget.dropdownMaxChildSize,
       minChildSize: widget.dropdownMinChildSize,
+      scrollable: widget.dropdownScrollable,
     );
 
     getController.value = item?.value ?? formState!.value;
