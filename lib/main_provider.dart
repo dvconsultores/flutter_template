@@ -1,12 +1,33 @@
 import 'package:another_flushbar/flushbar.dart';
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_detextre4/models/profile_model.dart';
 import 'package:flutter_detextre4/utils/config/config.dart';
 import 'package:flutter_detextre4/utils/config/theme.dart';
 import 'package:flutter_detextre4/utils/services/local_data/hive_data_service.dart';
 
 class MainProvider extends ChangeNotifier {
+  // ? ---------------------------Collections-------------------------------- //
+  //
+
   // ? -------------------------Global variables----------------------------- //
+  bool appStarted = false;
+
+  get setAppStarted {
+    if (appStarted) return;
+
+    appStarted = true;
+    notifyListeners();
+  }
+
+  ProfileModel? profile;
+
+  set setProfile(ProfileModel value) {
+    profile = value;
+    notifyListeners();
+  }
+
+  get clearProfile => profile = null;
   bool stopProcess = false;
   set setStopProcess(bool value) {
     stopProcess = value;

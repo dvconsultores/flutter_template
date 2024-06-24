@@ -1,4 +1,7 @@
+import 'package:flutter_detextre4/main.dart';
+import 'package:flutter_detextre4/main_provider.dart';
 import 'package:flutter_detextre4/utils/extensions/type_extensions.dart';
+import 'package:provider/provider.dart';
 
 class ProfileModel implements DefaultModel {
   ProfileModel({
@@ -14,6 +17,10 @@ class ProfileModel implements DefaultModel {
 
   @override
   Iterable get values => toJson().values;
+
+  static ProfileModel get() =>
+      globalNavigatorKey.currentContext!.read<MainProvider>().profile
+          as ProfileModel;
 
   @override
   ProfileModel copyWith({
