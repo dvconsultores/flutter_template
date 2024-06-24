@@ -5,7 +5,7 @@
 	<key>aps-environment</key>
 	<string>development</string>
 
-  <!-- app links -->
+  <!--?🖊️ App links config -->
   <!-- <key>com.apple.developer.associated-domains</key>
   <array>
     <string>applinks:www.example.com</string>

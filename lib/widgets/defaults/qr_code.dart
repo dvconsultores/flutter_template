@@ -50,7 +50,7 @@ class AppQrCode extends StatelessWidget {
             dataModuleShape: QrDataModuleShape.circle,
           ),
           embeddedImage:
-              hideLogo ? null : const AssetImage('assets/logos/logo_apolo.png'),
+              hideLogo ? null : const AssetImage('assets/images/avatar.png'),
         ),
       ),
     );

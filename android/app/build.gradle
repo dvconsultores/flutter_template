@@ -1,3 +1,16 @@
+// read env file
+file("../../.env").readLines().each() {
+    if (!it.isEmpty() && !it.startsWith("#")) {
+        def pos = it.indexOf("=")
+        def key = it.substring(0, pos)
+        def value = it.substring(pos + 1)
+
+        if (System.getProperty(key) == null) {
+            System.setProperty("env.$key", value)
+        }
+    }
+}
+
 def keystoreProperties = new Properties()
 def keystorePropertiesFile = rootProject.file('key.properties')
 if (keystorePropertiesFile.exists()) {
@@ -27,15 +40,20 @@ if (flutterVersionName == null) {
     flutterVersionName = '1.0'
 }
 
-def packageId = "com.example.flutter_detextre4"
-
 apply plugin: 'com.android.application'
+//? 🖊️ FlutterFire Configuration 🖊️
+// apply plugin: 'com.google.gms.google-services'
 apply plugin: 'kotlin-android'
 apply from: "$flutterRoot/packages/flutter_tools/gradle/flutter.gradle"
 
+import groovy.json.JsonSlurper
+import groovy.json.JsonOutput
+
+def bundleIdDev = "com.example.dev"
+def bundleIdProd = "com.example.prod"
+
 android {
-    namespace packageId
-    compileSdkVersion flutter.compileSdkVersion
+    compileSdkVersion 34
     ndkVersion flutter.ndkVersion
 
     compileOptions {
@@ -52,15 +70,29 @@ android {
     }
 
     defaultConfig {
-        // TODO: Specify your own unique Application ID (https://developer.android.com/studio/build/application-id.html).
-        applicationId packageId
         // You can update the following values to match your application needs.
-        // For more information, see: https://docs.flutter.dev/deployment/android#reviewing-the-gradle-build-configuration.
-        minSdkVersion 23
+        // For more information, see: https://docs.flutter.dev/deployment/android#reviewing-the-build-configuration.
+        minSdkVersion 21
+        multiDexEnabled true
         targetSdkVersion flutter.targetSdkVersion
         versionCode flutterVersionCode.toInteger()
         versionName flutterVersionName
-        // multiDexEnable true
+    }
+
+    flavorDimensions "version"
+    productFlavors {
+        dev {
+            dimension "version"
+            manifestPlaceholders = [appLabel: "Flutter detextre4 Test"]
+            applicationId bundleIdDev
+            namespace bundleIdDev
+        }
+        prod {
+            dimension "version"
+            manifestPlaceholders = [appLabel: "Flutter detextre4"]
+            applicationId bundleIdProd
+            namespace bundleIdProd
+        }
     }
 
     signingConfigs {
@@ -73,6 +105,14 @@ android {
     }
 
     buildTypes {
+        // to avoid troubles compiling app with compileSdkVersion 34
+        debug {
+            minifyEnabled true
+        }
+        profile {
+            minifyEnabled true
+        }
+
         release {
             debuggable false
             minifyEnabled true
@@ -80,11 +120,54 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt')
             if (keystoreProperties['keyAlias'] != null && keystoreProperties['keyPassword'] != null && keystoreProperties['storeFile'] != null && keystoreProperties['storePassword'] != null) {
                 signingConfig signingConfigs.release
-            } else {
-                signingConfig signingConfigs.debug
-            }
+            } else { println "Signature configuration not found. Debug keys will be used." }
         }
     }
+
+    namespace "com.example.dev"
+    lint {
+        checkReleaseBuilds false
+    }
+
+    //? 🖊️ Generate production google services (google services task) 🖊️
+    // tasks.register('createGoogleServicesJson') {
+    //     doLast {
+
+    //         // Check if the google services dev file already exists
+    //         def googleServicesFile = file("$projectDir/google-services.json")
+    //         if (!googleServicesFile.exists()) {
+    //             def jsonContent = System.getenv("GOOGLE_SERVICES")
+    //             googleServicesFile.text = jsonContent
+    //         }
+
+
+    //         // Check if the google services prod file already exists
+    //         def googleServicesProdFile = file("$projectDir/src/prod/google-services.json")
+    //         if (!googleServicesProdFile.exists()) {
+    //             def jsonContent = System.getenv("GOOGLE_SERVICES_PROD")
+    //             if (jsonContent == null) {
+    //                 // If the GOOGLE_SERVICES environment variable is not defined,
+    //                 // reads the content of the default google-services.json file
+    //                 def defaultFile = file("$projectDir/google-services.json")
+    //                 jsonContent = defaultFile.text
+    //             }
+
+    //             // Convert the file content to a JSON object
+    //             def slurped = new JsonSlurper()
+    //             def jsonObject = slurped.parseText(jsonContent)
+
+    //             // Modify the package_name field
+    //             jsonObject.client[0].client_info.android_client_info.package_name = bundleIdProd
+
+    //             // Convert the modified JSON object back to a string
+    //             def updatedJsonContent = JsonOutput.prettyPrint(JsonOutput.toJson(jsonObject))
+
+    //             googleServicesProdFile.text = updatedJsonContent
+    //         }
+    //     }
+    // }
+
+    // preBuild.dependsOn(createGoogleServicesJson)
 }
 
 flutter {
@@ -93,4 +176,5 @@ flutter {
 
 dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+    implementation 'com.android.support:multidex:1.0.3'
 }

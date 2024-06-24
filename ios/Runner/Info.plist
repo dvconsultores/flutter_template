@@ -2,10 +2,12 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 	<dict>
+		<key>CADisableMinimumFrameDurationOnPhone</key>
+		<true/>
 		<key>CFBundleDevelopmentRegion</key>
 		<string>$(DEVELOPMENT_LANGUAGE)</string>
 		<key>CFBundleDisplayName</key>
-		<string>Flutter Detextre4</string>
+		<string>Flutter detextre4</string>
 		<key>CFBundleExecutable</key>
 		<string>$(EXECUTABLE_NAME)</string>
 		<key>CFBundleIdentifier</key>
@@ -13,7 +15,7 @@
 		<key>CFBundleInfoDictionaryVersion</key>
 		<string>6.0</string>
 		<key>CFBundleName</key>
-		<string>flutter_detextre4</string>
+		<string>Flutter detextre4</string>
 		<key>CFBundlePackageType</key>
 		<string>APPL</string>
 		<key>CFBundleShortVersionString</key>
@@ -22,8 +24,46 @@
 		<string>????</string>
 		<key>CFBundleVersion</key>
 		<string>$(FLUTTER_BUILD_NUMBER)</string>
+		<key>CFBundleURLTypes</key>
+		<array>
+				<dict>
+						<key>CFBundleTypeRole</key>
+						<string>Editor</string>
+						<key>CFBundleURLName</key>
+						<string>www.example.com</string>
+						<key>CFBundleURLSchemes</key>
+						<array>
+								<string>logrckt</string>
+						</array>
+				</dict>
+		</array>
+		<key>FLTEnableImpeller</key>
+		<false/>
+		<key>FirebaseAppDelegateProxyEnabled</key>
+		<true/>
+		<key>GADApplicationIdentifier</key>
+		<string>1:673175469064:web:1c9c87db32853b12cfa5b</string>
+		<key>LSApplicationQueriesSchemes</key>
+		<array>
+			<string>flutter_detextre4</string>
+		</array>
 		<key>LSRequiresIPhoneOS</key>
 		<true/>
+		<key>NSCameraUsageDescription</key>
+		<string>Flutter detextre4 necesita acceso a la camara para escanear QR y documentos.</string>
+		<key>NSFaceIDUsageDescription</key>
+		<string>Flutter detextre4 necesita acceso a face ID para autenticarte.</string>
+		<key>NSMicrophoneUsageDescription</key>
+		<string>Flutter detextre4 necesita acceso al micrófono para poder abrir la camara.</string>
+		<key>NSPhotoLibraryUsageDescription</key>
+		<string>Allow access to photo library</string>
+		<key>UIApplicationSupportsIndirectInputEvents</key>
+		<true/>
+		<key>UIBackgroundModes</key>
+		<array>
+			<string>fetch</string>
+			<string>remote-notification</string>
+		</array>
 		<key>UILaunchStoryboardName</key>
 		<string>LaunchScreen</string>
 		<key>UIMainStoryboardFile</key>
@@ -31,8 +71,6 @@
 		<key>UISupportedInterfaceOrientations</key>
 		<array>
 			<string>UIInterfaceOrientationPortrait</string>
-			<string>UIInterfaceOrientationLandscapeLeft</string>
-			<string>UIInterfaceOrientationLandscapeRight</string>
 		</array>
 		<key>UISupportedInterfaceOrientations~ipad</key>
 		<array>
@@ -43,23 +81,11 @@
 		</array>
 		<key>UIViewControllerBasedStatusBarAppearance</key>
 		<false/>
-		<key>CADisableMinimumFrameDurationOnPhone</key>
+		<key>io.flutter.embedded_views_preview</key>
 		<true/>
-		<key>UIApplicationSupportsIndirectInputEvents</key>
-		<true/>
-		<key>NSCameraUsageDescription</key>
-		<string>Flutter Detextre4 reuiere tomar una foto. ¿Podemos user tú cámara?</string>
-		<key>NSPhotoLibraryUsageDescription</key>
-		<string>Flutter Detextre4 reuiere tomar una foto. ¿Podemos user tú cámara?</string>
-		<key>NSMicrophoneUsageDescription</key>
-		<string>Flutter Detextre4 reuiere tomar una foto. ¿Podemos user tú cámara?</string>
-		<key>NSFaceIDUsageDescription</key>
-		<string>Why is my app authenticating using face id?</string>
-		<key>LSApplicationQueriesSchemes</key>
-		<array>
-			<string>flutter_detextre4</string>
-		</array>
 		<key>UIStatusBarHidden</key>
+		<true/>
+		<key>FirebaseAppDelegateProxyEnabled</key>
 		<true/>
 	</dict>
 </plist>
