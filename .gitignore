@@ -44,6 +44,12 @@ app.*.map.json
 /android/app/profile
 /android/app/release
 
+# iOS lockfile
+pubspec.lock
+ios/Podfile.lock
+
+**/ios/Flutter/tmp.xcconfig
+
 # Remember to never publicly share your keystore.
 # See https://flutter.dev/docs/deployment/android#reference-the-keystore-from-the-app
 key.properties
