@@ -5,9 +5,9 @@ import 'dart:io';
 import 'package:collection/collection.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_detextre4/main.dart';
 import 'package:flutter_detextre4/main_provider.dart';
 import 'package:flutter_detextre4/utils/extensions/type_extensions.dart';
+import 'package:flutter_detextre4/utils/general/context_utility.dart';
 import 'package:flutter_detextre4/utils/general/file_type.dart.dart';
 import 'package:flutter_detextre4/utils/services/local_data/env_service.dart';
 import 'package:flutter_detextre4/utils/services/local_data/secure_storage_service.dart';
@@ -71,13 +71,13 @@ class DioService {
       onError: (DioException error, handler) async {
         //* stopped process
         final stoppedProcess =
-            globalNavigatorKey.currentContext!.read<MainProvider>().stopProcess;
+            ContextUtility.context!.read<MainProvider>().stopProcess;
         if (stoppedProcess) return;
 
         //* catch unauthorized request
         if (error.response?.statusCode == 401) {
           return await showDialog(
-            context: globalNavigatorKey.currentContext!,
+            context: ContextUtility.context!,
             barrierDismissible: false,
             builder: (context) => SystemAlertWidget(
               onOpen: () async =>
@@ -302,14 +302,14 @@ extension MultipartResponded on http.MultipartRequest {
     try {
       //* stopped process
       final stoppedProcess =
-          globalNavigatorKey.currentContext!.read<MainProvider>().stopProcess;
+          ContextUtility.context!.read<MainProvider>().stopProcess;
       if (stoppedProcess) throw "";
 
       final response = await http.Response.fromStream(await send());
 
       if (response.statusCode == 401) {
         throw await showDialog(
-              context: globalNavigatorKey.currentContext!,
+              context: ContextUtility.context!,
               barrierDismissible: false,
               builder: (context) => SystemAlertWidget(
                 onOpen: () async =>

@@ -1,8 +1,8 @@
 // * Themes app
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_detextre4/main.dart';
 import 'package:flutter_detextre4/main_provider.dart';
+import 'package:flutter_detextre4/utils/general/context_utility.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 
@@ -130,28 +130,26 @@ class ThemeApp {
 
   ///* Getter to current theme name.
   static ThemeType get theme =>
-      globalNavigatorKey.currentContext?.watch<MainProvider>().appTheme ??
-      ThemeType.light;
+      ContextUtility.context?.watch<MainProvider>().appTheme ?? ThemeType.light;
 
   ///* Getter to current theme assets directory `assets/themes/${theme}`.
   static String assetsPrefix(BuildContext? context) =>
-      'assets/themes/${(context ?? globalNavigatorKey.currentContext!).watch<MainProvider>().appTheme.name}';
+      'assets/themes/${(context ?? ContextUtility.context!).watch<MainProvider>().appTheme.name}';
 
   ///* Getter to current themeData.
   static ThemeData of(BuildContext? context) {
-    final ctx = context ?? globalNavigatorKey.currentContext!;
+    final ctx = context ?? ContextUtility.context!;
     return _themes[ctx.watch<MainProvider>().appTheme]!;
   }
 
   ///* Switch between themeData.
   static void switchTheme(BuildContext? context, ThemeType themeType) =>
-      (context ?? globalNavigatorKey.currentContext!)
-          .read<MainProvider>()
-          .switchTheme = themeType;
+      (context ?? ContextUtility.context!).read<MainProvider>().switchTheme =
+          themeType;
 
   ///* Getter to all custom colors registered in themeData.
   static ColorsApp colors(BuildContext? context) {
-    final themeData = Theme.of(context ?? globalNavigatorKey.currentContext!);
+    final themeData = Theme.of(context ?? ContextUtility.context!);
 
     return ColorsApp(
       background: themeData.colorScheme.background,
@@ -171,7 +169,7 @@ class ThemeApp {
 
   ///* Getter to all custom styles registered in themeData.
   static ThemeDataStyleExtension styles(BuildContext? context) {
-    final themeData = Theme.of(context ?? globalNavigatorKey.currentContext!);
+    final themeData = Theme.of(context ?? ContextUtility.context!);
 
     return ThemeDataStyleExtension(
       customText: themeData.extension<ThemeDataStyleExtension>()!.customText,

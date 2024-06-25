@@ -2,14 +2,14 @@ import 'dart:convert';
 
 import 'package:another_flushbar/flushbar.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_detextre4/main.dart';
 import 'package:flutter_detextre4/main_provider.dart';
 import 'package:flutter_detextre4/utils/config/theme.dart';
 import 'package:flutter_detextre4/utils/extensions/type_extensions.dart';
+import 'package:flutter_detextre4/utils/general/context_utility.dart';
 import 'package:flutter_detextre4/utils/general/variables.dart';
 import 'package:provider/provider.dart';
 
-final _context = globalNavigatorKey.currentContext!;
+final _context = ContextUtility.context!;
 
 // * App snackbar types
 enum SnackbarType {

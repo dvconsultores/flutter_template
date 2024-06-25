@@ -2,13 +2,13 @@ import 'package:collection/collection.dart';
 import 'package:double_back_to_exit/double_back_to_exit.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_detextre4/main.dart';
 import 'package:flutter_detextre4/main_navigation.dart';
 import 'package:flutter_detextre4/routes/log_in_page.dart';
 import 'package:flutter_detextre4/routes/shell_routes/home/home_page.dart';
 import 'package:flutter_detextre4/routes/shell_routes/profile/pages/user_page.dart';
 import 'package:flutter_detextre4/routes/shell_routes/search/pages/list_page.dart';
 import 'package:flutter_detextre4/routes/splash_page.dart';
+import 'package:flutter_detextre4/utils/general/context_utility.dart';
 import 'package:flutter_detextre4/utils/helper_widgets/custom_transition_wrapper.dart';
 import 'package:flutter_detextre4/utils/services/local_data/secure_storage_service.dart';
 import 'package:go_router/go_router.dart';
@@ -25,7 +25,7 @@ Page _pageBuilder(Widget child) => CustomTransitionPage(
     );
 
 final GoRouter router = GoRouter(
-    navigatorKey: globalNavigatorKey,
+    navigatorKey: ContextUtility.navigatorKey,
     initialLocation: kIsWeb ? "/" : "/splash",
     // errorBuilder: (context, state) {
     //   return const ErrorPage();
@@ -64,7 +64,7 @@ final GoRouter router = GoRouter(
 
       // * shell routes
       ShellRoute(
-          navigatorKey: globalShellrouteKey,
+          navigatorKey: ContextUtility.shellrouteKey,
           builder: (context, state, child) => MainNavigation(state, child),
           routes: [
             GoRoute(

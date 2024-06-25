@@ -1,7 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_detextre4/main.dart';
 import 'package:flutter_detextre4/utils/config/theme.dart';
+import 'package:flutter_detextre4/utils/general/context_utility.dart';
 import 'package:skeletons/skeletons.dart';
 
 // ? text extension
@@ -65,7 +65,7 @@ extension ImageExtension on Image {
         );
 
     if (loading) {
-      return skeletonLoader(globalNavigatorKey.currentContext!, true);
+      return skeletonLoader(ContextUtility.context!, true);
     }
 
     return ClipRRect(
@@ -163,7 +163,7 @@ extension CachedNetworkImageExtension on CachedNetworkImage {
         );
 
     if (loading) {
-      return skeletonLoader(globalNavigatorKey.currentContext!, true);
+      return skeletonLoader(ContextUtility.context!, true);
     }
 
     return ClipRRect(

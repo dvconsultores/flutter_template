@@ -2,9 +2,9 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
-import 'package:flutter_detextre4/main.dart';
 import 'package:flutter_detextre4/main_provider.dart';
 import 'package:flutter_detextre4/utils/config/theme.dart';
+import 'package:flutter_detextre4/utils/general/context_utility.dart';
 import 'package:flutter_detextre4/utils/general/variables.dart';
 import 'package:flutter_detextre4/utils/helper_widgets/will_pop_custom.dart';
 import 'package:flutter_detextre4/widgets/defaults/button.dart';
@@ -40,8 +40,7 @@ class _SystemAlertWidgetState extends State<SystemAlertWidget> {
   @override
   void initState() {
     SchedulerBinding.instance.addPostFrameCallback((timeStamp) {
-      globalNavigatorKey.currentContext!.read<MainProvider>().setStopProcess =
-          true;
+      ContextUtility.context!.read<MainProvider>().setStopProcess = true;
     });
     super.initState();
   }
@@ -50,9 +49,8 @@ class _SystemAlertWidgetState extends State<SystemAlertWidget> {
   void dispose() {
     Future.delayed(
         Durations.long2,
-        () => globalNavigatorKey.currentContext!
-            .read<MainProvider>()
-            .setStopProcess = false);
+        () => ContextUtility.context!.read<MainProvider>().setStopProcess =
+            false);
     super.dispose();
   }
 

@@ -3,8 +3,8 @@ import 'dart:io' as io;
 import 'package:collection/collection.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_detextre4/main.dart';
 import 'package:flutter_detextre4/main_provider.dart';
+import 'package:flutter_detextre4/utils/general/context_utility.dart';
 import 'package:provider/provider.dart';
 
 /// * A collection about application name formats
@@ -166,10 +166,9 @@ enum LanguageList {
 class AppLocale {
   /// Get current locale.
   static Locale get locale =>
-      globalNavigatorKey.currentContext!.read<MainProvider>().locale;
+      ContextUtility.context!.read<MainProvider>().locale;
 
   /// A global function to change current language.
   static void changeLanguage(LanguageList value) =>
-      globalNavigatorKey.currentContext!.read<MainProvider>().changeLocale =
-          value;
+      ContextUtility.context!.read<MainProvider>().changeLocale = value;
 }

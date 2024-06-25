@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_detextre4/main.dart';
 import 'package:flutter_detextre4/utils/extensions/type_extensions.dart';
+import 'package:flutter_detextre4/utils/general/context_utility.dart';
 import 'package:flutter_detextre4/utils/general/functions.dart';
 import 'package:flutter_detextre4/utils/general/variables.dart';
 import 'package:flutter_detextre4/widgets/form_fields/input_field.dart';
@@ -108,7 +108,7 @@ class DatePickerField extends InputField {
             if (onTap != null) onTap();
 
             final dateTime = await showDatePicker(
-              context: globalNavigatorKey.currentContext!,
+              context: ContextUtility.context!,
               firstDate: firstDate,
               lastDate: lastDate,
               anchorPoint: anchorPoint,
@@ -137,7 +137,7 @@ class DatePickerField extends InputField {
               textDirection: textDirection,
               useRootNavigator: useRootNavigator,
             );
-            unfocus(globalNavigatorKey.currentContext!);
+            unfocus(ContextUtility.context!);
             if (dateTime == null) return;
 
             controller!.text =

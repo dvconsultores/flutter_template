@@ -1,8 +1,8 @@
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_detextre4/main.dart';
 import 'package:flutter_detextre4/utils/config/theme.dart';
 import 'package:flutter_detextre4/utils/extensions/type_extensions.dart';
+import 'package:flutter_detextre4/utils/general/context_utility.dart';
 import 'package:flutter_detextre4/utils/general/variables.dart';
 
 class SelectField<T> extends StatefulWidget {
@@ -54,7 +54,7 @@ class SelectField<T> extends StatefulWidget {
     this.openedIcon,
     this.closedIcon,
   });
-  static final _context = globalNavigatorKey.currentContext!;
+  static final _context = ContextUtility.context!;
 
   final T? value;
   final TextStyle? textStyle;

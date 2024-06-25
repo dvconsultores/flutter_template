@@ -7,6 +7,7 @@ import 'package:flutter_detextre4/utils/config/config.dart';
 import 'package:flutter_detextre4/utils/config/router_config.dart';
 import 'package:flutter_detextre4/utils/config/session_timeout_config.dart';
 import 'package:flutter_detextre4/utils/config/theme.dart';
+import 'package:flutter_detextre4/utils/general/context_utility.dart';
 import 'package:flutter_detextre4/utils/general/variables.dart';
 import 'package:flutter_detextre4/utils/helper_widgets/restart_widget.dart';
 import 'package:flutter_detextre4/utils/services/dio_service.dart';
@@ -19,10 +20,6 @@ import 'package:hive_flutter/adapters.dart';
 import 'package:local_session_timeout/local_session_timeout.dart';
 import 'package:provider/provider.dart';
 import 'package:responsive_mixin_layout/responsive_mixin_layout.dart';
-
-final globalNavigatorKey = GlobalKey<NavigatorState>(),
-    globalShellrouteKey = GlobalKey<NavigatorState>(),
-    globalScaffoldMessengerKey = GlobalKey<ScaffoldMessengerState>();
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -91,7 +88,7 @@ class _AppState extends State<App> {
                 designSize: Vars.mSize,
                 builder: (context, child) {
                   return MaterialApp.router(
-                    scaffoldMessengerKey: globalScaffoldMessengerKey,
+                    scaffoldMessengerKey: ContextUtility.scaffoldMessengerKey,
                     locale: value.locale,
                     debugShowCheckedModeBanner: true,
                     title: AppName.capitalize.value,

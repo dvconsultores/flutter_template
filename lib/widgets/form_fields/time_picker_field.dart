@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_detextre4/main.dart';
+import 'package:flutter_detextre4/utils/general/context_utility.dart';
 import 'package:flutter_detextre4/utils/general/functions.dart';
 import 'package:flutter_detextre4/utils/general/variables.dart';
 import 'package:flutter_detextre4/widgets/form_fields/input_field.dart';
@@ -113,7 +113,7 @@ class TimePickerField extends InputField {
             if (onTap != null) onTap();
 
             final time = await showTimePicker(
-              context: globalNavigatorKey.currentContext!,
+              context: ContextUtility.context!,
               initialTime: initialTime,
               anchorPoint: anchorPoint,
               barrierColor: barrierColor,
@@ -128,12 +128,12 @@ class TimePickerField extends InputField {
               routeSettings: routeSettings,
               useRootNavigator: useRootNavigator,
             );
-            unfocus(globalNavigatorKey.currentContext!);
-            if (time == null || !globalNavigatorKey.currentContext!.mounted) {
+            unfocus(ContextUtility.context!);
+            if (time == null || !ContextUtility.context!.mounted) {
               return;
             }
 
-            controller!.text = time.format(globalNavigatorKey.currentContext!);
+            controller!.text = time.format(ContextUtility.context!);
           },
         );
 
