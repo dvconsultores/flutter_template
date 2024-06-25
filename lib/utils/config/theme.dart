@@ -130,7 +130,8 @@ class ThemeApp {
 
   ///* Getter to current theme name.
   static ThemeType get theme =>
-      globalNavigatorKey.currentContext!.watch<MainProvider>().appTheme;
+      globalNavigatorKey.currentContext?.watch<MainProvider>().appTheme ??
+      ThemeType.light;
 
   ///* Getter to current theme assets directory `assets/themes/${theme}`.
   static String assetsPrefix(BuildContext? context) =>

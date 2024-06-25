@@ -1,11 +1,11 @@
 import 'dart:io' as io;
 
+import 'package:collection/collection.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_detextre4/main.dart';
 import 'package:flutter_detextre4/main_provider.dart';
 import 'package:provider/provider.dart';
-import 'package:collection/collection.dart';
 
 /// * A collection about application name formats
 enum AppName {

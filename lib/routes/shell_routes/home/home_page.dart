@@ -55,7 +55,8 @@ class _Page1State extends State<_Page1> {
             text:
                 "Change language: ${AppLocalizations.of(context)!.helloWorld}",
             onPressed: () {
-              AppLocale.locale == LanguageList.en.locale
+              AppLocale.locale.languageCode ==
+                      LanguageList.en.locale.languageCode
                   ? AppLocale.changeLanguage(LanguageList.es)
                   : AppLocale.changeLanguage(LanguageList.en);
             },
