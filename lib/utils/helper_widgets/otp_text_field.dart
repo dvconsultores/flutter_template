@@ -185,14 +185,15 @@ class _OtpTextFieldState extends State<OtpTextField> {
         const TextSelection.collapsed(offset: 1);
   }
 
-  void replaceSecondValue({
+  String replaceSecondValue({
     required String value,
     required int indexOfTextField,
   }) {
-    if (value.length <= 1) return;
+    if (value.length <= 1) return value;
 
     //just replace value if input have 2 length
-    _textControllers[indexOfTextField]?.text = value.split('').last;
+    _textControllers[indexOfTextField]?.text = value[1];
+    return value[1];
   }
 
   void changeFocusToNextNodeWhenValueIsEntered({
@@ -323,12 +324,13 @@ class _OtpTextFieldState extends State<OtpTextField> {
                   ),
               obscureText: widget.obscureText,
               onTap: () => moveCursorToEnd(index),
-              onChanged: (String value) {
+              onChanged: (String val) {
                 //save entered value in a list
-                _verificationCode[index] = value;
-                onCodeChanged(verificationCode: value);
+                _verificationCode[index] = val;
+                final value =
+                    replaceSecondValue(value: val, indexOfTextField: index);
 
-                replaceSecondValue(value: value, indexOfTextField: index);
+                onCodeChanged(verificationCode: value);
 
                 changeFocusToNextNodeWhenValueIsEntered(
                     value: value, indexOfTextField: index);
