@@ -13,6 +13,8 @@ class SlicedAnimatedButton extends StatelessWidget {
     this.trailing,
     this.loading = false,
     this.disabled = false,
+    this.width = double.maxFinite,
+    this.height = Vars.buttonHeight,
   });
   final AnimationController animation;
   final VoidCallback? onPressed;
@@ -21,6 +23,8 @@ class SlicedAnimatedButton extends StatelessWidget {
   final Widget? trailing;
   final bool loading;
   final bool disabled;
+  final double? width;
+  final double? height;
 
   @override
   Widget build(BuildContext context) {
@@ -42,7 +46,8 @@ class SlicedAnimatedButton extends StatelessWidget {
 
         return Button(
           disabled: loading || disabled,
-          width: double.maxFinite,
+          width: width,
+          height: height,
           padding: const EdgeInsets.all(0),
           onPressed: onPressed,
           content: Expanded(
@@ -60,11 +65,7 @@ class SlicedAnimatedButton extends StatelessWidget {
                 ),
                 if (loading)
                   const Center(
-                    child: SizedBox(
-                      width: 60,
-                      height: 60,
-                      child: CircularProgressIndicator(),
-                    ),
+                    child: CircularProgressIndicator(),
                   )
                 else
                   SizedBox(
