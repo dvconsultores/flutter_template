@@ -1,4 +1,8 @@
+import 'dart:async';
+
+import 'package:easy_debounce/easy_debounce.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
 
 class ScrollAnimatedOptions {
   const ScrollAnimatedOptions(
@@ -34,6 +38,26 @@ class ScrollAnimatedBuilder extends StatefulWidget {
 class _ScrollAnimatedWidgetState extends State<ScrollAnimatedBuilder> {
   double lastOffsetProcessed = 0.0;
 
+  late StreamSubscription keyboardSubscription;
+
+  @override
+  void initState() {
+    keyboardSubscription =
+        KeyboardVisibilityController().onChange.listen((visible) {
+      EasyDebounce.debounce("setState", Durations.short1, () {
+        if (!mounted) return;
+        widget.controller.jumpTo(lastOffsetProcessed);
+      });
+    });
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    keyboardSubscription.cancel();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) => AnimatedBuilder(
       animation: widget.controller,
@@ -48,10 +72,7 @@ class _ScrollAnimatedWidgetState extends State<ScrollAnimatedBuilder> {
         return widget.builder(
           context,
           widget.child,
-          ScrollAnimatedOptions(
-            offset,
-            scrollDirection
-          ),
+          ScrollAnimatedOptions(offset, scrollDirection),
         );
       });
 }
