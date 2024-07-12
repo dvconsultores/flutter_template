@@ -372,14 +372,24 @@ extension DoubleExtension on double {
             .replaceAll(language.thousandsSeparator, '')
             .replaceAll(',', '.');
 
-        final amountWithoutThousands = withoutThousands.replaceAllMapped(
-          RegExp(r'\d+(\.\d+)?'),
-          (match) => toDouble()
-              .maxDecimals(maxDecimals)
-              .toString()
-              .split('.')
-              .join(language.decimalSeparator),
-        );
+        final amountWithoutThousands =
+            withoutThousands.replaceAllMapped(RegExp(r'\d+(\.\d+)?'), (match) {
+          final value = toDouble().maxDecimals(maxDecimals).toString(),
+              resultSplitted = value.split('.'),
+              multiplier =
+                  minimumFractionDigits - resultSplitted.elementAt(1).length;
+
+          final result =
+                  "${resultSplitted.join(language.decimalSeparator)}${'0' * multiplier}",
+              splittedResult = result.split('.');
+
+          if (minimumFractionDigits == 0 &&
+              splittedResult.elementAt(1) == '0') {
+            return splittedResult.elementAt(0);
+          }
+
+          return result;
+        });
 
         formattedAmount = amountWithoutThousands.replaceAllMapped(
           RegExp(r'(\d)(?=(\d{3})+(?!\d))'),
@@ -639,14 +649,24 @@ extension StringExtension on String {
             .replaceAll(language.thousandsSeparator, '')
             .replaceAll(',', '.');
 
-        final amountWithoutThousands = withoutThousands.replaceAllMapped(
-          RegExp(r'\d+(\.\d+)?'),
-          (match) => toDouble()
-              .maxDecimals(maxDecimals)
-              .toString()
-              .split('.')
-              .join(language.decimalSeparator),
-        );
+        final amountWithoutThousands =
+            withoutThousands.replaceAllMapped(RegExp(r'\d+(\.\d+)?'), (match) {
+          final value = toDouble().maxDecimals(maxDecimals).toString(),
+              resultSplitted = value.split('.'),
+              multiplier =
+                  minimumFractionDigits - resultSplitted.elementAt(1).length;
+
+          final result =
+                  "${resultSplitted.join(language.decimalSeparator)}${'0' * multiplier}",
+              splittedResult = result.split('.');
+
+          if (minimumFractionDigits == 0 &&
+              splittedResult.elementAt(1) == '0') {
+            return splittedResult.elementAt(0);
+          }
+
+          return result;
+        });
 
         formattedAmount = amountWithoutThousands.replaceAllMapped(
           RegExp(r'(\d)(?=(\d{3})+(?!\d))'),
