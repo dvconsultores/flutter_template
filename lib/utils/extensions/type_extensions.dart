@@ -352,7 +352,7 @@ extension DoubleExtension on double {
       formattedAmount = formatter.format(this).trim();
     } else {
       final localeValue = locale ?? AppLocale.locale.languageCode,
-          decimalSeparator = LanguageList.get(localeValue).decimalSeparator;
+          language = LanguageList.get(localeValue);
 
       formatter = NumberFormat.currency(
         locale: localeValue,
@@ -368,13 +368,22 @@ extension DoubleExtension on double {
 
       // prevent round numbers
       if (maxDecimals >= minimumFractionDigits) {
-        formattedAmount = formattedAmount.replaceAllMapped(
+        final withoutThousands = formattedAmount
+            .replaceAll(language.thousandsSeparator, '')
+            .replaceAll(',', '.');
+
+        final amountWithoutThousands = withoutThousands.replaceAllMapped(
           RegExp(r'\d+(\.\d+)?'),
           (match) => toDouble()
               .maxDecimals(maxDecimals)
               .toString()
               .split('.')
-              .join(decimalSeparator),
+              .join(language.decimalSeparator),
+        );
+
+        formattedAmount = amountWithoutThousands.replaceAllMapped(
+          RegExp(r'(\d)(?=(\d{3})+(?!\d))'),
+          (match) => '${match.group(1)}${language.thousandsSeparator}',
         );
       }
     }
@@ -610,7 +619,7 @@ extension StringExtension on String {
       formattedAmount = formatter.format(toDouble()).trim();
     } else {
       final localeValue = locale ?? AppLocale.locale.languageCode,
-          decimalSeparator = LanguageList.get(localeValue).decimalSeparator;
+          language = LanguageList.get(localeValue);
 
       formatter = NumberFormat.currency(
         locale: localeValue,
@@ -626,13 +635,22 @@ extension StringExtension on String {
 
       // prevent round numbers
       if (maxDecimals >= minimumFractionDigits) {
-        formattedAmount = formattedAmount.replaceAllMapped(
+        final withoutThousands = formattedAmount
+            .replaceAll(language.thousandsSeparator, '')
+            .replaceAll(',', '.');
+
+        final amountWithoutThousands = withoutThousands.replaceAllMapped(
           RegExp(r'\d+(\.\d+)?'),
           (match) => toDouble()
               .maxDecimals(maxDecimals)
               .toString()
               .split('.')
-              .join(decimalSeparator),
+              .join(language.decimalSeparator),
+        );
+
+        formattedAmount = amountWithoutThousands.replaceAllMapped(
+          RegExp(r'(\d)(?=(\d{3})+(?!\d))'),
+          (match) => '${match.group(1)}${language.thousandsSeparator}',
         );
       }
     }
