@@ -337,6 +337,7 @@ extension DoubleExtension on double {
     bool compact = false,
   }) {
     late NumberFormat formatter;
+    late String formattedAmount;
 
     if (compact) {
       formatter = NumberFormat.compactCurrency(
@@ -347,9 +348,14 @@ extension DoubleExtension on double {
       );
 
       formatter.minimumFractionDigits = 0;
+
+      formattedAmount = formatter.format(this).trim();
     } else {
+      final localeValue = locale ?? AppLocale.locale.languageCode,
+          decimalSeparator = LanguageList.get(localeValue).decimalSeparator;
+
       formatter = NumberFormat.currency(
-        locale: locale ?? AppLocale.locale.languageCode,
+        locale: localeValue,
         name: name ?? "",
         symbol: symbol,
         decimalDigits: maxDecimals,
@@ -357,13 +363,27 @@ extension DoubleExtension on double {
       );
 
       formatter.minimumFractionDigits = minimumFractionDigits;
+
+      formattedAmount = formatter.format(this).trim();
+
+      // prevent round numbers
+      if (maxDecimals >= minimumFractionDigits) {
+        formattedAmount = formattedAmount.replaceAllMapped(
+          RegExp(r'\d+(\.\d+)?'),
+          (match) => toDouble()
+              .maxDecimals(maxDecimals)
+              .toString()
+              .split('.')
+              .join(decimalSeparator),
+        );
+      }
     }
 
-    return formatter.format(this).trim();
+    return formattedAmount;
   }
 
   /// Used to limit decimal characters in `double`
-  double maxDecimals(int max) {
+  double maxDecimals([int max = Vars.maxDecimals]) {
     final splitted = toString().split("."),
         decimalsFiltered = splitted.last.substring(
             0, splitted.last.length > max ? max : splitted.last.length);
@@ -575,6 +595,7 @@ extension StringExtension on String {
     bool compact = false,
   }) {
     late NumberFormat formatter;
+    late String formattedAmount;
 
     if (compact) {
       formatter = NumberFormat.compactCurrency(
@@ -585,9 +606,14 @@ extension StringExtension on String {
       );
 
       formatter.minimumFractionDigits = 0;
+
+      formattedAmount = formatter.format(toDouble()).trim();
     } else {
+      final localeValue = locale ?? AppLocale.locale.languageCode,
+          decimalSeparator = LanguageList.get(localeValue).decimalSeparator;
+
       formatter = NumberFormat.currency(
-        locale: locale ?? AppLocale.locale.languageCode,
+        locale: localeValue,
         name: name ?? "",
         symbol: symbol,
         decimalDigits: maxDecimals,
@@ -595,9 +621,23 @@ extension StringExtension on String {
       );
 
       formatter.minimumFractionDigits = minimumFractionDigits;
+
+      formattedAmount = formatter.format(toDouble()).trim();
+
+      // prevent round numbers
+      if (maxDecimals >= minimumFractionDigits) {
+        formattedAmount = formattedAmount.replaceAllMapped(
+          RegExp(r'\d+(\.\d+)?'),
+          (match) => toDouble()
+              .maxDecimals(maxDecimals)
+              .toString()
+              .split('.')
+              .join(decimalSeparator),
+        );
+      }
     }
 
-    return formatter.format(toDouble()).trim();
+    return formattedAmount;
   }
 
   // This function "unformats" a currency amount string.
