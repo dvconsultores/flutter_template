@@ -17,6 +17,7 @@ flutter_native_splash:
 
 # To create app icon run below command
 #? flutter pub run flutter_launcher_icons -f flutter_native_run.yaml
+
 flutter_launcher_icons:
   android: "launcher_icon"
   ios: true
