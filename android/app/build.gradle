@@ -108,9 +108,11 @@ android {
         // to avoid troubles compiling app with compileSdkVersion 34
         debug {
             minifyEnabled true
+            signingConfig signingConfigs.debug
         }
         profile {
             minifyEnabled true
+            signingConfig signingConfigs.debug
         }
 
         release {
@@ -120,7 +122,10 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt')
             if (keystoreProperties['keyAlias'] != null && keystoreProperties['keyPassword'] != null && keystoreProperties['storeFile'] != null && keystoreProperties['storePassword'] != null) {
                 signingConfig signingConfigs.release
-            } else { println "Signature configuration not found. Debug keys will be used." }
+            } else {
+                println "Signature configuration not found. Debug keys will be used."
+                signingConfig signingConfigs.debug
+            }
         }
     }
 
