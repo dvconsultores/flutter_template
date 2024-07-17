@@ -381,7 +381,7 @@ extension DoubleExtension on double {
 
           final result =
                   "${resultSplitted.join(language.decimalSeparator)}${'0' * multiplier}",
-              splittedResult = result.split('.');
+              splittedResult = result.split(language.decimalSeparator);
 
           if (minimumFractionDigits == 0 &&
               splittedResult.elementAt(1) == '0') {
@@ -658,7 +658,7 @@ extension StringExtension on String {
 
           final result =
                   "${resultSplitted.join(language.decimalSeparator)}${'0' * multiplier}",
-              splittedResult = result.split('.');
+              splittedResult = result.split(language.decimalSeparator);
 
           if (minimumFractionDigits == 0 &&
               splittedResult.elementAt(1) == '0') {
