@@ -124,7 +124,6 @@ android {
                 signingConfig signingConfigs.release
             } else {
                 println "Signature configuration not found. Debug keys will be used."
-                signingConfig signingConfigs.debug
             }
         }
     }
