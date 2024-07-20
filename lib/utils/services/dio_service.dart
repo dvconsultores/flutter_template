@@ -85,19 +85,10 @@ class DioService {
               dismissible: false,
               title: 'Session has expired',
               textContent: 'Please log in again.',
-              textButton: "Entendido",
+              textButton: "Got it",
               onPressedButton: () => context.goNamed("login"),
             ),
           );
-
-          //* catch connection failed
-        } else if (error.error is SocketException) {
-          return handler.next(error.copyWith(
-            response: Response(
-              requestOptions: error.requestOptions,
-              data: error.response?.data ?? "Connection error, try it later",
-            ),
-          ));
         }
 
         return handler.next(error);
@@ -385,21 +376,26 @@ class MultipartContructor {
   }
 }
 
-// ? dio response extension
-extension DioResponseExtension on Response? {
+// ? dio exception extension
+extension DioExceptionExtension on DioException {
   /// Will return the `error message` from the api request.
   ///
   /// in case not be founded will return a custom default message.
   String catchErrorMessage({String? fallback}) {
+    //* catch connection failed
+    if (type == DioExceptionType.connectionError) {
+      return "Connection error, try it later";
+    }
+
     fallback ??=
-        "${this?.statusCode ?? 'Error'}: Ha ocurrido un error inesperado";
-    final response = this?.data.toString() ?? '';
+        "${response?.statusCode ?? 'Error'}: An unexpected error has occurred";
+    final responseData = response?.data.toString() ?? '';
 
-    debugPrint("statusCode: ${this?.statusCode} ⭕");
-    debugPrint("data: ${this?.data} ⭕");
+    debugPrint("statusCode: ${response?.statusCode} ⭕");
+    debugPrint("data: ${response?.data} ⭕");
 
-    if (response.isHtml()) return fallback;
-    return response.isNotEmpty ? response : fallback;
+    if (responseData.isHtml()) return fallback;
+    return responseData.isNotEmpty ? responseData : fallback;
   }
 }
 
@@ -409,7 +405,12 @@ extension ResponseExtension on http.Response {
   ///
   /// in case not be founded will return a custom default message.
   String catchErrorMessage({String? fallback}) {
-    fallback ??= "$statusCode: Ha ocurrido un error inesperado";
+    //* catch connection failed
+    if (statusCode == -6) {
+      return "Uppss parece que ocrrió un fallo de conexión!, intentalo más tarde";
+    }
+
+    fallback ??= "$statusCode: An unexpected error has occurred";
     final response = body.toString();
 
     debugPrint("statusCode: $statusCode ⭕");
