@@ -17,3 +17,9 @@ samples, guidance on mobile development, and a full API reference.
 
 ## Dio Error handling tutorial
 https://medium.com/@mohammadjoumani/error-handling-in-flutter-a1dfe81a2e0
+
+## Guides
+
+To install android app in device use command below:
+
+`adb install -r build\app\outputs\flutter-apk\app-prod-debug.apk`
