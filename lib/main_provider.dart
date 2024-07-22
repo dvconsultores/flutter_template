@@ -34,6 +34,12 @@ class MainProvider extends ChangeNotifier {
     notifyListeners();
   }
 
+  bool returnAuthError = false;
+  set setReturnAuthError(bool value) {
+    returnAuthError = value;
+    notifyListeners();
+  }
+
   // ? ------------------------Snackbar Provider----------------------------- //
   final List<Flushbar> snackbars = [];
 

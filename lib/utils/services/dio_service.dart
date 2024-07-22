@@ -70,25 +70,26 @@ class DioService {
       },
       onError: (DioException error, handler) async {
         //* stopped process
-        final stoppedProcess =
-            ContextUtility.context!.read<MainProvider>().stopProcess;
-        if (stoppedProcess) return;
+        final mainProvider = ContextUtility.context!.read<MainProvider>();
+        if (mainProvider.stopProcess) return;
 
         //* catch unauthorized request
         if (error.response?.statusCode == 401) {
-          return await showDialog(
+          ContextUtility.context!.goNamed("login");
+
+          showDialog(
             context: ContextUtility.context!,
             barrierDismissible: false,
-            builder: (context) => SystemAlertWidget(
-              onOpen: () async =>
-                  await SecureStorage.delete(SecureCollection.tokenAuth),
+            builder: (context) => const SystemAlertWidget(
               dismissible: false,
               title: 'Session has expired',
               textContent: 'Please log in again.',
               textButton: "Got it",
-              onPressedButton: () => context.goNamed("login"),
             ),
           );
+
+          if (!mainProvider.returnAuthError) return;
+          return handler.next(error);
         }
 
         return handler.next(error);
@@ -384,7 +385,12 @@ extension DioExceptionExtension on DioException {
   String catchErrorMessage({String? fallback}) {
     //* catch connection failed
     if (type == DioExceptionType.connectionError) {
-      return "Connection error, try it later";
+      return "Oops, it looks like a connection error occurred! Please try again later.";
+    }
+
+    //* catch unauthorized request
+    if (response?.statusCode == 401) {
+      return "Your session has expired. Please log in again";
     }
 
     fallback ??=
@@ -407,7 +413,12 @@ extension ResponseExtension on http.Response {
   String catchErrorMessage({String? fallback}) {
     //* catch connection failed
     if (statusCode == -6) {
-      return "Uppss parece que ocrrió un fallo de conexión!, intentalo más tarde";
+      return "Oops, it looks like a connection error occurred! Please try again later.";
+    }
+
+    //* catch unauthorized request
+    if (statusCode == 401) {
+      return "Your session has expired. Please log in again";
     }
 
     fallback ??= "$statusCode: An unexpected error has occurred";
