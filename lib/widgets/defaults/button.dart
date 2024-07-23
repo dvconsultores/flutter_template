@@ -10,6 +10,7 @@ class Button extends StatelessWidget {
   const Button({
     super.key,
     required this.onPressed,
+    this.onLongPress,
     this.text,
     this.textStyle,
     this.loading = false,
@@ -50,6 +51,7 @@ class Button extends StatelessWidget {
 
   final String? text;
   final void Function()? onPressed;
+  final void Function()? onLongPress;
   final TextStyle? textStyle;
   final bool loading;
   final bool disabled;
@@ -88,6 +90,7 @@ class Button extends StatelessWidget {
   static Button variant({
     String? text,
     void Function()? onPressed,
+    void Function()? onLongPress,
     TextStyle? textStyle,
     bool loading = false,
     bool disabled = false,
@@ -128,6 +131,7 @@ class Button extends StatelessWidget {
 
     return Button(
       onPressed: onPressed,
+      onLongPress: onLongPress,
       text: text,
       textStyle: textStyle,
       loading: loading,
@@ -170,6 +174,7 @@ class Button extends StatelessWidget {
   static Button variant2({
     String? text,
     void Function()? onPressed,
+    void Function()? onLongPress,
     TextStyle? textStyle,
     bool loading = false,
     bool disabled = false,
@@ -208,6 +213,7 @@ class Button extends StatelessWidget {
   }) =>
       Button(
         onPressed: onPressed,
+        onLongPress: onLongPress,
         text: text,
         textStyle: textStyle,
         loading: loading,
@@ -251,6 +257,7 @@ class Button extends StatelessWidget {
   static Button textVariant({
     String? text,
     void Function()? onPressed,
+    void Function()? onLongPress,
     TextStyle? textStyle,
     bool loading = false,
     bool disabled = false,
@@ -289,6 +296,7 @@ class Button extends StatelessWidget {
   }) =>
       Button(
         onPressed: onPressed,
+        onLongPress: onLongPress,
         text: text,
         textStyle: textStyle,
         loading: loading,
@@ -330,6 +338,7 @@ class Button extends StatelessWidget {
 
   static Button icon({
     required void Function()? onPressed,
+    void Function()? onLongPress,
     bool loading = false,
     bool disabled = false,
     double? loaderSize = 30,
@@ -367,6 +376,7 @@ class Button extends StatelessWidget {
         overlayColor: overlayColor,
         padding: padding,
         onPressed: onPressed,
+        onLongPress: onLongPress,
         constraints: constraints,
         customLoader: customLoader,
         child: icon,
@@ -374,6 +384,7 @@ class Button extends StatelessWidget {
 
   static Button iconVariant({
     required void Function()? onPressed,
+    void Function()? onLongPress,
     bool loading = false,
     bool disabled = false,
     double size = Vars.buttonHeight,
@@ -413,6 +424,7 @@ class Button extends StatelessWidget {
       overlayColor: overlayColor,
       padding: padding,
       onPressed: onPressed,
+      onLongPress: onLongPress,
       constraints: constraints,
       customLoader:
           customLoader ?? Lottie.asset("assets/animation/loader-primary.json"),
@@ -422,6 +434,7 @@ class Button extends StatelessWidget {
 
   static Button iconVariant2({
     required void Function()? onPressed,
+    void Function()? onLongPress,
     bool loading = false,
     bool disabled = false,
     double size = Vars.buttonHeight,
@@ -462,6 +475,7 @@ class Button extends StatelessWidget {
           overlayColor ?? ThemeApp.colors(context).primary.withAlpha(50),
       padding: padding,
       onPressed: onPressed,
+      onLongPress: onLongPress,
       constraints: constraints,
       customLoader: customLoader ?? const CircularProgressIndicator(),
       child: icon,
@@ -496,6 +510,7 @@ class Button extends StatelessWidget {
       ),
       child: ElevatedButton(
         onPressed: disabled || loading ? null : onPressed,
+        onLongPress: disabled || loading ? null : onLongPress,
         style: ButtonStyle(
           elevation: const MaterialStatePropertyAll(0),
           padding: MaterialStatePropertyAll(padding),
