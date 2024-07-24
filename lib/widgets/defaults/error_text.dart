@@ -31,7 +31,7 @@ class ErrorText extends StatelessWidget {
 
     return SingleAnimatedBuilder(
       animationSettings: CustomAnimationSettings(
-        duration: Durations.short4,
+        duration: Durations.short3,
       ),
       builder: (context, child, parent) {
         return SlideTransition(

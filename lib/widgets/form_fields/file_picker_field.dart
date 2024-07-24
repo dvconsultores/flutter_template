@@ -116,7 +116,7 @@ class _FilePickerFieldState extends State<FilePickerField>
     setState(() {});
 
     if (widget.onChanged != null) {
-      EasyDebounce.debounce("onChanged", Durations.short4,
+      EasyDebounce.debounce("onChanged", Durations.short3,
           () => widget.onChanged!(formState!.value));
     }
   }
