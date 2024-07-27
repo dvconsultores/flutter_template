@@ -8,6 +8,10 @@ class ListFilterable<T> {
 
   late final List<T> filtered = List.of(data);
   late final methods = _Filter(filtered);
+  
+  bool hasDoneInitialLoading = false;
+  bool loading = false;
+
 
   // ? --------------------------Default Methods----------------------------- //
 
