@@ -1,9 +1,9 @@
 import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
-import 'package:flutter_detextre4/widgets/defaults/scaffold.dart';
 import 'package:flutter_detextre4/utils/extensions/type_extensions.dart';
 import 'package:flutter_detextre4/utils/general/list_filterable.dart';
+import 'package:flutter_detextre4/widgets/defaults/scaffold.dart';
 import 'package:flutter_detextre4/widgets/loaders/refresh_indicator.dart';
 
 class ListPage extends StatefulWidget {
@@ -34,7 +34,7 @@ class _ListViewExampleState extends State<ListPage> {
 
   @override
   Widget build(BuildContext context) {
-    return ScaffoldBody.responsive(
+    return AppScaffold.responsive(
       tablet: (context, constraints) => AppRefreshIndicator.liquid(
         onRefresh: onRefresh,
         child: ListView.separated(

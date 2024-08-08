@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
 import 'package:flutter_detextre4/repositories/auth_api.dart';
 import 'package:flutter_detextre4/widgets/defaults/button.dart';
 import 'package:flutter_detextre4/widgets/defaults/scaffold.dart';
-import 'package:responsive_mixin_layout/responsive_mixin_layout.dart';
 
 class LogInPage extends StatefulWidget {
   const LogInPage({super.key});
@@ -11,8 +9,7 @@ class LogInPage extends StatefulWidget {
   State<LogInPage> createState() => _LogInPageState();
 }
 
-class _LogInPageState extends State<LogInPage>
-    with ResponsiveMixinLayoutStateful {
+class _LogInPageState extends State<LogInPage> {
   late final authApi = AuthApi(context);
 
   @override
@@ -22,7 +19,7 @@ class _LogInPageState extends State<LogInPage>
   }
 
   @override
-  Widget? tabletLayout(BuildContext context, Constraints constraints) {
+  Widget build(BuildContext context) {
     final Size size = MediaQuery.of(context).size;
 
     return AppScaffold.responsive(

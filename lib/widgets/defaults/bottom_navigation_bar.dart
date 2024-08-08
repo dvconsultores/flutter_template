@@ -70,9 +70,8 @@ class _CustomBottomNavigationBarState extends State<AppBottomNavigationBar>
 
   @override
   void initState() {
-    SchedulerBinding.instance.addPostFrameCallback(
-      (_) => Future.delayed(const Duration(milliseconds: 100), init),
-    );
+    SchedulerBinding.instance
+        .addPostFrameCallback((_) => Future.delayed(Durations.short2, init));
     super.initState();
   }
 
@@ -87,10 +86,9 @@ class _CustomBottomNavigationBarState extends State<AppBottomNavigationBar>
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
     final foregroundColor =
-        Theme.of(context).bottomNavigationBarTheme.backgroundColor;
-    final colors = ThemeApp.colors(context);
-
-    double? getWidth() => renderBox.value?.size.width;
+            Theme.of(context).bottomNavigationBarTheme.backgroundColor,
+        colors = ThemeApp.colors(context),
+        width = renderBox.value?.size.width;
 
     return AnimatedBuilder(
         animation: animation,
@@ -112,7 +110,7 @@ class _CustomBottomNavigationBarState extends State<AppBottomNavigationBar>
               size: Size(size.width, widget.height),
               painter: _BNBCustomPainter(
                 selectedDx: dxAnim.value,
-                selectedWidth: getWidth(),
+                selectedWidth: width,
                 color: foregroundColor!,
                 activeColor: widget.selectedItemColor ?? colors.primary,
                 opacity: opacityAnim.value,

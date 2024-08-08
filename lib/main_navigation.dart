@@ -1,12 +1,10 @@
 import 'package:double_back_to_exit/double_back_to_exit.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:flutter_detextre4/utils/config/router_config.dart';
 import 'package:flutter_detextre4/utils/extensions/type_extensions.dart';
 import 'package:flutter_detextre4/utils/helper_widgets/will_pop_custom.dart';
 import 'package:flutter_detextre4/widgets/defaults/bottom_navigation_bar.dart';
-import 'package:flutter_detextre4/widgets/defaults/drawer.dart';
-import 'package:flutter_detextre4/widgets/defaults/scaffold.dart';
-import 'package:go_router/go_router.dart';
 
 class MainNavigation extends StatelessWidget {
   const MainNavigation(
@@ -22,107 +20,72 @@ class MainNavigation extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     if (router.indexShellRoute == -1) {
-      return const ScaffoldBody(body: SizedBox.shrink());
+      return const Scaffold(body: SizedBox.shrink());
     }
 
-    final currentSubRoute = router.subShellRoutes
-        ?.any((element) => (element as GoRoute).path.contains(state.location));
-
-    Icon getIcon(String? value) {
-      switch (value) {
-        case "profile":
-          return const Icon(Icons.person);
-        case "home":
-          return const Icon(Icons.home);
-        case "search":
-        default:
-          return const Icon(Icons.search);
-      }
-    }
-
-    return AppScaffold(
-      padding: const EdgeInsets.all(0),
-      drawer: currentSubRoute != null ? const AppDrawer() : null,
-      appBar: AppBar(
-        leading: currentSubRoute == null
-            ? IconButton(
-                icon: const Icon(Icons.arrow_back),
-                onPressed: context.pop,
-              )
-            : null,
-        title: Text((router.shellRoute as GoRoute?)?.name ?? ""),
-      ),
+    return Scaffold(
       bottomNavigationBar: AppBottomNavigationBar(
         currentIndex: router.indexShellRoute,
         onTap: (index) =>
             context.goNamed((router.shellRoutes[index] as GoRoute).name!),
-        items: router.shellRoutes
-            .map((element) => BottomNavigationBarItem(
-                  label: "",
-                  tooltip: (element as GoRoute).name?.toCapitalize(),
-                  icon: getIcon(element.name),
-                ))
-            .toList(),
+        items: router.shellRoutes.map((element) {
+          Icon getIcon(String? value) {
+            switch (value) {
+              case "profile":
+                return const Icon(Icons.person);
+              case "home":
+                return const Icon(Icons.home);
+              case "search":
+              default:
+                return const Icon(Icons.search);
+            }
+          }
+
+          return BottomNavigationBarItem(
+            label: "",
+            tooltip: (element as GoRoute).name?.toCapitalize(),
+            icon: getIcon(element.name),
+          );
+        }).toList(),
       ),
 
       //? Render pages
-      child: _Body(
-        swipeNavigate: swipeNavigate,
-        state: state,
-        child: child,
-      ),
-    );
-  }
-}
+      body: GestureDetector(
+        onHorizontalDragUpdate: swipeNavigate
+            ? (details) {
+                // Note: Sensitivity is integer used when you don't want to mess up vertical drag
+                int sensitivity = 8;
 
-class _Body extends StatelessWidget {
-  const _Body({
-    required this.swipeNavigate,
-    required this.state,
-    required this.child,
-  });
+                // Right Swipe
+                if (details.delta.dx > sensitivity) {
+                  final index = router.indexShellRoute == 0
+                      ? 0
+                      : router.indexShellRoute - 1;
+                  final previousRoute =
+                      router.shellRoutes.elementAtOrNull(index) as GoRoute?;
 
-  final bool swipeNavigate;
-  final GoRouterState state;
-  final Widget child;
+                  if (previousRoute != null) router.go((previousRoute).path);
 
-  @override
-  Widget build(BuildContext context) {
-    return GestureDetector(
-      onHorizontalDragUpdate: swipeNavigate
-          ? (details) {
-              // Note: Sensitivity is integer used when you don't want to mess up vertical drag
-              int sensitivity = 8;
+                  // Left Swipe
+                } else if (details.delta.dx < -sensitivity) {
+                  final nextRoute = router.shellRoutes
+                      .elementAtOrNull(router.indexShellRoute + 1) as GoRoute?;
 
-              // Right Swipe
-              if (details.delta.dx > sensitivity) {
-                final index = router.indexShellRoute == 0
-                    ? 0
-                    : router.indexShellRoute - 1;
-                final previousRoute =
-                    router.shellRoutes.elementAtOrNull(index) as GoRoute?;
-
-                if (previousRoute != null) router.go((previousRoute).path);
-
-                // Left Swipe
-              } else if (details.delta.dx < -sensitivity) {
-                final nextRoute = router.shellRoutes
-                    .elementAtOrNull(router.indexShellRoute + 1) as GoRoute?;
-
-                if (nextRoute != null) router.go((nextRoute).path);
+                  if (nextRoute != null) router.go((nextRoute).path);
+                }
               }
-            }
-          : null,
-      child: state.location == "/"
-          ? DoubleBackToExit(
-              snackBarMessage: "Press again to leave", child: child)
-          : WillPopCustom(
-              onWillPop: () {
-                context.goNamed("home");
-                return false;
-              },
-              child: child,
-            ),
+            : null,
+        child: state.location == "/"
+            ? DoubleBackToExit(
+                snackBarMessage: "Press again to leave", child: child)
+            : WillPopCustom(
+                onWillPop: () {
+                  context.goNamed("home");
+                  return false;
+                },
+                child: child,
+              ),
+      ),
     );
   }
 }

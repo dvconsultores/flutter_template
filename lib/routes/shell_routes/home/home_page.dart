@@ -15,14 +15,14 @@ class HomePage extends StatelessWidget with ResponsiveMixinLayout {
 
   @override
   Widget? desktopLayout(BuildContext context, BoxConstraints constraints) {
-    return const ScaffoldBody(
+    return const AppScaffold(
       body: _Page1(),
     );
   }
 
   @override
   Widget tabletLayout(BuildContext context, BoxConstraints constraints) {
-    return ScaffoldBody(
+    return AppScaffold(
       body: PageView(
         children: const [
           _Page1(),
