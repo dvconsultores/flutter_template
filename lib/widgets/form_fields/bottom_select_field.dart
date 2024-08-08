@@ -1,9 +1,10 @@
+import 'package:collection/collection.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_detextre4/utils/config/theme.dart';
+import 'package:flutter_detextre4/utils/general/custom_focus_node.dart';
 import 'package:flutter_detextre4/utils/general/variables.dart';
 import 'package:flutter_detextre4/widgets/defaults/error_text.dart';
 import 'package:flutter_detextre4/widgets/sheets/bottom_sheet_card.dart';
-import 'package:collection/collection.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_gap/flutter_gap.dart';
 
 class BottomSelectField<T> extends StatefulWidget {
@@ -50,6 +51,7 @@ class BottomSelectField<T> extends StatefulWidget {
     this.dropdownMinChildSize = .2,
     this.isExpanded = false,
     this.dropdownScrollable = true,
+    this.focusNode,
   });
   final String? restorationId;
   final void Function(T? value)? onSaved;
@@ -89,25 +91,34 @@ class BottomSelectField<T> extends StatefulWidget {
   final double dropdownMinChildSize;
   final bool isExpanded;
   final bool dropdownScrollable;
+  final CustomFocusNode? focusNode;
 
   @override
   State<BottomSelectField<T>> createState() => _BottomSelectFieldState<T>();
 }
 
-class _BottomSelectFieldState<T> extends State<BottomSelectField<T>>
-    with SingleTickerProviderStateMixin {
+class _BottomSelectFieldState<T> extends State<BottomSelectField<T>> {
   FormFieldState<T>? formState;
 
-  late final AnimationController animation;
-
   final localController = ValueNotifier<T?>(null);
-
   ValueNotifier<T?> get getController => widget.controller ?? localController;
 
-  Future<void> onTap() async {
-    if (widget.loading) return;
+  final _focusNode = CustomFocusNode();
+  CustomFocusNode get focusNode => widget.focusNode ?? _focusNode;
+  bool get isFocused => focusNode.value;
 
-    animation.forward();
+  void onListenController() {
+    if (formState!.value == getController.value) return;
+
+    formState!.didChange(getController.value);
+
+    if (widget.onChanged != null) widget.onChanged!(formState!.value);
+  }
+
+  Future<void> onListenFocusNode() async {
+    setState(() {});
+
+    if (!isFocused) return;
 
     final item = await BottomSheetList.showModal<T>(
       context,
@@ -120,29 +131,21 @@ class _BottomSelectFieldState<T> extends State<BottomSelectField<T>>
     );
 
     getController.value = item?.value ?? formState!.value;
-    animation.reverse();
-  }
-
-  void onListen() {
-    if (formState!.value == getController.value) return;
-
-    formState!.didChange(getController.value);
-
-    if (widget.onChanged != null) widget.onChanged!(formState!.value);
+    focusNode.unfocus();
   }
 
   @override
   void initState() {
-    animation = AnimationController(vsync: this, duration: Durations.short1);
-    getController.addListener(onListen);
+    getController.addListener(onListenController);
+    focusNode.addListener(onListenFocusNode);
     super.initState();
   }
 
   @override
   void dispose() {
-    animation.dispose();
-    getController.removeListener(onListen);
+    getController.removeListener(onListenController);
     localController.dispose();
+    focusNode.removeListener(onListenFocusNode);
     super.dispose();
   }
 
@@ -194,60 +197,54 @@ class _BottomSelectFieldState<T> extends State<BottomSelectField<T>>
           child:
               Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
             // field
-            AnimatedBuilder(
-                animation: animation,
-                builder: (context, child) {
-                  final isOpen = animation.isCompleted;
-
-                  return GestureDetector(
-                    onTap: onTap,
-                    child: Container(
-                        width: widget.width,
-                        height: widget.height ??
-                            (widget.dense
-                                ? Vars.minInputHeight
-                                : Vars.maxInputHeight),
-                        padding: widget.padding,
-                        decoration: widget.decoration ??
-                            BoxDecoration(
-                                borderRadius: widget.borderRadius,
-                                color: widget.bgColor ??
-                                    Theme.of(context).colorScheme.background,
-                                boxShadow:
-                                    widget.boxShadow ?? [Vars.boxShadow2],
-                                border: Border.fromBorderSide(
-                                  widget.disabled
-                                      ? widget.borderDisabled ??
-                                          const BorderSide(
-                                              color: Colors.transparent)
-                                      : isOpen
-                                          ? widget.borderFocused ??
-                                              BorderSide(
-                                                  color: Theme.of(context)
-                                                      .focusColor)
-                                          : widget.border ??
-                                              const BorderSide(
-                                                  color: Colors.transparent),
-                                )),
-                        child: Row(children: [
-                          if (widget.leading != null) ...[
-                            widget.leading!,
-                            Gap(widget.gap).row,
-                          ],
-                          widget.isExpanded
-                              ? Expanded(child: contentWidget)
-                              : contentWidget,
-                          if (!widget.isExpanded) const Spacer(),
-                          if (!widget.hideTrailing) ...[
-                            Gap(widget.gap).row,
-                            widget.trailing ??
-                                (isOpen
-                                    ? const Icon(Icons.arrow_drop_up_rounded)
-                                    : const Icon(Icons.arrow_drop_down_rounded))
-                          ]
-                        ])),
-                  );
-                }),
+            GestureDetector(
+              onTap: () {
+                if (widget.loading) return;
+                focusNode.focus();
+              },
+              child: Container(
+                  width: widget.width,
+                  height: widget.height ??
+                      (widget.dense
+                          ? Vars.minInputHeight
+                          : Vars.maxInputHeight),
+                  padding: widget.padding,
+                  decoration: widget.decoration ??
+                      BoxDecoration(
+                          borderRadius: widget.borderRadius,
+                          color: widget.bgColor ??
+                              Theme.of(context).colorScheme.background,
+                          boxShadow: widget.boxShadow ?? [Vars.boxShadow2],
+                          border: Border.fromBorderSide(
+                            widget.disabled
+                                ? widget.borderDisabled ??
+                                    const BorderSide(color: Colors.transparent)
+                                : isFocused
+                                    ? widget.borderFocused ??
+                                        BorderSide(
+                                            color: Theme.of(context).focusColor)
+                                    : widget.border ??
+                                        const BorderSide(
+                                            color: Colors.transparent),
+                          )),
+                  child: Row(children: [
+                    if (widget.leading != null) ...[
+                      widget.leading!,
+                      Gap(widget.gap).row,
+                    ],
+                    widget.isExpanded
+                        ? Expanded(child: contentWidget)
+                        : contentWidget,
+                    if (!widget.isExpanded) const Spacer(),
+                    if (!widget.hideTrailing) ...[
+                      Gap(widget.gap).row,
+                      widget.trailing ??
+                          (isFocused
+                              ? const Icon(Icons.arrow_drop_up_rounded)
+                              : const Icon(Icons.arrow_drop_down_rounded))
+                    ]
+                  ])),
+            ),
 
             // error text
             if (state.hasError && (widget.errorText?.isNotEmpty ?? true))

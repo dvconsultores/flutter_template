@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:flutter_detextre4/utils/extensions/type_extensions.dart';
 import 'package:flutter_detextre4/utils/general/variables.dart';
+import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
 
 class ValidatorField {
   const ValidatorField(this.value, [this.validators]);
@@ -108,10 +109,14 @@ class ValidatorField {
       ? null
       : 'The password must have at least one uppercase letter, one lowercase letter, one number, and one special character';
 
-  String? isValidPhoneNumber() =>
-      Vars.phoneRegExp.hasMatch(value as String? ?? '')
-          ? null
-          : "Phone invalid";
+  String? isValidPhoneNumber([String? mask]) {
+    final val = value as String? ?? '';
+
+    return Vars.phoneRegExp
+            .hasMatch(MaskTextInputFormatter(mask: mask).unmaskText(val))
+        ? null
+        : "Phone invalid";
+  }
 
   String? walletValidator(String blockchainAsset, [String? customMessage]) {
     final v = value as String? ?? '';

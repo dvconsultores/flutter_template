@@ -4,14 +4,18 @@ import 'dart:ui' as ui;
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_detextre4/utils/config/theme.dart';
 import 'package:flutter_detextre4/utils/extensions/type_extensions.dart';
 import 'package:flutter_detextre4/utils/general/variables.dart';
 import 'package:flutter_detextre4/widgets/dialogs/system_alert_widget.dart';
+import 'package:flutter_detextre4/widgets/sheets/bottom_sheet_card.dart';
+import 'package:flutter_gap/flutter_gap.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:http/http.dart' show Response, get;
 import 'package:launch_review/launch_review.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:responsive_mixin_layout/responsive_mixin_layout.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:version/version.dart';
 
@@ -123,6 +127,67 @@ Future<String?> showPopup(
         constraints ?? BoxConstraints(minWidth: context.size?.width ?? 100),
     position: RelativeRect.fromLTRB(left, top, right, 0.0),
     items: items,
+  );
+}
+
+Future<void> attachmentPressed(
+  BuildContext context, {
+  VoidCallback? onVideo,
+  VoidCallback? onImage,
+  VoidCallback? onMedia,
+}) async {
+  final items = <Map<String, dynamic>>[];
+
+  if (onVideo != null) {
+    items.add({
+      "text": "Make video",
+      "icon": Icons.video_camera_back_outlined,
+      "action": onVideo,
+    });
+  }
+
+  if (onImage != null) {
+    items.add({
+      "text": "Take photo",
+      "icon": Icons.camera_alt_outlined,
+      "action": onImage,
+    });
+  }
+
+  if (onMedia != null) {
+    items.add({
+      "text": "Upload media",
+      "icon": Icons.photo_size_select_actual_outlined,
+      "action": onMedia,
+    });
+  }
+
+  await BottomSheetList.showModal<void>(
+    context,
+    maxChildSize: context.height.isSmall ? .33 : .3,
+    initialChildSize: context.height.isSmall ? .33 : .3,
+    onTap: (item) => (item.value as VoidCallback)(),
+    items: items
+        .map((item) => DropdownMenuItem(
+              value: item['action'] as VoidCallback,
+              child:
+                  Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+                Icon(
+                  item['icon'] as IconData,
+                  size: 20,
+                ),
+                const Gap(Vars.gapNormal).row,
+                Text(
+                  item['text'] as String,
+                  style: TextStyle(
+                    fontSize: 15,
+                    fontWeight: FontWeight.w500,
+                    fontFamily: FontFamily.lato("500"),
+                  ),
+                ),
+              ]),
+            ))
+        .toList(),
   );
 }
 

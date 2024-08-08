@@ -97,16 +97,22 @@ class BottomSheetCard extends StatelessWidget {
               child: SingleChildScrollView(
                 controller: scrollController,
                 physics: const BouncingScrollPhysics(),
-                padding:
-                    padding ?? Vars.paddingScaffold.copyWith(top: 0, bottom: 0),
+                padding: padding ??
+                    Vars.paddingScaffold.copyWith(
+                      top: 0,
+                      bottom: Vars.paddingScaffold.bottom,
+                    ),
                 child: child,
               ),
             )
           else
             Expanded(
               child: Padding(
-                padding:
-                    padding ?? Vars.paddingScaffold.copyWith(top: 0, bottom: 0),
+                padding: padding ??
+                    Vars.paddingScaffold.copyWith(
+                      top: 0,
+                      bottom: Vars.paddingScaffold.bottom,
+                    ),
                 child: child,
               ),
             ),
@@ -242,7 +248,10 @@ class BottomSheetList<T> extends StatelessWidget {
                 )
               : ListView.separated(
                   padding: padding ??
-                      Vars.paddingScaffold.copyWith(top: 0, bottom: 0),
+                      Vars.paddingScaffold.copyWith(
+                        top: 0,
+                        bottom: Vars.paddingScaffold.bottom,
+                      ),
                   shrinkWrap: scrollable,
                   physics: scrollable
                       ? const NeverScrollableScrollPhysics()

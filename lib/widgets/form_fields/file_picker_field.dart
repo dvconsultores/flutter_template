@@ -8,9 +8,17 @@ import 'package:flutter/scheduler.dart';
 import 'package:flutter_detextre4/utils/config/theme.dart';
 import 'package:flutter_detextre4/utils/extensions/type_extensions.dart';
 import 'package:flutter_detextre4/utils/extensions/widget_extensions.dart';
+import 'package:flutter_detextre4/utils/general/functions.dart';
 import 'package:flutter_detextre4/utils/general/variables.dart';
 import 'package:flutter_detextre4/widgets/defaults/error_text.dart';
-import 'package:path/path.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:path/path.dart' as path;
+
+enum FilePickerMode {
+  fromCamera,
+  fromFiles,
+  both;
+}
 
 class FilePickerField extends StatefulWidget {
   const FilePickerField({
@@ -40,6 +48,7 @@ class FilePickerField extends StatefulWidget {
     this.clearButtonInside = true,
     this.chipPositionRight = 0,
     this.chipPositionBottom = 0,
+    this.filePickerMode = FilePickerMode.fromFiles,
   });
 
   final String? restorationId;
@@ -67,6 +76,7 @@ class FilePickerField extends StatefulWidget {
   final bool clearButtonInside;
   final double chipPositionRight;
   final double chipPositionBottom;
+  final FilePickerMode filePickerMode;
 
   @override
   State<FilePickerField> createState() => _FilePickerFieldState();
@@ -105,6 +115,27 @@ class _FilePickerFieldState extends State<FilePickerField>
 
       animation.reverse();
       getController.value = File(platformFile.path!);
+    } else {
+      animation.reverse();
+      getController.value = formState?.value;
+    }
+  }
+
+  Future<void> pickImage() async {
+    animation.forward();
+
+    final xfile = await ImagePicker().pickImage(
+      source: ImageSource.camera,
+      imageQuality: 70,
+      maxWidth: 400,
+      maxHeight: 400,
+    );
+
+    if (xfile != null) {
+      fileExtension = xfile.path.split('.').last;
+
+      animation.reverse();
+      getController.value = File(xfile.path);
     } else {
       animation.reverse();
       getController.value = formState?.value;
@@ -197,7 +228,17 @@ class _FilePickerFieldState extends State<FilePickerField>
                     final isOpen = animation.isCompleted;
 
                     return GestureDetector(
-                      onTap: widget.disabled ? null : pickFile,
+                      onTap: widget.disabled
+                          ? null
+                          : () => switch (widget.filePickerMode) {
+                                FilePickerMode.fromFiles => pickFile(),
+                                FilePickerMode.fromCamera => pickImage(),
+                                FilePickerMode.both => attachmentPressed(
+                                    context,
+                                    onImage: pickImage,
+                                    onMedia: pickFile,
+                                  ),
+                              },
                       child: Container(
                         width: widget.width,
                         height: widget.height,
@@ -263,7 +304,9 @@ class _FilePickerFieldState extends State<FilePickerField>
                                               Expanded(
                                                 flex: 6,
                                                 child: Text(
-                                                  basename(state.value!.path)
+                                                  path
+                                                      .basename(
+                                                          state.value!.path)
                                                       .split(".$fileExtension")
                                                       .first,
                                                   textAlign: TextAlign.right,
