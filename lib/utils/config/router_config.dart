@@ -3,7 +3,7 @@ import 'package:double_back_to_exit/double_back_to_exit.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_detextre4/main_navigation.dart';
-import 'package:flutter_detextre4/routes/log_in_page.dart';
+import 'package:flutter_detextre4/routes/login_page.dart';
 import 'package:flutter_detextre4/routes/shell_routes/home/home_page.dart';
 import 'package:flutter_detextre4/routes/shell_routes/profile/pages/user_page.dart';
 import 'package:flutter_detextre4/routes/shell_routes/search/pages/list_page.dart';
@@ -58,7 +58,7 @@ final GoRouter router = GoRouter(
         path: '/auth',
         name: 'login',
         pageBuilder: (context, state) =>
-            _topLevelPageBuilder(const LogInPage()),
+            _topLevelPageBuilder(const LoginPage()),
         routes: const [],
       ),
 

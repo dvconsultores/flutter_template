@@ -3,13 +3,13 @@ import 'package:flutter_detextre4/repositories/auth_api.dart';
 import 'package:flutter_detextre4/widgets/defaults/button.dart';
 import 'package:flutter_detextre4/widgets/defaults/scaffold.dart';
 
-class LogInPage extends StatefulWidget {
-  const LogInPage({super.key});
+class LoginPage extends StatefulWidget {
+  const LoginPage({super.key});
   @override
-  State<LogInPage> createState() => _LogInPageState();
+  State<LoginPage> createState() => _LoginPageState();
 }
 
-class _LogInPageState extends State<LogInPage> {
+class _LoginPageState extends State<LoginPage> {
   late final authApi = AuthApi(context);
 
   @override
