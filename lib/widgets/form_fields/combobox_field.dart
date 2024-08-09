@@ -182,7 +182,6 @@ class _ComboboxFieldState<T> extends State<ComboboxField<T>> {
                   color: ThemeApp.colors(context).text.withOpacity(.7),
                   fontSize: 13,
                   fontWeight: FontWeight.w400,
-                  fontFamily: FontFamily.lato("400"),
                 ),
             contentWidget = widget.loading
                 ? SizedBox(

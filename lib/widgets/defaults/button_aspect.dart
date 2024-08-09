@@ -285,7 +285,6 @@ class ButtonAspect extends StatelessWidget {
               fontSize: 14,
               letterSpacing: 3.9,
               fontWeight: FontWeight.w500,
-              fontFamily: FontFamily.lato("500"),
             ),
         textWidget = Text(
           text ?? '',

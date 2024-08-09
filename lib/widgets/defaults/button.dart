@@ -485,10 +485,9 @@ class Button extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final ts = textStyle ??
-            TextStyle(
+            const TextStyle(
               fontSize: 14,
               fontWeight: FontWeight.w500,
-              fontFamily: FontFamily.lato("500"),
             ),
         textWidget = Text(
           text ?? '',

@@ -65,10 +65,17 @@ class ThemeApp {
         bottomNavigationBarTheme: const BottomNavigationBarThemeData(
           backgroundColor: Color.fromARGB(255, 231, 225, 225),
         ),
+        inputDecorationTheme: const InputDecorationTheme(
+          fillColor: Colors.white,
+          outlineBorder: BorderSide(color: Color(0xFF46464F)),
+        ),
+        scaffoldBackgroundColor: const Color(0xfffafafa),
         progressIndicatorTheme: const ProgressIndicatorThemeData(
-            circularTrackColor: Colors.red, color: Colors.amber),
+          circularTrackColor: Colors.red,
+          color: Colors.amber,
+        ),
         colorScheme: const ColorScheme.light(
-          background: Colors.white,
+          background: Color(0xFFF9F9F9),
           primary: Colors.amber,
           secondary: Colors.red,
           tertiary: Colors.deepPurpleAccent,
@@ -90,41 +97,7 @@ class ThemeApp {
       ),
 
       // ? dark
-      ThemeType.dark: darkTheme.copyWith(
-        // text config
-        textTheme: GoogleFonts.latoTextTheme(darkTheme.textTheme.copyWith(
-          bodyMedium: darkTheme.textTheme.bodyLarge?.copyWith(fontSize: 16),
-        )),
-
-        // color config
-        primaryColor: Colors.pink,
-        focusColor: const Color.fromARGB(255, 0, 32, 215),
-        disabledColor: const Color.fromARGB(255, 138, 146, 191),
-        bottomNavigationBarTheme: const BottomNavigationBarThemeData(
-          backgroundColor: Color.fromARGB(255, 39, 37, 37),
-        ),
-        progressIndicatorTheme: const ProgressIndicatorThemeData(
-            circularTrackColor: Colors.red, color: Colors.pink),
-        colorScheme: const ColorScheme.dark(
-          primary: Colors.pink,
-          secondary: Colors.red,
-          tertiary: Colors.deepPurpleAccent,
-          error: Colors.red,
-          outline: Colors.white,
-        ),
-        extensions: const <ThemeExtension<dynamic>>[
-          ThemeDataColorExtension(
-            text: Colors.white,
-            accent: Colors.indigo,
-            success: Colors.green,
-            warning: Color.fromARGB(255, 233, 198, 2),
-            label: Color.fromARGB(255, 129, 127, 129),
-          ),
-          ThemeDataStyleExtension(
-            customText: TextStyle(),
-          ),
-        ],
-      ),
+      ThemeType.dark: darkTheme.copyWith(),
     };
   }
 

@@ -312,7 +312,6 @@ class _SelectFieldState<T> extends State<SelectField<T>> {
         hs = widget.hintStyle ??
             ts.copyWith(
               color: ThemeApp.colors(context).text.withOpacity(.7),
-              fontFamily: FontFamily.lato("400"),
               fontWeight: FontWeight.w400,
             ),
         ls =

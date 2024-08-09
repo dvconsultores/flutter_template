@@ -35,11 +35,10 @@ class AppTooltip extends StatelessWidget {
         horizontal: Vars.gapLarge,
         vertical: Vars.gapNormal,
       ),
-      textStyle: TextStyle(
+      textStyle: const TextStyle(
         fontSize: 12,
         color: Colors.white,
         fontWeight: FontWeight.w400,
-        fontFamily: FontFamily.lato("400"),
       ),
       child: child,
     );

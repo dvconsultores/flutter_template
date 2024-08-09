@@ -30,11 +30,10 @@ class SwitchField extends StatelessWidget {
       child: label ??
           Text(labelText ?? '',
               style: labelStyle ??
-                  TextStyle(
+                  const TextStyle(
                     fontSize: 14,
                     color: Colors.white,
                     fontWeight: FontWeight.w500,
-                    fontFamily: FontFamily.lato("500"),
                   )),
     );
 

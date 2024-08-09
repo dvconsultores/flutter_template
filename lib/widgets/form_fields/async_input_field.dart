@@ -156,7 +156,6 @@ class AsyncInputField extends AsyncTextFormField {
         color: ThemeApp.colors(context).text,
         fontSize: 16,
         fontWeight: FontWeight.w400,
-        fontFamily: FontFamily.lato("400"),
       );
 
   final String? labelText;

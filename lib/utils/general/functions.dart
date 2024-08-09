@@ -4,7 +4,6 @@ import 'dart:ui' as ui;
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_detextre4/utils/config/theme.dart';
 import 'package:flutter_detextre4/utils/extensions/type_extensions.dart';
 import 'package:flutter_detextre4/utils/general/variables.dart';
 import 'package:flutter_detextre4/widgets/dialogs/system_alert_widget.dart';
@@ -179,10 +178,9 @@ Future<void> attachmentPressed(
                 const Gap(Vars.gapNormal).row,
                 Text(
                   item['text'] as String,
-                  style: TextStyle(
+                  style: const TextStyle(
                     fontSize: 15,
                     fontWeight: FontWeight.w500,
-                    fontFamily: FontFamily.lato("500"),
                   ),
                 ),
               ]),

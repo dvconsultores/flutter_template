@@ -130,7 +130,7 @@ class InputField extends TextFormField {
               filled: decoration?.filled ?? filled,
               fillColor: decoration?.fillColor ??
                   color ??
-                  ThemeApp.colors(context).background,
+                  Theme.of(context).inputDecorationTheme.fillColor,
               border: decoration?.border ?? checkBorder(defaultBorder),
               enabledBorder:
                   decoration?.enabledBorder ?? checkBorder(defaultBorder),
@@ -199,7 +199,6 @@ class InputField extends TextFormField {
         color: ThemeApp.colors(context).text,
         fontSize: 16,
         fontWeight: FontWeight.w400,
-        fontFamily: FontFamily.lato("400"),
       );
 
   static Widget sizedBox({
