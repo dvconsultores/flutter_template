@@ -122,9 +122,9 @@ class ThemeApp {
   static ThemeType get theme =>
       ContextUtility.context?.watch<MainProvider>().appTheme ?? ThemeType.light;
 
-  ///* Getter to current theme assets directory `assets/themes/${theme}`.
-  static String assetsPrefix(BuildContext? context) =>
-      'assets/themes/${(context ?? ContextUtility.context!).watch<MainProvider>().appTheme.name}';
+  ///* Getter to current theme assets directory `assets/themes/${theme}/` + path provided.
+  static String getAsset(BuildContext? context, String path) =>
+      'assets/themes/${(context ?? ContextUtility.context!).watch<MainProvider>().appTheme.name}/$path';
 
   ///* Getter to current themeData.
   static ThemeData of(BuildContext? context) {

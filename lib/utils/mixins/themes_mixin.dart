@@ -6,6 +6,7 @@ mixin ThemesMixin {
   static final context = ContextUtility.context!;
 
   final colors = ThemeApp.colors(context),
+      styles = ThemeApp.styles(context),
       theme = Theme.of(context),
       media = MediaQuery.of(context);
 }
