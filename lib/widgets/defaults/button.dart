@@ -4,7 +4,6 @@ import 'package:flutter_detextre4/utils/extensions/type_extensions.dart';
 import 'package:flutter_detextre4/utils/general/context_utility.dart';
 import 'package:flutter_detextre4/utils/general/variables.dart';
 import 'package:flutter_gap/flutter_gap.dart';
-import 'package:lottie/lottie.dart';
 
 class Button extends StatelessWidget {
   const Button({
@@ -127,7 +126,8 @@ class Button extends StatelessWidget {
     Widget? content,
     Widget? child,
   }) {
-    final backgroundColor = bgColor ?? ThemeApp.colors(context).secondary;
+    final colors = ThemeApp.colors(context),
+        backgroundColor = bgColor ?? colors.secondary;
 
     return Button(
       onPressed: onPressed,
@@ -165,8 +165,7 @@ class Button extends StatelessWidget {
       textAlign: textAlign,
       textExpanded: textExpanded,
       textFitted: textFitted,
-      customLoader:
-          customLoader ?? Lottie.asset("assets/animation/loader-primary.json"),
+      customLoader: customLoader ?? const CircularProgressIndicator(),
       child: child,
     );
   }
@@ -210,49 +209,49 @@ class Button extends StatelessWidget {
     Widget? customLoader,
     Widget? content,
     Widget? child,
-  }) =>
-      Button(
-        onPressed: onPressed,
-        onLongPress: onLongPress,
-        text: text,
-        textStyle: textStyle,
-        loading: loading,
-        disabled: disabled,
-        loaderSize: loaderSize,
-        width: width,
-        height: height,
-        constraints: constraints,
-        shape: shape,
-        borderRadius: borderRadius,
-        borderSide: borderSide ??
-            BorderSide(width: 1, color: ThemeApp.colors(context).primary),
-        boxShadow: boxShadow,
-        color: color ?? ThemeApp.colors(context).primary,
-        bgColor: bgColor,
-        bgColorDisabled: bgColorDisabled ?? bgColor.withOpacity(.2),
-        splashFactory: splashFactory,
-        overlayColor:
-            overlayColor ?? ThemeApp.colors(context).primary.withOpacity(.2),
-        padding: padding,
-        margin: margin,
-        leading: leading,
-        trailing: trailing,
-        buttonAxisAlignment: buttonAxisAlignment,
-        gap: gap,
-        leadingGap: leadingGap,
-        trailingGap: trailingGap,
-        leadingSpacer: leadingSpacer,
-        trailingSpacer: trailingSpacer,
-        textSoftWrap: textSoftWrap,
-        textOverflow: textOverflow,
-        content: content,
-        textAlign: textAlign,
-        textExpanded: textExpanded,
-        textFitted: textFitted,
-        customLoader: customLoader ??
-            Lottie.asset("assets/animation/loader-primary.json"),
-        child: child,
-      );
+  }) {
+    final colors = ThemeApp.colors(context);
+
+    return Button(
+      onPressed: onPressed,
+      onLongPress: onLongPress,
+      text: text,
+      textStyle: textStyle,
+      loading: loading,
+      disabled: disabled,
+      loaderSize: loaderSize,
+      width: width,
+      height: height,
+      constraints: constraints,
+      shape: shape,
+      borderRadius: borderRadius,
+      borderSide: borderSide ?? BorderSide(width: 1, color: colors.primary),
+      boxShadow: boxShadow,
+      color: color ?? colors.primary,
+      bgColor: bgColor,
+      bgColorDisabled: bgColorDisabled ?? bgColor.withOpacity(.2),
+      splashFactory: splashFactory,
+      overlayColor: overlayColor ?? colors.primary.withOpacity(.2),
+      padding: padding,
+      margin: margin,
+      leading: leading,
+      trailing: trailing,
+      buttonAxisAlignment: buttonAxisAlignment,
+      gap: gap,
+      leadingGap: leadingGap,
+      trailingGap: trailingGap,
+      leadingSpacer: leadingSpacer,
+      trailingSpacer: trailingSpacer,
+      textSoftWrap: textSoftWrap,
+      textOverflow: textOverflow,
+      content: content,
+      textAlign: textAlign,
+      textExpanded: textExpanded,
+      textFitted: textFitted,
+      customLoader: customLoader ?? const CircularProgressIndicator(),
+      child: child,
+    );
+  }
 
   static Button textVariant({
     String? text,
@@ -293,48 +292,49 @@ class Button extends StatelessWidget {
     Widget? customLoader,
     Widget? content,
     Widget? child,
-  }) =>
-      Button(
-        onPressed: onPressed,
-        onLongPress: onLongPress,
-        text: text,
-        textStyle: textStyle,
-        loading: loading,
-        disabled: disabled,
-        loaderSize: loaderSize,
-        width: width,
-        height: height,
-        constraints: constraints,
-        shape: shape,
-        borderRadius: borderRadius,
-        borderSide: borderSide,
-        boxShadow: boxShadow,
-        color: color ?? ThemeApp.colors(context).text,
-        bgColor: bgColor,
-        bgColorDisabled: bgColorDisabled ?? Colors.transparent,
-        splashFactory: splashFactory,
-        overlayColor:
-            overlayColor ?? ThemeApp.colors(context).secondary.withOpacity(.4),
-        padding: padding,
-        margin: margin,
-        leading: leading,
-        trailing: trailing,
-        buttonAxisAlignment: buttonAxisAlignment,
-        gap: gap,
-        leadingGap: leadingGap,
-        trailingGap: trailingGap,
-        leadingSpacer: leadingSpacer,
-        trailingSpacer: trailingSpacer,
-        textSoftWrap: textSoftWrap,
-        textOverflow: textOverflow,
-        content: content,
-        textAlign: textAlign,
-        textExpanded: textExpanded,
-        textFitted: textFitted,
-        customLoader: customLoader ??
-            Lottie.asset("assets/animation/loader-bicolor.json"),
-        child: child,
-      );
+  }) {
+    final colors = ThemeApp.colors(context);
+
+    return Button(
+      onPressed: onPressed,
+      onLongPress: onLongPress,
+      text: text,
+      textStyle: textStyle,
+      loading: loading,
+      disabled: disabled,
+      loaderSize: loaderSize,
+      width: width,
+      height: height,
+      constraints: constraints,
+      shape: shape,
+      borderRadius: borderRadius,
+      borderSide: borderSide,
+      boxShadow: boxShadow,
+      color: color ?? colors.text,
+      bgColor: bgColor,
+      bgColorDisabled: bgColorDisabled ?? Colors.transparent,
+      splashFactory: splashFactory,
+      overlayColor: overlayColor ?? colors.secondary.withOpacity(.4),
+      padding: padding,
+      margin: margin,
+      leading: leading,
+      trailing: trailing,
+      buttonAxisAlignment: buttonAxisAlignment,
+      gap: gap,
+      leadingGap: leadingGap,
+      trailingGap: trailingGap,
+      leadingSpacer: leadingSpacer,
+      trailingSpacer: trailingSpacer,
+      textSoftWrap: textSoftWrap,
+      textOverflow: textOverflow,
+      content: content,
+      textAlign: textAlign,
+      textExpanded: textExpanded,
+      textFitted: textFitted,
+      customLoader: customLoader ?? const CircularProgressIndicator(),
+      child: child,
+    );
+  }
 
   static Button icon({
     required void Function()? onPressed,
@@ -404,7 +404,8 @@ class Button extends StatelessWidget {
     Widget? customLoader,
     required Widget? icon,
   }) {
-    final backgroundColor = bgColor ?? ThemeApp.colors(context).tertiary;
+    final colors = ThemeApp.colors(context),
+        backgroundColor = bgColor ?? colors.tertiary;
 
     return Button(
       width: size,
@@ -417,7 +418,7 @@ class Button extends StatelessWidget {
       boxShadow: boxShadow,
       loading: loading,
       disabled: disabled,
-      color: color ?? ThemeApp.colors(context).text,
+      color: color ?? colors.text,
       bgColor: backgroundColor,
       bgColorDisabled: bgColorDisabled ?? backgroundColor.withOpacity(.4),
       splashFactory: splashFactory,
@@ -426,8 +427,7 @@ class Button extends StatelessWidget {
       onPressed: onPressed,
       onLongPress: onLongPress,
       constraints: constraints,
-      customLoader:
-          customLoader ?? Lottie.asset("assets/animation/loader-primary.json"),
+      customLoader: customLoader ?? const CircularProgressIndicator(),
       child: icon,
     );
   }
@@ -454,7 +454,8 @@ class Button extends StatelessWidget {
     Widget? customLoader,
     required Widget? icon,
   }) {
-    final backgroundColor = bgColor ?? Colors.white;
+    final colors = ThemeApp.colors(context),
+        backgroundColor = bgColor ?? Colors.white;
 
     return Button(
       width: size,
@@ -467,12 +468,11 @@ class Button extends StatelessWidget {
       boxShadow: boxShadow,
       loading: loading,
       disabled: disabled,
-      color: color ?? ThemeApp.colors(context).primary,
+      color: color ?? colors.primary,
       bgColor: backgroundColor,
       bgColorDisabled: bgColorDisabled ?? backgroundColor.withOpacity(.4),
       splashFactory: splashFactory,
-      overlayColor:
-          overlayColor ?? ThemeApp.colors(context).primary.withAlpha(50),
+      overlayColor: overlayColor ?? colors.primary.withAlpha(50),
       padding: padding,
       onPressed: onPressed,
       onLongPress: onLongPress,
@@ -484,6 +484,8 @@ class Button extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colors = ThemeApp.colors(context);
+
     final ts = textStyle ??
             const TextStyle(
               fontSize: 14,
@@ -496,7 +498,7 @@ class Button extends StatelessWidget {
           overflow: textOverflow,
           style: ts,
         ),
-        backgroundColor = bgColor ?? ThemeApp.colors(context).primary;
+        backgroundColor = bgColor ?? colors.primary;
 
     return Container(
       margin: margin,
@@ -518,12 +520,15 @@ class Button extends StatelessWidget {
           overlayColor: MaterialStatePropertyAll(overlayColor),
           backgroundColor: disabled
               ? MaterialStatePropertyAll(
-                  bgColorDisabled ?? backgroundColor.withOpacity(.4))
+                  bgColorDisabled ?? backgroundColor.withOpacity(.4),
+                )
               : MaterialStatePropertyAll(backgroundColor),
           shape: MaterialStatePropertyAll(
             shape ??
                 RoundedRectangleBorder(
-                    borderRadius: borderRadius, side: borderSide),
+                  borderRadius: borderRadius,
+                  side: borderSide,
+                ),
           ),
         ),
         child: loading

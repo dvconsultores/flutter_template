@@ -13,13 +13,13 @@ enum ThemeType {
 }
 
 ///? A Mixin to getter some weigth of current font families.
-/// use like `FontFamily.lato("400")`
+/// use like `FontFamily.noto("400")`
 mixin FontFamily {
   static final _conversion = {
     "100": "extra_light",
     "200": "semi_light",
     "300": "light",
-    "400": "normal",
+    "400": "regular",
     "500": "medium",
     "600": "semi_bold",
     "700": "bold",
@@ -27,7 +27,7 @@ mixin FontFamily {
     "900": "black",
   };
 
-  static String lato(String value) => 'Lato_${_conversion[value] ?? value}';
+  static String noto(String value) => 'NotoSans_${_conversion[value] ?? value}';
 }
 
 /// Themes configuration class from app.
@@ -46,58 +46,75 @@ class ThemeApp {
             );
 
   static Map<ThemeType, ThemeData> get _themes {
-    final ligthTheme = ThemeData.light(useMaterial3: false);
-    final darkTheme = ThemeData.dark(useMaterial3: false);
+    var ligthTheme = ThemeData.light(useMaterial3: true),
+        darkTheme = ThemeData.dark(useMaterial3: true);
+
+    //? light
+    ligthTheme = ligthTheme.copyWith(
+      // values config
+      visualDensity: VisualDensity.compact,
+
+      // color config
+      primaryColor: const Color(0xff001689),
+      focusColor: const Color(0xFF3B4279),
+      disabledColor: const Color.fromARGB(255, 209, 175, 172),
+      bottomNavigationBarTheme: const BottomNavigationBarThemeData(
+        backgroundColor: Colors.white,
+      ),
+      cardColor: Colors.white,
+      inputDecorationTheme: const InputDecorationTheme(
+        fillColor: Colors.white,
+        outlineBorder: BorderSide(color: Color(0xFF46464F)),
+      ),
+      scaffoldBackgroundColor: const Color(0xfffafafa),
+      progressIndicatorTheme: const ProgressIndicatorThemeData(
+        circularTrackColor: Colors.red,
+        color: Color(0xff001689),
+      ),
+      colorScheme: const ColorScheme.light(
+        background: Color(0xFFF9F9F9),
+        primary: Color(0xff001689),
+        secondary: Color(0xFFFF5100),
+        tertiary: Color(0xFFF7E388),
+        error: Color(0xFFFF5100),
+        outline: Color(0xFF4E444B),
+      ),
+      extensions: const <ThemeExtension<dynamic>>[
+        ThemeDataColorExtension(
+          text: Color(0xFF4E444B),
+          label: Color(0xFF777680),
+          title: Color(0xFF4E444B),
+          accent: Colors.red,
+          success: Colors.green,
+          warning: Color(0xFFFFDD00),
+        ),
+        ThemeDataStyleExtension(
+          customText: TextStyle(),
+        ),
+      ],
+    );
+    // text config
+    ligthTheme = ligthTheme.copyWith(
+      textTheme: GoogleFonts.notoSansTextTheme(ligthTheme.textTheme.copyWith(
+        bodyLarge: TextStyle(
+          fontSize: 17,
+          color: ligthTheme.extension<ThemeDataColorExtension>()!.title!,
+          fontWeight: FontWeight.w700,
+          letterSpacing: 0.15,
+        ),
+        bodyMedium: TextStyle(
+          fontSize: 16,
+          color: ligthTheme.extension<ThemeDataColorExtension>()!.text!,
+        ),
+        bodySmall: TextStyle(
+          color: ligthTheme.extension<ThemeDataColorExtension>()!.text!,
+        ),
+      )),
+    );
 
     return {
-      // ? ligth
-      ThemeType.light: ligthTheme.copyWith(
-        // text config
-        textTheme: GoogleFonts.latoTextTheme(ligthTheme.textTheme.copyWith(
-          bodyMedium: ligthTheme.textTheme.bodyLarge?.copyWith(fontSize: 16),
-        )),
-        visualDensity: VisualDensity.compact,
-
-        // color config
-        primaryColor: const Color(0xff001689),
-        focusColor: const Color(0xFF3B4279),
-        disabledColor: const Color.fromARGB(255, 209, 175, 172),
-        bottomNavigationBarTheme: const BottomNavigationBarThemeData(
-          backgroundColor: Color.fromARGB(255, 231, 225, 225),
-        ),
-        inputDecorationTheme: const InputDecorationTheme(
-          fillColor: Colors.white,
-          outlineBorder: BorderSide(color: Color(0xFF46464F)),
-        ),
-        scaffoldBackgroundColor: const Color(0xfffafafa),
-        progressIndicatorTheme: const ProgressIndicatorThemeData(
-          circularTrackColor: Colors.red,
-          color: Color(0xff001689),
-        ),
-        colorScheme: const ColorScheme.light(
-          background: Color(0xFFF9F9F9),
-          primary: Color(0xff001689),
-          secondary: Color(0xFFFF5100),
-          tertiary: Color(0xFFF7E388),
-          error: Color(0xFFFF5100),
-          outline: Color(0xFF4E444B),
-        ),
-        extensions: const <ThemeExtension<dynamic>>[
-          ThemeDataColorExtension(
-            text: Color(0xFF4E444B),
-            label: Color(0xFF777680),
-            accent: Colors.red,
-            success: Colors.green,
-            warning: Color(0xFFFFDD00),
-          ),
-          ThemeDataStyleExtension(
-            customText: TextStyle(),
-          ),
-        ],
-      ),
-
-      // ? dark
-      ThemeType.dark: darkTheme.copyWith(),
+      ThemeType.light: ligthTheme,
+      ThemeType.dark: darkTheme,
     };
   }
 
@@ -134,6 +151,7 @@ class ThemeApp {
       disabledColor: themeData.disabledColor,
       text: themeData.extension<ThemeDataColorExtension>()!.text!,
       label: themeData.extension<ThemeDataColorExtension>()!.label!,
+      title: themeData.extension<ThemeDataColorExtension>()!.title!,
       accent: themeData.extension<ThemeDataColorExtension>()!.accent!,
       success: themeData.extension<ThemeDataColorExtension>()!.success!,
       warning: themeData.extension<ThemeDataColorExtension>()!.warning!,
@@ -162,6 +180,7 @@ class ColorsApp {
     required this.disabledColor,
     required this.text,
     required this.label,
+    required this.title,
     required this.accent,
     required this.success,
     required this.warning,
@@ -175,6 +194,7 @@ class ColorsApp {
   final Color disabledColor;
   final Color text;
   final Color label;
+  final Color title;
   final Color accent;
   final Color success;
   final Color warning;
@@ -186,12 +206,14 @@ class ThemeDataColorExtension extends ThemeExtension<ThemeDataColorExtension> {
   const ThemeDataColorExtension({
     this.text,
     this.label,
+    this.title,
     this.accent,
     this.success,
     this.warning,
   });
   final Color? text;
   final Color? label;
+  final Color? title;
   final Color? accent;
   final Color? success;
   final Color? warning;
@@ -200,6 +222,7 @@ class ThemeDataColorExtension extends ThemeExtension<ThemeDataColorExtension> {
   ThemeDataColorExtension copyWith({
     Color? text,
     Color? label,
+    Color? title,
     Color? accent,
     Color? success,
     Color? warning,
@@ -207,6 +230,7 @@ class ThemeDataColorExtension extends ThemeExtension<ThemeDataColorExtension> {
     return ThemeDataColorExtension(
       text: text ?? this.text,
       label: label ?? this.label,
+      title: title ?? this.title,
       accent: accent ?? this.accent,
       success: success ?? this.success,
       warning: warning ?? this.warning,
@@ -220,6 +244,7 @@ class ThemeDataColorExtension extends ThemeExtension<ThemeDataColorExtension> {
     return ThemeDataColorExtension(
       text: Color.lerp(text, other.text, t),
       label: Color.lerp(label, other.label, t),
+      title: Color.lerp(title, other.title, t),
       accent: Color.lerp(accent, other.accent, t),
       success: Color.lerp(success, other.success, t),
       warning: Color.lerp(warning, other.warning, t),
@@ -228,7 +253,7 @@ class ThemeDataColorExtension extends ThemeExtension<ThemeDataColorExtension> {
 
   @override
   String toString() =>
-      'ThemeDataColorExtension(text: $text, label: $label, accent: $accent, success: $success, warning: $warning)';
+      'ThemeDataColorExtension(text: $text, label: $label, title: $title, accent: $accent, success: $success, warning: $warning)';
 }
 
 // ? Theme data style extension

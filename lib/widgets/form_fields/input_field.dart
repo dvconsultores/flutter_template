@@ -66,7 +66,9 @@ class InputField extends TextFormField {
           style: textStyle ?? _ts,
           keyboardType: numeric
               ? const TextInputType.numberWithOptions(
-                  signed: true, decimal: true)
+                  signed: true,
+                  decimal: true,
+                )
               : keyboardType,
           inputFormatters: [
             if (numeric) ...[
@@ -87,22 +89,31 @@ class InputField extends TextFormField {
             onChanged(haveDecimals ? value.split(',').join('.') : value);
           },
           decoration: buildWidget<InputDecoration>(() {
+            final colors = ThemeApp.colors(context), theme = Theme.of(context);
+
             final ts = textStyle ?? _ts,
                 hs = hintStyle ??
-                    ts.copyWith(
-                        color: ThemeApp.colors(context).text.withOpacity(.7),
-                        fontSize: 13),
+                    ts?.copyWith(
+                      color: colors.text.withOpacity(.7),
+                      fontSize: 13,
+                    ),
                 ls = labelStyle ??
-                    ts.copyWith(
-                        color: ThemeApp.colors(context).text, fontSize: 13),
+                    ts?.copyWith(
+                      color: colors.text,
+                      fontSize: 13,
+                    ),
                 fls = floatingLabelStyle ?? ls;
 
             InputBorder checkBorder(BorderSide border) => DecoratedInputBorder(
                   child: underline
                       ? UnderlineInputBorder(
-                          borderSide: border, borderRadius: borderRadius)
+                          borderSide: border,
+                          borderRadius: borderRadius,
+                        )
                       : OutlineInputBorder(
-                          borderSide: border, borderRadius: borderRadius),
+                          borderSide: border,
+                          borderRadius: borderRadius,
+                        ),
                   shadow: shadow ?? Vars.boxShadow2,
                 );
 
@@ -110,10 +121,10 @@ class InputField extends TextFormField {
                     border ?? const BorderSide(color: Colors.transparent),
                 disabledBorder = borderDisabled ??
                     const BorderSide(color: Colors.transparent),
-                errorBorder = borderError ??
-                    BorderSide(color: Theme.of(context).colorScheme.error),
-                focusedBorder = borderFocused ??
-                    BorderSide(color: Theme.of(context).focusColor);
+                errorBorder =
+                    borderError ?? BorderSide(color: theme.colorScheme.error),
+                focusedBorder =
+                    borderFocused ?? BorderSide(color: theme.focusColor);
 
             return InputDecoration(
               prefixIconConstraints: decoration?.prefixIconConstraints ??
@@ -130,7 +141,7 @@ class InputField extends TextFormField {
               filled: decoration?.filled ?? filled,
               fillColor: decoration?.fillColor ??
                   color ??
-                  Theme.of(context).inputDecorationTheme.fillColor,
+                  theme.inputDecorationTheme.fillColor,
               border: decoration?.border ?? checkBorder(defaultBorder),
               enabledBorder:
                   decoration?.enabledBorder ?? checkBorder(defaultBorder),
@@ -195,11 +206,7 @@ class InputField extends TextFormField {
           }),
         );
   static final context = ContextUtility.context!,
-      _ts = TextStyle(
-        color: ThemeApp.colors(context).text,
-        fontSize: 16,
-        fontWeight: FontWeight.w400,
-      );
+      _ts = Theme.of(context).textTheme.bodyMedium;
 
   static Widget sizedBox({
     double? width,
