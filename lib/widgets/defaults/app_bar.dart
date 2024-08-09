@@ -31,12 +31,12 @@ class CustomAppBar extends AppBar {
                               BorderSide(color: ThemeApp.colors(null).label)),
                     )),
               )),
+          toolbarHeight: subTitleText.hasValue ? 66 : 56,
           titleSpacing: 0,
           title: Padding(
             padding: EdgeInsets.only(
               left: Vars.gapLow,
               right: Vars.paddingScaffold.right,
-              bottom: subTitleText.hasValue ? Vars.gapMedium : 0,
             ),
             child: Column(children: [
               if (titleText.hasValue) Text(titleText!),
