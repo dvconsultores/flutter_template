@@ -59,8 +59,8 @@ class ThemeApp {
         visualDensity: VisualDensity.compact,
 
         // color config
-        primaryColor: Colors.amber,
-        focusColor: const Color.fromARGB(255, 255, 17, 0),
+        primaryColor: const Color(0xff001689),
+        focusColor: const Color(0xFF3B4279),
         disabledColor: const Color.fromARGB(255, 209, 175, 172),
         bottomNavigationBarTheme: const BottomNavigationBarThemeData(
           backgroundColor: Color.fromARGB(255, 231, 225, 225),
@@ -72,23 +72,23 @@ class ThemeApp {
         scaffoldBackgroundColor: const Color(0xfffafafa),
         progressIndicatorTheme: const ProgressIndicatorThemeData(
           circularTrackColor: Colors.red,
-          color: Colors.amber,
+          color: Color(0xff001689),
         ),
         colorScheme: const ColorScheme.light(
           background: Color(0xFFF9F9F9),
-          primary: Colors.amber,
-          secondary: Colors.red,
-          tertiary: Colors.deepPurpleAccent,
-          error: Colors.red,
-          outline: Colors.black,
+          primary: Color(0xff001689),
+          secondary: Color(0xFFFF5100),
+          tertiary: Color(0xFFF7E388),
+          error: Color(0xFFFF5100),
+          outline: Color(0xFF4E444B),
         ),
         extensions: const <ThemeExtension<dynamic>>[
           ThemeDataColorExtension(
-            text: Colors.black,
+            text: Color(0xFF4E444B),
+            label: Color(0xFF777680),
             accent: Colors.red,
             success: Colors.green,
-            warning: Color.fromARGB(255, 233, 198, 2),
-            label: Color.fromARGB(255, 129, 127, 129),
+            warning: Color(0xFFFFDD00),
           ),
           ThemeDataStyleExtension(
             customText: TextStyle(),
@@ -133,10 +133,10 @@ class ThemeApp {
       focusColor: themeData.focusColor,
       disabledColor: themeData.disabledColor,
       text: themeData.extension<ThemeDataColorExtension>()!.text!,
+      label: themeData.extension<ThemeDataColorExtension>()!.label!,
       accent: themeData.extension<ThemeDataColorExtension>()!.accent!,
       success: themeData.extension<ThemeDataColorExtension>()!.success!,
       warning: themeData.extension<ThemeDataColorExtension>()!.warning!,
-      label: themeData.extension<ThemeDataColorExtension>()!.label!,
     );
   }
 
@@ -161,10 +161,10 @@ class ColorsApp {
     required this.focusColor,
     required this.disabledColor,
     required this.text,
+    required this.label,
     required this.accent,
     required this.success,
     required this.warning,
-    required this.label,
   });
   final Color background;
   final Color primary;
@@ -174,10 +174,10 @@ class ColorsApp {
   final Color focusColor;
   final Color disabledColor;
   final Color text;
+  final Color label;
   final Color accent;
   final Color success;
   final Color warning;
-  final Color label;
 }
 
 // ? Theme data color extension
@@ -185,31 +185,31 @@ class ColorsApp {
 class ThemeDataColorExtension extends ThemeExtension<ThemeDataColorExtension> {
   const ThemeDataColorExtension({
     this.text,
+    this.label,
     this.accent,
     this.success,
     this.warning,
-    this.label,
   });
   final Color? text;
+  final Color? label;
   final Color? accent;
   final Color? success;
   final Color? warning;
-  final Color? label;
 
   @override
   ThemeDataColorExtension copyWith({
     Color? text,
+    Color? label,
     Color? accent,
     Color? success,
     Color? warning,
-    Color? label,
   }) {
     return ThemeDataColorExtension(
       text: text ?? this.text,
+      label: label ?? this.label,
       accent: accent ?? this.accent,
       success: success ?? this.success,
       warning: warning ?? this.warning,
-      label: label ?? this.label,
     );
   }
 
@@ -219,16 +219,16 @@ class ThemeDataColorExtension extends ThemeExtension<ThemeDataColorExtension> {
 
     return ThemeDataColorExtension(
       text: Color.lerp(text, other.text, t),
+      label: Color.lerp(label, other.label, t),
       accent: Color.lerp(accent, other.accent, t),
       success: Color.lerp(success, other.success, t),
       warning: Color.lerp(warning, other.warning, t),
-      label: Color.lerp(label, other.label, t),
     );
   }
 
   @override
   String toString() =>
-      'ThemeDataColorExtension(text: $text, accent: $accent, success: $success, warning: $warning, label: $label)';
+      'ThemeDataColorExtension(text: $text, label: $label, accent: $accent, success: $success, warning: $warning)';
 }
 
 // ? Theme data style extension
