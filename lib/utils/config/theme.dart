@@ -13,7 +13,7 @@ enum ThemeType {
 }
 
 ///? A Mixin to getter some weigth of current font families.
-/// use like `FontFamily.noto("400")`
+/// use like `FontFamily.lato("400")`
 mixin FontFamily {
   static final _conversion = {
     "100": "extra_light",
@@ -27,7 +27,7 @@ mixin FontFamily {
     "900": "black",
   };
 
-  static String noto(String value) => 'NotoSans_${_conversion[value] ?? value}';
+  static String lato(String value) => 'Lato_${_conversion[value] ?? value}';
 }
 
 /// Themes configuration class from app.
@@ -95,7 +95,7 @@ class ThemeApp {
     );
     // text config
     ligthTheme = ligthTheme.copyWith(
-      textTheme: GoogleFonts.notoSansTextTheme(ligthTheme.textTheme.copyWith(
+      textTheme: GoogleFonts.latoTextTheme(ligthTheme.textTheme.copyWith(
         bodyLarge: TextStyle(
           fontSize: 17,
           color: ligthTheme.extension<ThemeDataColorExtension>()!.title!,
