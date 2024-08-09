@@ -16,7 +16,7 @@ class CardWidget extends StatelessWidget {
     this.shape = const RoundedRectangleBorder(
       borderRadius: BorderRadius.all(Radius.circular(Vars.radius15)),
     ),
-    this.clipBehavior = Clip.antiAliasWithSaveLayer,
+    this.clipBehavior = Clip.antiAlias,
     this.child,
   });
 
@@ -35,11 +35,13 @@ class CardWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+
     return GestureDetector(
       onTap: onTap,
       child: Card(
         margin: margin,
-        color: color ?? Colors.white,
+        color: color ?? theme.cardColor,
         shadowColor: shadowColor,
         shape: shape,
         clipBehavior: clipBehavior,
@@ -65,7 +67,7 @@ class CardWidgetV2 extends StatelessWidget {
     this.padding = const EdgeInsets.all(Vars.gapMedium),
     this.margin,
     this.boxShadow = const [Vars.boxShadow1],
-    this.borderRadius = const BorderRadius.all(Radius.circular(Vars.radius10)),
+    this.borderRadius = const BorderRadius.all(Radius.circular(Vars.radius15)),
     this.onTap,
     this.constraints,
     this.width = double.maxFinite,
@@ -85,6 +87,8 @@ class CardWidgetV2 extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+
     return GestureDetector(
       onTap: onTap,
       child: Container(
@@ -96,7 +100,7 @@ class CardWidgetV2 extends StatelessWidget {
         decoration: BoxDecoration(
           border: border,
           borderRadius: borderRadius,
-          color: color ?? Colors.white,
+          color: color ?? theme.cardColor,
           boxShadow: boxShadow,
         ),
         child: child,

@@ -13,7 +13,7 @@ enum ThemeType {
 }
 
 ///? A Mixin to getter some weigth of current font families.
-/// use like `FontFamily.lato("400")`
+/// use like `FontFamily.noto("400")`
 mixin FontFamily {
   static final _conversion = {
     "100": "extra_light",
@@ -27,7 +27,7 @@ mixin FontFamily {
     "900": "black",
   };
 
-  static String lato(String value) => 'Lato_${_conversion[value] ?? value}';
+  static String noto(String value) => 'NotoSans_${_conversion[value] ?? value}';
 }
 
 /// Themes configuration class from app.
@@ -58,6 +58,9 @@ class ThemeApp {
       primaryColor: const Color(0xff001689),
       focusColor: const Color(0xFF3B4279),
       disabledColor: const Color.fromARGB(255, 209, 175, 172),
+      appBarTheme: const AppBarTheme(
+        backgroundColor: Color(0xfffafafa),
+      ),
       bottomNavigationBarTheme: const BottomNavigationBarThemeData(
         backgroundColor: Colors.white,
       ),
@@ -95,19 +98,31 @@ class ThemeApp {
     );
     // text config
     ligthTheme = ligthTheme.copyWith(
-      textTheme: GoogleFonts.latoTextTheme(ligthTheme.textTheme.copyWith(
+      appBarTheme: AppBarTheme(
+        titleTextStyle: TextStyle(
+          fontSize: 17,
+          color: ligthTheme.extension<ThemeDataColorExtension>()!.title!,
+          fontWeight: FontWeight.w700,
+          letterSpacing: 1,
+          height: 1.1,
+        ),
+      ),
+      textTheme: GoogleFonts.notoSansTextTheme(ligthTheme.textTheme.copyWith(
         bodyLarge: TextStyle(
           fontSize: 17,
           color: ligthTheme.extension<ThemeDataColorExtension>()!.title!,
           fontWeight: FontWeight.w700,
           letterSpacing: 0.15,
+          height: 1.1,
         ),
         bodyMedium: TextStyle(
           fontSize: 16,
           color: ligthTheme.extension<ThemeDataColorExtension>()!.text!,
+          height: 1.1,
         ),
         bodySmall: TextStyle(
           color: ligthTheme.extension<ThemeDataColorExtension>()!.text!,
+          height: 1.1,
         ),
       )),
     );
