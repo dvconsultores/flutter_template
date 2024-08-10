@@ -39,6 +39,12 @@ class MainProvider extends ChangeNotifier {
     returnAuthError = value;
     notifyListeners();
   }
+  // ? ----------------------Bottom Sheet Provider--------------------------- //
+  bool haveBottomSheet = false;
+  set setBottomSheet(bool value) {
+    haveBottomSheet = value;
+    notifyListeners();
+  }
 
   // ? ------------------------Snackbar Provider----------------------------- //
   final List<Flushbar> snackbars = [];

@@ -1,11 +1,13 @@
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_detextre4/main_provider.dart';
 import 'package:flutter_detextre4/utils/config/theme.dart';
 import 'package:flutter_detextre4/utils/general/variables.dart';
 import 'package:flutter_detextre4/widgets/defaults/button.dart';
 import 'package:flutter_detextre4/widgets/defaults/snackbar.dart';
 import 'package:flutter_detextre4/widgets/sheets/card_widget.dart';
 import 'package:flutter_gap/flutter_gap.dart';
+import 'package:provider/provider.dart';
 
 class BottomSheetCard extends StatelessWidget {
   const BottomSheetCard({
@@ -50,34 +52,41 @@ class BottomSheetCard extends StatelessWidget {
     Widget? topWidget,
     Widget? floatingActionButton,
     Widget? bottomNavigationBar,
-  }) async =>
-      await showModalBottomSheet<T>(
-        context: context,
-        clipBehavior: clipBehavior ?? Clip.antiAlias,
-        isDismissible: isDismissible,
-        isScrollControlled: isScrollControlled,
-        backgroundColor: backgroundColor ?? ThemeApp.colors(context).background,
-        shape: shape ??
-            const RoundedRectangleBorder(
-              borderRadius: BorderRadius.only(
-                topLeft: Radius.circular(Vars.radius50),
-                topRight: Radius.circular(Vars.radius50),
-              ),
+  }) async {
+    final mainProvider = Provider.of<MainProvider>(context, listen: false);
+    mainProvider.setBottomSheet = true;
+
+    final value = await showModalBottomSheet<T>(
+      context: context,
+      clipBehavior: clipBehavior ?? Clip.antiAlias,
+      isDismissible: isDismissible,
+      isScrollControlled: isScrollControlled,
+      backgroundColor: backgroundColor ?? ThemeApp.colors(context).background,
+      shape: shape ??
+          const RoundedRectangleBorder(
+            borderRadius: BorderRadius.only(
+              topLeft: Radius.circular(Vars.radius50),
+              topRight: Radius.circular(Vars.radius50),
             ),
-        builder: builder ??
-            (context) => BottomSheetCard(
-                  expand: expand,
-                  initialChildSize: initialChildSize,
-                  maxChildSize: maxChildSize,
-                  minChildSize: minChildSize,
-                  padding: padding,
-                  scrollable: scrollable,
-                  topWidget: topWidget,
-                  floatingActionButton: floatingActionButton,
-                  bottomNavigationBar: bottomNavigationBar,
-                  child: child ?? const SizedBox.shrink(),
-                ),
-      );
+          ),
+      builder: builder ??
+          (context) => BottomSheetCard(
+                expand: expand,
+                initialChildSize: initialChildSize,
+                maxChildSize: maxChildSize,
+                minChildSize: minChildSize,
+                padding: padding,
+                scrollable: scrollable,
+                topWidget: topWidget,
+                floatingActionButton: floatingActionButton,
+                bottomNavigationBar: bottomNavigationBar,
+                child: child ?? const SizedBox.shrink(),
+              ),
+    );
+    mainProvider.setBottomSheet = false;
+
+    return value;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -190,39 +199,47 @@ class BottomSheetList<T> extends StatelessWidget {
     Widget? topWidget,
     Widget? floatingActionButton,
     Widget? bottomNavigationBar,
-  }) async =>
-      await showModalBottomSheet<DropdownMenuItem<T>>(
-        context: context,
-        clipBehavior: clipBehavior ?? Clip.antiAlias,
-        isDismissible: isDismissible,
-        isScrollControlled: isScrollControlled,
-        backgroundColor: backgroundColor ?? ThemeApp.colors(context).background,
-        shape: shape ??
-            const RoundedRectangleBorder(
-              borderRadius: BorderRadius.only(
-                topLeft: Radius.circular(Vars.radius50),
-                topRight: Radius.circular(Vars.radius50),
-              ),
+  }) async {
+    final mainProvider = Provider.of<MainProvider>(context, listen: false);
+    mainProvider.setBottomSheet = true;
+
+    final value = await showModalBottomSheet<DropdownMenuItem<T>>(
+      context: context,
+      clipBehavior: clipBehavior ?? Clip.antiAlias,
+      isDismissible: isDismissible,
+      isScrollControlled: isScrollControlled,
+      backgroundColor: backgroundColor ?? ThemeApp.colors(context).background,
+      shape: shape ??
+          const RoundedRectangleBorder(
+            borderRadius: BorderRadius.only(
+              topLeft: Radius.circular(Vars.radius50),
+              topRight: Radius.circular(Vars.radius50),
             ),
-        builder: (context) => BottomSheetList<T>(
-          items: items ?? [],
-          onTap: onTap,
-          expand: expand,
-          initialChildSize: initialChildSize,
-          maxChildSize: maxChildSize,
-          minChildSize: minChildSize,
-          itemBuilder: itemBuilder,
-          emptyData: emptyData,
-          emptyDataText: emptyDataText,
-          emptyDataStyle: emptyDataStyle,
-          padding: padding,
-          itemsGap: itemsGap,
-          topWidget: topWidget,
-          floatingActionButton: floatingActionButton,
-          bottomNavigationBar: bottomNavigationBar,
-          scrollable: scrollable,
-        ),
-      );
+          ),
+      builder: (context) => BottomSheetList<T>(
+        items: items ?? [],
+        onTap: onTap,
+        expand: expand,
+        initialChildSize: initialChildSize,
+        maxChildSize: maxChildSize,
+        minChildSize: minChildSize,
+        itemBuilder: itemBuilder,
+        emptyData: emptyData,
+        emptyDataText: emptyDataText,
+        emptyDataStyle: emptyDataStyle,
+        padding: padding,
+        itemsGap: itemsGap,
+        topWidget: topWidget,
+        floatingActionButton: floatingActionButton,
+        bottomNavigationBar: bottomNavigationBar,
+        scrollable: scrollable,
+      ),
+    );
+
+    mainProvider.setBottomSheet = false;
+
+    return value;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -238,13 +255,15 @@ class BottomSheetList<T> extends StatelessWidget {
           else
             const Gap(Vars.gapXLarge).column,
           items.isEmpty
-              ? Padding(
-                  padding: const EdgeInsets.symmetric(vertical: Vars.gapMax),
-                  child: emptyData ??
-                      Text(
-                        emptyDataText ?? "No hay registros",
-                        style: emptyDataStyle,
-                      ),
+              ? Align(
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(vertical: Vars.gapMax),
+                    child: emptyData ??
+                        Text(
+                          emptyDataText ?? "No records",
+                          style: emptyDataStyle,
+                        ),
+                  ),
                 )
               : ListView.separated(
                   padding: padding ??
@@ -272,7 +291,6 @@ class BottomSheetList<T> extends StatelessWidget {
                       child: itemBuilder != null
                           ? itemBuilder!(context, index)
                           : CardWidget(
-                              elevation: 5,
                               padding: const EdgeInsets.symmetric(
                                 horizontal: Vars.gapMedium,
                                 vertical: Vars.gapXLarge,
@@ -288,7 +306,7 @@ class BottomSheetList<T> extends StatelessWidget {
           floatingActionButton: floatingActionButton,
           bottomNavigationBar: bottomNavigationBar,
           body: scrollable
-              ? Expanded(child: SingleChildScrollView(child: contentWidget))
+              ? SingleChildScrollView(child: contentWidget)
               : Expanded(child: contentWidget),
         );
       },
@@ -395,51 +413,59 @@ class BottomSheetListMultiple<T> extends StatefulWidget {
     Widget? topWidget,
     Widget? floatingActionButton,
     Widget? bottomNavigationBar,
-  }) async =>
-      await showModalBottomSheet<List<DropdownMenuItem<T>>>(
-        context: context,
-        clipBehavior: clipBehavior ?? Clip.antiAlias,
-        isDismissible: isDismissible,
-        isScrollControlled: isScrollControlled,
-        backgroundColor: backgroundColor ?? ThemeApp.colors(context).background,
-        shape: shape ??
-            const RoundedRectangleBorder(
-              borderRadius: BorderRadius.only(
-                topLeft: Radius.circular(Vars.radius50),
-                topRight: Radius.circular(Vars.radius50),
-              ),
+  }) async {
+    final mainProvider = Provider.of<MainProvider>(context, listen: false);
+    mainProvider.setBottomSheet = true;
+
+    final value = await showModalBottomSheet<List<DropdownMenuItem<T>>>(
+      context: context,
+      clipBehavior: clipBehavior ?? Clip.antiAlias,
+      isDismissible: isDismissible,
+      isScrollControlled: isScrollControlled,
+      backgroundColor: backgroundColor ?? ThemeApp.colors(context).background,
+      shape: shape ??
+          const RoundedRectangleBorder(
+            borderRadius: BorderRadius.only(
+              topLeft: Radius.circular(Vars.radius50),
+              topRight: Radius.circular(Vars.radius50),
             ),
-        builder: (context) => BottomSheetListMultiple<T>(
-          items: items ?? [],
-          itemforegroundColor: itemforegroundColor,
-          itemBuilder: itemBuilder,
-          onComplete: onComplete,
-          expand: expand,
-          initialChildSize: initialChildSize,
-          maxChildSize: maxChildSize,
-          minChildSize: minChildSize,
-          buttonBuilder: buttonBuilder,
-          buttonText: buttonText,
-          buttonTextStyle: buttonTextStyle,
-          maxLenght: maxLenght,
-          emptyData: emptyData,
-          emptyDataText: emptyDataText,
-          emptyDataStyle: emptyDataStyle,
-          label: label,
-          labelText: labelText,
-          labelStyle: labelStyle,
-          contextPadding: contextPadding,
-          initialItems: initialItems,
-          crossAxisCount: crossAxisCount,
-          childAspectRatio: childAspectRatio,
-          crossAxisSpacing: crossAxisSpacing,
-          mainAxisSpacing: mainAxisSpacing,
-          topWidget: topWidget,
-          scrollable: scrollable,
-          floatingActionButton: floatingActionButton,
-          bottomNavigationBar: bottomNavigationBar,
-        ),
-      );
+          ),
+      builder: (context) => BottomSheetListMultiple<T>(
+        items: items ?? [],
+        itemforegroundColor: itemforegroundColor,
+        itemBuilder: itemBuilder,
+        onComplete: onComplete,
+        expand: expand,
+        initialChildSize: initialChildSize,
+        maxChildSize: maxChildSize,
+        minChildSize: minChildSize,
+        buttonBuilder: buttonBuilder,
+        buttonText: buttonText,
+        buttonTextStyle: buttonTextStyle,
+        maxLenght: maxLenght,
+        emptyData: emptyData,
+        emptyDataText: emptyDataText,
+        emptyDataStyle: emptyDataStyle,
+        label: label,
+        labelText: labelText,
+        labelStyle: labelStyle,
+        contextPadding: contextPadding,
+        initialItems: initialItems,
+        crossAxisCount: crossAxisCount,
+        childAspectRatio: childAspectRatio,
+        crossAxisSpacing: crossAxisSpacing,
+        mainAxisSpacing: mainAxisSpacing,
+        topWidget: topWidget,
+        scrollable: scrollable,
+        floatingActionButton: floatingActionButton,
+        bottomNavigationBar: bottomNavigationBar,
+      ),
+    );
+
+    mainProvider.setBottomSheet = false;
+
+    return value;
+  }
 
   @override
   State<BottomSheetListMultiple<T>> createState() =>
@@ -501,13 +527,15 @@ class _BottomSheetListMultipleState<T>
                       const TextStyle(fontWeight: FontWeight.w700),
                 )),
           widget.items.isEmpty
-              ? Padding(
-                  padding: const EdgeInsets.symmetric(vertical: Vars.gapMax),
-                  child: widget.emptyData ??
-                      Text(
-                        widget.emptyDataText ?? "No hay registros",
-                        style: widget.emptyDataStyle,
-                      ),
+              ? Align(
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(vertical: Vars.gapMax),
+                    child: widget.emptyData ??
+                        Text(
+                          widget.emptyDataText ?? "No records",
+                          style: widget.emptyDataStyle,
+                        ),
+                  ),
                 )
               : GridView.count(
                   crossAxisCount: widget.crossAxisCount,
@@ -560,7 +588,7 @@ class _BottomSheetListMultipleState<T>
                       onPressed: onComplete,
                     )),
           body: widget.scrollable
-              ? Expanded(child: SingleChildScrollView(child: contentWidget))
+              ? SingleChildScrollView(child: contentWidget)
               : Expanded(child: contentWidget),
         );
       },
