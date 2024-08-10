@@ -1,7 +1,6 @@
 import 'dart:io';
 
 import 'package:collection/collection.dart';
-import 'package:double_back_to_exit/double_back_to_exit.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -17,11 +16,6 @@ import 'package:flutter_detextre4/utils/helper_widgets/custom_transition_wrapper
 import 'package:flutter_detextre4/utils/services/local_data/secure_storage_service.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
-
-Page _topLevelPageBuilder(Widget child) => _pageBuilder(DoubleBackToExit(
-      snackBarMessage: "Press again to leave",
-      child: child,
-    ));
 
 Page _pageBuilder(Widget child) => CustomTransitionPage(
       transitionsBuilder: (context, animation, secondaryAnimation, child) =>
@@ -55,15 +49,13 @@ final GoRouter router = GoRouter(
       GoRoute(
         path: '/splash',
         name: 'splash',
-        pageBuilder: (context, state) =>
-            _topLevelPageBuilder(const SplashPage()),
+        pageBuilder: (context, state) => _pageBuilder(const SplashPage()),
       ),
 
       GoRoute(
         path: '/auth',
         name: 'login',
-        pageBuilder: (context, state) =>
-            _topLevelPageBuilder(const LoginPage()),
+        pageBuilder: (context, state) => _pageBuilder(const LoginPage()),
         routes: const [],
       ),
 
