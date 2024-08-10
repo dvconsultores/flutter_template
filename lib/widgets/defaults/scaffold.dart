@@ -111,6 +111,7 @@ class AppScaffold extends StatelessWidget {
           data: Theme.of(context).copyWith(
             bottomSheetTheme: const BottomSheetThemeData(
               backgroundColor: Colors.transparent,
+              surfaceTintColor: Colors.transparent,
             ),
           ),
           child: Scaffold(
