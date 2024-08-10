@@ -41,6 +41,7 @@ class BottomSheetCard extends StatelessWidget {
 
   static Future<T?> showModal<T>(
     BuildContext context, {
+    bool hideBottomNavigationBar = false,
     ShapeBorder? shape,
     Color? backgroundColor,
     bool isScrollControlled = true,
@@ -60,14 +61,15 @@ class BottomSheetCard extends StatelessWidget {
     Color? draggableFrameBgColor,
     Color? draggableFrameColor,
   }) async {
-    router.hideBottomNavigationBar();
+    if (hideBottomNavigationBar) router.hideBottomNavigationBar();
 
     final value = await showModalBottomSheet<T>(
       context: context,
       clipBehavior: clipBehavior ?? Clip.antiAlias,
       isDismissible: isDismissible,
       isScrollControlled: isScrollControlled,
-      backgroundColor: backgroundColor,
+      backgroundColor:
+          backgroundColor ?? Theme.of(context).colorScheme.background,
       shape: shape ??
           const RoundedRectangleBorder(
             borderRadius: BorderRadius.only(
@@ -92,7 +94,7 @@ class BottomSheetCard extends StatelessWidget {
               ),
     );
 
-    router.showBottomNavigationBar();
+    if (hideBottomNavigationBar) router.showBottomNavigationBar();
 
     return value;
   }
@@ -201,6 +203,7 @@ class BottomSheetList<T> extends StatelessWidget {
 
   static Future<DropdownMenuItem<T>?> showModal<T>(
     BuildContext context, {
+    bool hideBottomNavigationBar = false,
     ShapeBorder? shape,
     Color? backgroundColor,
     bool isScrollControlled = true,
@@ -225,14 +228,15 @@ class BottomSheetList<T> extends StatelessWidget {
     Color? draggableFrameBgColor,
     Color? draggableFrameColor,
   }) async {
-    router.hideBottomNavigationBar();
+    if (hideBottomNavigationBar) router.hideBottomNavigationBar();
 
     final value = await showModalBottomSheet<DropdownMenuItem<T>>(
       context: context,
       clipBehavior: clipBehavior ?? Clip.antiAlias,
       isDismissible: isDismissible,
       isScrollControlled: isScrollControlled,
-      backgroundColor: backgroundColor,
+      backgroundColor:
+          backgroundColor ?? Theme.of(context).colorScheme.background,
       shape: shape ??
           const RoundedRectangleBorder(
             borderRadius: BorderRadius.only(
@@ -262,7 +266,7 @@ class BottomSheetList<T> extends StatelessWidget {
       ),
     );
 
-    router.showBottomNavigationBar();
+    if (hideBottomNavigationBar) router.showBottomNavigationBar();
 
     return value;
   }
@@ -422,6 +426,7 @@ class BottomSheetListMultiple<T> extends StatefulWidget {
 
   static Future<List<DropdownMenuItem<T>>?> showModal<T>(
     BuildContext context, {
+    bool hideBottomNavigationBar = false,
     ShapeBorder? shape,
     Color? backgroundColor,
     bool isScrollControlled = true,
@@ -459,14 +464,15 @@ class BottomSheetListMultiple<T> extends StatefulWidget {
     Color? draggableFrameBgColor,
     Color? draggableFrameColor,
   }) async {
-    router.hideBottomNavigationBar();
+    if (hideBottomNavigationBar) router.hideBottomNavigationBar();
 
     final value = await showModalBottomSheet<List<DropdownMenuItem<T>>>(
       context: context,
       clipBehavior: clipBehavior ?? Clip.antiAlias,
       isDismissible: isDismissible,
       isScrollControlled: isScrollControlled,
-      backgroundColor: backgroundColor,
+      backgroundColor:
+          backgroundColor ?? Theme.of(context).colorScheme.background,
       shape: shape ??
           const RoundedRectangleBorder(
             borderRadius: BorderRadius.only(
@@ -508,7 +514,7 @@ class BottomSheetListMultiple<T> extends StatefulWidget {
       ),
     );
 
-    router.showBottomNavigationBar();
+    if (hideBottomNavigationBar) router.showBottomNavigationBar();
 
     return value;
   }

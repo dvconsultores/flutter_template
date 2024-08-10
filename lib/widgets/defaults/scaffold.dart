@@ -107,29 +107,21 @@ class AppScaffold extends StatelessWidget {
 
           return false;
         },
-        child: Theme(
-          data: Theme.of(context).copyWith(
-            bottomSheetTheme: const BottomSheetThemeData(
-              backgroundColor: Colors.transparent,
-              surfaceTintColor: Colors.transparent,
-            ),
+        child: Scaffold(
+          drawer: drawer,
+          appBar: appBar,
+          body: _BackgroundStyled(
+            padding: padding,
+            color: color,
+            gradient: gradient,
+            decorationImage: decorationImage,
+            scrollable: scrollable,
+            backgroundStack: backgroundStack,
+            foregroundStack: foregroundStack,
+            child: body,
           ),
-          child: Scaffold(
-            drawer: drawer,
-            appBar: appBar,
-            body: _BackgroundStyled(
-              padding: padding,
-              color: color,
-              gradient: gradient,
-              decorationImage: decorationImage,
-              scrollable: scrollable,
-              backgroundStack: backgroundStack,
-              foregroundStack: foregroundStack,
-              child: body,
-            ),
-            bottomSheet: bottomWidget,
-            floatingActionButton: floatingActionButton,
-          ),
+          bottomSheet: bottomWidget,
+          floatingActionButton: floatingActionButton,
         ),
       ),
     );

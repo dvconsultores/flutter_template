@@ -65,7 +65,8 @@ class ThemeApp {
         backgroundColor: Colors.white,
       ),
       bottomSheetTheme: const BottomSheetThemeData(
-        backgroundColor: Color(0xFFF9F9F9),
+        backgroundColor: Colors.transparent,
+        surfaceTintColor: Colors.transparent,
       ),
       cardColor: Colors.white,
       inputDecorationTheme: const InputDecorationTheme(
