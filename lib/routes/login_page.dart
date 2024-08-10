@@ -22,9 +22,8 @@ class _LoginPageState extends State<LoginPage> {
   Widget build(BuildContext context) {
     final Size size = MediaQuery.of(context).size;
 
-    return AppScaffold.responsive(
-      tablet: (context, constraints) =>
-          Column(mainAxisAlignment: MainAxisAlignment.center, children: [
+    return AppScaffold(
+      body: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
         Container(
           margin: const EdgeInsets.only(bottom: 40.0),
           child: Hero(

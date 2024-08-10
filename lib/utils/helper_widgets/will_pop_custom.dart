@@ -9,14 +9,16 @@ class WillPopCustom extends StatelessWidget {
     super.key,
     required this.child,
     this.onWillPop,
+    this.enabled = true,
   });
   final Widget child;
   final FutureOr<bool> Function()? onWillPop;
+  final bool enabled;
 
   @override
   Widget build(BuildContext context) {
     // * Web
-    if (kIsWeb) return child;
+    if (kIsWeb || !enabled) return child;
 
     Future<bool> onWillPopCallback() async {
       if (onWillPop != null) return await onWillPop!();

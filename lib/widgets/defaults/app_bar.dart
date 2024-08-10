@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_detextre4/utils/config/router_config.dart';
 import 'package:flutter_detextre4/utils/config/theme.dart';
 import 'package:flutter_detextre4/utils/extensions/type_extensions.dart';
+import 'package:flutter_detextre4/utils/general/context_utility.dart';
 import 'package:flutter_detextre4/utils/general/variables.dart';
 import 'package:flutter_gap/flutter_gap.dart';
 
@@ -10,6 +11,7 @@ class CustomAppBar extends AppBar {
     super.key,
     this.titleText,
     this.subTitleText,
+    this.onPop,
     super.centerTitle = true,
   }) : super(
           systemOverlayStyle: ThemeApp.systemUiOverlayStyle,
@@ -17,8 +19,10 @@ class CustomAppBar extends AppBar {
           leading: IconButton(
             icon: const Icon(Icons.chevron_left_rounded),
             iconSize: 28,
-            onPressed: () =>
-                router.canPop() ? router.pop() : router.goNamed("home"),
+            onPressed: onPop ??
+                () => router.canPop()
+                    ? router.pop()
+                    : Navigator.pop(ContextUtility.context!),
           ),
           bottom: PreferredSize(
               preferredSize: const Size(0, 0),
@@ -44,9 +48,10 @@ class CustomAppBar extends AppBar {
               if (subTitleText.hasValue) ...[
                 const Gap(Vars.gapXLow).column,
                 Text(subTitleText!,
-                    style: const TextStyle(
+                    style: TextStyle(
                       fontSize: 15,
                       fontWeight: FontWeight.w400,
+                      fontFamily: FontFamily.lato("400"),
                     ))
               ],
             ]),
@@ -55,4 +60,5 @@ class CustomAppBar extends AppBar {
 
   final String? titleText;
   final String? subTitleText;
+  final VoidCallback? onPop;
 }

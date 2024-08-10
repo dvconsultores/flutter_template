@@ -39,10 +39,16 @@ class MainProvider extends ChangeNotifier {
     returnAuthError = value;
     notifyListeners();
   }
-  // ? ----------------------Bottom Sheet Provider--------------------------- //
-  bool haveBottomSheet = false;
-  set setBottomSheet(bool value) {
-    haveBottomSheet = value;
+
+  // ? ----------------------Bottom Navigation Bar Provider--------------------------- //
+  bool bottomNavigationBar = true;
+  void showBottomNavigationBar() {
+    bottomNavigationBar = true;
+    notifyListeners();
+  }
+
+  void hideBottomNavigationBar() {
+    bottomNavigationBar = false;
     notifyListeners();
   }
 

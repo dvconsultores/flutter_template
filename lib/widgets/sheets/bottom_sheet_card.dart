@@ -1,13 +1,12 @@
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_detextre4/main_provider.dart';
+import 'package:flutter_detextre4/utils/config/router_config.dart';
 import 'package:flutter_detextre4/utils/config/theme.dart';
 import 'package:flutter_detextre4/utils/general/variables.dart';
 import 'package:flutter_detextre4/widgets/defaults/button.dart';
 import 'package:flutter_detextre4/widgets/defaults/snackbar.dart';
 import 'package:flutter_detextre4/widgets/sheets/card_widget.dart';
 import 'package:flutter_gap/flutter_gap.dart';
-import 'package:provider/provider.dart';
 
 class BottomSheetCard extends StatelessWidget {
   const BottomSheetCard({
@@ -53,8 +52,7 @@ class BottomSheetCard extends StatelessWidget {
     Widget? floatingActionButton,
     Widget? bottomNavigationBar,
   }) async {
-    final mainProvider = Provider.of<MainProvider>(context, listen: false);
-    mainProvider.setBottomSheet = true;
+    router.hideBottomNavigationBar();
 
     final value = await showModalBottomSheet<T>(
       context: context,
@@ -83,7 +81,8 @@ class BottomSheetCard extends StatelessWidget {
                 child: child ?? const SizedBox.shrink(),
               ),
     );
-    mainProvider.setBottomSheet = false;
+
+    router.showBottomNavigationBar();
 
     return value;
   }
@@ -200,8 +199,7 @@ class BottomSheetList<T> extends StatelessWidget {
     Widget? floatingActionButton,
     Widget? bottomNavigationBar,
   }) async {
-    final mainProvider = Provider.of<MainProvider>(context, listen: false);
-    mainProvider.setBottomSheet = true;
+    router.hideBottomNavigationBar();
 
     final value = await showModalBottomSheet<DropdownMenuItem<T>>(
       context: context,
@@ -236,7 +234,7 @@ class BottomSheetList<T> extends StatelessWidget {
       ),
     );
 
-    mainProvider.setBottomSheet = false;
+    router.showBottomNavigationBar();
 
     return value;
   }
@@ -414,8 +412,7 @@ class BottomSheetListMultiple<T> extends StatefulWidget {
     Widget? floatingActionButton,
     Widget? bottomNavigationBar,
   }) async {
-    final mainProvider = Provider.of<MainProvider>(context, listen: false);
-    mainProvider.setBottomSheet = true;
+    router.hideBottomNavigationBar();
 
     final value = await showModalBottomSheet<List<DropdownMenuItem<T>>>(
       context: context,
@@ -462,7 +459,7 @@ class BottomSheetListMultiple<T> extends StatefulWidget {
       ),
     );
 
-    mainProvider.setBottomSheet = false;
+    router.showBottomNavigationBar();
 
     return value;
   }

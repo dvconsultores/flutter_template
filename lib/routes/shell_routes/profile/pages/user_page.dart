@@ -10,9 +10,8 @@ class UserPage extends StatelessWidget {
   Widget build(BuildContext context) {
     final authAPI = AuthApi(context);
 
-    return AppScaffold.responsive(
-      tablet: (context, constraints) =>
-          Column(mainAxisAlignment: MainAxisAlignment.center, children: [
+    return AppScaffold(
+      body: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
         Text("user", style: Theme.of(context).textTheme.displayMedium),
         Button(
           width: 200,

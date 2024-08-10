@@ -1,6 +1,8 @@
+import 'package:double_back_to_exit/double_back_to_exit.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:flutter_detextre4/utils/general/variables.dart';
-import 'package:responsive_mixin_layout/responsive_mixin_layout.dart';
+import 'package:flutter_detextre4/utils/helper_widgets/will_pop_custom.dart';
 
 // * Custom background styled
 class _BackgroundStyled extends StatelessWidget {
@@ -17,13 +19,29 @@ class _BackgroundStyled extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final body = Container(
-      color: color ?? Theme.of(context).scaffoldBackgroundColor,
+    final c = color ?? Theme.of(context).scaffoldBackgroundColor;
+
+    final body = Padding(
       padding: padding ?? Vars.paddingScaffold,
       child: child,
     );
 
-    return scrollable ? SingleChildScrollView(child: body) : body;
+    return SafeArea(
+      child: Stack(fit: StackFit.expand, children: [
+        Positioned.fill(
+            child: Container(
+                decoration: BoxDecoration(
+          gradient: LinearGradient(
+              begin: Alignment.topCenter,
+              end: Alignment.bottomCenter,
+              colors: [
+                c.withOpacity(.6),
+                c.withOpacity(.264),
+              ]),
+        ))),
+        scrollable ? SingleChildScrollView(child: body) : body
+      ]),
+    );
   }
 }
 
@@ -39,6 +57,8 @@ class AppScaffold extends StatelessWidget {
     this.padding,
     this.color,
     this.scrollable = false,
+    this.doubleBackToExit = false,
+    this.goHomeOnBack = false,
   });
   final Widget? drawer;
   final PreferredSizeWidget? appBar;
@@ -48,96 +68,40 @@ class AppScaffold extends StatelessWidget {
   final EdgeInsetsGeometry? padding;
   final Color? color;
   final bool scrollable;
+  final bool doubleBackToExit;
+  final bool goHomeOnBack;
 
   @override
-  Widget build(BuildContext context) => Scaffold(
-        drawer: drawer,
-        appBar: appBar,
-        body: _BackgroundStyled(
-          padding: padding,
-          color: color,
-          scrollable: scrollable,
-          child: body,
-        ),
-        bottomNavigationBar: bottomNavigationBar,
-        floatingActionButton: floatingActionButton,
-      );
+  Widget build(BuildContext context) {
+    return DoubleBackToExit(
+      enabled: doubleBackToExit,
+      snackBarMessage: "Press again to leave",
+      child: WillPopCustom(
+        enabled: !doubleBackToExit,
+        onWillPop: () {
+          if (context.canPop()) {
+            context.pop();
+          } else if (goHomeOnBack) {
+            context.goNamed("home");
+          } else {
+            return true;
+          }
 
-  /// Responsive variant from `AppScaffold`
-  static Widget responsive({
-    Widget? Function(BuildContext context, BoxConstraints constraints)? mobile,
-    Widget? Function(BuildContext context, BoxConstraints constraints)? tablet,
-    Widget? Function(BuildContext context, BoxConstraints constraints)? desktop,
-    Widget? Function(BuildContext context, BoxConstraints constraints)? tv,
-    Widget? drawer,
-    PreferredSizeWidget? appBar,
-    Widget? bottomNavigationBar,
-    Widget? floatingActionButton,
-    EdgeInsetsGeometry? padding,
-    Color? color,
-    bool scrollable = false,
-  }) =>
-      _AppScaffoldResponsive(
-        drawer: drawer,
-        appBar: appBar,
-        mobile: mobile,
-        tablet: tablet,
-        desktop: desktop,
-        tv: tv,
-        bottomNavigationBar: bottomNavigationBar,
-        floatingActionButton: floatingActionButton,
-        padding: padding,
-        color: color,
-        scrollable: scrollable,
-      );
-}
-
-// ? Responsive variant from `AppScaffold`
-class _AppScaffoldResponsive extends StatelessWidget {
-  const _AppScaffoldResponsive({
-    this.drawer,
-    this.appBar,
-    this.mobile,
-    this.tablet,
-    this.desktop,
-    this.tv,
-    this.bottomNavigationBar,
-    this.floatingActionButton,
-    this.padding,
-    this.color,
-    this.scrollable = false,
-  });
-  final Widget? Function(BuildContext context, BoxConstraints constraints)?
-      mobile;
-  final Widget? Function(BuildContext context, BoxConstraints constraints)?
-      tablet;
-  final Widget? Function(BuildContext context, BoxConstraints constraints)?
-      desktop;
-  final Widget? Function(BuildContext context, BoxConstraints constraints)? tv;
-  final Widget? drawer;
-  final PreferredSizeWidget? appBar;
-  final Widget? bottomNavigationBar;
-  final Widget? floatingActionButton;
-  final EdgeInsetsGeometry? padding;
-  final Color? color;
-  final bool scrollable;
-
-  @override
-  Widget build(BuildContext context) => Scaffold(
-        drawer: drawer,
-        appBar: appBar,
-        body: _BackgroundStyled(
-          padding: padding,
-          color: color,
-          scrollable: scrollable,
-          child: ResponsiveLayout(
-            mobile: mobile,
-            tablet: tablet,
-            desktop: desktop,
-            tv: tv,
+          return false;
+        },
+        child: Scaffold(
+          drawer: drawer,
+          appBar: appBar,
+          body: _BackgroundStyled(
+            padding: padding,
+            color: color,
+            scrollable: scrollable,
+            child: body,
           ),
+          bottomNavigationBar: bottomNavigationBar,
+          floatingActionButton: floatingActionButton,
         ),
-        bottomNavigationBar: bottomNavigationBar,
-        floatingActionButton: floatingActionButton,
-      );
+      ),
+    );
+  }
 }

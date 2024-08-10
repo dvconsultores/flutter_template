@@ -1,10 +1,9 @@
-import 'package:double_back_to_exit/double_back_to_exit.dart';
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
+import 'package:flutter_detextre4/main_provider.dart';
 import 'package:flutter_detextre4/utils/config/router_config.dart';
-import 'package:flutter_detextre4/utils/extensions/type_extensions.dart';
-import 'package:flutter_detextre4/utils/helper_widgets/will_pop_custom.dart';
 import 'package:flutter_detextre4/widgets/defaults/bottom_navigation_bar.dart';
+import 'package:go_router/go_router.dart';
+import 'package:provider/provider.dart';
 
 class MainNavigation extends StatelessWidget {
   const MainNavigation(
@@ -19,35 +18,41 @@ class MainNavigation extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final mainProvider = context.read<MainProvider>();
+
     if (router.indexShellRoute == -1) {
       return const Scaffold(body: SizedBox.shrink());
     }
 
-    return Scaffold(
-      bottomNavigationBar: AppBottomNavigationBar(
-        currentIndex: router.indexShellRoute,
-        onTap: (index) =>
-            context.goNamed((router.shellRoutes[index] as GoRoute).name!),
-        items: router.shellRoutes.map((element) {
-          Icon getIcon(String? value) {
-            switch (value) {
-              case "profile":
-                return const Icon(Icons.person);
-              case "home":
-                return const Icon(Icons.home);
-              case "search":
-              default:
-                return const Icon(Icons.search);
-            }
-          }
-
-          return BottomNavigationBarItem(
-            label: "",
-            tooltip: (element as GoRoute).name?.toCapitalize(),
-            icon: getIcon(element.name),
-          );
-        }).toList(),
+    final items = {
+      "profile": const BottomNavigationBarItem(
+        label: "",
+        tooltip: "Profile",
+        icon: Icon(Icons.person),
       ),
+      "home": const BottomNavigationBarItem(
+        label: "",
+        tooltip: "Home",
+        icon: Icon(Icons.home),
+      ),
+      "search": const BottomNavigationBarItem(
+        label: "",
+        tooltip: "Search",
+        icon: Icon(Icons.search),
+      ),
+    };
+
+    return Scaffold(
+      bottomNavigationBar: mainProvider.bottomNavigationBar
+          ? AppBottomNavigationBar(
+              currentIndex: router.indexShellRoute,
+              onTap: (index) =>
+                  context.goNamed(items.entries.elementAt(index).key),
+              items: router.shellRoutes
+                  .map((element) => items[(element as GoRoute).name]!)
+                  .toList(),
+            )
+          : null,
 
       //? Render pages
       body: GestureDetector(
@@ -75,16 +80,7 @@ class MainNavigation extends StatelessWidget {
                 }
               }
             : null,
-        child: state.location == "/"
-            ? DoubleBackToExit(
-                snackBarMessage: "Press again to leave", child: child)
-            : WillPopCustom(
-                onWillPop: () {
-                  context.goNamed("home");
-                  return false;
-                },
-                child: child,
-              ),
+        child: child,
       ),
     );
   }

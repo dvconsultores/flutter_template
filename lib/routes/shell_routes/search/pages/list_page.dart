@@ -34,8 +34,8 @@ class _ListViewExampleState extends State<ListPage> {
 
   @override
   Widget build(BuildContext context) {
-    return AppScaffold.responsive(
-      tablet: (context, constraints) => AppRefreshIndicator.liquid(
+    return AppScaffold(
+      body: AppRefreshIndicator.liquid(
         onRefresh: onRefresh,
         child: ListView.separated(
           itemBuilder: (context, index) =>

@@ -1,8 +1,12 @@
+import 'dart:io';
+
 import 'package:collection/collection.dart';
 import 'package:double_back_to_exit/double_back_to_exit.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_detextre4/main_navigation.dart';
+import 'package:flutter_detextre4/main_provider.dart';
 import 'package:flutter_detextre4/routes/login_page.dart';
 import 'package:flutter_detextre4/routes/shell_routes/home/home_page.dart';
 import 'package:flutter_detextre4/routes/shell_routes/profile/pages/user_page.dart';
@@ -12,6 +16,7 @@ import 'package:flutter_detextre4/utils/general/context_utility.dart';
 import 'package:flutter_detextre4/utils/helper_widgets/custom_transition_wrapper.dart';
 import 'package:flutter_detextre4/utils/services/local_data/secure_storage_service.dart';
 import 'package:go_router/go_router.dart';
+import 'package:provider/provider.dart';
 
 Page _topLevelPageBuilder(Widget child) => _pageBuilder(DoubleBackToExit(
       snackBarMessage: "Press again to leave",
@@ -113,4 +118,80 @@ extension GoRouterExtension on GoRouter {
   RouteBase? get shellRoute => indexShellRoute == -1
       ? null
       : shellRoutes.elementAtOrNull(indexShellRoute);
+
+  /// Function to show [AppBottomNavigationBar] widget.
+  void showBottomNavigationBar() =>
+      ContextUtility.context!.read<MainProvider>().showBottomNavigationBar();
+
+  /// Function to hide [AppBottomNavigationBar] widget.
+  void hideBottomNavigationBar() =>
+      ContextUtility.context!.read<MainProvider>().hideBottomNavigationBar();
+}
+
+class Nav {
+  @optionalTypeArgs
+  static Future<T?> push<T extends Object?>(
+    BuildContext context, {
+    required Widget page,
+    bool hideBottomNavigationBar = false,
+  }) async {
+    if (hideBottomNavigationBar) router.hideBottomNavigationBar();
+
+    final value = await Navigator.push<T>(
+      context,
+      Platform.isIOS
+          ? CupertinoPageRoute(builder: (context) => page)
+          : MaterialPageRoute(builder: (context) => page),
+    );
+
+    if (hideBottomNavigationBar && context.mounted) {
+      router.showBottomNavigationBar();
+    }
+
+    return value;
+  }
+
+  @optionalTypeArgs
+  static Future<T?> pushAndRemoveUntil<T extends Object?>(
+    BuildContext context, {
+    required Widget page,
+    required RoutePredicate predicate,
+    bool hideBottomNavigationBar = false,
+  }) async {
+    if (hideBottomNavigationBar) router.hideBottomNavigationBar();
+    final value = await Navigator.pushAndRemoveUntil(
+      context,
+      Platform.isIOS
+          ? CupertinoPageRoute(builder: (context) => page)
+          : MaterialPageRoute(builder: (context) => page),
+      predicate,
+    );
+
+    if (hideBottomNavigationBar && context.mounted) {
+      router.showBottomNavigationBar();
+    }
+
+    return value;
+  }
+
+  @optionalTypeArgs
+  static Future<T?> pushReplacement<T extends Object?>(
+    BuildContext context, {
+    required Widget page,
+    bool hideBottomNavigationBar = false,
+  }) async {
+    if (hideBottomNavigationBar) router.hideBottomNavigationBar();
+    final value = await Navigator.pushReplacement(
+      context,
+      Platform.isIOS
+          ? CupertinoPageRoute(builder: (context) => page)
+          : MaterialPageRoute(builder: (context) => page),
+    );
+
+    if (hideBottomNavigationBar && context.mounted) {
+      router.showBottomNavigationBar();
+    }
+
+    return value;
+  }
 }

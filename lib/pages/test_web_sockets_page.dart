@@ -26,33 +26,34 @@ class _TestWebSocketsPageState extends State<TestWebSocketsPage> {
 
   @override
   Widget build(BuildContext context) {
-    return AppScaffold.responsive(
-        appBar: AppBar(),
-        tablet: (context, constraints) => StreamBuilder(
-            stream: getChannelStream,
-            builder: (BuildContext context, snapshot) {
-              final dataTestWebSocket = BlocProvider.of<MainBloc>(context)
-                  .getterOfTestWebSocket(snapshot.data);
+    return AppScaffold(
+      appBar: AppBar(),
+      body: StreamBuilder(
+          stream: getChannelStream,
+          builder: (BuildContext context, snapshot) {
+            final dataTestWebSocket = BlocProvider.of<MainBloc>(context)
+                .getterOfTestWebSocket(snapshot.data);
 
-              return Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  const Text(
-                    "Web socket test example",
-                    style: TextStyle(fontSize: 17),
+            return Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                const Text(
+                  "Web socket test example",
+                  style: TextStyle(fontSize: 17),
+                ),
+                Container(
+                  margin: const EdgeInsets.all(Vars.gapMax),
+                  child: TextField(
+                    onChanged: (value) => setChannelSink = value,
                   ),
-                  Container(
-                    margin: const EdgeInsets.all(Vars.gapMax),
-                    child: TextField(
-                      onChanged: (value) => setChannelSink = value,
-                    ),
-                  ),
-                  Text(
-                    "database showcase: \n\n $dataTestWebSocket",
-                    style: Theme.of(context).textTheme.displaySmall,
-                  ),
-                ],
-              );
-            }));
+                ),
+                Text(
+                  "database showcase: \n\n $dataTestWebSocket",
+                  style: Theme.of(context).textTheme.displaySmall,
+                ),
+              ],
+            );
+          }),
+    );
   }
 }
