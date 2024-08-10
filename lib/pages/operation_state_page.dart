@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_detextre4/utils/config/theme.dart';
 import 'package:flutter_detextre4/utils/general/variables.dart';
+import 'package:flutter_detextre4/widgets/circle_light__blurred_widget.dart';
 import 'package:flutter_detextre4/widgets/defaults/scaffold.dart';
 import 'package:flutter_gap/flutter_gap.dart';
 
@@ -44,8 +45,8 @@ class OperationStatePage extends StatelessWidget {
       OperationStateType.success => {
           "icon": Icon(
             Icons.check_circle_rounded,
+            size: 100,
             color: colors.success,
-            size: 70,
           ),
           "title": "Saved successfully!",
           "desc": "The record was saved successfully",
@@ -54,8 +55,8 @@ class OperationStatePage extends StatelessWidget {
       OperationStateType.cancel => {
           "icon": Icon(
             Icons.cancel_rounded,
+            size: 100,
             color: colors.error,
-            size: 70,
           ),
           "title": "Save failed!",
           "desc": "The record could not be saved correctly",
@@ -89,9 +90,28 @@ class OperationStatePage extends StatelessWidget {
       child: AppScaffold(
         onPop: onPop,
         color: const Color(0xFF000042),
-        backgroundStack: const [],
+        // decorators
+        backgroundStack: [
+          const Positioned(
+              top: -20,
+              left: -30,
+              width: 211,
+              height: 211,
+              child: CircleLightBlurredWidget(blur: 110)),
+          Positioned(
+              top: -20,
+              right: -30,
+              width: 211,
+              height: 211,
+              child: CircleLightBlurredWidget(
+                blur: 110,
+                color: colors.success.withOpacity(.66),
+              ))
+        ],
+
+        // body
         body: Column(children: [
-          Gap(MediaQuery.of(context).size.height * .2).column,
+          const Gap(30).column,
           const Gap(Vars.gapXLarge).column,
           iconWidget,
           const Gap(Vars.gapXLarge).column,

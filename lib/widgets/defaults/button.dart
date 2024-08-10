@@ -514,7 +514,9 @@ class Button extends StatelessWidget {
         onLongPress: disabled || loading ? null : onLongPress,
         style: ButtonStyle(
           elevation: const MaterialStatePropertyAll(0),
-          padding: MaterialStatePropertyAll(padding),
+          padding: MaterialStatePropertyAll(
+            padding ?? const EdgeInsets.all(Vars.gapMedium),
+          ),
           foregroundColor: MaterialStatePropertyAll(color ?? Colors.white),
           splashFactory: splashFactory,
           overlayColor: MaterialStatePropertyAll(overlayColor),
