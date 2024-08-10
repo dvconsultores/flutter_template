@@ -17,7 +17,8 @@ class CustomAppBar extends AppBar {
           leading: IconButton(
             icon: const Icon(Icons.chevron_left_rounded),
             iconSize: 28,
-            onPressed: () => router.goNamed("home"),
+            onPressed: () =>
+                router.canPop() ? router.pop() : router.goNamed("home"),
           ),
           bottom: PreferredSize(
               preferredSize: const Size(0, 0),
