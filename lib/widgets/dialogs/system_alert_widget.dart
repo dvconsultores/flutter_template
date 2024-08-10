@@ -32,7 +32,7 @@ class SystemAlertWidget extends StatefulWidget {
   final bool dismissible;
   final VoidCallback? onOpen;
 
-  static Future<void> showModal(
+  static Future<T?> showModal<T>(
     BuildContext context, {
     required String title,
     String? content,
@@ -43,7 +43,7 @@ class SystemAlertWidget extends StatefulWidget {
     bool dismissible = true,
     VoidCallback? onOpen,
   }) async =>
-      await showDialog(
+      await showDialog<T>(
         context: context,
         builder: (context) => SystemAlertWidget(
           title: title,

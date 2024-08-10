@@ -42,7 +42,7 @@ class ModalWidget extends StatelessWidget {
   final double actionButtonsHeight;
   final bool shrinkWrap;
 
-  static Future<void> showModal(
+  static Future<T?> showModal<T>(
     BuildContext context, {
     required String textTitle,
     Widget? body,
@@ -62,7 +62,7 @@ class ModalWidget extends StatelessWidget {
     double actionButtonsHeight = 40,
     bool shrinkWrap = false,
   }) async =>
-      await showDialog(
+      await showDialog<T>(
         context: context,
         builder: (context) => ModalWidget(
           textTitle: textTitle,

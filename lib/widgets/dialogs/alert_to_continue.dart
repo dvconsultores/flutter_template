@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_gap/flutter_gap.dart';
 import 'package:flutter_detextre4/utils/general/variables.dart';
 import 'package:flutter_detextre4/widgets/defaults/button.dart';
+import 'package:flutter_gap/flutter_gap.dart';
 
 class AlertToContinue extends StatelessWidget {
   const AlertToContinue({
@@ -16,14 +16,14 @@ class AlertToContinue extends StatelessWidget {
   final String? acceptText;
   final String? cancelText;
 
-  static Future<void> showModal(
+  static Future<T?> showModal<T>(
     BuildContext context, {
     String? title,
     String? content,
     String? acceptText,
     String? cancelText,
   }) async =>
-      await showDialog(
+      await showDialog<T>(
         context: context,
         builder: (context) => AlertToContinue(
           title: title,
