@@ -1,5 +1,6 @@
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_detextre4/painters/draggable_frame_painter.dart';
 import 'package:flutter_detextre4/utils/config/router_config.dart';
 import 'package:flutter_detextre4/utils/config/theme.dart';
 import 'package:flutter_detextre4/utils/general/variables.dart';
@@ -7,6 +8,7 @@ import 'package:flutter_detextre4/widgets/defaults/button.dart';
 import 'package:flutter_detextre4/widgets/defaults/snackbar.dart';
 import 'package:flutter_detextre4/widgets/sheets/card_widget.dart';
 import 'package:flutter_gap/flutter_gap.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class BottomSheetCard extends StatelessWidget {
   const BottomSheetCard({
@@ -20,7 +22,9 @@ class BottomSheetCard extends StatelessWidget {
     this.scrollable = true,
     this.topWidget,
     this.floatingActionButton,
-    this.bottomNavigationBar,
+    this.bottomWidget,
+    this.draggableFrameBgColor,
+    this.draggableFrameColor,
   });
   final EdgeInsetsGeometry? padding;
   final bool expand;
@@ -31,7 +35,9 @@ class BottomSheetCard extends StatelessWidget {
   final Widget child;
   final Widget? topWidget;
   final Widget? floatingActionButton;
-  final Widget? bottomNavigationBar;
+  final Widget? bottomWidget;
+  final Color? draggableFrameBgColor;
+  final Color? draggableFrameColor;
 
   static Future<T?> showModal<T>(
     BuildContext context, {
@@ -50,7 +56,9 @@ class BottomSheetCard extends StatelessWidget {
     Widget? child,
     Widget? topWidget,
     Widget? floatingActionButton,
-    Widget? bottomNavigationBar,
+    Widget? bottomWidget,
+    Color? draggableFrameBgColor,
+    Color? draggableFrameColor,
   }) async {
     router.hideBottomNavigationBar();
 
@@ -59,12 +67,12 @@ class BottomSheetCard extends StatelessWidget {
       clipBehavior: clipBehavior ?? Clip.antiAlias,
       isDismissible: isDismissible,
       isScrollControlled: isScrollControlled,
-      backgroundColor: backgroundColor ?? ThemeApp.colors(context).background,
+      backgroundColor: backgroundColor,
       shape: shape ??
           const RoundedRectangleBorder(
             borderRadius: BorderRadius.only(
-              topLeft: Radius.circular(Vars.radius50),
-              topRight: Radius.circular(Vars.radius50),
+              topLeft: Radius.circular(Vars.radius30),
+              topRight: Radius.circular(Vars.radius30),
             ),
           ),
       builder: builder ??
@@ -77,7 +85,9 @@ class BottomSheetCard extends StatelessWidget {
                 scrollable: scrollable,
                 topWidget: topWidget,
                 floatingActionButton: floatingActionButton,
-                bottomNavigationBar: bottomNavigationBar,
+                bottomWidget: bottomWidget,
+                draggableFrameBgColor: draggableFrameBgColor,
+                draggableFrameColor: draggableFrameColor,
                 child: child ?? const SizedBox.shrink(),
               ),
     );
@@ -96,6 +106,12 @@ class BottomSheetCard extends StatelessWidget {
       maxChildSize: maxChildSize,
       builder: (context, scrollController) {
         final renderWidget = Column(children: [
+          CustomPaint(
+              size: Size(double.maxFinite, 36.sp),
+              painter: DraggableFramePainter(
+                bgColor: draggableFrameBgColor,
+                color: draggableFrameColor,
+              )),
           if (topWidget != null)
             topWidget!
           else
@@ -106,8 +122,10 @@ class BottomSheetCard extends StatelessWidget {
                 controller: scrollController,
                 physics: const BouncingScrollPhysics(),
                 padding: padding ??
-                    Vars.paddingScaffold.copyWith(
+                    EdgeInsets.only(
                       top: 0,
+                      left: Vars.gapXLarge,
+                      right: Vars.gapXLarge,
                       bottom: Vars.paddingScaffold.bottom,
                     ),
                 child: child,
@@ -117,8 +135,10 @@ class BottomSheetCard extends StatelessWidget {
             Expanded(
               child: Padding(
                 padding: padding ??
-                    Vars.paddingScaffold.copyWith(
+                    EdgeInsets.only(
                       top: 0,
+                      left: Vars.gapXLarge,
+                      right: Vars.gapXLarge,
                       bottom: Vars.paddingScaffold.bottom,
                     ),
                 child: child,
@@ -126,10 +146,10 @@ class BottomSheetCard extends StatelessWidget {
             ),
         ]);
 
-        return floatingActionButton != null || bottomNavigationBar != null
+        return floatingActionButton != null || bottomWidget != null
             ? Scaffold(
                 floatingActionButton: floatingActionButton,
-                bottomNavigationBar: bottomNavigationBar,
+                bottomSheet: bottomWidget,
                 body: renderWidget,
               )
             : renderWidget;
@@ -155,8 +175,10 @@ class BottomSheetList<T> extends StatelessWidget {
     this.itemsGap,
     this.topWidget,
     this.floatingActionButton,
-    this.bottomNavigationBar,
+    this.bottomWidget,
     this.scrollable = true,
+    this.draggableFrameBgColor,
+    this.draggableFrameColor,
   });
   final EdgeInsetsGeometry? padding;
   final List<DropdownMenuItem<T>> items;
@@ -172,8 +194,10 @@ class BottomSheetList<T> extends StatelessWidget {
   final double? itemsGap;
   final Widget? topWidget;
   final Widget? floatingActionButton;
-  final Widget? bottomNavigationBar;
+  final Widget? bottomWidget;
   final bool scrollable;
+  final Color? draggableFrameBgColor;
+  final Color? draggableFrameColor;
 
   static Future<DropdownMenuItem<T>?> showModal<T>(
     BuildContext context, {
@@ -197,7 +221,9 @@ class BottomSheetList<T> extends StatelessWidget {
     double? itemsGap,
     Widget? topWidget,
     Widget? floatingActionButton,
-    Widget? bottomNavigationBar,
+    Widget? bottomWidget,
+    Color? draggableFrameBgColor,
+    Color? draggableFrameColor,
   }) async {
     router.hideBottomNavigationBar();
 
@@ -206,12 +232,12 @@ class BottomSheetList<T> extends StatelessWidget {
       clipBehavior: clipBehavior ?? Clip.antiAlias,
       isDismissible: isDismissible,
       isScrollControlled: isScrollControlled,
-      backgroundColor: backgroundColor ?? ThemeApp.colors(context).background,
+      backgroundColor: backgroundColor,
       shape: shape ??
           const RoundedRectangleBorder(
             borderRadius: BorderRadius.only(
-              topLeft: Radius.circular(Vars.radius50),
-              topRight: Radius.circular(Vars.radius50),
+              topLeft: Radius.circular(Vars.radius30),
+              topRight: Radius.circular(Vars.radius30),
             ),
           ),
       builder: (context) => BottomSheetList<T>(
@@ -229,8 +255,10 @@ class BottomSheetList<T> extends StatelessWidget {
         itemsGap: itemsGap,
         topWidget: topWidget,
         floatingActionButton: floatingActionButton,
-        bottomNavigationBar: bottomNavigationBar,
+        bottomWidget: bottomWidget,
         scrollable: scrollable,
+        draggableFrameBgColor: draggableFrameBgColor,
+        draggableFrameColor: draggableFrameColor,
       ),
     );
 
@@ -265,8 +293,10 @@ class BottomSheetList<T> extends StatelessWidget {
                 )
               : ListView.separated(
                   padding: padding ??
-                      Vars.paddingScaffold.copyWith(
+                      EdgeInsets.only(
                         top: 0,
+                        left: Vars.gapXLarge,
+                        right: Vars.gapXLarge,
                         bottom: Vars.paddingScaffold.bottom,
                       ),
                   shrinkWrap: scrollable,
@@ -284,7 +314,9 @@ class BottomSheetList<T> extends StatelessWidget {
                       onTap: () {
                         clearSnackbars();
                         Navigator.pop<DropdownMenuItem<T>>(context, item);
-                        if (onTap != null) onTap!(item);
+                        Future.delayed(Durations.short1, () {
+                          if (onTap != null) onTap!(item);
+                        });
                       },
                       child: itemBuilder != null
                           ? itemBuilder!(context, index)
@@ -302,10 +334,19 @@ class BottomSheetList<T> extends StatelessWidget {
 
         return Scaffold(
           floatingActionButton: floatingActionButton,
-          bottomNavigationBar: bottomNavigationBar,
-          body: scrollable
-              ? SingleChildScrollView(child: contentWidget)
-              : Expanded(child: contentWidget),
+          bottomSheet: bottomWidget,
+          backgroundColor: Colors.transparent,
+          body: Column(children: [
+            CustomPaint(
+                size: Size(double.maxFinite, 36.sp),
+                painter: DraggableFramePainter(
+                  bgColor: draggableFrameBgColor,
+                  color: draggableFrameColor,
+                )),
+            scrollable
+                ? Expanded(child: SingleChildScrollView(child: contentWidget))
+                : Expanded(child: contentWidget),
+          ]),
         );
       },
     );
@@ -341,8 +382,10 @@ class BottomSheetListMultiple<T> extends StatefulWidget {
     this.mainAxisSpacing = Vars.gapXLarge,
     this.topWidget,
     this.floatingActionButton,
-    this.bottomNavigationBar,
+    this.bottomWidget,
     this.scrollable = true,
+    this.draggableFrameBgColor,
+    this.draggableFrameColor,
   });
 
   final EdgeInsetsGeometry? contextPadding;
@@ -372,8 +415,10 @@ class BottomSheetListMultiple<T> extends StatefulWidget {
   final double mainAxisSpacing;
   final Widget? topWidget;
   final Widget? floatingActionButton;
-  final Widget? bottomNavigationBar;
+  final Widget? bottomWidget;
   final bool scrollable;
+  final Color? draggableFrameBgColor;
+  final Color? draggableFrameColor;
 
   static Future<List<DropdownMenuItem<T>>?> showModal<T>(
     BuildContext context, {
@@ -410,7 +455,9 @@ class BottomSheetListMultiple<T> extends StatefulWidget {
     double mainAxisSpacing = Vars.gapXLarge,
     Widget? topWidget,
     Widget? floatingActionButton,
-    Widget? bottomNavigationBar,
+    Widget? bottomWidget,
+    Color? draggableFrameBgColor,
+    Color? draggableFrameColor,
   }) async {
     router.hideBottomNavigationBar();
 
@@ -419,12 +466,12 @@ class BottomSheetListMultiple<T> extends StatefulWidget {
       clipBehavior: clipBehavior ?? Clip.antiAlias,
       isDismissible: isDismissible,
       isScrollControlled: isScrollControlled,
-      backgroundColor: backgroundColor ?? ThemeApp.colors(context).background,
+      backgroundColor: backgroundColor,
       shape: shape ??
           const RoundedRectangleBorder(
             borderRadius: BorderRadius.only(
-              topLeft: Radius.circular(Vars.radius50),
-              topRight: Radius.circular(Vars.radius50),
+              topLeft: Radius.circular(Vars.radius30),
+              topRight: Radius.circular(Vars.radius30),
             ),
           ),
       builder: (context) => BottomSheetListMultiple<T>(
@@ -455,7 +502,9 @@ class BottomSheetListMultiple<T> extends StatefulWidget {
         topWidget: topWidget,
         scrollable: scrollable,
         floatingActionButton: floatingActionButton,
-        bottomNavigationBar: bottomNavigationBar,
+        bottomWidget: bottomWidget,
+        draggableFrameBgColor: draggableFrameBgColor,
+        draggableFrameColor: draggableFrameColor,
       ),
     );
 
@@ -477,13 +526,16 @@ class _BottomSheetListMultipleState<T>
 
   void onComplete() {
     Navigator.pop<List<DropdownMenuItem<T>>>(context, selectedItems);
-    if (widget.onComplete != null) {
-      widget.onComplete!(selectedItems);
-    }
+
+    Future.delayed(Durations.short1, () {
+      if (widget.onComplete != null) widget.onComplete!(selectedItems);
+    });
   }
 
   @override
   Widget build(BuildContext context) {
+    final colors = ThemeApp.colors(context), theme = Theme.of(context);
+
     bool isSelected(DropdownMenuItem<T> item) =>
         selectedItems
             .singleWhereOrNull((element) => element.value == item.value) !=
@@ -554,18 +606,20 @@ class _BottomSheetListMultipleState<T>
                               )
                             : Button(
                                 borderRadius: const BorderRadius.all(
-                                    Radius.circular(Vars.radius10)),
+                                  Radius.circular(Vars.radius10),
+                                ),
                                 boxShadow: [
                                   if (!isSelected(item)) Vars.boxShadow2
                                 ],
                                 borderSide: BorderSide(
                                   width: 1.3,
                                   color: isSelected(item)
-                                      ? ThemeApp.colors(context).primary
+                                      ? colors.primary
                                       : Colors.transparent,
                                 ),
-                                bgColor: Colors.white,
-                                color: widget.itemforegroundColor,
+                                bgColor: theme.cardColor,
+                                color:
+                                    widget.itemforegroundColor ?? colors.text,
                                 onPressed: () => onPressed(item),
                                 child: item.child,
                               ),
@@ -576,17 +630,26 @@ class _BottomSheetListMultipleState<T>
 
         return Scaffold(
           floatingActionButton: widget.floatingActionButton,
-          bottomNavigationBar: widget.bottomNavigationBar ??
+          bottomSheet: widget.bottomWidget ??
               (widget.buttonBuilder != null
                   ? widget.buttonBuilder!(context, onComplete)
                   : Button(
                       margin: Vars.paddingScaffold,
-                      text: widget.buttonText ?? "Aceptar",
+                      text: widget.buttonText ?? "Accept",
                       onPressed: onComplete,
                     )),
-          body: widget.scrollable
-              ? SingleChildScrollView(child: contentWidget)
-              : Expanded(child: contentWidget),
+          backgroundColor: Colors.transparent,
+          body: Column(children: [
+            CustomPaint(
+                size: Size(double.maxFinite, 36.sp),
+                painter: DraggableFramePainter(
+                  bgColor: widget.draggableFrameBgColor,
+                  color: widget.draggableFrameColor,
+                )),
+            widget.scrollable
+                ? Expanded(child: SingleChildScrollView(child: contentWidget))
+                : Expanded(child: contentWidget),
+          ]),
         );
       },
     );
