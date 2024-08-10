@@ -83,7 +83,7 @@ class DioService {
             builder: (context) => const SystemAlertWidget(
               dismissible: false,
               title: 'Session has expired',
-              textContent: 'Please log in again.',
+              content: 'Please log in again.',
               textButton: "Got it",
             ),
           );
@@ -308,7 +308,7 @@ extension MultipartResponded on http.MultipartRequest {
                     await SecureStorage.delete(SecureCollection.tokenAuth),
                 dismissible: false,
                 title: 'Session has expired',
-                textContent: 'Please log in again.',
+                content: 'Please log in again.',
                 textButton: "Entendido",
                 onPressedButton: () => context.goNamed("login"),
               ),

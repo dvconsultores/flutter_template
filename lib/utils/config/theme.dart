@@ -13,7 +13,7 @@ enum ThemeType {
 }
 
 ///? A Mixin to getter some weigth of current font families.
-/// use like `FontFamily.noto("400")`
+/// use like `FontFamily.lato("400")`
 mixin FontFamily {
   static final _conversion = {
     "100": "extra_light",
@@ -27,7 +27,7 @@ mixin FontFamily {
     "900": "black",
   };
 
-  static String noto(String value) => 'NotoSans_${_conversion[value] ?? value}';
+  static String lato(String value) => 'Lato_${_conversion[value] ?? value}';
 }
 
 /// Themes configuration class from app.
@@ -64,6 +64,9 @@ class ThemeApp {
       bottomNavigationBarTheme: const BottomNavigationBarThemeData(
         backgroundColor: Colors.white,
       ),
+      bottomSheetTheme: const BottomSheetThemeData(
+        backgroundColor: Color(0xFFF9F9F9),
+      ),
       cardColor: Colors.white,
       inputDecorationTheme: const InputDecorationTheme(
         fillColor: Colors.white,
@@ -99,15 +102,26 @@ class ThemeApp {
     // text config
     ligthTheme = ligthTheme.copyWith(
       appBarTheme: AppBarTheme(
-        titleTextStyle: TextStyle(
-          fontSize: 17,
-          color: ligthTheme.extension<ThemeDataColorExtension>()!.title!,
-          fontWeight: FontWeight.w700,
-          letterSpacing: 1,
-          height: 1.1,
-        ),
-      ),
-      textTheme: GoogleFonts.notoSansTextTheme(ligthTheme.textTheme.copyWith(
+          titleTextStyle: GoogleFonts.lato(
+        fontSize: 17,
+        color: ligthTheme.extension<ThemeDataColorExtension>()!.title!,
+        fontWeight: FontWeight.w700,
+        letterSpacing: 1,
+        height: 1.1,
+      )),
+      dialogTheme: DialogTheme(
+          titleTextStyle: GoogleFonts.lato(
+            fontSize: 22,
+            fontWeight: FontWeight.w500,
+            color: ligthTheme.extension<ThemeDataColorExtension>()!.title!,
+            height: 1.1,
+          ),
+          contentTextStyle: GoogleFonts.lato(
+            fontSize: 16,
+            color: ligthTheme.extension<ThemeDataColorExtension>()!.text!,
+            height: 1.1,
+          )),
+      textTheme: GoogleFonts.latoTextTheme(ligthTheme.textTheme.copyWith(
         bodyLarge: TextStyle(
           fontSize: 17,
           color: ligthTheme.extension<ThemeDataColorExtension>()!.title!,

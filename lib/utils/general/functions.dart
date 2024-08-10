@@ -207,7 +207,7 @@ Future<void> checkVersion(BuildContext context) =>
             barrierDismissible: !requireUpdate,
             builder: (context) => SystemAlertWidget(
                   title: "Update Available!",
-                  textContent: requireUpdate
+                  content: requireUpdate
                       ? "You must to update the application to continue"
                       : "We have a new version available to you on the store",
                   dismissible: !requireUpdate,

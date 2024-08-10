@@ -42,6 +42,48 @@ class ModalWidget extends StatelessWidget {
   final double actionButtonsHeight;
   final bool shrinkWrap;
 
+  static Future<void> showModal(
+    BuildContext context, {
+    required String textTitle,
+    Widget? body,
+    bool loading = false,
+    bool disabled = false,
+    String? textCancelBtn,
+    String? textConfirmBtn,
+    String? textSoloBtn,
+    VoidCallback? onPressedCancelBtn,
+    VoidCallback? onPressedConfirmBtn,
+    VoidCallback? onPressedSoloBtn,
+    EdgeInsetsGeometry? titlePadding,
+    EdgeInsetsGeometry? contentPadding,
+    EdgeInsetsGeometry? actionsPadding,
+    EdgeInsets insetPadding =
+        const EdgeInsets.symmetric(horizontal: 40.0, vertical: 24.0),
+    double actionButtonsHeight = 40,
+    bool shrinkWrap = false,
+  }) async =>
+      await showDialog(
+        context: context,
+        builder: (context) => ModalWidget(
+          textTitle: textTitle,
+          body: body,
+          loading: loading,
+          disabled: disabled,
+          textCancelBtn: textCancelBtn,
+          textConfirmBtn: textConfirmBtn,
+          textSoloBtn: textSoloBtn,
+          onPressedCancelBtn: onPressedCancelBtn,
+          onPressedConfirmBtn: onPressedConfirmBtn,
+          onPressedSoloBtn: onPressedSoloBtn,
+          titlePadding: titlePadding,
+          contentPadding: contentPadding,
+          actionsPadding: actionsPadding,
+          insetPadding: insetPadding,
+          actionButtonsHeight: actionButtonsHeight,
+          shrinkWrap: shrinkWrap,
+        ),
+      );
+
   @override
   Widget build(BuildContext context) {
     final bodyWidget = body ?? const SizedBox.shrink();
@@ -49,8 +91,8 @@ class ModalWidget extends StatelessWidget {
     return AlertDialog(
         actionsAlignment: MainAxisAlignment.center,
         alignment: Alignment.center,
-        shape: const ContinuousRectangleBorder(
-          borderRadius: BorderRadius.all(Radius.circular(Vars.radius15)),
+        shape: const RoundedRectangleBorder(
+          borderRadius: BorderRadius.all(Radius.circular(Vars.radius30)),
         ),
         titlePadding: Vars.paddingScaffold
             .copyWith(bottom: 0)
