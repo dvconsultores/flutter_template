@@ -1,10 +1,10 @@
+import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_detextre4/utils/extensions/type_extensions.dart';
 import 'package:flutter_detextre4/utils/general/custom_focus_node.dart';
 import 'package:flutter_detextre4/utils/general/variables.dart';
 import 'package:flutter_detextre4/widgets/form_fields/bottom_select_field.dart';
 import 'package:flutter_detextre4/widgets/form_fields/input_field.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 
 class SelectableInputField extends StatefulWidget {
   const SelectableInputField({
@@ -54,7 +54,6 @@ class _SelectableInputFieldState extends State<SelectableInputField> {
         controller: selectController,
         focusNode: focusNodePhonePrefix,
         items: widget.items,
-        isExpanded: true,
         onChanged: (value) {
           setState(() {});
           if (value != null) focusNodePhone.requestFocus();

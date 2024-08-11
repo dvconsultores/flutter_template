@@ -1,11 +1,13 @@
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_detextre4/utils/config/theme.dart';
+import 'package:flutter_detextre4/utils/extensions/type_extensions.dart';
 import 'package:flutter_detextre4/utils/general/custom_focus_node.dart';
 import 'package:flutter_detextre4/utils/general/variables.dart';
 import 'package:flutter_detextre4/widgets/defaults/error_text.dart';
 import 'package:flutter_detextre4/widgets/sheets/bottom_sheet_card.dart';
 import 'package:flutter_gap/flutter_gap.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class BottomSelectField<T> extends StatefulWidget {
   const BottomSelectField({
@@ -49,9 +51,13 @@ class BottomSelectField<T> extends StatefulWidget {
     this.dropdownInitialChildSize = .45,
     this.dropdownMaxChildSize = .45,
     this.dropdownMinChildSize = .2,
-    this.isExpanded = false,
     this.dropdownScrollable = true,
     this.focusNode,
+    this.label,
+    this.labelText,
+    this.labelStyle,
+    this.floatingLabelStyle,
+    this.floatingLabelBehavior = FloatingLabelBehavior.always,
   });
   final String? restorationId;
   final void Function(T? value)? onSaved;
@@ -83,22 +89,29 @@ class BottomSelectField<T> extends StatefulWidget {
   final Color? bgColor;
   final List<BoxShadow>? boxShadow;
   final double gap;
-  final EdgeInsetsGeometry padding;
+  final EdgeInsets padding;
   final double loaderHeight;
   final bool dense;
   final double dropdownInitialChildSize;
   final double dropdownMaxChildSize;
   final double dropdownMinChildSize;
-  final bool isExpanded;
   final bool dropdownScrollable;
   final CustomFocusNode? focusNode;
+  final Widget? label;
+  final String? labelText;
+  final TextStyle? labelStyle;
+  final TextStyle? floatingLabelStyle;
+  final FloatingLabelBehavior floatingLabelBehavior;
 
   @override
   State<BottomSelectField<T>> createState() => _BottomSelectFieldState<T>();
 }
 
-class _BottomSelectFieldState<T> extends State<BottomSelectField<T>> {
+class _BottomSelectFieldState<T> extends State<BottomSelectField<T>>
+    with SingleTickerProviderStateMixin {
   FormFieldState<T>? formState;
+
+  late final AnimationController labelAnimationController;
 
   final localController = ValueNotifier<T?>(null);
   ValueNotifier<T?> get getController => widget.controller ?? localController;
@@ -120,6 +133,10 @@ class _BottomSelectFieldState<T> extends State<BottomSelectField<T>> {
 
     if (!isFocused) return;
 
+    if (widget.floatingLabelBehavior == FloatingLabelBehavior.auto) {
+      labelAnimationController.forward();
+    }
+
     final item = await BottomSheetList.showModal<T>(
       context,
       items: widget.items,
@@ -128,7 +145,13 @@ class _BottomSelectFieldState<T> extends State<BottomSelectField<T>> {
       maxChildSize: widget.dropdownMaxChildSize,
       minChildSize: widget.dropdownMinChildSize,
       scrollable: widget.dropdownScrollable,
+      draggableFrameBgColor: Colors.transparent,
+      draggableFrameColor: ThemeApp.colors(context).label,
     );
+
+    if (widget.floatingLabelBehavior == FloatingLabelBehavior.auto) {
+      labelAnimationController.reverse();
+    }
 
     getController.value = item?.value ?? formState!.value;
     focusNode.unfocus();
@@ -138,6 +161,12 @@ class _BottomSelectFieldState<T> extends State<BottomSelectField<T>> {
   void initState() {
     getController.addListener(onListenController);
     focusNode.addListener(onListenFocusNode);
+    labelAnimationController = AnimationController(
+      vsync: this,
+      duration: Durations.short3,
+      value:
+          widget.floatingLabelBehavior == FloatingLabelBehavior.always ? 1 : 0,
+    );
     super.initState();
   }
 
@@ -146,11 +175,14 @@ class _BottomSelectFieldState<T> extends State<BottomSelectField<T>> {
     getController.removeListener(onListenController);
     localController.dispose();
     focusNode.removeListener(onListenFocusNode);
+    labelAnimationController.dispose();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+
     return FormField<T>(
       restorationId: widget.restorationId,
       onSaved: widget.onSaved,
@@ -163,33 +195,7 @@ class _BottomSelectFieldState<T> extends State<BottomSelectField<T>> {
         formState ??= state;
         widget.controller?.value = state.value;
 
-        final hintWidget = Text(
-              widget.hintText ?? "",
-              textAlign: widget.textAlignHint,
-              style: widget.hintStyle ??
-                  TextStyle(
-                    color: ThemeApp.colors(context).text.withOpacity(.7),
-                    fontSize: 13,
-                    fontWeight: FontWeight.w400,
-                  ),
-            ),
-            contentWidget = widget.loading
-                ? SizedBox(
-                    width: widget.width,
-                    child: LinearProgressIndicator(
-                      borderRadius: const BorderRadius.all(Radius.circular(12)),
-                      color: ThemeApp.colors(context).primary,
-                      minHeight: widget.loaderHeight,
-                    ),
-                  )
-                :
-                // value
-                widget.items
-                        .singleWhereOrNull(
-                            (element) => element.value == state.value)
-                        ?.child ??
-                    // hintText
-                    hintWidget;
+        final bgColor = widget.bgColor ?? theme.colorScheme.background;
 
         return SizedBox(
           width: widget.width,
@@ -211,8 +217,7 @@ class _BottomSelectFieldState<T> extends State<BottomSelectField<T>> {
                   decoration: widget.decoration ??
                       BoxDecoration(
                           borderRadius: widget.borderRadius,
-                          color: widget.bgColor ??
-                              Theme.of(context).colorScheme.background,
+                          color: bgColor,
                           boxShadow: widget.boxShadow ?? [Vars.boxShadow2],
                           border: Border.fromBorderSide(
                             widget.disabled
@@ -220,8 +225,7 @@ class _BottomSelectFieldState<T> extends State<BottomSelectField<T>> {
                                     const BorderSide(color: Colors.transparent)
                                 : isFocused
                                     ? widget.borderFocused ??
-                                        BorderSide(
-                                            color: Theme.of(context).focusColor)
+                                        BorderSide(color: theme.focusColor)
                                     : widget.border ??
                                         const BorderSide(
                                             color: Colors.transparent),
@@ -231,10 +235,22 @@ class _BottomSelectFieldState<T> extends State<BottomSelectField<T>> {
                       widget.leading!,
                       Gap(widget.gap).row,
                     ],
-                    widget.isExpanded
-                        ? Expanded(child: contentWidget)
-                        : contentWidget,
-                    if (!widget.isExpanded) const Spacer(),
+                    _ContentWidget(
+                      padding: widget.padding,
+                      items: widget.items,
+                      labelAnimationController: labelAnimationController,
+                      bgColor: bgColor,
+                      state: state,
+                      textAlignHint: widget.textAlignHint,
+                      loading: widget.loading,
+                      loaderHeight: widget.loaderHeight,
+                      labelText: widget.labelText,
+                      labelStyle: widget.labelStyle,
+                      label: widget.label,
+                      floatingLabelStyle: widget.floatingLabelStyle,
+                      hintText: widget.hintText,
+                      hintStyle: widget.hintStyle,
+                    ),
                     if (!widget.hideTrailing) ...[
                       Gap(widget.gap).row,
                       widget.trailing ??
@@ -250,14 +266,129 @@ class _BottomSelectFieldState<T> extends State<BottomSelectField<T>> {
               ErrorText(
                 widget.errorText ?? state.errorText ?? '',
                 style: widget.errorStyle ??
-                    Theme.of(context)
-                        .textTheme
-                        .labelMedium
-                        ?.copyWith(color: Theme.of(context).colorScheme.error),
+                    theme.textTheme.labelMedium
+                        ?.copyWith(color: theme.colorScheme.error),
               )
           ]),
         );
       },
+    );
+  }
+}
+
+class _ContentWidget<T> extends StatelessWidget {
+  const _ContentWidget({
+    required this.padding,
+    this.loading = false,
+    this.loaderHeight = 20,
+    required this.items,
+    required this.labelAnimationController,
+    required this.bgColor,
+    this.hintText,
+    this.textAlignHint,
+    this.hintStyle,
+    this.label,
+    this.labelText,
+    this.labelStyle,
+    this.floatingLabelStyle,
+    required this.state,
+  });
+  final EdgeInsets padding;
+  final bool loading;
+  final double loaderHeight;
+  final List<DropdownMenuItem<T>> items;
+  final AnimationController labelAnimationController;
+  final Color bgColor;
+  final String? hintText;
+  final TextAlign? textAlignHint;
+  final TextStyle? hintStyle;
+  final Widget? label;
+  final String? labelText;
+  final TextStyle? labelStyle;
+  final TextStyle? floatingLabelStyle;
+  final FormFieldState<T> state;
+
+  @override
+  Widget build(BuildContext context) {
+    final colors = ThemeApp.colors(context);
+
+    final hs = hintStyle ??
+            TextStyle(
+              color: colors.text.withOpacity(.7),
+              fontSize: 13,
+              fontWeight: FontWeight.w400,
+            ),
+        ls = labelStyle ??
+            TextStyle(
+              color: colors.label,
+              backgroundColor: bgColor,
+              fontSize: 15.sp,
+            ),
+        fls = floatingLabelStyle ?? ls;
+
+    final hintWidget = Text(
+      hintText ?? "",
+      textAlign: textAlignHint,
+      style: hs,
+    );
+
+    return Expanded(
+      child: LayoutBuilder(
+          builder: (context, constraints) => loading
+              // loader
+              ? LinearProgressIndicator(
+                  borderRadius: const BorderRadius.all(Radius.circular(12)),
+                  color: colors.primary,
+                  minHeight: loaderHeight,
+                )
+              : Stack(clipBehavior: Clip.none, children: [
+                  // value
+                  items
+                          .singleWhereOrNull(
+                              (element) => element.value == state.value)
+                          ?.child ??
+
+                      // hintText
+                      hintWidget,
+
+                  // labelText
+                  if (label != null || labelText.hasValue)
+                    AnimatedBuilder(
+                        animation: labelAnimationController,
+                        builder: (context, child) {
+                          final floatingAnimation = Tween<double>(
+                                begin: 0,
+                                end: padding.top + 16,
+                              ).animate(labelAnimationController),
+                              floatingAnimationReposition = Tween<double>(
+                                begin: 0,
+                                end: 8,
+                              ).animate(labelAnimationController),
+                              scaleAnimation = Tween<double>(
+                                begin: 1,
+                                end: .78,
+                              ).animate(labelAnimationController);
+
+                          final isFloating =
+                              labelAnimationController.isCompleted ||
+                                  labelAnimationController.isAnimating;
+
+                          return Positioned(
+                            top: -floatingAnimation.value,
+                            left: -floatingAnimationReposition.value,
+                            width: isFloating ? null : constraints.maxWidth,
+                            child: Transform.scale(
+                              scale: scaleAnimation.value,
+                              child: Container(
+                                color: bgColor,
+                                child: label ??
+                                    Text(labelText!,
+                                        style: isFloating ? fls : ls),
+                              ),
+                            ),
+                          );
+                        })
+                ])),
     );
   }
 }

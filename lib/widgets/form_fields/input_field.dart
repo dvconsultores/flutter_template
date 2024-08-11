@@ -139,9 +139,7 @@ class InputField extends TextFormField {
               floatingLabelBehavior:
                   decoration?.floatingLabelBehavior ?? floatingLabelBehavior,
               filled: decoration?.filled ?? filled,
-              fillColor: decoration?.fillColor ??
-                  color ??
-                  theme.inputDecorationTheme.fillColor,
+              fillColor: decoration?.fillColor ?? color,
               border: decoration?.border ?? checkBorder(defaultBorder),
               enabledBorder:
                   decoration?.enabledBorder ?? checkBorder(defaultBorder),
