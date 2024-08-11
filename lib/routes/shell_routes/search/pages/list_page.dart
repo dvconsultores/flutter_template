@@ -35,6 +35,7 @@ class _ListViewExampleState extends State<ListPage> {
   @override
   Widget build(BuildContext context) {
     return AppScaffold(
+      goHomeOnBack: true,
       body: AppRefreshIndicator.liquid(
         onRefresh: onRefresh,
         child: ListView.separated(

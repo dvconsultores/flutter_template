@@ -11,6 +11,7 @@ class UserPage extends StatelessWidget {
     final authAPI = AuthApi(context);
 
     return AppScaffold(
+      goHomeOnBack: true,
       body: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
         Text("user", style: Theme.of(context).textTheme.displayMedium),
         Button(

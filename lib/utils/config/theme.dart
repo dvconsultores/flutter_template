@@ -85,7 +85,7 @@ class ThemeApp {
       ),
       // bottomNavigationBarTheme
       bottomNavigationBarTheme: const BottomNavigationBarThemeData(
-        backgroundColor: Colors.white,
+        backgroundColor: Color.fromARGB(235, 224, 221, 221),
       ),
       // bottomSheetTheme
       bottomSheetTheme: const BottomSheetThemeData(

@@ -23,6 +23,7 @@ class HomePage extends StatelessWidget with ResponsiveMixinLayout {
   @override
   Widget tabletLayout(BuildContext context, BoxConstraints constraints) {
     return AppScaffold(
+      doubleBackToExit: true,
       body: PageView(
         children: const [
           _Page1(),

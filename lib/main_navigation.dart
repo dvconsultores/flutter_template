@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_detextre4/main_provider.dart';
 import 'package:flutter_detextre4/utils/config/router_config.dart';
 import 'package:flutter_detextre4/widgets/defaults/bottom_navigation_bar.dart';
 import 'package:go_router/go_router.dart';
-import 'package:provider/provider.dart';
 
 class MainNavigation extends StatelessWidget {
   const MainNavigation(
@@ -18,8 +16,6 @@ class MainNavigation extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final mainProvider = context.read<MainProvider>();
-
     if (router.indexShellRoute == -1) {
       return const Scaffold(body: SizedBox.shrink());
     }
@@ -43,16 +39,13 @@ class MainNavigation extends StatelessWidget {
     };
 
     return Scaffold(
-      bottomNavigationBar: mainProvider.bottomNavigationBar
-          ? AppBottomNavigationBar(
-              currentIndex: router.indexShellRoute,
-              onTap: (index) =>
-                  context.goNamed(items.entries.elementAt(index).key),
-              items: router.shellRoutes
-                  .map((element) => items[(element as GoRoute).name]!)
-                  .toList(),
-            )
-          : null,
+      bottomNavigationBar: AppBottomNavigationBar(
+        currentIndex: router.indexShellRoute,
+        onTap: (index) => context.goNamed(items.entries.elementAt(index).key),
+        items: router.shellRoutes
+            .map((element) => items[(element as GoRoute).name]!)
+            .toList(),
+      ),
 
       //? Render pages
       body: GestureDetector(

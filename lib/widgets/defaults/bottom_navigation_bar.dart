@@ -4,7 +4,10 @@ import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter_animate/flutter_animate.dart';
+import 'package:flutter_detextre4/main_provider.dart';
 import 'package:flutter_detextre4/utils/config/theme.dart';
+import 'package:flutter_detextre4/utils/extensions/type_extensions.dart';
+import 'package:provider/provider.dart';
 
 class AppBottomNavigationBar extends StatefulWidget {
   const AppBottomNavigationBar({
@@ -30,8 +33,9 @@ class AppBottomNavigationBar extends StatefulWidget {
 
 class _CustomBottomNavigationBarState extends State<AppBottomNavigationBar>
     with TickerProviderStateMixin {
-  final selectedKey = GlobalKey();
-  final renderBox = ValueNotifier<RenderBox?>(null);
+  late final MainProvider mainProvider;
+
+  final selectedKey = GlobalKey(), renderBox = ValueNotifier<RenderBox?>(null);
 
   static const duration = 200;
   late final animation = AnimationController(
@@ -70,8 +74,12 @@ class _CustomBottomNavigationBarState extends State<AppBottomNavigationBar>
 
   @override
   void initState() {
-    SchedulerBinding.instance
-        .addPostFrameCallback((_) => Future.delayed(Durations.short2, init));
+    mainProvider = Provider.of<MainProvider>(context, listen: false)
+      ..showBottomNavigationBar();
+
+    SchedulerBinding.instance.addPostFrameCallback(
+      (_) => Future.delayed(Durations.short2, init),
+    );
     super.initState();
   }
 
@@ -91,67 +99,86 @@ class _CustomBottomNavigationBarState extends State<AppBottomNavigationBar>
         width = renderBox.value?.size.width;
 
     return AnimatedBuilder(
-        animation: animation,
+        animation: mainProvider.bottomNavigationBarController,
         builder: (context, child) {
-          // animated dx
-          final dxAnim = Tween<double>(
-            begin: cachedDx ?? 0,
-            end: getDx,
-          ).animate(animation);
+          final nav = Tween<double>(
+            begin: 0,
+            end: 1,
+          ).animate(mainProvider.bottomNavigationBarController);
 
-          // animated translate
-          final translateAnim =
-              Tween<double>(begin: 0, end: -20).animate(animation);
+          return AnimatedBuilder(
+              animation: animation,
+              builder: (context, child) {
+                // animated dx
+                final dxAnim = Tween<double>(
+                  begin: cachedDx ?? 0,
+                  end: getDx,
+                ).animate(animation);
 
-          return SizedBox(
-            width: size.width,
-            height: widget.height,
-            child: CustomPaint(
-              size: Size(size.width, widget.height),
-              painter: _BNBCustomPainter(
-                selectedDx: dxAnim.value,
-                selectedWidth: width,
-                color: foregroundColor!,
-                activeColor: widget.selectedItemColor ?? colors.primary,
-                opacity: opacityAnim.value,
-              ),
-              child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: widget.items
-                      .mapIndexed((i, item) => i == widget.currentIndex
-                          ? Transform.translate(
-                              offset: Offset(0, translateAnim.value),
-                              child: Tooltip(
-                                message: item.tooltip,
-                                waitDuration: const Duration(milliseconds: 200),
-                                child: FloatingActionButton(
-                                  key: selectedKey,
-                                  heroTag: UniqueKey(),
-                                  onPressed: () {},
-                                  backgroundColor: widget.selectedItemColor ??
-                                      colors.primary,
-                                  foregroundColor: widget.selectedIconColor ??
-                                      foregroundColor,
-                                  elevation: .1,
-                                  child: item.icon,
-                                ),
-                              ),
-                            )
-                          : Tooltip(
-                              message: item.tooltip,
-                              waitDuration: const Duration(milliseconds: 200),
-                              child: IconButton(
-                                onPressed: () {
-                                  widget.onTap(i);
-                                  startAnimation();
-                                },
-                                visualDensity: VisualDensity.comfortable,
-                                icon: item.icon,
-                              ),
-                            ))
-                      .toList()),
-            ),
-          ).animate().moveY(begin: 100);
+                // animated translate
+                final translateAnim =
+                    Tween<double>(begin: 0, end: -20).animate(animation);
+
+                return Transform.translate(
+                  offset: Offset(
+                    0,
+                    widget.height * nav.value.clampInverted(0, 1),
+                  ),
+                  child: SizedBox(
+                    width: size.width,
+                    height: widget.height * nav.value,
+                    child: CustomPaint(
+                      size: Size(size.width, widget.height),
+                      painter: _BNBCustomPainter(
+                        selectedDx: dxAnim.value,
+                        selectedWidth: width,
+                        color: foregroundColor!,
+                        activeColor: widget.selectedItemColor ?? colors.primary,
+                        opacity: opacityAnim.value,
+                      ),
+                      child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: widget.items.mapIndexed((i, item) {
+                            return i == widget.currentIndex
+                                ? Transform.translate(
+                                    offset: Offset(0, translateAnim.value),
+                                    child: Tooltip(
+                                      message: item.tooltip,
+                                      waitDuration:
+                                          const Duration(milliseconds: 200),
+                                      child: FloatingActionButton(
+                                        key: selectedKey,
+                                        heroTag: UniqueKey(),
+                                        onPressed: () {},
+                                        backgroundColor:
+                                            widget.selectedItemColor ??
+                                                colors.primary,
+                                        foregroundColor:
+                                            widget.selectedIconColor ??
+                                                foregroundColor,
+                                        elevation: .1,
+                                        child: item.icon,
+                                      ),
+                                    ),
+                                  )
+                                : Tooltip(
+                                    message: item.tooltip,
+                                    waitDuration:
+                                        const Duration(milliseconds: 200),
+                                    child: IconButton(
+                                      onPressed: () {
+                                        widget.onTap(i);
+                                        startAnimation();
+                                      },
+                                      visualDensity: VisualDensity.comfortable,
+                                      icon: item.icon,
+                                    ),
+                                  );
+                          }).toList()),
+                    ),
+                  ).animate().moveY(begin: 100),
+                );
+              });
         });
   }
 }
@@ -205,16 +232,6 @@ class _BNBCustomPainter extends CustomPainter {
 
     canvas.drawShadow(path, Colors.black.withOpacity(.8), 5, true);
     canvas.drawPath(path, paint);
-
-    const double dxBubble = 13;
-    final double dyBubble = w / 3;
-    final double bubbleSize = 15 * opacity;
-    final bubblePaint = Paint()..color = activeColor.withOpacity(opacity);
-
-    canvas.drawCircle(
-        Offset(dxl + dxBubble, dyBubble), bubbleSize, bubblePaint);
-    canvas.drawCircle(
-        Offset(dxr - dxBubble, dyBubble), bubbleSize, bubblePaint);
   }
 
   @override
