@@ -92,24 +92,25 @@ class DatePickerField extends InputField {
     VoidCallback? onTapClear,
   }) : super(
           readOnly: true,
-          suffixIcon: IntrinsicWidth(
-            child: Row(mainAxisAlignment: MainAxisAlignment.end, children: [
-              if (onTapClear != null && controller!.text.isNotEmpty)
-                SizedBox(
-                    height: 30,
-                    width: 30,
-                    child: IconButton(
-                      onPressed: onTapClear,
-                      padding: const EdgeInsets.all(0),
-                      visualDensity: VisualDensity.compact,
-                      splashRadius: 30,
-                      icon: const Icon(Icons.close),
-                    )),
-              const Icon(Icons.calendar_today),
-              if (suffixIcon != null) suffixIcon,
-              Gap(contentPadding?.right ?? Vars.gapMedium).row,
-            ]),
-          ),
+          suffixIcon: Row(
+              mainAxisSize: MainAxisSize.min,
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                if (onTapClear != null && controller!.text.isNotEmpty)
+                  SizedBox(
+                      height: 30,
+                      width: 30,
+                      child: IconButton(
+                        onPressed: onTapClear,
+                        padding: const EdgeInsets.all(0),
+                        visualDensity: VisualDensity.compact,
+                        splashRadius: 30,
+                        icon: const Icon(Icons.close),
+                      )),
+                const Icon(Icons.calendar_today),
+                if (suffixIcon != null) suffixIcon,
+                Gap(contentPadding?.right ?? Vars.gapMedium).row,
+              ]),
           onTap: () async {
             if (onTap != null) onTap();
 
