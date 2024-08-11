@@ -46,38 +46,19 @@ class ThemeApp {
             );
 
   static Map<ThemeType, ThemeData> get _themes {
-    var ligthTheme = ThemeData.light(useMaterial3: true),
-        darkTheme = ThemeData.dark(useMaterial3: true);
+    var ligthTheme = ThemeData.light(useMaterial3: false),
+        darkTheme = ThemeData.dark(useMaterial3: false);
 
     //? light
     ligthTheme = ligthTheme.copyWith(
       // values config
       visualDensity: VisualDensity.compact,
-
       // color config
       primaryColor: const Color(0xff001689),
       focusColor: const Color(0xFF3B4279),
       disabledColor: const Color.fromARGB(255, 209, 175, 172),
-      appBarTheme: const AppBarTheme(
-        backgroundColor: Color(0xfffafafa),
-      ),
-      bottomNavigationBarTheme: const BottomNavigationBarThemeData(
-        backgroundColor: Colors.white,
-      ),
-      bottomSheetTheme: const BottomSheetThemeData(
-        backgroundColor: Colors.transparent,
-        surfaceTintColor: Colors.transparent,
-      ),
       cardColor: Colors.white,
-      inputDecorationTheme: const InputDecorationTheme(
-        fillColor: Colors.white,
-        outlineBorder: BorderSide(color: Color(0xFF46464F)),
-      ),
       scaffoldBackgroundColor: const Color(0xfffafafa),
-      progressIndicatorTheme: const ProgressIndicatorThemeData(
-        circularTrackColor: Colors.red,
-        color: Color(0xff001689),
-      ),
       colorScheme: const ColorScheme.light(
         background: Color(0xFFF9F9F9),
         primary: Color(0xff001689),
@@ -91,37 +72,46 @@ class ThemeApp {
           text: Color(0xFF4E444B),
           label: Color(0xFF777680),
           title: Color(0xFF4E444B),
+          divider: Color(0xFFE3E1EC),
           accent: Colors.red,
           success: Colors.green,
           warning: Color(0xFFFFDD00),
         ),
-        ThemeDataStyleExtension(
-          customText: TextStyle(),
-        ),
       ],
+      // appBarTheme
+      appBarTheme: const AppBarTheme(
+        backgroundColor: Color(0xfffafafa),
+      ),
+      // bottomNavigationBarTheme
+      bottomNavigationBarTheme: const BottomNavigationBarThemeData(
+        backgroundColor: Colors.white,
+      ),
+      // bottomSheetTheme
+      bottomSheetTheme: const BottomSheetThemeData(
+        backgroundColor: Colors.transparent,
+        surfaceTintColor: Colors.transparent,
+      ),
+      // datePickerTheme
+      datePickerTheme: const DatePickerThemeData(
+        headerBackgroundColor: Color(0xff001689),
+        headerForegroundColor: Colors.white,
+        dayForegroundColor: MaterialStatePropertyAll(Color(0xFF535256)),
+        weekdayStyle: TextStyle(color: Color(0xFF001689)),
+      ),
+      // inputDecorationTheme
+      inputDecorationTheme: const InputDecorationTheme(
+        fillColor: Colors.white,
+        outlineBorder: BorderSide(color: Color(0xFF46464F)),
+      ),
+      // progressIndicatorTheme
+      progressIndicatorTheme: const ProgressIndicatorThemeData(
+        circularTrackColor: Colors.red,
+        color: Color(0xff001689),
+      ),
     );
     // text config
     ligthTheme = ligthTheme.copyWith(
-      appBarTheme: AppBarTheme(
-          titleTextStyle: GoogleFonts.lato(
-        fontSize: 17,
-        color: ligthTheme.extension<ThemeDataColorExtension>()!.title!,
-        fontWeight: FontWeight.w700,
-        letterSpacing: 1,
-        height: 1.1,
-      )),
-      dialogTheme: DialogTheme(
-          titleTextStyle: GoogleFonts.lato(
-            fontSize: 22,
-            fontWeight: FontWeight.w500,
-            color: ligthTheme.extension<ThemeDataColorExtension>()!.title!,
-            height: 1.1,
-          ),
-          contentTextStyle: GoogleFonts.lato(
-            fontSize: 16,
-            color: ligthTheme.extension<ThemeDataColorExtension>()!.text!,
-            height: 1.1,
-          )),
+      // textTheme
       textTheme: GoogleFonts.latoTextTheme(ligthTheme.textTheme.copyWith(
         bodyLarge: TextStyle(
           fontSize: 17,
@@ -140,6 +130,61 @@ class ThemeApp {
           height: 1.1,
         ),
       )),
+      extensions: ligthTheme.extensions.values.toList() +
+          <ThemeExtension<dynamic>>[
+            const ThemeDataStyleExtension(
+              customText: TextStyle(),
+            ),
+          ],
+      // appbarTheme
+      appBarTheme: ligthTheme.appBarTheme.copyWith(
+          titleTextStyle: GoogleFonts.lato(
+        fontSize: 17,
+        color: ligthTheme.extension<ThemeDataColorExtension>()!.title!,
+        fontWeight: FontWeight.w700,
+        letterSpacing: 1,
+        height: 1.1,
+      )),
+      // dialogTheme
+      dialogTheme: ligthTheme.dialogTheme.copyWith(
+          titleTextStyle: GoogleFonts.lato(
+            fontSize: 22,
+            fontWeight: FontWeight.w500,
+            color: ligthTheme.extension<ThemeDataColorExtension>()!.title!,
+            height: 1.1,
+          ),
+          contentTextStyle: GoogleFonts.lato(
+            fontSize: 16,
+            color: ligthTheme.extension<ThemeDataColorExtension>()!.text!,
+            height: 1.1,
+          )),
+      // datePickerTheme
+      datePickerTheme: ligthTheme.datePickerTheme.copyWith(
+        dayStyle: GoogleFonts.lato(fontWeight: FontWeight.w400),
+        cancelButtonStyle: ButtonStyle(
+          textStyle: MaterialStatePropertyAll(
+            GoogleFonts.lato(fontWeight: FontWeight.w500),
+          ),
+        ),
+        confirmButtonStyle: ButtonStyle(
+          textStyle: MaterialStatePropertyAll(
+            GoogleFonts.lato(fontWeight: FontWeight.w500),
+          ),
+        ),
+      ),
+      // timePickerTheme
+      timePickerTheme: ligthTheme.timePickerTheme.copyWith(
+        cancelButtonStyle: ButtonStyle(
+          textStyle: MaterialStatePropertyAll(
+            GoogleFonts.lato(fontWeight: FontWeight.w500),
+          ),
+        ),
+        confirmButtonStyle: ButtonStyle(
+          textStyle: MaterialStatePropertyAll(
+            GoogleFonts.lato(fontWeight: FontWeight.w500),
+          ),
+        ),
+      ),
     );
 
     return {
@@ -182,6 +227,7 @@ class ThemeApp {
       text: themeData.extension<ThemeDataColorExtension>()!.text!,
       label: themeData.extension<ThemeDataColorExtension>()!.label!,
       title: themeData.extension<ThemeDataColorExtension>()!.title!,
+      divider: themeData.extension<ThemeDataColorExtension>()!.divider!,
       accent: themeData.extension<ThemeDataColorExtension>()!.accent!,
       success: themeData.extension<ThemeDataColorExtension>()!.success!,
       warning: themeData.extension<ThemeDataColorExtension>()!.warning!,
@@ -211,6 +257,7 @@ class ColorsApp {
     required this.text,
     required this.label,
     required this.title,
+    required this.divider,
     required this.accent,
     required this.success,
     required this.warning,
@@ -225,6 +272,7 @@ class ColorsApp {
   final Color text;
   final Color label;
   final Color title;
+  final Color divider;
   final Color accent;
   final Color success;
   final Color warning;
@@ -237,6 +285,7 @@ class ThemeDataColorExtension extends ThemeExtension<ThemeDataColorExtension> {
     this.text,
     this.label,
     this.title,
+    this.divider,
     this.accent,
     this.success,
     this.warning,
@@ -244,6 +293,7 @@ class ThemeDataColorExtension extends ThemeExtension<ThemeDataColorExtension> {
   final Color? text;
   final Color? label;
   final Color? title;
+  final Color? divider;
   final Color? accent;
   final Color? success;
   final Color? warning;
@@ -253,6 +303,7 @@ class ThemeDataColorExtension extends ThemeExtension<ThemeDataColorExtension> {
     Color? text,
     Color? label,
     Color? title,
+    Color? divider,
     Color? accent,
     Color? success,
     Color? warning,
@@ -261,6 +312,7 @@ class ThemeDataColorExtension extends ThemeExtension<ThemeDataColorExtension> {
       text: text ?? this.text,
       label: label ?? this.label,
       title: title ?? this.title,
+      divider: divider ?? this.divider,
       accent: accent ?? this.accent,
       success: success ?? this.success,
       warning: warning ?? this.warning,
@@ -275,6 +327,7 @@ class ThemeDataColorExtension extends ThemeExtension<ThemeDataColorExtension> {
       text: Color.lerp(text, other.text, t),
       label: Color.lerp(label, other.label, t),
       title: Color.lerp(title, other.title, t),
+      divider: Color.lerp(divider, other.divider, t),
       accent: Color.lerp(accent, other.accent, t),
       success: Color.lerp(success, other.success, t),
       warning: Color.lerp(warning, other.warning, t),
@@ -283,7 +336,7 @@ class ThemeDataColorExtension extends ThemeExtension<ThemeDataColorExtension> {
 
   @override
   String toString() =>
-      'ThemeDataColorExtension(text: $text, label: $label, title: $title, accent: $accent, success: $success, warning: $warning)';
+      'ThemeDataColorExtension(text: $text, label: $label, title: $title, divider: $divider, accent: $accent, success: $success, warning: $warning)';
 }
 
 // ? Theme data style extension
