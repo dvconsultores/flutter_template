@@ -1,4 +1,5 @@
 import 'package:collection/collection.dart';
+import 'package:easy_debounce/easy_debounce.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_detextre4/painters/draggable_frame_painter.dart';
 import 'package:flutter_detextre4/utils/config/router_config.dart';
@@ -6,6 +7,7 @@ import 'package:flutter_detextre4/utils/config/theme.dart';
 import 'package:flutter_detextre4/utils/general/variables.dart';
 import 'package:flutter_detextre4/widgets/defaults/button.dart';
 import 'package:flutter_detextre4/widgets/defaults/snackbar.dart';
+import 'package:flutter_detextre4/widgets/form_fields/input_field.dart';
 import 'package:flutter_detextre4/widgets/sheets/card_widget.dart';
 import 'package:flutter_gap/flutter_gap.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -20,20 +22,24 @@ class BottomSheetCard extends StatelessWidget {
     this.maxChildSize = .45,
     required this.child,
     this.scrollable = true,
-    this.topWidget,
+    this.title,
+    this.titleText,
+    this.titleStyle,
     this.floatingActionButton,
     this.bottomWidget,
     this.draggableFrameBgColor,
     this.draggableFrameColor,
   });
-  final EdgeInsetsGeometry? padding;
+  final EdgeInsets? padding;
   final bool expand;
   final double initialChildSize;
   final double minChildSize;
   final double maxChildSize;
   final bool scrollable;
   final Widget child;
-  final Widget? topWidget;
+  final Widget? title;
+  final String? titleText;
+  final TextStyle? titleStyle;
   final Widget? floatingActionButton;
   final Widget? bottomWidget;
   final Color? draggableFrameBgColor;
@@ -50,12 +56,14 @@ class BottomSheetCard extends StatelessWidget {
     double initialChildSize = .45,
     double maxChildSize = .45,
     double minChildSize = .2,
-    EdgeInsetsGeometry? padding,
+    EdgeInsets? padding,
     bool scrollable = true,
     Clip? clipBehavior,
     bool isDismissible = true,
     Widget? child,
-    Widget? topWidget,
+    Widget? title,
+    String? titleText,
+    TextStyle? titleStyle,
     Widget? floatingActionButton,
     Widget? bottomWidget,
     Color? draggableFrameBgColor,
@@ -85,7 +93,9 @@ class BottomSheetCard extends StatelessWidget {
                 minChildSize: minChildSize,
                 padding: padding,
                 scrollable: scrollable,
-                topWidget: topWidget,
+                title: title,
+                titleText: titleText,
+                titleStyle: titleStyle,
                 floatingActionButton: floatingActionButton,
                 bottomWidget: bottomWidget,
                 draggableFrameBgColor: draggableFrameBgColor,
@@ -101,6 +111,14 @@ class BottomSheetCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final p = padding ??
+        EdgeInsets.only(
+          top: Vars.gapXLarge,
+          left: Vars.gapXLarge,
+          right: Vars.gapXLarge,
+          bottom: Vars.paddingScaffold.bottom,
+        );
+
     return DraggableScrollableSheet(
       expand: expand,
       initialChildSize: initialChildSize,
@@ -114,38 +132,32 @@ class BottomSheetCard extends StatelessWidget {
                 bgColor: draggableFrameBgColor,
                 color: draggableFrameColor,
               )),
-          if (topWidget != null)
-            topWidget!
-          else
-            const Gap(Vars.gapXLarge).column,
+
+          // title
+          if (title != null) ...[
+            Gap(p.top).column,
+            title!,
+          ] else if (titleText != null)
+            Padding(
+                padding: p.copyWith(bottom: 0),
+                child: Text(
+                  titleText!,
+                  style: titleStyle ??
+                      const TextStyle(fontWeight: FontWeight.w700),
+                )),
+
+          // content
           if (scrollable)
             Expanded(
               child: SingleChildScrollView(
                 controller: scrollController,
                 physics: const BouncingScrollPhysics(),
-                padding: padding ??
-                    EdgeInsets.only(
-                      top: 0,
-                      left: Vars.gapXLarge,
-                      right: Vars.gapXLarge,
-                      bottom: Vars.paddingScaffold.bottom,
-                    ),
+                padding: p,
                 child: child,
               ),
             )
           else
-            Expanded(
-              child: Padding(
-                padding: padding ??
-                    EdgeInsets.only(
-                      top: 0,
-                      left: Vars.gapXLarge,
-                      right: Vars.gapXLarge,
-                      bottom: Vars.paddingScaffold.bottom,
-                    ),
-                child: child,
-              ),
-            ),
+            Expanded(child: Padding(padding: p, child: child)),
         ]);
 
         return floatingActionButton != null || bottomWidget != null
@@ -160,7 +172,7 @@ class BottomSheetCard extends StatelessWidget {
   }
 }
 
-class BottomSheetList<T> extends StatelessWidget {
+class BottomSheetList<T> extends StatefulWidget {
   const BottomSheetList({
     super.key,
     this.padding,
@@ -171,18 +183,23 @@ class BottomSheetList<T> extends StatelessWidget {
     this.initialChildSize = .45,
     this.minChildSize = .2,
     this.maxChildSize = .45,
+    this.title,
+    this.titleText,
+    this.titleStyle,
     this.emptyData,
     this.emptyDataText,
     this.emptyDataStyle,
     this.itemsGap,
-    this.topWidget,
     this.floatingActionButton,
     this.bottomWidget,
     this.scrollable = true,
     this.draggableFrameBgColor,
     this.draggableFrameColor,
+    this.searchFunction,
+    this.searchLabelText,
+    this.searchHintText,
   });
-  final EdgeInsetsGeometry? padding;
+  final EdgeInsets? padding;
   final List<DropdownMenuItem<T>> items;
   final Widget Function(BuildContext context, int index)? itemBuilder;
   final void Function(DropdownMenuItem<T> item)? onTap;
@@ -190,16 +207,22 @@ class BottomSheetList<T> extends StatelessWidget {
   final double initialChildSize;
   final double minChildSize;
   final double maxChildSize;
+  final Widget? title;
+  final String? titleText;
+  final TextStyle? titleStyle;
   final Widget? emptyData;
   final String? emptyDataText;
   final TextStyle? emptyDataStyle;
   final double? itemsGap;
-  final Widget? topWidget;
   final Widget? floatingActionButton;
   final Widget? bottomWidget;
   final bool scrollable;
   final Color? draggableFrameBgColor;
   final Color? draggableFrameColor;
+  final bool Function(int index, DropdownMenuItem<T> element, String search)?
+      searchFunction;
+  final String? searchLabelText;
+  final String? searchHintText;
 
   static Future<DropdownMenuItem<T>?> showModal<T>(
     BuildContext context, {
@@ -212,21 +235,27 @@ class BottomSheetList<T> extends StatelessWidget {
     double initialChildSize = .45,
     double maxChildSize = .45,
     double minChildSize = .2,
-    EdgeInsetsGeometry? padding,
+    EdgeInsets? padding,
     bool scrollable = true,
     Clip? clipBehavior,
     bool isDismissible = true,
     List<DropdownMenuItem<T>>? items,
     void Function(DropdownMenuItem<T> bottomSheetListItem)? onTap,
+    Widget? title,
+    String? titleText,
+    TextStyle? titleStyle,
     Widget? emptyData,
     String? emptyDataText,
     TextStyle? emptyDataStyle,
     double? itemsGap,
-    Widget? topWidget,
     Widget? floatingActionButton,
     Widget? bottomWidget,
     Color? draggableFrameBgColor,
     Color? draggableFrameColor,
+    bool Function(int index, DropdownMenuItem<T> element, String search)?
+        searchFunction,
+    String? searchLabelText,
+    String? searchHintText,
   }) async {
     if (hideBottomNavigationBar) router.hideBottomNavigationBar();
 
@@ -257,12 +286,17 @@ class BottomSheetList<T> extends StatelessWidget {
         emptyDataStyle: emptyDataStyle,
         padding: padding,
         itemsGap: itemsGap,
-        topWidget: topWidget,
+        title: title,
+        titleText: titleText,
+        titleStyle: titleStyle,
         floatingActionButton: floatingActionButton,
         bottomWidget: bottomWidget,
         scrollable: scrollable,
         draggableFrameBgColor: draggableFrameBgColor,
         draggableFrameColor: draggableFrameColor,
+        searchFunction: searchFunction,
+        searchLabelText: searchLabelText,
+        searchHintText: searchHintText,
       ),
     );
 
@@ -272,58 +306,120 @@ class BottomSheetList<T> extends StatelessWidget {
   }
 
   @override
+  State<BottomSheetList<T>> createState() => _BottomSheetListState<T>();
+}
+
+class _BottomSheetListState<T> extends State<BottomSheetList<T>> {
+  final searchController = TextEditingController();
+
+  List<DropdownMenuItem<T>> get filteredItems {
+    if (widget.searchFunction == null) return widget.items;
+
+    return widget.items
+        .whereIndexed((index, element) =>
+            widget.searchFunction!(index, element, searchController.text))
+        .toList();
+  }
+
+  @override
   Widget build(BuildContext context) {
+    final p = widget.padding ??
+        EdgeInsets.only(
+          top: Vars.gapXLarge,
+          left: Vars.gapXLarge,
+          right: Vars.gapXLarge,
+          bottom: Vars.paddingScaffold.bottom,
+        );
+
     return DraggableScrollableSheet(
-      expand: expand,
-      initialChildSize: initialChildSize,
-      minChildSize: minChildSize,
-      maxChildSize: maxChildSize,
+      expand: widget.expand,
+      initialChildSize: widget.initialChildSize,
+      minChildSize: widget.minChildSize,
+      maxChildSize: widget.maxChildSize,
       builder: (context, scrollController) {
         final contentWidget = Column(children: [
-          if (topWidget != null)
-            topWidget!
-          else
-            const Gap(Vars.gapXLarge).column,
-          items.isEmpty
+          // title
+          if (widget.title != null) ...[
+            Gap(p.top).column,
+            widget.title!,
+          ] else if (widget.titleText != null)
+            Padding(
+                padding: p.copyWith(bottom: 0),
+                child: Text(
+                  widget.titleText!,
+                  style: widget.titleStyle ??
+                      const TextStyle(fontWeight: FontWeight.w700),
+                )),
+
+          // search
+          if (widget.searchFunction != null) ...[
+            Padding(
+              padding: p,
+              child: InputField(
+                controller: searchController,
+                onChanged: (value) => EasyDebounce.debounce(
+                  "setState",
+                  Durations.short3,
+                  () => setState(() {}),
+                ),
+                labelText: widget.searchLabelText,
+                hintText: widget.searchHintText,
+                suffixIcon: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      const SizedBox(
+                        height: Vars.buttonHeight / 2,
+                        child: VerticalDivider(thickness: 1),
+                      ),
+                      const Icon(Icons.search_rounded, size: 24),
+                      const Gap(Vars.gapMedium).row,
+                    ]),
+              ),
+            ),
+            Divider(
+              height: 0,
+              indent: p.left,
+              endIndent: p.right,
+              color: Theme.of(context).colorScheme.outline,
+            ),
+          ],
+
+          // content
+          filteredItems.isEmpty
               ? Align(
                   child: Padding(
-                    padding: const EdgeInsets.symmetric(vertical: Vars.gapMax),
-                    child: emptyData ??
+                    padding: p.copyWith(top: Vars.gapMax, bottom: Vars.gapMax),
+                    child: widget.emptyData ??
                         Text(
-                          emptyDataText ?? "No records",
-                          style: emptyDataStyle,
+                          widget.emptyDataText ?? "No records",
+                          style: widget.emptyDataStyle,
                         ),
                   ),
                 )
               : ListView.separated(
-                  padding: padding ??
-                      EdgeInsets.only(
-                        top: 0,
-                        left: Vars.gapXLarge,
-                        right: Vars.gapXLarge,
-                        bottom: Vars.paddingScaffold.bottom,
-                      ),
-                  shrinkWrap: scrollable,
-                  physics: scrollable
+                  padding: p,
+                  shrinkWrap: widget.scrollable,
+                  physics: widget.scrollable
                       ? const NeverScrollableScrollPhysics()
                       : const ClampingScrollPhysics(),
                   controller: scrollController,
-                  itemCount: items.length,
+                  itemCount: filteredItems.length,
                   separatorBuilder: (context, index) =>
-                      Gap(itemsGap ?? Vars.gapXLarge).column,
+                      Gap(widget.itemsGap ?? Vars.gapXLarge).column,
                   itemBuilder: (context, index) {
-                    final item = items[index];
+                    final item = filteredItems[index];
 
                     return GestureDetector(
                       onTap: () {
                         clearSnackbars();
                         Navigator.pop<DropdownMenuItem<T>>(context, item);
                         Future.delayed(Durations.short1, () {
-                          if (onTap != null) onTap!(item);
+                          if (widget.onTap != null) widget.onTap!(item);
                         });
                       },
-                      child: itemBuilder != null
-                          ? itemBuilder!(context, index)
+                      child: widget.itemBuilder != null
+                          ? widget.itemBuilder!(context, index)
                           : CardWidget(
                               padding: const EdgeInsets.symmetric(
                                 horizontal: Vars.gapMedium,
@@ -337,17 +433,17 @@ class BottomSheetList<T> extends StatelessWidget {
         ]);
 
         return Scaffold(
-          floatingActionButton: floatingActionButton,
-          bottomSheet: bottomWidget,
+          floatingActionButton: widget.floatingActionButton,
+          bottomSheet: widget.bottomWidget,
           backgroundColor: Colors.transparent,
           body: Column(children: [
             CustomPaint(
                 size: Size(double.maxFinite, 36.sp),
                 painter: DraggableFramePainter(
-                  bgColor: draggableFrameBgColor,
-                  color: draggableFrameColor,
+                  bgColor: widget.draggableFrameBgColor,
+                  color: widget.draggableFrameColor,
                 )),
-            scrollable
+            widget.scrollable
                 ? Expanded(child: SingleChildScrollView(child: contentWidget))
                 : Expanded(child: contentWidget),
           ]),
@@ -360,7 +456,7 @@ class BottomSheetList<T> extends StatelessWidget {
 class BottomSheetListMultiple<T> extends StatefulWidget {
   const BottomSheetListMultiple({
     super.key,
-    this.contextPadding,
+    this.contentPadding,
     this.initialItems,
     required this.items,
     this.itemforegroundColor,
@@ -370,9 +466,9 @@ class BottomSheetListMultiple<T> extends StatefulWidget {
     this.initialChildSize = .45,
     this.minChildSize = .2,
     this.maxChildSize = .45,
-    this.label,
-    this.labelText,
-    this.labelStyle,
+    this.title,
+    this.titleText,
+    this.titleStyle,
     this.emptyData,
     this.emptyDataText,
     this.emptyDataStyle,
@@ -384,15 +480,17 @@ class BottomSheetListMultiple<T> extends StatefulWidget {
     this.childAspectRatio = 20 / 4.8,
     this.crossAxisSpacing = Vars.gapXLarge,
     this.mainAxisSpacing = Vars.gapXLarge,
-    this.topWidget,
     this.floatingActionButton,
     this.bottomWidget,
     this.scrollable = true,
     this.draggableFrameBgColor,
     this.draggableFrameColor,
+    this.searchFunction,
+    this.searchLabelText,
+    this.searchHintText,
   });
 
-  final EdgeInsetsGeometry? contextPadding;
+  final EdgeInsets? contentPadding;
   final List<T>? initialItems;
   final List<DropdownMenuItem<T>> items;
   final Color? itemforegroundColor;
@@ -402,12 +500,12 @@ class BottomSheetListMultiple<T> extends StatefulWidget {
   final double initialChildSize;
   final double minChildSize;
   final double maxChildSize;
+  final Widget? title;
+  final String? titleText;
+  final TextStyle? titleStyle;
   final Widget? emptyData;
   final String? emptyDataText;
   final TextStyle? emptyDataStyle;
-  final Widget? label;
-  final String? labelText;
-  final TextStyle? labelStyle;
   final Widget Function(BuildContext context, VoidCallback onComplete)?
       buttonBuilder;
   final String? buttonText;
@@ -417,12 +515,15 @@ class BottomSheetListMultiple<T> extends StatefulWidget {
   final double childAspectRatio;
   final double crossAxisSpacing;
   final double mainAxisSpacing;
-  final Widget? topWidget;
   final Widget? floatingActionButton;
   final Widget? bottomWidget;
   final bool scrollable;
   final Color? draggableFrameBgColor;
   final Color? draggableFrameColor;
+  final bool Function(int index, DropdownMenuItem<T> element, String search)?
+      searchFunction;
+  final String? searchLabelText;
+  final String? searchHintText;
 
   static Future<List<DropdownMenuItem<T>>?> showModal<T>(
     BuildContext context, {
@@ -435,7 +536,7 @@ class BottomSheetListMultiple<T> extends StatefulWidget {
     double initialChildSize = .45,
     double maxChildSize = .45,
     double minChildSize = .2,
-    EdgeInsetsGeometry? contextPadding,
+    EdgeInsets? contentPadding,
     bool scrollable = true,
     Clip? clipBehavior,
     bool isDismissible = true,
@@ -448,21 +549,24 @@ class BottomSheetListMultiple<T> extends StatefulWidget {
     String? buttonText,
     TextStyle? buttonTextStyle,
     int? maxLenght,
+    Widget? title,
+    String? titleText,
+    TextStyle? titleStyle,
     Widget? emptyData,
     String? emptyDataText,
     TextStyle? emptyDataStyle,
-    Widget? label,
-    String? labelText,
-    TextStyle? labelStyle,
     int crossAxisCount = 2,
     double childAspectRatio = 20 / 4.8,
     double crossAxisSpacing = Vars.gapXLarge,
     double mainAxisSpacing = Vars.gapXLarge,
-    Widget? topWidget,
     Widget? floatingActionButton,
     Widget? bottomWidget,
     Color? draggableFrameBgColor,
     Color? draggableFrameColor,
+    bool Function(int index, DropdownMenuItem<T> element, String search)?
+        searchFunction,
+    String? searchLabelText,
+    String? searchHintText,
   }) async {
     if (hideBottomNavigationBar) router.hideBottomNavigationBar();
 
@@ -496,21 +600,23 @@ class BottomSheetListMultiple<T> extends StatefulWidget {
         emptyData: emptyData,
         emptyDataText: emptyDataText,
         emptyDataStyle: emptyDataStyle,
-        label: label,
-        labelText: labelText,
-        labelStyle: labelStyle,
-        contextPadding: contextPadding,
+        titleText: titleText,
+        titleStyle: titleStyle,
+        contentPadding: contentPadding,
         initialItems: initialItems,
         crossAxisCount: crossAxisCount,
         childAspectRatio: childAspectRatio,
         crossAxisSpacing: crossAxisSpacing,
         mainAxisSpacing: mainAxisSpacing,
-        topWidget: topWidget,
+        title: title,
         scrollable: scrollable,
         floatingActionButton: floatingActionButton,
         bottomWidget: bottomWidget,
         draggableFrameBgColor: draggableFrameBgColor,
         draggableFrameColor: draggableFrameColor,
+        searchFunction: searchFunction,
+        searchLabelText: searchLabelText,
+        searchHintText: searchHintText,
       ),
     );
 
@@ -526,6 +632,17 @@ class BottomSheetListMultiple<T> extends StatefulWidget {
 
 class _BottomSheetListMultipleState<T>
     extends State<BottomSheetListMultiple<T>> {
+  final searchController = TextEditingController();
+
+  List<DropdownMenuItem<T>> get filteredItems {
+    if (widget.searchFunction == null) return widget.items;
+
+    return widget.items
+        .whereIndexed((index, element) =>
+            widget.searchFunction!(index, element, searchController.text))
+        .toList();
+  }
+
   late final selectedItems = widget.items
       .where((element) => (widget.initialItems ?? []).contains(element.value))
       .toList();
@@ -547,44 +664,85 @@ class _BottomSheetListMultipleState<T>
             .singleWhereOrNull((element) => element.value == item.value) !=
         null;
 
+    void onPressed(DropdownMenuItem<T> item) => setState(() {
+          if (isSelected(item)) {
+            return selectedItems
+                .removeWhere((element) => element.value == item.value);
+          }
+
+          if (widget.maxLenght == null ||
+              selectedItems.length < widget.maxLenght!) {
+            selectedItems.add(item);
+          }
+        });
+
+    final p = widget.contentPadding ??
+        EdgeInsets.only(
+          top: Vars.gapXLarge,
+          left: Vars.gapXLarge,
+          right: Vars.gapXLarge,
+          bottom: Vars.paddingScaffold.bottom,
+        );
+
     return DraggableScrollableSheet(
       expand: widget.expand,
       initialChildSize: widget.initialChildSize,
       minChildSize: widget.minChildSize,
       maxChildSize: widget.maxChildSize,
       builder: (context, scrollController) {
-        void onPressed(DropdownMenuItem<T> item) => setState(() {
-              if (isSelected(item)) {
-                return selectedItems
-                    .removeWhere((element) => element.value == item.value);
-              }
-
-              if (widget.maxLenght == null ||
-                  selectedItems.length < widget.maxLenght!) {
-                selectedItems.add(item);
-              }
-            });
-
         final contentWidget = Column(children: [
-          if (widget.topWidget != null)
-            widget.topWidget!
-          else
-            const Gap(Vars.gapXLarge).column,
-          if (widget.label != null)
-            widget.label!
-          else if (widget.labelText != null)
+          // title
+          if (widget.title != null) ...[
+            Gap(p.top).column,
+            widget.title!,
+          ] else if (widget.titleText != null)
             Padding(
-                padding: Vars.paddingScaffold
-                    .copyWith(top: 0, bottom: Vars.gapXLarge),
+                padding: p.copyWith(bottom: 0),
                 child: Text(
-                  widget.labelText!,
-                  style: widget.labelStyle ??
+                  widget.titleText!,
+                  style: widget.titleStyle ??
                       const TextStyle(fontWeight: FontWeight.w700),
                 )),
-          widget.items.isEmpty
+
+          // search
+          if (widget.searchFunction != null) ...[
+            Padding(
+              padding: p,
+              child: InputField(
+                controller: searchController,
+                onChanged: (value) => EasyDebounce.debounce(
+                  "setState",
+                  Durations.short3,
+                  () => setState(() {}),
+                ),
+                labelText: widget.searchLabelText,
+                hintText: widget.searchHintText,
+                suffixIcon: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      const SizedBox(
+                        height: Vars.buttonHeight / 2,
+                        child: VerticalDivider(thickness: 1),
+                      ),
+                      const Icon(Icons.search_rounded, size: 24),
+                      const Gap(Vars.gapMedium).row,
+                    ]),
+              ),
+            ),
+            Divider(
+              height: 0,
+              indent: p.left,
+              endIndent: p.right,
+              color: Theme.of(context).colorScheme.outline,
+            ),
+          ],
+
+          // content
+          filteredItems.isEmpty
               ? Align(
                   child: Padding(
-                    padding: const EdgeInsets.symmetric(vertical: Vars.gapMax),
+                    padding: p.copyWith(top: Vars.gapMax, bottom: Vars.gapMax),
                     child: widget.emptyData ??
                         Text(
                           widget.emptyDataText ?? "No records",
@@ -601,9 +759,8 @@ class _BottomSheetListMultipleState<T>
                   physics: widget.scrollable
                       ? const NeverScrollableScrollPhysics()
                       : const BouncingScrollPhysics(),
-                  padding: widget.contextPadding ??
-                      Vars.paddingScaffold.copyWith(top: 0),
-                  children: widget.items
+                  padding: p,
+                  children: filteredItems
                       .map(
                         (item) => widget.itemBuilder != null
                             ? GestureDetector(

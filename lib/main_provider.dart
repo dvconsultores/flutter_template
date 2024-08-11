@@ -44,7 +44,7 @@ class MainProvider extends ChangeNotifier {
   // ? ----------------------Bottom Navigation Bar Provider--------------------------- //
   final bottomNavigationBarController = AnimationController(
     vsync: CustomTickerProvider(),
-    duration: Durations.short2,
+    duration: Durations.short3,
   );
   void showBottomNavigationBar() => bottomNavigationBarController.forward();
   void hideBottomNavigationBar() => bottomNavigationBarController.reverse();

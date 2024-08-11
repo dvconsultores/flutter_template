@@ -29,7 +29,6 @@ class MultipleSelectField<T> extends StatefulWidget {
     this.decoration,
     this.leading,
     this.trailing,
-    this.dropdownTitle,
     this.indicator = false,
     this.disabled = false,
     this.loading = false,
@@ -59,7 +58,9 @@ class MultipleSelectField<T> extends StatefulWidget {
     this.dropdownMinChildSize = .2,
     this.dropdownChildAspectRatio = 20 / 4.8,
     this.dropdownScrollable = true,
-    this.dropdownTopWidget,
+    this.dropdownTitle,
+    this.dropdownTitleText,
+    this.dropdownTitleStyle,
     this.dropdownBottomWidget,
     this.focusNode,
     this.labelText,
@@ -67,6 +68,9 @@ class MultipleSelectField<T> extends StatefulWidget {
     this.floatingLabelStyle,
     this.floatingLabelBehavior = FloatingLabelBehavior.auto,
     this.hideBottomNavigationBarOnFocus = false,
+    this.dropdownSearchFunction,
+    this.dropdownSearchLabelText,
+    this.dropdownSearchHintText,
   });
   final String? restorationId;
   final void Function(List<T>? value)? onSaved;
@@ -83,7 +87,6 @@ class MultipleSelectField<T> extends StatefulWidget {
   final BoxDecoration? decoration;
   final Widget? leading;
   final Widget? trailing;
-  final String? dropdownTitle;
   final bool indicator;
   final bool loading;
   final bool disabled;
@@ -108,16 +111,22 @@ class MultipleSelectField<T> extends StatefulWidget {
   final double dropdownInitialChildSize;
   final double dropdownMaxChildSize;
   final double dropdownMinChildSize;
+  final Widget? dropdownTitle;
+  final String? dropdownTitleText;
+  final TextStyle? dropdownTitleStyle;
+  final Widget? dropdownBottomWidget;
   final double dropdownChildAspectRatio;
   final bool dropdownScrollable;
-  final Widget? dropdownTopWidget;
-  final Widget? dropdownBottomWidget;
   final CustomFocusNode? focusNode;
   final String? labelText;
   final TextStyle? labelStyle;
   final TextStyle? floatingLabelStyle;
   final FloatingLabelBehavior floatingLabelBehavior;
   final bool hideBottomNavigationBarOnFocus;
+  final bool Function(int index, DropdownMenuItem<T>, String)?
+      dropdownSearchFunction;
+  final String? dropdownSearchLabelText;
+  final String? dropdownSearchHintText;
 
   @override
   State<MultipleSelectField<T>> createState() => _MultiSelectFieldState<T>();
@@ -178,16 +187,20 @@ class _MultiSelectFieldState<T> extends State<MultipleSelectField<T>>
       items: widget.items,
       scrollable: widget.dropdownScrollable,
       initialItems: selectedItems(),
-      labelText: widget.dropdownTitle,
       maxLenght: widget.maxLenght,
+      title: widget.dropdownTitle,
+      titleText: widget.dropdownTitleText,
+      titleStyle: widget.dropdownTitleStyle,
       emptyDataText: widget.emptyDataMessage,
       itemforegroundColor: widget.itemforegroundColor,
       minChildSize: widget.dropdownMinChildSize,
       initialChildSize: widget.dropdownInitialChildSize,
       maxChildSize: widget.dropdownMaxChildSize,
       childAspectRatio: widget.dropdownChildAspectRatio,
-      topWidget: widget.dropdownTopWidget,
       bottomWidget: widget.dropdownBottomWidget,
+      searchFunction: widget.dropdownSearchFunction,
+      searchLabelText: widget.dropdownSearchLabelText,
+      searchHintText: widget.dropdownSearchHintText,
       draggableFrameBgColor: Colors.transparent,
       draggableFrameColor: ThemeApp.colors(context).label,
     );
@@ -286,7 +299,6 @@ class _MultiSelectFieldState<T> extends State<MultipleSelectField<T>>
                         Gap(widget.gap).row,
                       ],
                       _ContentWidget(
-                        height: height,
                         items: widget.items,
                         labelAnimationController: labelAnimationController,
                         bgColor: bgColor,
@@ -305,8 +317,8 @@ class _MultiSelectFieldState<T> extends State<MultipleSelectField<T>>
                       if (!widget.hideOpenIcon) ...[
                         Gap(widget.gap).row,
                         isFocused
-                            ? const Icon(Icons.keyboard_arrow_up_rounded)
-                            : const Icon(Icons.keyboard_arrow_down_rounded)
+                            ? const Icon(Icons.arrow_drop_up_rounded)
+                            : const Icon(Icons.arrow_drop_down_rounded)
                       ],
                       if (widget.trailing != null) widget.trailing!
                     ]),
@@ -337,7 +349,6 @@ class _MultiSelectFieldState<T> extends State<MultipleSelectField<T>>
 
 class _ContentWidget<T> extends StatelessWidget {
   const _ContentWidget({
-    required this.height,
     this.loading = false,
     this.loaderHeight = 20,
     required this.items,
@@ -353,7 +364,6 @@ class _ContentWidget<T> extends StatelessWidget {
     required this.indicator,
     required this.selectedItems,
   });
-  final double height;
   final bool loading;
   final double loaderHeight;
   final List<DropdownMenuItem<T>> items;
@@ -371,7 +381,7 @@ class _ContentWidget<T> extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final colors = ThemeApp.colors(context);
+    final colors = ThemeApp.colors(context), theme = Theme.of(context);
 
     final hs = hintStyle ??
             TextStyle(
@@ -422,11 +432,11 @@ class _ContentWidget<T> extends StatelessWidget {
                                   physics: const BouncingScrollPhysics(),
                                   itemCount: itemsFiltered.length,
                                   separatorBuilder: (context, index) =>
-                                      const VerticalDivider(
-                                    thickness: 1,
+                                      VerticalDivider(
                                     indent: Vars.gapNormal,
                                     endIndent: Vars.gapNormal,
                                     width: Vars.gapXLarge,
+                                    color: theme.colorScheme.outline,
                                   ),
                                   itemBuilder: (context, index) =>
                                       Center(child: itemsFiltered[index].child),
@@ -443,9 +453,13 @@ class _ContentWidget<T> extends StatelessWidget {
                                     begin: 1,
                                     end: .78,
                                   ).animate(labelAnimationController),
-                                  floatingAnimation = Tween<double>(
+                                  animationY = Tween<double>(
                                     begin: 0,
-                                    end: height / 2 * scaleAnimation.value + 2,
+                                    end: constraints.maxHeight - 2,
+                                  ).animate(labelAnimationController),
+                                  animationX = Tween<double>(
+                                    begin: 0,
+                                    end: -constraints.maxWidth * .11,
                                   ).animate(labelAnimationController);
 
                               final isFloating =
@@ -453,8 +467,8 @@ class _ContentWidget<T> extends StatelessWidget {
                                       labelAnimationController.isAnimating;
 
                               return Positioned(
-                                  top: -floatingAnimation.value,
-                                  left: -constraints.maxWidth * .11,
+                                  top: -animationY.value,
+                                  left: animationX.value,
                                   width:
                                       isFloating ? null : constraints.maxWidth,
                                   child: Transform.scale(
@@ -463,9 +477,7 @@ class _ContentWidget<T> extends StatelessWidget {
                                         alignment: Alignment.centerLeft,
                                         color: isFloating ? null : bgColor,
                                         width: constraints.maxWidth,
-                                        height: isFloating
-                                            ? null
-                                            : constraints.maxHeight,
+                                        height: constraints.maxHeight,
                                         child: Text(
                                           labelText!,
                                           overflow: TextOverflow.ellipsis,
