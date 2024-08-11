@@ -57,9 +57,10 @@ class MultipleSelectField<T> extends StatefulWidget {
     this.dropdownInitialChildSize = .45,
     this.dropdownMaxChildSize = .45,
     this.dropdownMinChildSize = .2,
-    this.dropdownTopWidget,
     this.dropdownChildAspectRatio = 20 / 4.8,
     this.dropdownScrollable = true,
+    this.dropdownTopWidget,
+    this.dropdownBottomWidget,
     this.focusNode,
     this.labelText,
     this.labelStyle,
@@ -107,9 +108,10 @@ class MultipleSelectField<T> extends StatefulWidget {
   final double dropdownInitialChildSize;
   final double dropdownMaxChildSize;
   final double dropdownMinChildSize;
-  final Widget? dropdownTopWidget;
   final double dropdownChildAspectRatio;
   final bool dropdownScrollable;
+  final Widget? dropdownTopWidget;
+  final Widget? dropdownBottomWidget;
   final CustomFocusNode? focusNode;
   final String? labelText;
   final TextStyle? labelStyle;
@@ -180,11 +182,12 @@ class _MultiSelectFieldState<T> extends State<MultipleSelectField<T>>
       maxLenght: widget.maxLenght,
       emptyDataText: widget.emptyDataMessage,
       itemforegroundColor: widget.itemforegroundColor,
-      topWidget: widget.dropdownTopWidget,
       minChildSize: widget.dropdownMinChildSize,
       initialChildSize: widget.dropdownInitialChildSize,
       maxChildSize: widget.dropdownMaxChildSize,
       childAspectRatio: widget.dropdownChildAspectRatio,
+      topWidget: widget.dropdownTopWidget,
+      bottomWidget: widget.dropdownBottomWidget,
       draggableFrameBgColor: Colors.transparent,
       draggableFrameColor: ThemeApp.colors(context).label,
     );

@@ -51,6 +51,8 @@ class BottomSelectField<T> extends StatefulWidget {
     this.dropdownMaxChildSize = .45,
     this.dropdownMinChildSize = .2,
     this.dropdownScrollable = true,
+    this.dropdownTopWidget,
+    this.dropdownBottomWidget,
     this.focusNode,
     this.labelText,
     this.labelStyle,
@@ -95,6 +97,8 @@ class BottomSelectField<T> extends StatefulWidget {
   final double dropdownMaxChildSize;
   final double dropdownMinChildSize;
   final bool dropdownScrollable;
+  final Widget? dropdownTopWidget;
+  final Widget? dropdownBottomWidget;
   final CustomFocusNode? focusNode;
   final String? labelText;
   final TextStyle? labelStyle;
@@ -153,6 +157,8 @@ class _BottomSelectFieldState<T> extends State<BottomSelectField<T>>
       maxChildSize: widget.dropdownMaxChildSize,
       minChildSize: widget.dropdownMinChildSize,
       scrollable: widget.dropdownScrollable,
+      topWidget: widget.dropdownTopWidget,
+      bottomWidget: widget.dropdownBottomWidget,
       draggableFrameBgColor: Colors.transparent,
       draggableFrameColor: ThemeApp.colors(context).label,
     );
