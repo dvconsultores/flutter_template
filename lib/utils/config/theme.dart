@@ -72,12 +72,13 @@ class ThemeApp {
           text: Color(0xFF4E444B),
           label: Color(0xFF777680),
           title: Color(0xFF4E444B),
-          divider: Color(0xFFE3E1EC),
           accent: Colors.red,
           success: Colors.green,
           warning: Color(0xFFFFDD00),
         ),
       ],
+      // dividerTheme
+      dividerTheme: const DividerThemeData(color: Color(0xFFE3E1EC)),
       // appBarTheme
       appBarTheme: const AppBarTheme(
         backgroundColor: Color(0xfffafafa),
@@ -227,7 +228,6 @@ class ThemeApp {
       text: themeData.extension<ThemeDataColorExtension>()!.text!,
       label: themeData.extension<ThemeDataColorExtension>()!.label!,
       title: themeData.extension<ThemeDataColorExtension>()!.title!,
-      divider: themeData.extension<ThemeDataColorExtension>()!.divider!,
       accent: themeData.extension<ThemeDataColorExtension>()!.accent!,
       success: themeData.extension<ThemeDataColorExtension>()!.success!,
       warning: themeData.extension<ThemeDataColorExtension>()!.warning!,
@@ -257,7 +257,6 @@ class ColorsApp {
     required this.text,
     required this.label,
     required this.title,
-    required this.divider,
     required this.accent,
     required this.success,
     required this.warning,
@@ -272,7 +271,6 @@ class ColorsApp {
   final Color text;
   final Color label;
   final Color title;
-  final Color divider;
   final Color accent;
   final Color success;
   final Color warning;
@@ -285,7 +283,6 @@ class ThemeDataColorExtension extends ThemeExtension<ThemeDataColorExtension> {
     this.text,
     this.label,
     this.title,
-    this.divider,
     this.accent,
     this.success,
     this.warning,
@@ -293,7 +290,6 @@ class ThemeDataColorExtension extends ThemeExtension<ThemeDataColorExtension> {
   final Color? text;
   final Color? label;
   final Color? title;
-  final Color? divider;
   final Color? accent;
   final Color? success;
   final Color? warning;
@@ -303,7 +299,6 @@ class ThemeDataColorExtension extends ThemeExtension<ThemeDataColorExtension> {
     Color? text,
     Color? label,
     Color? title,
-    Color? divider,
     Color? accent,
     Color? success,
     Color? warning,
@@ -312,7 +307,6 @@ class ThemeDataColorExtension extends ThemeExtension<ThemeDataColorExtension> {
       text: text ?? this.text,
       label: label ?? this.label,
       title: title ?? this.title,
-      divider: divider ?? this.divider,
       accent: accent ?? this.accent,
       success: success ?? this.success,
       warning: warning ?? this.warning,
@@ -327,7 +321,6 @@ class ThemeDataColorExtension extends ThemeExtension<ThemeDataColorExtension> {
       text: Color.lerp(text, other.text, t),
       label: Color.lerp(label, other.label, t),
       title: Color.lerp(title, other.title, t),
-      divider: Color.lerp(divider, other.divider, t),
       accent: Color.lerp(accent, other.accent, t),
       success: Color.lerp(success, other.success, t),
       warning: Color.lerp(warning, other.warning, t),
@@ -336,7 +329,7 @@ class ThemeDataColorExtension extends ThemeExtension<ThemeDataColorExtension> {
 
   @override
   String toString() =>
-      'ThemeDataColorExtension(text: $text, label: $label, title: $title, divider: $divider, accent: $accent, success: $success, warning: $warning)';
+      'ThemeDataColorExtension(text: $text, label: $label, title: $title, accent: $accent, success: $success, warning: $warning)';
 }
 
 // ? Theme data style extension
