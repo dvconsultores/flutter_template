@@ -65,7 +65,6 @@ class TimePickerField extends InputField {
     Color? barrierColor,
     bool barrierDismissible = true,
     String? barrierLabel,
-    Widget Function(BuildContext context, Widget? child)? pickerBuilder,
     String? cancelText,
     String? confirmText,
     String? errorFormatText,
@@ -84,12 +83,25 @@ class TimePickerField extends InputField {
     TextDirection? textDirection,
     bool useRootNavigator = true,
     VoidCallback? onTapClear,
+    Color? pickerBackgroundColor,
+    Color? pickerDialHandColor,
+    Color? pickerDialTextColor,
+    Color? pickerDayPeriodColor,
+    Color? pickerHourMinuteColor,
+    Color? pickerDayPeriodTextColor,
+    Color? pickerEntryModeIconColor,
+    Color? pickerDialBackgroundColor,
+    Color? pickerHourMinuteTextColor,
   }) : super(
           readOnly: true,
           suffixIcon: Row(
               mainAxisSize: MainAxisSize.min,
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
+                const SizedBox(
+                  height: Vars.buttonHeight / 2,
+                  child: VerticalDivider(thickness: 1),
+                ),
                 if (onTapClear != null && controller!.text.isNotEmpty)
                   SizedBox(
                       height: 30,
@@ -101,7 +113,7 @@ class TimePickerField extends InputField {
                         splashRadius: 30,
                         icon: const Icon(Icons.close),
                       )),
-                const Icon(Icons.timer_outlined),
+                const Icon(Icons.timer_outlined, size: 24),
                 if (suffixIcon != null) suffixIcon,
                 Gap(contentPadding?.right ?? Vars.gapMedium).row,
               ]),
@@ -110,12 +122,31 @@ class TimePickerField extends InputField {
 
             final time = await showTimePicker(
               context: ContextUtility.context!,
+              builder: (context, child) {
+                final theme = Theme.of(context);
+
+                return Theme(
+                  data: theme.copyWith(
+                    timePickerTheme: theme.timePickerTheme.copyWith(
+                      backgroundColor: pickerBackgroundColor,
+                      dialHandColor: pickerDialHandColor,
+                      dialTextColor: pickerDialTextColor,
+                      dayPeriodColor: pickerDayPeriodColor,
+                      hourMinuteColor: pickerHourMinuteColor,
+                      dayPeriodTextColor: pickerDayPeriodTextColor,
+                      entryModeIconColor: pickerEntryModeIconColor,
+                      dialBackgroundColor: pickerDialBackgroundColor,
+                      hourMinuteTextColor: pickerHourMinuteTextColor,
+                    ),
+                  ),
+                  child: child!,
+                );
+              },
               initialTime: initialTime,
               anchorPoint: anchorPoint,
               barrierColor: barrierColor,
               barrierDismissible: barrierDismissible,
               barrierLabel: barrierLabel,
-              builder: pickerBuilder,
               cancelText: cancelText,
               confirmText: confirmText,
               errorInvalidText: errorInvalidText,
@@ -194,7 +225,6 @@ class TimePickerField extends InputField {
     Color? barrierColor,
     bool barrierDismissible = true,
     String? barrierLabel,
-    Widget Function(BuildContext context, Widget? child)? pickerBuilder,
     String? cancelText,
     String? confirmText,
     String? errorFormatText,
@@ -214,6 +244,15 @@ class TimePickerField extends InputField {
     TextDirection? textDirection,
     bool useRootNavigator = true,
     VoidCallback? onTapClear,
+    Color? pickerBackgroundColor,
+    Color? pickerDialHandColor,
+    Color? pickerDialTextColor,
+    Color? pickerDayPeriodColor,
+    Color? pickerHourMinuteColor,
+    Color? pickerDayPeriodTextColor,
+    Color? pickerEntryModeIconColor,
+    Color? pickerDialBackgroundColor,
+    Color? pickerHourMinuteTextColor,
   }) {
     final expanded = maxLines == null;
 
@@ -277,7 +316,6 @@ class TimePickerField extends InputField {
         barrierColor: barrierColor,
         barrierDismissible: barrierDismissible,
         barrierLabel: barrierLabel,
-        pickerBuilder: pickerBuilder,
         cancelText: cancelText,
         confirmText: confirmText,
         errorFormatText: errorFormatText,
@@ -295,6 +333,15 @@ class TimePickerField extends InputField {
         textDirection: textDirection,
         useRootNavigator: useRootNavigator,
         onTapClear: onTapClear,
+        pickerBackgroundColor: pickerBackgroundColor,
+        pickerDialHandColor: pickerDialHandColor,
+        pickerDialTextColor: pickerDialTextColor,
+        pickerDayPeriodColor: pickerDayPeriodColor,
+        pickerHourMinuteColor: pickerHourMinuteColor,
+        pickerDayPeriodTextColor: pickerDayPeriodTextColor,
+        pickerEntryModeIconColor: pickerEntryModeIconColor,
+        pickerDialBackgroundColor: pickerDialBackgroundColor,
+        pickerHourMinuteTextColor: pickerHourMinuteTextColor,
       ),
     );
   }

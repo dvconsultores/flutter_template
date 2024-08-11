@@ -67,7 +67,6 @@ class DatePickerField extends InputField {
     Color? barrierColor,
     bool barrierDismissible = true,
     String? barrierLabel,
-    Widget Function(BuildContext context, Widget? child)? pickerBuilder,
     String? cancelText,
     String? confirmText,
     DateTime? currentDate,
@@ -90,12 +89,38 @@ class DatePickerField extends InputField {
     TextDirection? textDirection,
     bool useRootNavigator = true,
     VoidCallback? onTapClear,
+    Color? pickerHeaderBackgroundColor,
+    Color? pickerHeaderForegroundColor,
+    MaterialStateProperty<Color?>? pickerDayForegroundColor,
+    Color? pickerBackgroundColor,
+    MaterialStateProperty<Color?>? pickerTodayBackgroundColor,
+    Color? pickerShadowColor,
+    Color? pickerDividerColor,
+    MaterialStateProperty<Color?>? pickerDayOverlayColor,
+    Color? pickerSurfaceTintColor,
+    MaterialStateProperty<Color?>? pickerYearOverlayColor,
+    MaterialStateProperty<Color?>? pickerDayBackgroundColor,
+    MaterialStateProperty<Color?>? pickerYearBackgroundColor,
+    MaterialStateProperty<Color?>? pickerYearForegroundColor,
+    MaterialStateProperty<Color?>? pickerTodayForegroundColor,
+    Color? pickerRangePickerShadowColor,
+    Color? pickerRangePickerBackgroundColor,
+    MaterialStateProperty<Color?>? pickerRangeSelectionOverlayColor,
+    Color? pickerRangePickerSurfaceTintColor,
+    Color? pickerRangeSelectionBackgroundColor,
+    Color? pickerRangePickerHeaderBackgroundColor,
+    Color? pickerRangePickerHeaderForegroundColor,
+    TextStyle? pickerWeekdayStyle,
   }) : super(
           readOnly: true,
           suffixIcon: Row(
               mainAxisSize: MainAxisSize.min,
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
+                const SizedBox(
+                  height: Vars.buttonHeight / 2,
+                  child: VerticalDivider(thickness: 1),
+                ),
                 if (onTapClear != null && controller!.text.isNotEmpty)
                   SizedBox(
                       height: 30,
@@ -107,7 +132,7 @@ class DatePickerField extends InputField {
                         splashRadius: 30,
                         icon: const Icon(Icons.close),
                       )),
-                const Icon(Icons.calendar_today),
+                const Icon(Icons.calendar_month_outlined, size: 24),
                 if (suffixIcon != null) suffixIcon,
                 Gap(contentPadding?.right ?? Vars.gapMedium).row,
               ]),
@@ -116,13 +141,51 @@ class DatePickerField extends InputField {
 
             final dateTime = await showDatePicker(
               context: ContextUtility.context!,
+              builder: (context, child) {
+                final theme = Theme.of(context);
+
+                return Theme(
+                  data: theme.copyWith(
+                    datePickerTheme: theme.datePickerTheme.copyWith(
+                      headerBackgroundColor: pickerHeaderBackgroundColor,
+                      headerForegroundColor: pickerHeaderForegroundColor,
+                      dayForegroundColor: pickerDayForegroundColor,
+                      backgroundColor: pickerBackgroundColor,
+                      todayBackgroundColor: pickerTodayBackgroundColor,
+                      shadowColor: pickerShadowColor,
+                      dividerColor: pickerDividerColor,
+                      dayOverlayColor: pickerDayOverlayColor,
+                      surfaceTintColor: pickerSurfaceTintColor,
+                      yearOverlayColor: pickerYearOverlayColor,
+                      dayBackgroundColor: pickerDayBackgroundColor,
+                      yearBackgroundColor: pickerYearBackgroundColor,
+                      yearForegroundColor: pickerYearForegroundColor,
+                      todayForegroundColor: pickerTodayForegroundColor,
+                      rangePickerShadowColor: pickerRangePickerShadowColor,
+                      rangePickerBackgroundColor:
+                          pickerRangePickerBackgroundColor,
+                      rangeSelectionOverlayColor:
+                          pickerRangeSelectionOverlayColor,
+                      rangePickerSurfaceTintColor:
+                          pickerRangePickerSurfaceTintColor,
+                      rangeSelectionBackgroundColor:
+                          pickerRangeSelectionBackgroundColor,
+                      rangePickerHeaderBackgroundColor:
+                          pickerRangePickerHeaderBackgroundColor,
+                      rangePickerHeaderForegroundColor:
+                          pickerRangePickerHeaderForegroundColor,
+                      weekdayStyle: pickerWeekdayStyle,
+                    ),
+                  ),
+                  child: child!,
+                );
+              },
               firstDate: firstDate,
               lastDate: lastDate,
               anchorPoint: anchorPoint,
               barrierColor: barrierColor,
               barrierDismissible: barrierDismissible,
               barrierLabel: barrierLabel,
-              builder: pickerBuilder,
               cancelText: cancelText,
               confirmText: confirmText,
               currentDate: currentDate,
@@ -215,7 +278,6 @@ class DatePickerField extends InputField {
     Color? barrierColor,
     bool barrierDismissible = true,
     String? barrierLabel,
-    Widget Function(BuildContext context, Widget? child)? pickerBuilder,
     String? cancelText,
     String? confirmText,
     DateTime? currentDate,
@@ -238,6 +300,28 @@ class DatePickerField extends InputField {
     TextDirection? textDirection,
     bool useRootNavigator = true,
     VoidCallback? onTapClear,
+    Color? pickerHeaderBackgroundColor,
+    Color? pickerHeaderForegroundColor,
+    MaterialStateProperty<Color?>? pickerDayForegroundColor,
+    Color? pickerBackgroundColor,
+    MaterialStateProperty<Color?>? pickerTodayBackgroundColor,
+    Color? pickerShadowColor,
+    Color? pickerDividerColor,
+    MaterialStateProperty<Color?>? pickerDayOverlayColor,
+    Color? pickerSurfaceTintColor,
+    MaterialStateProperty<Color?>? pickerYearOverlayColor,
+    MaterialStateProperty<Color?>? pickerDayBackgroundColor,
+    MaterialStateProperty<Color?>? pickerYearBackgroundColor,
+    MaterialStateProperty<Color?>? pickerYearForegroundColor,
+    MaterialStateProperty<Color?>? pickerTodayForegroundColor,
+    Color? pickerRangePickerShadowColor,
+    Color? pickerRangePickerBackgroundColor,
+    MaterialStateProperty<Color?>? pickerRangeSelectionOverlayColor,
+    Color? pickerRangePickerSurfaceTintColor,
+    Color? pickerRangeSelectionBackgroundColor,
+    Color? pickerRangePickerHeaderBackgroundColor,
+    Color? pickerRangePickerHeaderForegroundColor,
+    TextStyle? pickerWeekdayStyle,
   }) {
     final expanded = maxLines == null;
 
@@ -302,7 +386,6 @@ class DatePickerField extends InputField {
         barrierColor: barrierColor,
         barrierDismissible: barrierDismissible,
         barrierLabel: barrierLabel,
-        pickerBuilder: pickerBuilder,
         cancelText: cancelText,
         confirmText: confirmText,
         currentDate: currentDate,
@@ -324,6 +407,31 @@ class DatePickerField extends InputField {
         textDirection: textDirection,
         useRootNavigator: useRootNavigator,
         onTapClear: onTapClear,
+        pickerHeaderBackgroundColor: pickerHeaderBackgroundColor,
+        pickerHeaderForegroundColor: pickerHeaderForegroundColor,
+        pickerDayForegroundColor: pickerDayForegroundColor,
+        pickerBackgroundColor: pickerBackgroundColor,
+        pickerTodayBackgroundColor: pickerTodayBackgroundColor,
+        pickerShadowColor: pickerShadowColor,
+        pickerDividerColor: pickerDividerColor,
+        pickerDayOverlayColor: pickerDayOverlayColor,
+        pickerSurfaceTintColor: pickerSurfaceTintColor,
+        pickerYearOverlayColor: pickerYearOverlayColor,
+        pickerDayBackgroundColor: pickerDayBackgroundColor,
+        pickerYearBackgroundColor: pickerYearBackgroundColor,
+        pickerYearForegroundColor: pickerYearForegroundColor,
+        pickerTodayForegroundColor: pickerTodayForegroundColor,
+        pickerRangePickerShadowColor: pickerRangePickerShadowColor,
+        pickerRangePickerBackgroundColor: pickerRangePickerBackgroundColor,
+        pickerRangeSelectionOverlayColor: pickerRangeSelectionOverlayColor,
+        pickerRangePickerSurfaceTintColor: pickerRangePickerSurfaceTintColor,
+        pickerRangeSelectionBackgroundColor:
+            pickerRangeSelectionBackgroundColor,
+        pickerRangePickerHeaderBackgroundColor:
+            pickerRangePickerHeaderBackgroundColor,
+        pickerRangePickerHeaderForegroundColor:
+            pickerRangePickerHeaderForegroundColor,
+        pickerWeekdayStyle: pickerWeekdayStyle,
       ),
     );
   }
