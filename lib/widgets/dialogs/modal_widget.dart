@@ -24,6 +24,7 @@ class ModalWidget extends StatelessWidget {
         const EdgeInsets.symmetric(horizontal: 40.0, vertical: 24.0),
     this.actionButtonsHeight = 40,
     this.shrinkWrap = false,
+    this.bgColor,
   });
   final String textTitle;
   final Widget? body;
@@ -41,6 +42,7 @@ class ModalWidget extends StatelessWidget {
   final EdgeInsets insetPadding;
   final double actionButtonsHeight;
   final bool shrinkWrap;
+  final Color? bgColor;
 
   static Future<T?> showModal<T>(
     BuildContext context, {
@@ -61,6 +63,7 @@ class ModalWidget extends StatelessWidget {
         const EdgeInsets.symmetric(horizontal: 40.0, vertical: 24.0),
     double actionButtonsHeight = 40,
     bool shrinkWrap = false,
+    Color? bgColor,
   }) async =>
       await showDialog<T>(
         context: context,
@@ -81,6 +84,7 @@ class ModalWidget extends StatelessWidget {
           insetPadding: insetPadding,
           actionButtonsHeight: actionButtonsHeight,
           shrinkWrap: shrinkWrap,
+          bgColor: bgColor,
         ),
       );
 
@@ -89,6 +93,7 @@ class ModalWidget extends StatelessWidget {
     final bodyWidget = body ?? const SizedBox.shrink();
 
     return AlertDialog(
+        backgroundColor: bgColor,
         actionsAlignment: MainAxisAlignment.center,
         alignment: Alignment.center,
         shape: const RoundedRectangleBorder(

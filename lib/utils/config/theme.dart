@@ -87,6 +87,10 @@ class ThemeApp {
       bottomNavigationBarTheme: const BottomNavigationBarThemeData(
         backgroundColor: Color.fromARGB(235, 224, 221, 221),
       ),
+      // dialogTheme
+      dialogTheme: const DialogTheme(
+        backgroundColor: Color(0xFFF9F9F9),
+      ),
       // bottomSheetTheme
       bottomSheetTheme: const BottomSheetThemeData(
         backgroundColor: Colors.transparent,

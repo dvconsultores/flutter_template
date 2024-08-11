@@ -69,7 +69,7 @@ class BottomSheetCard extends StatelessWidget {
       isDismissible: isDismissible,
       isScrollControlled: isScrollControlled,
       backgroundColor:
-          backgroundColor ?? Theme.of(context).colorScheme.background,
+          backgroundColor ?? Theme.of(context).dialogTheme.backgroundColor,
       shape: shape ??
           const RoundedRectangleBorder(
             borderRadius: BorderRadius.only(
@@ -236,7 +236,7 @@ class BottomSheetList<T> extends StatelessWidget {
       isDismissible: isDismissible,
       isScrollControlled: isScrollControlled,
       backgroundColor:
-          backgroundColor ?? Theme.of(context).colorScheme.background,
+          backgroundColor ?? Theme.of(context).dialogTheme.backgroundColor,
       shape: shape ??
           const RoundedRectangleBorder(
             borderRadius: BorderRadius.only(
@@ -472,7 +472,7 @@ class BottomSheetListMultiple<T> extends StatefulWidget {
       isDismissible: isDismissible,
       isScrollControlled: isScrollControlled,
       backgroundColor:
-          backgroundColor ?? Theme.of(context).colorScheme.background,
+          backgroundColor ?? Theme.of(context).dialogTheme.backgroundColor,
       shape: shape ??
           const RoundedRectangleBorder(
             borderRadius: BorderRadius.only(

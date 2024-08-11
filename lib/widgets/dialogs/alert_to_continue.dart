@@ -10,11 +10,13 @@ class AlertToContinue extends StatelessWidget {
     this.content,
     this.acceptText,
     this.cancelText,
+    this.bgColor,
   });
   final String? title;
   final String? content;
   final String? acceptText;
   final String? cancelText;
+  final Color? bgColor;
 
   static Future<T?> showModal<T>(
     BuildContext context, {
@@ -22,6 +24,7 @@ class AlertToContinue extends StatelessWidget {
     String? content,
     String? acceptText,
     String? cancelText,
+    Color? bgColor,
   }) async =>
       await showDialog<T>(
         context: context,
@@ -30,13 +33,14 @@ class AlertToContinue extends StatelessWidget {
           content: content,
           acceptText: acceptText,
           cancelText: cancelText,
+          bgColor: bgColor,
         ),
       );
 
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-        backgroundColor: Theme.of(context).bottomSheetTheme.backgroundColor,
+        backgroundColor: bgColor,
         shape: const RoundedRectangleBorder(
             borderRadius: BorderRadius.all(
           Radius.circular(Vars.radius30),

@@ -22,6 +22,7 @@ class SystemAlertWidget extends StatefulWidget {
     this.onPressedButton2,
     this.dismissible = false,
     this.onOpen,
+    this.bgColor,
   });
   final String title;
   final String? content;
@@ -31,6 +32,7 @@ class SystemAlertWidget extends StatefulWidget {
   final void Function()? onPressedButton2;
   final bool dismissible;
   final VoidCallback? onOpen;
+  final Color? bgColor;
 
   static Future<T?> showModal<T>(
     BuildContext context, {
@@ -42,6 +44,7 @@ class SystemAlertWidget extends StatefulWidget {
     void Function()? onPressedButton2,
     bool dismissible = true,
     VoidCallback? onOpen,
+    Color? bgColor,
   }) async =>
       await showDialog<T>(
         context: context,
@@ -54,6 +57,7 @@ class SystemAlertWidget extends StatefulWidget {
           onPressedButton2: onPressedButton2,
           dismissible: dismissible,
           onOpen: onOpen,
+          bgColor: bgColor,
         ),
       );
 
@@ -91,6 +95,7 @@ class _SystemAlertWidgetState extends State<SystemAlertWidget> {
       child: BackdropFilter(
         filter: ImageFilter.blur(sigmaX: 2, sigmaY: 2),
         child: AlertDialog(
+            backgroundColor: widget.bgColor,
             shape: RoundedRectangleBorder(
               borderRadius: const BorderRadius.all(
                 Radius.circular(Vars.radius30),
