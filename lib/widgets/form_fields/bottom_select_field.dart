@@ -7,7 +7,6 @@ import 'package:flutter_detextre4/utils/general/variables.dart';
 import 'package:flutter_detextre4/widgets/defaults/error_text.dart';
 import 'package:flutter_detextre4/widgets/sheets/bottom_sheet_card.dart';
 import 'package:flutter_gap/flutter_gap.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class BottomSelectField<T> extends StatefulWidget {
   const BottomSelectField({
@@ -53,11 +52,11 @@ class BottomSelectField<T> extends StatefulWidget {
     this.dropdownMinChildSize = .2,
     this.dropdownScrollable = true,
     this.focusNode,
-    this.label,
     this.labelText,
     this.labelStyle,
     this.floatingLabelStyle,
-    this.floatingLabelBehavior = FloatingLabelBehavior.always,
+    this.floatingLabelBehavior = FloatingLabelBehavior.auto,
+    this.hideBottomNavigationBarOnFocus = false,
   });
   final String? restorationId;
   final void Function(T? value)? onSaved;
@@ -89,7 +88,7 @@ class BottomSelectField<T> extends StatefulWidget {
   final Color? bgColor;
   final List<BoxShadow>? boxShadow;
   final double gap;
-  final EdgeInsets padding;
+  final EdgeInsetsGeometry padding;
   final double loaderHeight;
   final bool dense;
   final double dropdownInitialChildSize;
@@ -97,11 +96,11 @@ class BottomSelectField<T> extends StatefulWidget {
   final double dropdownMinChildSize;
   final bool dropdownScrollable;
   final CustomFocusNode? focusNode;
-  final Widget? label;
   final String? labelText;
   final TextStyle? labelStyle;
   final TextStyle? floatingLabelStyle;
   final FloatingLabelBehavior floatingLabelBehavior;
+  final bool hideBottomNavigationBarOnFocus;
 
   @override
   State<BottomSelectField<T>> createState() => _BottomSelectFieldState<T>();
@@ -125,6 +124,12 @@ class _BottomSelectFieldState<T> extends State<BottomSelectField<T>>
 
     formState!.didChange(getController.value);
 
+    if (widget.floatingLabelBehavior == FloatingLabelBehavior.auto) {
+      getController.value != null
+          ? labelAnimationController.forward()
+          : labelAnimationController.reverse();
+    }
+
     if (widget.onChanged != null) widget.onChanged!(formState!.value);
   }
 
@@ -133,12 +138,15 @@ class _BottomSelectFieldState<T> extends State<BottomSelectField<T>>
 
     if (!isFocused) return;
 
-    if (widget.floatingLabelBehavior == FloatingLabelBehavior.auto) {
-      labelAnimationController.forward();
-    }
+    final canAnimateLabel =
+        widget.floatingLabelBehavior == FloatingLabelBehavior.auto &&
+            getController.value == null;
+
+    if (canAnimateLabel) labelAnimationController.forward();
 
     final item = await BottomSheetList.showModal<T>(
       context,
+      hideBottomNavigationBar: widget.hideBottomNavigationBarOnFocus,
       items: widget.items,
       emptyDataText: widget.emptyDataMessage,
       initialChildSize: widget.dropdownInitialChildSize,
@@ -149,9 +157,7 @@ class _BottomSelectFieldState<T> extends State<BottomSelectField<T>>
       draggableFrameColor: ThemeApp.colors(context).label,
     );
 
-    if (widget.floatingLabelBehavior == FloatingLabelBehavior.auto) {
-      labelAnimationController.reverse();
-    }
+    if (canAnimateLabel) labelAnimationController.reverse();
 
     getController.value = item?.value ?? formState!.value;
     focusNode.unfocus();
@@ -195,7 +201,9 @@ class _BottomSelectFieldState<T> extends State<BottomSelectField<T>>
         formState ??= state;
         widget.controller?.value = state.value;
 
-        final bgColor = widget.bgColor ?? theme.colorScheme.background;
+        final bgColor = widget.bgColor ?? theme.colorScheme.background,
+            height = widget.height ??
+                (widget.dense ? Vars.minInputHeight : Vars.maxInputHeight);
 
         return SizedBox(
           width: widget.width,
@@ -209,10 +217,7 @@ class _BottomSelectFieldState<T> extends State<BottomSelectField<T>>
               },
               child: Container(
                   width: widget.width,
-                  height: widget.height ??
-                      (widget.dense
-                          ? Vars.minInputHeight
-                          : Vars.maxInputHeight),
+                  height: height,
                   padding: widget.padding,
                   decoration: widget.decoration ??
                       BoxDecoration(
@@ -236,7 +241,7 @@ class _BottomSelectFieldState<T> extends State<BottomSelectField<T>>
                       Gap(widget.gap).row,
                     ],
                     _ContentWidget(
-                      padding: widget.padding,
+                      height: height,
                       items: widget.items,
                       labelAnimationController: labelAnimationController,
                       bgColor: bgColor,
@@ -246,7 +251,6 @@ class _BottomSelectFieldState<T> extends State<BottomSelectField<T>>
                       loaderHeight: widget.loaderHeight,
                       labelText: widget.labelText,
                       labelStyle: widget.labelStyle,
-                      label: widget.label,
                       floatingLabelStyle: widget.floatingLabelStyle,
                       hintText: widget.hintText,
                       hintStyle: widget.hintStyle,
@@ -255,8 +259,8 @@ class _BottomSelectFieldState<T> extends State<BottomSelectField<T>>
                       Gap(widget.gap).row,
                       widget.trailing ??
                           (isFocused
-                              ? const Icon(Icons.arrow_drop_up_rounded)
-                              : const Icon(Icons.arrow_drop_down_rounded))
+                              ? const Icon(Icons.keyboard_arrow_up_rounded)
+                              : const Icon(Icons.keyboard_arrow_down_rounded))
                     ]
                   ])),
             ),
@@ -278,7 +282,7 @@ class _BottomSelectFieldState<T> extends State<BottomSelectField<T>>
 
 class _ContentWidget<T> extends StatelessWidget {
   const _ContentWidget({
-    required this.padding,
+    required this.height,
     this.loading = false,
     this.loaderHeight = 20,
     required this.items,
@@ -287,13 +291,12 @@ class _ContentWidget<T> extends StatelessWidget {
     this.hintText,
     this.textAlignHint,
     this.hintStyle,
-    this.label,
     this.labelText,
     this.labelStyle,
     this.floatingLabelStyle,
     required this.state,
   });
-  final EdgeInsets padding;
+  final double height;
   final bool loading;
   final double loaderHeight;
   final List<DropdownMenuItem<T>> items;
@@ -302,7 +305,6 @@ class _ContentWidget<T> extends StatelessWidget {
   final String? hintText;
   final TextAlign? textAlignHint;
   final TextStyle? hintStyle;
-  final Widget? label;
   final String? labelText;
   final TextStyle? labelStyle;
   final TextStyle? floatingLabelStyle;
@@ -322,14 +324,16 @@ class _ContentWidget<T> extends StatelessWidget {
             TextStyle(
               color: colors.label,
               backgroundColor: bgColor,
-              fontSize: 15.sp,
             ),
         fls = floatingLabelStyle ?? ls;
 
-    final hintWidget = Text(
-      hintText ?? "",
-      textAlign: textAlignHint,
-      style: hs,
+    final hintWidget = Align(
+      alignment: Alignment.centerLeft,
+      child: Text(
+        hintText ?? "",
+        textAlign: textAlignHint,
+        style: hs,
+      ),
     );
 
     return Expanded(
@@ -337,58 +341,67 @@ class _ContentWidget<T> extends StatelessWidget {
           builder: (context, constraints) => loading
               // loader
               ? LinearProgressIndicator(
-                  borderRadius: const BorderRadius.all(Radius.circular(12)),
+                  borderRadius:
+                      const BorderRadius.all(Radius.circular(Vars.radius10)),
                   color: colors.primary,
                   minHeight: loaderHeight,
                 )
-              : Stack(clipBehavior: Clip.none, children: [
-                  // value
-                  items
-                          .singleWhereOrNull(
-                              (element) => element.value == state.value)
-                          ?.child ??
+              : Stack(
+                  clipBehavior: Clip.none,
+                  fit: StackFit.expand,
+                  alignment: Alignment.centerLeft,
+                  children: [
+                      // value
+                      items
+                              .singleWhereOrNull(
+                                  (element) => element.value == state.value)
+                              ?.child ??
 
-                      // hintText
-                      hintWidget,
+                          // hintText
+                          hintWidget,
 
-                  // labelText
-                  if (label != null || labelText.hasValue)
-                    AnimatedBuilder(
-                        animation: labelAnimationController,
-                        builder: (context, child) {
-                          final floatingAnimation = Tween<double>(
-                                begin: 0,
-                                end: padding.top + 16,
-                              ).animate(labelAnimationController),
-                              floatingAnimationReposition = Tween<double>(
-                                begin: 0,
-                                end: 8,
-                              ).animate(labelAnimationController),
-                              scaleAnimation = Tween<double>(
-                                begin: 1,
-                                end: .78,
-                              ).animate(labelAnimationController);
+                      // labelText
+                      if (labelText.hasValue)
+                        AnimatedBuilder(
+                            animation: labelAnimationController,
+                            builder: (context, child) {
+                              final floatingAnimation = Tween<double>(
+                                    begin: 0,
+                                    end: height / 2 - 3,
+                                  ).animate(labelAnimationController),
+                                  floatingAnimationReposition = Tween<double>(
+                                    begin: 0,
+                                    end: labelText!.length.toDouble() - .5,
+                                  ).animate(labelAnimationController),
+                                  scaleAnimation = Tween<double>(
+                                    begin: 1,
+                                    end: .78,
+                                  ).animate(labelAnimationController);
 
-                          final isFloating =
-                              labelAnimationController.isCompleted ||
-                                  labelAnimationController.isAnimating;
+                              final isFloating =
+                                  labelAnimationController.isCompleted ||
+                                      labelAnimationController.isAnimating;
 
-                          return Positioned(
-                            top: -floatingAnimation.value,
-                            left: -floatingAnimationReposition.value,
-                            width: isFloating ? null : constraints.maxWidth,
-                            child: Transform.scale(
-                              scale: scaleAnimation.value,
-                              child: Container(
-                                color: bgColor,
-                                child: label ??
-                                    Text(labelText!,
-                                        style: isFloating ? fls : ls),
-                              ),
-                            ),
-                          );
-                        })
-                ])),
+                              return Positioned(
+                                  top: -floatingAnimation.value,
+                                  left: -floatingAnimationReposition.value,
+                                  width:
+                                      isFloating ? null : constraints.maxWidth,
+                                  child: Transform.scale(
+                                      scale: scaleAnimation.value,
+                                      child: Container(
+                                        alignment: Alignment.centerLeft,
+                                        color: bgColor,
+                                        height: isFloating
+                                            ? null
+                                            : constraints.maxHeight,
+                                        child: Text(
+                                          labelText!,
+                                          style: isFloating ? fls : ls,
+                                        ),
+                                      )));
+                            })
+                    ])),
     );
   }
 }
