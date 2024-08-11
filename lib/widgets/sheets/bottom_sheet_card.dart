@@ -139,11 +139,14 @@ class BottomSheetCard extends StatelessWidget {
             title!,
           ] else if (titleText != null)
             Padding(
-                padding: p.copyWith(bottom: 0),
+                padding: p.copyWith(bottom: Vars.gapLow),
                 child: Text(
                   titleText!,
                   style: titleStyle ??
-                      const TextStyle(fontWeight: FontWeight.w700),
+                      const TextStyle(
+                        fontWeight: FontWeight.w700,
+                        fontSize: 18,
+                      ),
                 )),
 
           // content
@@ -344,11 +347,14 @@ class _BottomSheetListState<T> extends State<BottomSheetList<T>> {
             widget.title!,
           ] else if (widget.titleText != null)
             Padding(
-                padding: p.copyWith(bottom: 0),
+                padding: p.copyWith(bottom: Vars.gapLow),
                 child: Text(
                   widget.titleText!,
                   style: widget.titleStyle ??
-                      const TextStyle(fontWeight: FontWeight.w700),
+                      const TextStyle(
+                        fontWeight: FontWeight.w700,
+                        fontSize: 18,
+                      ),
                 )),
 
           // search
@@ -697,11 +703,14 @@ class _BottomSheetListMultipleState<T>
             widget.title!,
           ] else if (widget.titleText != null)
             Padding(
-                padding: p.copyWith(bottom: 0),
+                padding: p.copyWith(bottom: Vars.gapLow),
                 child: Text(
                   widget.titleText!,
                   style: widget.titleStyle ??
-                      const TextStyle(fontWeight: FontWeight.w700),
+                      const TextStyle(
+                        fontWeight: FontWeight.w700,
+                        fontSize: 18,
+                      ),
                 )),
 
           // search
