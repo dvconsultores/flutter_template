@@ -320,11 +320,7 @@ class _ContentWidget<T> extends StatelessWidget {
               fontSize: 13,
               fontWeight: FontWeight.w400,
             ),
-        ls = labelStyle ??
-            TextStyle(
-              color: colors.label,
-              backgroundColor: bgColor,
-            ),
+        ls = labelStyle ?? TextStyle(color: colors.label),
         fls = floatingLabelStyle ?? ls;
 
     final hintWidget = Align(
@@ -365,17 +361,13 @@ class _ContentWidget<T> extends StatelessWidget {
                         AnimatedBuilder(
                             animation: labelAnimationController,
                             builder: (context, child) {
-                              final floatingAnimation = Tween<double>(
-                                    begin: 0,
-                                    end: height / 2 - 3,
-                                  ).animate(labelAnimationController),
-                                  floatingAnimationReposition = Tween<double>(
-                                    begin: 0,
-                                    end: labelText!.length.toDouble() - .5,
-                                  ).animate(labelAnimationController),
-                                  scaleAnimation = Tween<double>(
+                              final scaleAnimation = Tween<double>(
                                     begin: 1,
                                     end: .78,
+                                  ).animate(labelAnimationController),
+                                  floatingAnimation = Tween<double>(
+                                    begin: 0,
+                                    end: height / 2 * scaleAnimation.value + 2,
                                   ).animate(labelAnimationController);
 
                               final isFloating =
@@ -384,20 +376,24 @@ class _ContentWidget<T> extends StatelessWidget {
 
                               return Positioned(
                                   top: -floatingAnimation.value,
-                                  left: -floatingAnimationReposition.value,
+                                  left: -constraints.maxWidth * .11,
                                   width:
                                       isFloating ? null : constraints.maxWidth,
                                   child: Transform.scale(
                                       scale: scaleAnimation.value,
                                       child: Container(
                                         alignment: Alignment.centerLeft,
-                                        color: bgColor,
+                                        color: isFloating ? null : bgColor,
+                                        width: constraints.maxWidth,
                                         height: isFloating
                                             ? null
                                             : constraints.maxHeight,
                                         child: Text(
                                           labelText!,
-                                          style: isFloating ? fls : ls,
+                                          overflow: TextOverflow.ellipsis,
+                                          style: (isFloating ? fls : ls)
+                                              .copyWith(
+                                                  backgroundColor: bgColor),
                                         ),
                                       )));
                             })
