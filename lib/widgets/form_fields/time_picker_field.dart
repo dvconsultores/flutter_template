@@ -4,6 +4,7 @@ import 'package:flutter_detextre4/utils/general/context_utility.dart';
 import 'package:flutter_detextre4/utils/general/functions.dart';
 import 'package:flutter_detextre4/utils/general/variables.dart';
 import 'package:flutter_detextre4/widgets/form_fields/input_field.dart';
+import 'package:flutter_gap/flutter_gap.dart';
 
 class TimePickerField extends InputField {
   TimePickerField({
@@ -30,6 +31,7 @@ class TimePickerField extends InputField {
     super.prefixIcon,
     super.prefix,
     Widget? suffixIcon,
+    super.suffix,
     super.maxWidthPrefix,
     super.numeric,
     super.inputFormatters,
@@ -56,13 +58,13 @@ class TimePickerField extends InputField {
     super.counterText,
     super.isCollapsed,
     super.suffixIconConstraints,
+    super.contentPadding,
     bool toLocal = true,
     required TimeOfDay initialTime,
     Offset? anchorPoint,
     Color? barrierColor,
     bool barrierDismissible = true,
     String? barrierLabel,
-    EdgeInsets? contentPadding,
     Widget Function(BuildContext context, Widget? child)? pickerBuilder,
     String? cancelText,
     String? confirmText,
@@ -84,30 +86,23 @@ class TimePickerField extends InputField {
     VoidCallback? onTapClear,
   }) : super(
           readOnly: true,
-          contentPadding: contentPadding ??
-              const EdgeInsets.symmetric(
-                vertical: Vars.gapXLarge,
-                horizontal: Vars.gapMedium,
-              ),
-          suffix: IntrinsicWidth(
-            child: Transform.translate(
-              offset: const Offset(0, 4),
-              child:
-                  Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-                const Icon(Icons.timer_outlined),
-                if (onTapClear != null && controller!.text.isNotEmpty)
-                  IconButton(
-                    onPressed: onTapClear,
-                    padding: const EdgeInsets.all(0),
-                    visualDensity: VisualDensity.compact,
-                    constraints:
-                        const BoxConstraints(maxHeight: 20, maxWidth: 20),
-                    splashRadius: 20,
-                    icon: const Icon(Icons.close),
-                  ),
-                if (suffixIcon != null) suffixIcon,
-              ]),
-            ),
+          suffixIcon: IntrinsicWidth(
+            child: Row(mainAxisAlignment: MainAxisAlignment.end, children: [
+              if (onTapClear != null && controller!.text.isNotEmpty)
+                SizedBox(
+                    height: 30,
+                    width: 30,
+                    child: IconButton(
+                      onPressed: onTapClear,
+                      padding: const EdgeInsets.all(0),
+                      visualDensity: VisualDensity.compact,
+                      splashRadius: 30,
+                      icon: const Icon(Icons.close),
+                    )),
+              const Icon(Icons.timer_outlined),
+              if (suffixIcon != null) suffixIcon,
+              Gap(contentPadding?.right ?? Vars.gapMedium).row,
+            ]),
           ),
           onTap: () async {
             if (onTap != null) onTap();
@@ -217,6 +212,7 @@ class TimePickerField extends InputField {
     Icon? switchToInputEntryModeIcon,
     TextDirection? textDirection,
     bool useRootNavigator = true,
+    VoidCallback? onTapClear,
   }) {
     final expanded = maxLines == null;
 
@@ -297,6 +293,7 @@ class TimePickerField extends InputField {
         switchToInputEntryModeIcon: switchToInputEntryModeIcon,
         textDirection: textDirection,
         useRootNavigator: useRootNavigator,
+        onTapClear: onTapClear,
       ),
     );
   }

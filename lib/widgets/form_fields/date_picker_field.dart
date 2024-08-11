@@ -5,6 +5,7 @@ import 'package:flutter_detextre4/utils/general/context_utility.dart';
 import 'package:flutter_detextre4/utils/general/functions.dart';
 import 'package:flutter_detextre4/utils/general/variables.dart';
 import 'package:flutter_detextre4/widgets/form_fields/input_field.dart';
+import 'package:flutter_gap/flutter_gap.dart';
 
 class DatePickerField extends InputField {
   DatePickerField({
@@ -31,6 +32,7 @@ class DatePickerField extends InputField {
     super.prefixIcon,
     super.prefix,
     Widget? suffixIcon,
+    super.suffix,
     super.maxWidthPrefix,
     super.numeric,
     super.inputFormatters,
@@ -57,12 +59,12 @@ class DatePickerField extends InputField {
     super.counterText,
     super.isCollapsed,
     super.suffixIconConstraints,
+    super.contentPadding,
     bool toLocal = true,
     required DateTime firstDate,
     required DateTime lastDate,
     Offset? anchorPoint,
     Color? barrierColor,
-    EdgeInsets? contentPadding,
     bool barrierDismissible = true,
     String? barrierLabel,
     Widget Function(BuildContext context, Widget? child)? pickerBuilder,
@@ -87,22 +89,26 @@ class DatePickerField extends InputField {
     Icon? switchToInputEntryModeIcon,
     TextDirection? textDirection,
     bool useRootNavigator = true,
+    VoidCallback? onTapClear,
   }) : super(
           readOnly: true,
-          contentPadding: contentPadding ??
-              const EdgeInsets.symmetric(
-                vertical: Vars.gapXLarge,
-                horizontal: Vars.gapMedium,
-              ),
-          suffix: IntrinsicWidth(
-            child: Transform.translate(
-              offset: const Offset(0, 4),
-              child:
-                  Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-                const Icon(Icons.calendar_today),
-                if (suffixIcon != null) suffixIcon,
-              ]),
-            ),
+          suffixIcon: IntrinsicWidth(
+            child: Row(mainAxisAlignment: MainAxisAlignment.end, children: [
+              if (onTapClear != null && controller!.text.isNotEmpty)
+                SizedBox(
+                    height: 30,
+                    width: 30,
+                    child: IconButton(
+                      onPressed: onTapClear,
+                      padding: const EdgeInsets.all(0),
+                      visualDensity: VisualDensity.compact,
+                      splashRadius: 30,
+                      icon: const Icon(Icons.close),
+                    )),
+              const Icon(Icons.calendar_today),
+              if (suffixIcon != null) suffixIcon,
+              Gap(contentPadding?.right ?? Vars.gapMedium).row,
+            ]),
           ),
           onTap: () async {
             if (onTap != null) onTap();
@@ -230,6 +236,7 @@ class DatePickerField extends InputField {
     Icon? switchToInputEntryModeIcon,
     TextDirection? textDirection,
     bool useRootNavigator = true,
+    VoidCallback? onTapClear,
   }) {
     final expanded = maxLines == null;
 
@@ -315,6 +322,7 @@ class DatePickerField extends InputField {
         switchToInputEntryModeIcon: switchToInputEntryModeIcon,
         textDirection: textDirection,
         useRootNavigator: useRootNavigator,
+        onTapClear: onTapClear,
       ),
     );
   }
