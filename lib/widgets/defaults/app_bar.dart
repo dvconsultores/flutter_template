@@ -9,9 +9,9 @@ import 'package:flutter_gap/flutter_gap.dart';
 class CustomAppBar extends AppBar {
   CustomAppBar({
     super.key,
-    this.titleText,
-    this.subTitleText,
-    this.onPop,
+    String? titleText,
+    String? subTitleText,
+    VoidCallback? onPop,
     super.centerTitle = true,
   }) : super(
           systemOverlayStyle: ThemeApp.systemUiOverlayStyle,
@@ -57,8 +57,4 @@ class CustomAppBar extends AppBar {
             ]),
           ),
         );
-
-  final String? titleText;
-  final String? subTitleText;
-  final VoidCallback? onPop;
 }
