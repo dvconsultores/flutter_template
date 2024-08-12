@@ -13,7 +13,6 @@ class MainProvider extends ChangeNotifier {
 
   // ? -------------------------Global variables----------------------------- //
   bool appStarted = false;
-
   get setAppStarted {
     if (appStarted) return;
 
@@ -22,22 +21,21 @@ class MainProvider extends ChangeNotifier {
   }
 
   ProfileModel? profile;
-
+  get clearProfile => profile = null;
   set setProfile(ProfileModel value) {
     profile = value;
     notifyListeners();
   }
 
-  get clearProfile => profile = null;
-  bool stopProcess = false;
-  set setStopProcess(bool value) {
-    stopProcess = value;
+  bool preventModal = false;
+  set setPreventModal(bool value) {
+    preventModal = value;
     notifyListeners();
   }
 
-  bool returnAuthError = false;
-  set setReturnAuthError(bool value) {
-    returnAuthError = value;
+  bool returnDioAuthError = false;
+  set setReturnDioAuthError(bool value) {
+    returnDioAuthError = value;
     notifyListeners();
   }
 

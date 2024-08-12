@@ -341,13 +341,10 @@ class _ContentWidget<T> extends StatelessWidget {
         ls = labelStyle ?? TextStyle(color: colors.label),
         fls = floatingLabelStyle ?? ls;
 
-    final hintWidget = Align(
-      alignment: Alignment.centerLeft,
-      child: Text(
-        hintText ?? "",
-        textAlign: textAlignHint,
-        style: hs,
-      ),
+    final hintWidget = Text(
+      hintText ?? "",
+      textAlign: textAlignHint,
+      style: hs,
     );
 
     return Expanded(
@@ -365,14 +362,17 @@ class _ContentWidget<T> extends StatelessWidget {
                   fit: StackFit.expand,
                   alignment: Alignment.centerLeft,
                   children: [
-                      // value
-                      items
-                              .singleWhereOrNull(
-                                  (element) => element.value == state.value)
-                              ?.child ??
+                      Align(
+                        alignment: Alignment.centerLeft,
+                        child: // value
+                            items
+                                    .singleWhereOrNull((element) =>
+                                        element.value == state.value)
+                                    ?.child ??
 
-                          // hintText
-                          hintWidget,
+                                // hintText
+                                hintWidget,
+                      ),
 
                       // labelText
                       if (labelText.hasValue)

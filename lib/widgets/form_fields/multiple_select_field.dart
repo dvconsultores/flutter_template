@@ -392,13 +392,10 @@ class _ContentWidget<T> extends StatelessWidget {
         ls = labelStyle ?? TextStyle(color: colors.label),
         fls = floatingLabelStyle ?? ls;
 
-    final hintWidget = Align(
-      alignment: Alignment.centerLeft,
-      child: Text(
-        hintText ?? "",
-        textAlign: textAlignHint,
-        style: hs,
-      ),
+    final hintWidget = Text(
+      hintText ?? "",
+      textAlign: textAlignHint,
+      style: hs,
     );
 
     return Expanded(
@@ -416,33 +413,36 @@ class _ContentWidget<T> extends StatelessWidget {
                   fit: StackFit.expand,
                   alignment: Alignment.centerLeft,
                   children: [
-                      state.value.hasNotValue || indicator
-                          // hint text
-                          ? hintWidget
-                          // value
-                          : buildWidget(
-                              () {
-                                final itemsFiltered = selectedItems()
-                                    .expand((item) => items.where(
-                                        (element) => element.value == item))
-                                    .toList();
+                      Align(
+                        alignment: Alignment.centerLeft,
+                        child: state.value.hasNotValue || indicator
+                            // hint text
+                            ? hintWidget
+                            // value
+                            : buildWidget(
+                                () {
+                                  final itemsFiltered = selectedItems()
+                                      .expand((item) => items.where(
+                                          (element) => element.value == item))
+                                      .toList();
 
-                                return ListView.separated(
-                                  scrollDirection: Axis.horizontal,
-                                  physics: const BouncingScrollPhysics(),
-                                  itemCount: itemsFiltered.length,
-                                  separatorBuilder: (context, index) =>
-                                      VerticalDivider(
-                                    indent: Vars.gapNormal,
-                                    endIndent: Vars.gapNormal,
-                                    width: Vars.gapXLarge,
-                                    color: theme.colorScheme.outline,
-                                  ),
-                                  itemBuilder: (context, index) =>
-                                      Center(child: itemsFiltered[index].child),
-                                );
-                              },
-                            ),
+                                  return ListView.separated(
+                                    scrollDirection: Axis.horizontal,
+                                    physics: const BouncingScrollPhysics(),
+                                    itemCount: itemsFiltered.length,
+                                    separatorBuilder: (context, index) =>
+                                        VerticalDivider(
+                                      indent: Vars.gapNormal,
+                                      endIndent: Vars.gapNormal,
+                                      width: Vars.gapXLarge,
+                                      color: theme.colorScheme.outline,
+                                    ),
+                                    itemBuilder: (context, index) => Center(
+                                        child: itemsFiltered[index].child),
+                                  );
+                                },
+                              ),
+                      ),
 
                       // labelText
                       if (labelText.hasValue)

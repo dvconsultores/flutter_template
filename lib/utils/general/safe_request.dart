@@ -46,7 +46,7 @@ class SafeRequest {
         load.close();
         if (!context.mounted) return null;
 
-        final accepts = await ModalWidget.showAlertToContinue(
+        final accepts = await Modal.showAlertToContinue(
           context,
           titleText: title,
           contentText: contentText ?? error.toString(),

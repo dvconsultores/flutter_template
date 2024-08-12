@@ -201,7 +201,7 @@ Future<void> checkVersion(BuildContext context) =>
               Version.parse(packageVersion) < Version.parse(minVersion);
 
       if (context.mounted && hasUpdate) {
-        await ModalWidget.showSystemAlert(
+        await Modal.showSystemAlert(
           context,
           barrierColor: Colors.black.withOpacity(.1),
           titleText: "Update Available!",

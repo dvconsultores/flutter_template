@@ -13,7 +13,6 @@ import 'package:flutter_detextre4/utils/general/file_type.dart.dart';
 import 'package:flutter_detextre4/utils/services/local_data/env_service.dart';
 import 'package:flutter_detextre4/utils/services/local_data/secure_storage_service.dart';
 import 'package:flutter_detextre4/widgets/dialogs/modal_widget.dart';
-import 'package:go_router/go_router.dart';
 import 'package:http/http.dart' as http;
 import 'package:http_parser/http_parser.dart';
 import 'package:path/path.dart';
@@ -70,15 +69,12 @@ class DioService {
         return handler.next(options);
       },
       onError: (DioException error, handler) async {
-        //* stopped process
-        final mainProvider = ContextUtility.context!.read<MainProvider>();
-        if (mainProvider.stopProcess) return;
-
         //* catch unauthorized request
         if (error.response?.statusCode == 401) {
-          ContextUtility.context!.goNamed("login");
+          final mainProvider = ContextUtility.context!.read<MainProvider>();
+          router.goNamed("login");
 
-          await ModalWidget.showSystemAlert(
+          await Modal.showSystemAlert(
             ContextUtility.context!,
             dismissible: false,
             titleText: 'Session has expired',
@@ -86,7 +82,7 @@ class DioService {
             textConfirmBtn: "Got it",
           );
 
-          if (!mainProvider.returnAuthError) return;
+          if (!mainProvider.returnDioAuthError) return;
           return handler.next(error);
         }
 
@@ -290,24 +286,9 @@ extension MultipartResponded on http.MultipartRequest {
     }
 
     try {
-      //* stopped process
-      final mainProvider = ContextUtility.context!.read<MainProvider>();
-      if (mainProvider.stopProcess) throw "";
-
       final response = await http.Response.fromStream(await send());
 
       if (response.statusCode == 401) {
-        SecureStorage.delete(SecureCollection.tokenAuth);
-
-        await ModalWidget.showSystemAlert(
-          ContextUtility.context!,
-          dismissible: false,
-          titleText: 'Session has expired',
-          contentText: 'Please log in again.',
-          textConfirmBtn: "Entendido",
-          onPressedConfirmBtn: (context) => router.goNamed("login"),
-        );
-
         throw "Session has expired";
       } else if (!acceptedStatus.contains(response.statusCode)) {
         throw response.catchErrorMessage(fallback: fallback);

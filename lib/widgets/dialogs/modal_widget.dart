@@ -10,8 +10,8 @@ import 'package:flutter_detextre4/widgets/defaults/button.dart';
 import 'package:flutter_gap/flutter_gap.dart';
 import 'package:provider/provider.dart';
 
-class ModalWidget extends StatelessWidget {
-  const ModalWidget({
+class Modal extends StatelessWidget {
+  const Modal({
     super.key,
     this.icon,
     this.iconColor,
@@ -101,7 +101,7 @@ class ModalWidget extends StatelessWidget {
           barrierColor: barrierColor,
           barrierDismissible: barrierDismissible,
           builder: (context) {
-            final child = ModalWidget(
+            final child = Modal(
               icon: icon,
               iconColor: iconColor,
               title: title,
@@ -175,8 +175,8 @@ class ModalWidget extends StatelessWidget {
     bool dismissible = true,
   }) async {
     final mainProvider = ContextUtility.context!.read<MainProvider>();
-    if (mainProvider.stopProcess) return;
-    mainProvider.setStopProcess = true;
+    if (mainProvider.preventModal) return;
+    mainProvider.setPreventModal = true;
 
     await showModal<void>(
       context,
@@ -202,7 +202,7 @@ class ModalWidget extends StatelessWidget {
       },
     );
 
-    Future.delayed(Durations.long2, () => mainProvider.setStopProcess = false);
+    Future.delayed(Durations.long2, () => mainProvider.setPreventModal = false);
   }
 
   @override
