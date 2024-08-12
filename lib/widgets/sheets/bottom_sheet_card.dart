@@ -10,7 +10,6 @@ import 'package:flutter_detextre4/widgets/defaults/snackbar.dart';
 import 'package:flutter_detextre4/widgets/form_fields/input_field.dart';
 import 'package:flutter_detextre4/widgets/sheets/card_widget.dart';
 import 'package:flutter_gap/flutter_gap.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class BottomSheetCard extends StatelessWidget {
   const BottomSheetCard({
@@ -127,7 +126,7 @@ class BottomSheetCard extends StatelessWidget {
       builder: (context, scrollController) {
         final renderWidget = Column(children: [
           CustomPaint(
-              size: Size(double.maxFinite, 36.sp),
+              size: const Size(double.maxFinite, 38),
               painter: DraggableFramePainter(
                 bgColor: draggableFrameBgColor,
                 color: draggableFrameColor,
@@ -444,7 +443,7 @@ class _BottomSheetListState<T> extends State<BottomSheetList<T>> {
           backgroundColor: Colors.transparent,
           body: Column(children: [
             CustomPaint(
-                size: Size(double.maxFinite, 36.sp),
+                size: const Size(double.maxFinite, 38),
                 painter: DraggableFramePainter(
                   bgColor: widget.draggableFrameBgColor,
                   color: widget.draggableFrameColor,
@@ -813,7 +812,7 @@ class _BottomSheetListMultipleState<T>
           backgroundColor: Colors.transparent,
           body: Column(children: [
             CustomPaint(
-                size: Size(double.maxFinite, 36.sp),
+                size: const Size(double.maxFinite, 38),
                 painter: DraggableFramePainter(
                   bgColor: widget.draggableFrameBgColor,
                   color: widget.draggableFrameColor,
