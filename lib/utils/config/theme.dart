@@ -12,9 +12,9 @@ enum ThemeType {
   dark;
 }
 
-///? A Mixin to getter some weigth of current font families.
+///? A Class to get some weigth of current font families.
 /// use like `FontFamily.lato("400")`
-mixin FontFamily {
+class FontFamily {
   static final _conversion = {
     "100": "extra_light",
     "200": "semi_light",
