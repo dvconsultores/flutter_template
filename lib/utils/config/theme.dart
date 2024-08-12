@@ -114,14 +114,13 @@ class ThemeApp {
         color: Color(0xff001689),
       ),
     );
-    // text config
+    // textTheme
     ligthTheme = ligthTheme.copyWith(
-      // textTheme
       textTheme: GoogleFonts.latoTextTheme(ligthTheme.textTheme.copyWith(
         bodyLarge: TextStyle(
-          fontSize: 17,
+          fontSize: 18,
           color: ligthTheme.extension<ThemeDataColorExtension>()!.title!,
-          fontWeight: FontWeight.w700,
+          fontWeight: FontWeight.w500,
           letterSpacing: 0.15,
           height: 1.1,
         ),
@@ -135,6 +134,9 @@ class ThemeApp {
           height: 1.1,
         ),
       )),
+    );
+    // text config
+    ligthTheme = ligthTheme.copyWith(
       extensions: ligthTheme.extensions.values.toList() +
           <ThemeExtension<dynamic>>[
             const ThemeDataStyleExtension(
@@ -142,27 +144,13 @@ class ThemeApp {
             ),
           ],
       // appbarTheme
-      appBarTheme: ligthTheme.appBarTheme.copyWith(
-          titleTextStyle: GoogleFonts.lato(
-        fontSize: 17,
-        color: ligthTheme.extension<ThemeDataColorExtension>()!.title!,
-        fontWeight: FontWeight.w700,
-        letterSpacing: 1,
-        height: 1.1,
-      )),
+      appBarTheme: ligthTheme.appBarTheme
+          .copyWith(titleTextStyle: ligthTheme.textTheme.bodyLarge),
       // dialogTheme
       dialogTheme: ligthTheme.dialogTheme.copyWith(
-          titleTextStyle: GoogleFonts.lato(
-            fontSize: 22,
-            fontWeight: FontWeight.w500,
-            color: ligthTheme.extension<ThemeDataColorExtension>()!.title!,
-            height: 1.1,
-          ),
-          contentTextStyle: GoogleFonts.lato(
-            fontSize: 16,
-            color: ligthTheme.extension<ThemeDataColorExtension>()!.text!,
-            height: 1.1,
-          )),
+        titleTextStyle: ligthTheme.textTheme.bodyLarge,
+        contentTextStyle: ligthTheme.textTheme.bodyMedium,
+      ),
       // datePickerTheme
       datePickerTheme: ligthTheme.datePickerTheme.copyWith(
         dayStyle: GoogleFonts.lato(fontWeight: FontWeight.w400),
