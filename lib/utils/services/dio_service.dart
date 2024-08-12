@@ -74,7 +74,7 @@ class DioService {
           final mainProvider = ContextUtility.context!.read<MainProvider>();
           router.goNamed("login");
 
-          await Modal.showSystemAlert(
+          Modal.showSystemAlert(
             ContextUtility.context!,
             dismissible: false,
             titleText: 'Session has expired',
