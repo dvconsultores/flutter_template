@@ -267,6 +267,7 @@ class Modal extends StatelessWidget {
                 Expanded(
                   child: Button(
                     height: actionButtonsHeight,
+                    disabled: disabled || loading,
                     text: textConfirmBtn ?? "Continue",
                     textFitted: BoxFit.scaleDown,
                     bgColor: colors.primary,
@@ -284,17 +285,32 @@ class Modal extends StatelessWidget {
         borderRadius: borderRadius,
         side: borderSide,
       ),
-      iconPadding: iconPadding ??
-          Vars.paddingScaffold
-              .copyWith(bottom: Vars.gapXLarge)
-              .add(const EdgeInsets.only(top: Vars.gapNormal)),
+      iconPadding: const EdgeInsets.all(0),
       titlePadding: tp,
       contentPadding: cp,
+      clipBehavior: Clip.hardEdge,
       actionsPadding: actionsPadding ??
           Vars.paddingScaffold
               .copyWith(top: Vars.gapXLarge)
               .add(const EdgeInsets.only(bottom: Vars.gapNormal)),
-      icon: icon,
+      icon: Column(children: [
+        if (loading)
+          LinearProgressIndicator(
+            color: colors.primary,
+            backgroundColor: colors.secondary,
+            minHeight: 5,
+            borderRadius:
+                const BorderRadius.all(Radius.circular(Vars.radius30)),
+          ),
+        if (icon != null)
+          Padding(
+            padding: iconPadding ??
+                Vars.paddingScaffold
+                    .copyWith(bottom: Vars.gapXLarge)
+                    .add(const EdgeInsets.only(top: Vars.gapNormal)),
+            child: icon,
+          ),
+      ]),
       iconColor: iconColor ?? colors.text,
       title: titleWidget,
       content:
