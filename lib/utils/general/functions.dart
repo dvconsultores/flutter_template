@@ -6,7 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_detextre4/utils/extensions/type_extensions.dart';
 import 'package:flutter_detextre4/utils/general/variables.dart';
-import 'package:flutter_detextre4/widgets/dialogs/system_alert_widget.dart';
+import 'package:flutter_detextre4/widgets/dialogs/modal_widget.dart';
 import 'package:flutter_detextre4/widgets/sheets/bottom_sheet_card.dart';
 import 'package:flutter_gap/flutter_gap.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
@@ -201,20 +201,18 @@ Future<void> checkVersion(BuildContext context) =>
               Version.parse(packageVersion) < Version.parse(minVersion);
 
       if (context.mounted && hasUpdate) {
-        await showDialog(
-            context: context,
-            barrierColor: Colors.black.withOpacity(.1),
-            barrierDismissible: !requireUpdate,
-            builder: (context) => SystemAlertWidget(
-                  title: "Update Available!",
-                  content: requireUpdate
-                      ? "You must to update the application to continue"
-                      : "We have a new version available to you on the store",
-                  dismissible: !requireUpdate,
-                  textButton: requireUpdate ? null : "Continue",
-                  textButton2: "Update",
-                  onPressedButton2: () => LaunchReview.launch(
-                      androidAppId: packageInfo.packageName),
-                ));
+        await ModalWidget.showSystemAlert(
+          context,
+          barrierColor: Colors.black.withOpacity(.1),
+          titleText: "Update Available!",
+          contentText: requireUpdate
+              ? "You must to update the application to continue"
+              : "We have a new version available to you on the store",
+          dismissible: !requireUpdate,
+          textCancelBtn: requireUpdate ? null : "Continue",
+          textConfirmBtn: "Update",
+          onPressedConfirmBtn: (context) =>
+              LaunchReview.launch(androidAppId: packageInfo.packageName),
+        );
       }
     });

@@ -1,158 +1,313 @@
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
+import 'package:flutter_detextre4/main_provider.dart';
+import 'package:flutter_detextre4/utils/config/theme.dart';
+import 'package:flutter_detextre4/utils/general/context_utility.dart';
 import 'package:flutter_detextre4/utils/general/variables.dart';
+import 'package:flutter_detextre4/utils/helper_widgets/will_pop_custom.dart';
 import 'package:flutter_detextre4/widgets/defaults/button.dart';
-import 'package:flutter_detextre4/widgets/defaults/snackbar.dart';
 import 'package:flutter_gap/flutter_gap.dart';
+import 'package:provider/provider.dart';
 
 class ModalWidget extends StatelessWidget {
   const ModalWidget({
     super.key,
-    required this.textTitle,
-    this.body,
+    this.icon,
+    this.iconColor,
+    this.title,
+    this.titleText,
+    this.content,
+    this.contentText,
+    this.actions,
     this.loading = false,
     this.disabled = false,
     this.textCancelBtn,
     this.textConfirmBtn,
-    this.textSoloBtn,
     this.onPressedCancelBtn,
     this.onPressedConfirmBtn,
-    this.onPressedSoloBtn,
+    this.iconPadding,
     this.titlePadding,
     this.contentPadding,
     this.actionsPadding,
     this.insetPadding =
         const EdgeInsets.symmetric(horizontal: 40.0, vertical: 24.0),
     this.actionButtonsHeight = 40,
+    this.actionsDirection = Axis.horizontal,
     this.shrinkWrap = false,
     this.bgColor,
+    this.borderSide = BorderSide.none,
+    this.borderRadius = const BorderRadius.all(Radius.circular(Vars.radius30)),
   });
-  final String textTitle;
-  final Widget? body;
+  final Widget? icon;
+  final Color? iconColor;
+  final Widget? title;
+  final String? titleText;
+  final Widget? content;
+  final String? contentText;
+  final List<Widget>? actions;
   final bool loading;
   final bool disabled;
   final String? textCancelBtn;
   final String? textConfirmBtn;
-  final String? textSoloBtn;
-  final VoidCallback? onPressedCancelBtn;
-  final VoidCallback? onPressedConfirmBtn;
-  final VoidCallback? onPressedSoloBtn;
+  final void Function(BuildContext context)? onPressedCancelBtn;
+  final void Function(BuildContext context)? onPressedConfirmBtn;
+  final EdgeInsetsGeometry? iconPadding;
   final EdgeInsetsGeometry? titlePadding;
   final EdgeInsetsGeometry? contentPadding;
   final EdgeInsetsGeometry? actionsPadding;
   final EdgeInsets insetPadding;
   final double actionButtonsHeight;
+  final Axis actionsDirection;
   final bool shrinkWrap;
   final Color? bgColor;
+  final BorderSide borderSide;
+  final BorderRadius borderRadius;
 
   static Future<T?> showModal<T>(
     BuildContext context, {
-    required String textTitle,
-    Widget? body,
+    Widget? icon,
+    Color? iconColor,
+    Widget? title,
+    String? titleText,
+    Widget? content,
+    String? contentText,
+    List<Widget>? actions,
     bool loading = false,
     bool disabled = false,
     String? textCancelBtn,
     String? textConfirmBtn,
-    String? textSoloBtn,
-    VoidCallback? onPressedCancelBtn,
-    VoidCallback? onPressedConfirmBtn,
-    VoidCallback? onPressedSoloBtn,
+    void Function(BuildContext context)? onPressedCancelBtn,
+    void Function(BuildContext context)? onPressedConfirmBtn,
+    EdgeInsetsGeometry? iconPadding,
     EdgeInsetsGeometry? titlePadding,
     EdgeInsetsGeometry? contentPadding,
     EdgeInsetsGeometry? actionsPadding,
     EdgeInsets insetPadding =
         const EdgeInsets.symmetric(horizontal: 40.0, vertical: 24.0),
     double actionButtonsHeight = 40,
+    Axis actionsDirection = Axis.horizontal,
     bool shrinkWrap = false,
     Color? bgColor,
+    BorderSide borderSide = BorderSide.none,
+    BorderRadius borderRadius =
+        const BorderRadius.all(Radius.circular(Vars.radius30)),
+    Widget Function(BuildContext context, Widget child)? builder,
+    bool barrierDismissible = true,
+    Color? barrierColor,
   }) async =>
       await showDialog<T>(
-        context: context,
-        builder: (context) => ModalWidget(
-          textTitle: textTitle,
-          body: body,
-          loading: loading,
-          disabled: disabled,
-          textCancelBtn: textCancelBtn,
-          textConfirmBtn: textConfirmBtn,
-          textSoloBtn: textSoloBtn,
-          onPressedCancelBtn: onPressedCancelBtn,
-          onPressedConfirmBtn: onPressedConfirmBtn,
-          onPressedSoloBtn: onPressedSoloBtn,
-          titlePadding: titlePadding,
-          contentPadding: contentPadding,
-          actionsPadding: actionsPadding,
-          insetPadding: insetPadding,
-          actionButtonsHeight: actionButtonsHeight,
-          shrinkWrap: shrinkWrap,
-          bgColor: bgColor,
-        ),
+          context: context,
+          barrierColor: barrierColor,
+          barrierDismissible: barrierDismissible,
+          builder: (context) {
+            final child = ModalWidget(
+              icon: icon,
+              iconColor: iconColor,
+              title: title,
+              titleText: titleText,
+              content: content,
+              contentText: contentText,
+              actions: actions,
+              loading: loading,
+              disabled: disabled,
+              textCancelBtn: textCancelBtn,
+              textConfirmBtn: textConfirmBtn,
+              onPressedCancelBtn: onPressedCancelBtn,
+              onPressedConfirmBtn: onPressedConfirmBtn,
+              iconPadding: iconPadding,
+              titlePadding: titlePadding,
+              contentPadding: contentPadding,
+              actionsPadding: actionsPadding,
+              insetPadding: insetPadding,
+              actionButtonsHeight: actionButtonsHeight,
+              actionsDirection: actionsDirection,
+              shrinkWrap: shrinkWrap,
+              bgColor: bgColor,
+              borderSide: borderSide,
+              borderRadius: borderRadius,
+            );
+
+            if (builder != null) builder(context, child);
+            return child;
+          });
+
+  static Future<bool?> showAlertToContinue(
+    BuildContext context, {
+    Widget? icon,
+    Color? iconColor,
+    String? titleText,
+    String? contentText,
+    String? textConfirmBtn,
+    String? textCancelBtn,
+    Axis actionsDirection = Axis.horizontal,
+    bool barrierDismissible = true,
+    Color? barrierColor,
+  }) async =>
+      await showModal<bool>(
+        context,
+        barrierDismissible: barrierDismissible,
+        barrierColor: barrierColor,
+        icon: icon,
+        iconColor: iconColor,
+        titleText: titleText,
+        contentText: contentText,
+        textConfirmBtn: textConfirmBtn,
+        textCancelBtn: textCancelBtn,
+        onPressedConfirmBtn: (context) => Navigator.pop(context, true),
+        onPressedCancelBtn: (context) => Navigator.pop(context, false),
+        actionsDirection: actionsDirection,
       );
+
+  static Future<void> showSystemAlert(
+    BuildContext context, {
+    Widget? icon,
+    Color? iconColor,
+    String? titleText,
+    String? contentText,
+    String? textConfirmBtn,
+    String? textCancelBtn,
+    void Function(BuildContext context)? onPressedCancelBtn,
+    void Function(BuildContext context)? onPressedConfirmBtn,
+    Axis actionsDirection = Axis.horizontal,
+    bool barrierDismissible = true,
+    Color? barrierColor,
+    bool dismissible = true,
+  }) async {
+    final mainProvider = ContextUtility.context!.read<MainProvider>();
+    if (mainProvider.stopProcess) return;
+    mainProvider.setStopProcess = true;
+
+    await showModal<void>(
+      context,
+      barrierDismissible: dismissible,
+      barrierColor: barrierColor,
+      icon: icon,
+      iconColor: iconColor,
+      titleText: titleText,
+      contentText: contentText,
+      textConfirmBtn: textConfirmBtn,
+      textCancelBtn: textCancelBtn,
+      onPressedCancelBtn: onPressedCancelBtn,
+      onPressedConfirmBtn: onPressedConfirmBtn,
+      actionsDirection: actionsDirection,
+      builder: (context, child) {
+        return WillPopCustom(
+          onWillPop: () async => dismissible,
+          child: BackdropFilter(
+            filter: ImageFilter.blur(sigmaX: 2, sigmaY: 2),
+            child: child,
+          ),
+        );
+      },
+    );
+
+    Future.delayed(Durations.long2, () => mainProvider.setStopProcess = false);
+  }
 
   @override
   Widget build(BuildContext context) {
-    final bodyWidget = body ?? const SizedBox.shrink();
+    final colors = ThemeApp.colors(context);
+
+    final haveActions =
+            onPressedConfirmBtn != null || onPressedCancelBtn != null,
+        haveTitle = titleText != null,
+        haveContent = contentText != null,
+        haveIcon = icon != null;
+
+    final tp = titlePadding ??
+            Vars.paddingScaffold
+                .copyWith(
+                  top: haveIcon ? 0 : null,
+                  bottom: haveContent || haveActions ? 0 : null,
+                )
+                .add(EdgeInsets.only(
+                  top: haveIcon ? 0 : Vars.gapNormal,
+                  bottom: haveContent || haveActions ? 0 : Vars.gapNormal,
+                )),
+        cp = contentPadding ??
+            Vars.paddingScaffold
+                .copyWith(
+                  top: Vars.gapXLarge,
+                  bottom: haveActions ? 0 : Vars.gapXLarge,
+                )
+                .add(EdgeInsets.only(
+                  top: haveTitle ? 0 : Vars.gapNormal,
+                  bottom: haveActions ? 0 : Vars.gapNormal,
+                ));
+
+    // widgets
+    final titleWidget = title ??
+            (titleText != null
+                ? Text(titleText!, textAlign: TextAlign.center)
+                : null),
+        contentWidget = content ??
+            (contentText != null
+                ? Text(contentText!, textAlign: TextAlign.center)
+                : null),
+        actionWidgets = actions ??
+            [
+              if (onPressedCancelBtn != null)
+                Expanded(
+                  child: Button.variant2(
+                    height: actionButtonsHeight,
+                    text: textCancelBtn ?? "Cancel",
+                    textFitted: BoxFit.scaleDown,
+                    borderRadius: const BorderRadius.all(
+                      Radius.circular(Vars.radius12),
+                    ),
+                    borderSide: BorderSide(color: colors.primary),
+                    color: colors.primary,
+                    onPressed: () => onPressedCancelBtn!(context),
+                  ),
+                ),
+              if (onPressedCancelBtn != null && onPressedConfirmBtn != null)
+                const Gap(Vars.gapXLarge),
+              if (onPressedConfirmBtn != null)
+                Expanded(
+                  child: Button(
+                    height: actionButtonsHeight,
+                    text: textConfirmBtn ?? "Continue",
+                    textFitted: BoxFit.scaleDown,
+                    bgColor: colors.primary,
+                    borderRadius: const BorderRadius.all(
+                      Radius.circular(Vars.radius12),
+                    ),
+                    onPressed: () => onPressedConfirmBtn!(context),
+                  ),
+                ),
+            ];
 
     return AlertDialog(
-        backgroundColor: bgColor,
-        actionsAlignment: MainAxisAlignment.center,
-        alignment: Alignment.center,
-        shape: const RoundedRectangleBorder(
-          borderRadius: BorderRadius.all(Radius.circular(Vars.radius30)),
-        ),
-        titlePadding: Vars.paddingScaffold
-            .copyWith(bottom: 0)
-            .add(const EdgeInsets.only(top: Vars.gapLow)),
-        title: Center(
-            child: Text(
-          textTitle,
-          textAlign: TextAlign.center,
-          style: const TextStyle(fontWeight: FontWeight.w700),
-        )),
-        content: shrinkWrap ? IntrinsicHeight(child: bodyWidget) : bodyWidget,
-        contentPadding:
-            contentPadding ?? Vars.paddingScaffold.copyWith(top: 0, bottom: 0),
-        actionsPadding: actionsPadding ??
-            Vars.paddingScaffold
-                .add(const EdgeInsets.only(bottom: Vars.gapLow)),
-        insetPadding: insetPadding,
-        actions: [
-          Row(children: [
-            if (onPressedSoloBtn != null)
-              Expanded(
-                  child: Button(
-                height: actionButtonsHeight,
-                text: textSoloBtn ?? "Confirmar",
-                textExpanded: true,
-                onPressed: onPressedSoloBtn ??
-                    () {
-                      clearSnackbars();
-                      Navigator.pop(context);
-                    },
-              ))
-            else ...[
-              Expanded(
-                  child: Button.variant(
-                height: actionButtonsHeight,
-                text: textCancelBtn ?? "Cancelar",
-                textExpanded: true,
-                onPressed: onPressedCancelBtn ??
-                    () {
-                      clearSnackbars();
-                      Navigator.pop(context);
-                    },
-              )),
-              const Gap(Vars.gapXLarge).row,
-              Expanded(
-                  child: Button(
-                height: actionButtonsHeight,
-                loading: loading,
-                disabled: disabled,
-                textExpanded: true,
-                text: textConfirmBtn ?? "Confirmar",
-                onPressed: onPressedConfirmBtn,
-              )),
+      backgroundColor: bgColor,
+      shape: RoundedRectangleBorder(
+        borderRadius: borderRadius,
+        side: borderSide,
+      ),
+      iconPadding: iconPadding ??
+          Vars.paddingScaffold
+              .copyWith(bottom: Vars.gapXLarge)
+              .add(const EdgeInsets.only(top: Vars.gapNormal)),
+      titlePadding: tp,
+      contentPadding: cp,
+      actionsPadding: actionsPadding ??
+          Vars.paddingScaffold
+              .copyWith(top: Vars.gapXLarge)
+              .add(const EdgeInsets.only(bottom: Vars.gapNormal)),
+      icon: icon,
+      iconColor: iconColor ?? colors.text,
+      title: titleWidget,
+      content:
+          shrinkWrap ? IntrinsicHeight(child: contentWidget) : contentWidget,
+      alignment: Alignment.center,
+      actionsAlignment: MainAxisAlignment.center,
+      actions: actionWidgets.isNotEmpty
+          ? [
+              actionsDirection == Axis.horizontal
+                  ? Row(children: actionWidgets)
+                  : IntrinsicHeight(child: Column(children: actionWidgets))
             ]
-          ]),
-        ]);
+          : null,
+    );
   }
 }

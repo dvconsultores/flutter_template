@@ -6,12 +6,13 @@ import 'package:collection/collection.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_detextre4/main_provider.dart';
+import 'package:flutter_detextre4/utils/config/router_config.dart';
 import 'package:flutter_detextre4/utils/extensions/type_extensions.dart';
 import 'package:flutter_detextre4/utils/general/context_utility.dart';
 import 'package:flutter_detextre4/utils/general/file_type.dart.dart';
 import 'package:flutter_detextre4/utils/services/local_data/env_service.dart';
 import 'package:flutter_detextre4/utils/services/local_data/secure_storage_service.dart';
-import 'package:flutter_detextre4/widgets/dialogs/system_alert_widget.dart';
+import 'package:flutter_detextre4/widgets/dialogs/modal_widget.dart';
 import 'package:go_router/go_router.dart';
 import 'package:http/http.dart' as http;
 import 'package:http_parser/http_parser.dart';
@@ -77,15 +78,12 @@ class DioService {
         if (error.response?.statusCode == 401) {
           ContextUtility.context!.goNamed("login");
 
-          showDialog(
-            context: ContextUtility.context!,
-            barrierDismissible: false,
-            builder: (context) => const SystemAlertWidget(
-              dismissible: false,
-              title: 'Session has expired',
-              content: 'Please log in again.',
-              textButton: "Got it",
-            ),
+          await ModalWidget.showSystemAlert(
+            ContextUtility.context!,
+            dismissible: false,
+            titleText: 'Session has expired',
+            contentText: 'Please log in again.',
+            textConfirmBtn: "Got it",
           );
 
           if (!mainProvider.returnAuthError) return;
@@ -293,27 +291,24 @@ extension MultipartResponded on http.MultipartRequest {
 
     try {
       //* stopped process
-      final stoppedProcess =
-          ContextUtility.context!.read<MainProvider>().stopProcess;
-      if (stoppedProcess) throw "";
+      final mainProvider = ContextUtility.context!.read<MainProvider>();
+      if (mainProvider.stopProcess) throw "";
 
       final response = await http.Response.fromStream(await send());
 
       if (response.statusCode == 401) {
-        throw await showDialog(
-              context: ContextUtility.context!,
-              barrierDismissible: false,
-              builder: (context) => SystemAlertWidget(
-                onOpen: () async =>
-                    await SecureStorage.delete(SecureCollection.tokenAuth),
-                dismissible: false,
-                title: 'Session has expired',
-                content: 'Please log in again.',
-                textButton: "Entendido",
-                onPressedButton: () => context.goNamed("login"),
-              ),
-            ) ??
-            "Session has expired";
+        SecureStorage.delete(SecureCollection.tokenAuth);
+
+        await ModalWidget.showSystemAlert(
+          ContextUtility.context!,
+          dismissible: false,
+          titleText: 'Session has expired',
+          contentText: 'Please log in again.',
+          textConfirmBtn: "Entendido",
+          onPressedConfirmBtn: (context) => router.goNamed("login"),
+        );
+
+        throw "Session has expired";
       } else if (!acceptedStatus.contains(response.statusCode)) {
         throw response.catchErrorMessage(fallback: fallback);
       }

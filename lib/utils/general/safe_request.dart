@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_detextre4/widgets/dialogs/alert_to_continue.dart';
+import 'package:flutter_detextre4/widgets/dialogs/modal_widget.dart';
 import 'package:flutter_detextre4/widgets/loaders/loader.dart';
 
 class SafeRequest {
@@ -29,8 +29,8 @@ class SafeRequest {
     Duration delay = Durations.long2,
     String title = "Something went wrong",
     String? contentText,
-    String acceptText = "Retry",
-    String cancelText = "Cancel",
+    String textConfirm = "Retry",
+    String texTCancel = "Cancel",
   }) async {
     final load = loader ?? AppLoader(context);
     int attempt = 0;
@@ -46,14 +46,12 @@ class SafeRequest {
         load.close();
         if (!context.mounted) return null;
 
-        final accepts = await showDialog(
-          context: context,
-          builder: (context) => AlertToContinue(
-            title: title,
-            content: contentText ?? error.toString(),
-            acceptText: acceptText,
-            cancelText: cancelText,
-          ),
+        final accepts = await ModalWidget.showAlertToContinue(
+          context,
+          titleText: title,
+          contentText: contentText ?? error.toString(),
+          textConfirmBtn: textConfirm,
+          textCancelBtn: texTCancel,
         );
         if (accepts != true || !context.mounted) return null;
         await Future.delayed(delay);
