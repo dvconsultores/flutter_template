@@ -78,7 +78,7 @@ class ThemeApp {
         ),
       ],
       // dividerTheme
-      dividerTheme: const DividerThemeData(color: Color(0xFFE3E1EC)),
+      dividerTheme: const DividerThemeData(color: Color(0xFF4E444B)),
       // appBarTheme
       appBarTheme: const AppBarTheme(
         backgroundColor: Color(0xfffafafa),
