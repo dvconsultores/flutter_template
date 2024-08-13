@@ -159,7 +159,7 @@ class Modal extends StatelessWidget {
         actionsDirection: actionsDirection,
       );
 
-  static Future<void> showSystemAlert(
+  static Future<bool?> showSystemAlert(
     BuildContext context, {
     Widget? icon,
     Color? iconColor,
@@ -174,10 +174,10 @@ class Modal extends StatelessWidget {
     bool dismissible = true,
   }) async {
     final mainProvider = ContextUtility.context!.read<MainProvider>();
-    if (mainProvider.preventModal) return;
+    if (mainProvider.preventModal) return null;
     mainProvider.setPreventModal = true;
 
-    await showModal<void>(
+    final value = await showModal<bool>(
       context,
       barrierDismissible: dismissible,
       barrierColor: barrierColor,
@@ -187,8 +187,14 @@ class Modal extends StatelessWidget {
       contentText: contentText,
       textConfirmBtn: textConfirmBtn,
       textCancelBtn: textCancelBtn,
-      onPressedCancelBtn: onPressedCancelBtn,
-      onPressedConfirmBtn: onPressedConfirmBtn,
+      onPressedCancelBtn: onPressedCancelBtn ??
+          (textCancelBtn != null
+              ? (context) => Navigator.pop(context, false)
+              : null),
+      onPressedConfirmBtn: onPressedConfirmBtn ??
+          (textConfirmBtn != null
+              ? (context) => Navigator.pop(context, true)
+              : null),
       actionsDirection: actionsDirection,
       builder: (context, child) {
         return WillPopCustom(
@@ -202,6 +208,7 @@ class Modal extends StatelessWidget {
     );
 
     Future.delayed(Durations.long2, () => mainProvider.setPreventModal = false);
+    return value;
   }
 
   @override
