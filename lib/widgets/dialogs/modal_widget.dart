@@ -170,7 +170,6 @@ class Modal extends StatelessWidget {
     void Function(BuildContext context)? onPressedCancelBtn,
     void Function(BuildContext context)? onPressedConfirmBtn,
     Axis actionsDirection = Axis.horizontal,
-    bool barrierDismissible = true,
     Color? barrierColor,
     bool dismissible = true,
   }) async {
