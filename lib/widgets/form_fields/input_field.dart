@@ -262,6 +262,8 @@ class InputField extends TextFormField {
     String? counterText,
     bool isCollapsed = false,
     BoxConstraints? suffixIconConstraints,
+    int maxEntires = 10,
+    int maxDecimals = 3,
   }) {
     final expanded = maxLines == null;
 
@@ -322,6 +324,8 @@ class InputField extends TextFormField {
         counterText: counterText,
         isCollapsed: isCollapsed,
         suffixIconConstraints: suffixIconConstraints,
+        maxEntires: maxEntires,
+        maxDecimals: maxDecimals,
       ),
     );
   }
