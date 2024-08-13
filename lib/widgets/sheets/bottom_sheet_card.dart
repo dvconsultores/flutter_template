@@ -72,7 +72,7 @@ class BottomSheetCard extends StatelessWidget {
 
     final value = await showModalBottomSheet<T>(
       context: context,
-      clipBehavior: clipBehavior ?? Clip.antiAlias,
+      clipBehavior: clipBehavior ?? Clip.hardEdge,
       isDismissible: isDismissible,
       isScrollControlled: isScrollControlled,
       backgroundColor:
@@ -263,7 +263,7 @@ class BottomSheetList<T> extends StatefulWidget {
 
     final value = await showModalBottomSheet<DropdownMenuItem<T>>(
       context: context,
-      clipBehavior: clipBehavior ?? Clip.antiAlias,
+      clipBehavior: clipBehavior ?? Clip.hardEdge,
       isDismissible: isDismissible,
       isScrollControlled: isScrollControlled,
       backgroundColor:
@@ -577,7 +577,7 @@ class BottomSheetListMultiple<T> extends StatefulWidget {
 
     final value = await showModalBottomSheet<List<DropdownMenuItem<T>>>(
       context: context,
-      clipBehavior: clipBehavior ?? Clip.antiAlias,
+      clipBehavior: clipBehavior ?? Clip.hardEdge,
       isDismissible: isDismissible,
       isScrollControlled: isScrollControlled,
       backgroundColor:
