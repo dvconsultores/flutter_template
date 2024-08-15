@@ -149,6 +149,8 @@ class TimePickerField extends InputField {
               barrierLabel: barrierLabel,
               cancelText: cancelText,
               confirmText: confirmText,
+              hourLabelText: null,
+              minuteLabelText: null,
               errorInvalidText: errorInvalidText,
               helpText: helpText,
               initialEntryMode: initialEntryMode,
