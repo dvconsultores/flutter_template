@@ -113,7 +113,7 @@ class TimePickerField extends InputField {
                         splashRadius: 30,
                         icon: const Icon(Icons.close),
                       )),
-                const Icon(Icons.timer_outlined, size: 24),
+                const Icon(Icons.schedule_rounded, size: 24),
                 if (suffixIcon != null) suffixIcon,
                 Gap(contentPadding?.right ?? Vars.gapMedium).row,
               ]),
