@@ -112,8 +112,7 @@ class OperationStatePage extends StatelessWidget {
 
         // body
         body: Column(children: [
-          const Gap(30).column,
-          const Gap(Vars.gapXLarge).column,
+          const Gap(Vars.gapMax * 2.3).column,
           iconWidget,
           const Gap(Vars.gapXLarge).column,
           titleWidget,
