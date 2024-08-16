@@ -45,7 +45,6 @@ class BottomSheetCard extends StatelessWidget {
 
   static Future<T?> showModal<T>(
     BuildContext context, {
-    bool hideBottomNavigationBar = false,
     ShapeBorder? shape,
     Color? backgroundColor,
     bool isScrollControlled = true,
@@ -221,7 +220,6 @@ class BottomSheetList<T> extends StatefulWidget {
 
   static Future<DropdownMenuItem<T>?> showModal<T>(
     BuildContext context, {
-    bool hideBottomNavigationBar = false,
     ShapeBorder? shape,
     Color? backgroundColor,
     bool isScrollControlled = true,
@@ -519,7 +517,6 @@ class BottomSheetListMultiple<T> extends StatefulWidget {
 
   static Future<List<DropdownMenuItem<T>>?> showModal<T>(
     BuildContext context, {
-    bool hideBottomNavigationBar = false,
     ShapeBorder? shape,
     Color? backgroundColor,
     bool isScrollControlled = true,
