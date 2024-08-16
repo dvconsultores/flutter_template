@@ -33,7 +33,7 @@ class OperationStatePage extends StatelessWidget {
   final Widget? desc;
   final String? descText;
   final TextStyle? descStyle;
-  final List<Widget>? actions;
+  final List<Widget> Function(BuildContext context)? actions;
   final Axis actionsDirection;
   final VoidCallback? onPop;
 
@@ -79,7 +79,8 @@ class OperationStatePage extends StatelessWidget {
             Text(
               descText ?? defaultValues['desc'] as String,
               style: descStyle ?? const TextStyle(fontSize: 14),
-            );
+            ),
+        renderActions = actions != null ? actions!(context) : null;
 
     return Theme(
       data: theme.copyWith(
@@ -119,24 +120,24 @@ class OperationStatePage extends StatelessWidget {
           const Gap(Vars.gapXLarge).column,
           descWidget,
         ]),
-        bottomWidget: actions != null
+        bottomWidget: renderActions != null
             ? Padding(
                 padding: Vars.paddingScaffold
                     .add(const EdgeInsets.only(bottom: Vars.gapXLarge)),
                 child: switch (actionsDirection) {
                   Axis.horizontal =>
                     Row(mainAxisSize: MainAxisSize.min, children: [
-                      for (var i = 0; i < actions!.length; i++) ...[
-                        actions![i],
-                        if (i != actions!.length - 1)
+                      for (var i = 0; i < renderActions.length; i++) ...[
+                        renderActions[i],
+                        if (i != renderActions.length - 1)
                           const Gap(Vars.gapXLarge).row,
                       ],
                     ]),
                   Axis.vertical =>
                     Column(mainAxisSize: MainAxisSize.min, children: [
-                      for (var i = 0; i < actions!.length; i++) ...[
-                        actions![i],
-                        if (i != actions!.length - 1)
+                      for (var i = 0; i < renderActions.length; i++) ...[
+                        renderActions[i],
+                        if (i != renderActions.length - 1)
                           const Gap(Vars.gapXLarge).column,
                       ],
                     ]),

@@ -136,9 +136,8 @@ class Nav {
           : MaterialPageRoute(builder: (context) => page),
     );
 
-    if (hideBottomNavigationBar && context.mounted) {
-      router.showBottomNavigationBar();
-    }
+    if (hideBottomNavigationBar) router.showBottomNavigationBar();
+    
 
     return value;
   }
@@ -159,9 +158,8 @@ class Nav {
       predicate,
     );
 
-    if (hideBottomNavigationBar && context.mounted) {
-      router.showBottomNavigationBar();
-    }
+    if (hideBottomNavigationBar) router.showBottomNavigationBar();
+    
 
     return value;
   }
@@ -180,9 +178,8 @@ class Nav {
           : MaterialPageRoute(builder: (context) => page),
     );
 
-    if (hideBottomNavigationBar && context.mounted) {
-      router.showBottomNavigationBar();
-    }
+    if (hideBottomNavigationBar) router.showBottomNavigationBar();
+    
 
     return value;
   }
