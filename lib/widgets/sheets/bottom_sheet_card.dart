@@ -2,7 +2,6 @@ import 'package:collection/collection.dart';
 import 'package:easy_debounce/easy_debounce.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_detextre4/painters/draggable_frame_painter.dart';
-import 'package:flutter_detextre4/utils/config/router_config.dart';
 import 'package:flutter_detextre4/utils/config/theme.dart';
 import 'package:flutter_detextre4/utils/general/variables.dart';
 import 'package:flutter_detextre4/widgets/defaults/button.dart';
@@ -68,9 +67,7 @@ class BottomSheetCard extends StatelessWidget {
     Color? draggableFrameBgColor,
     Color? draggableFrameColor,
   }) async {
-    if (hideBottomNavigationBar) router.hideBottomNavigationBar();
-
-    final value = await showModalBottomSheet<T>(
+    return await showModalBottomSheet<T>(
       context: context,
       clipBehavior: clipBehavior ?? Clip.hardEdge,
       isDismissible: isDismissible,
@@ -102,10 +99,6 @@ class BottomSheetCard extends StatelessWidget {
                 child: child ?? const SizedBox.shrink(),
               ),
     );
-
-    if (hideBottomNavigationBar) router.showBottomNavigationBar();
-
-    return value;
   }
 
   @override
@@ -259,9 +252,7 @@ class BottomSheetList<T> extends StatefulWidget {
     String? searchLabelText,
     String? searchHintText,
   }) async {
-    if (hideBottomNavigationBar) router.hideBottomNavigationBar();
-
-    final value = await showModalBottomSheet<DropdownMenuItem<T>>(
+    return await showModalBottomSheet<DropdownMenuItem<T>>(
       context: context,
       clipBehavior: clipBehavior ?? Clip.hardEdge,
       isDismissible: isDismissible,
@@ -301,10 +292,6 @@ class BottomSheetList<T> extends StatefulWidget {
         searchHintText: searchHintText,
       ),
     );
-
-    if (hideBottomNavigationBar) router.showBottomNavigationBar();
-
-    return value;
   }
 
   @override
@@ -573,9 +560,7 @@ class BottomSheetListMultiple<T> extends StatefulWidget {
     String? searchLabelText,
     String? searchHintText,
   }) async {
-    if (hideBottomNavigationBar) router.hideBottomNavigationBar();
-
-    final value = await showModalBottomSheet<List<DropdownMenuItem<T>>>(
+    return await showModalBottomSheet<List<DropdownMenuItem<T>>>(
       context: context,
       clipBehavior: clipBehavior ?? Clip.hardEdge,
       isDismissible: isDismissible,
@@ -624,10 +609,6 @@ class BottomSheetListMultiple<T> extends StatefulWidget {
         searchHintText: searchHintText,
       ),
     );
-
-    if (hideBottomNavigationBar) router.showBottomNavigationBar();
-
-    return value;
   }
 
   @override

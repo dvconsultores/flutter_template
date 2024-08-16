@@ -5,7 +5,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_detextre4/main_navigation.dart';
-import 'package:flutter_detextre4/main_provider.dart';
 import 'package:flutter_detextre4/routes/login_page.dart';
 import 'package:flutter_detextre4/routes/shell_routes/home/home_page.dart';
 import 'package:flutter_detextre4/routes/shell_routes/profile/pages/user_page.dart';
@@ -15,7 +14,6 @@ import 'package:flutter_detextre4/utils/general/context_utility.dart';
 import 'package:flutter_detextre4/utils/helper_widgets/custom_transition_wrapper.dart';
 import 'package:flutter_detextre4/utils/services/local_data/secure_storage_service.dart';
 import 'package:go_router/go_router.dart';
-import 'package:provider/provider.dart';
 
 Page _pageBuilder(Widget child) => CustomTransitionPage(
       transitionsBuilder: (context, animation, secondaryAnimation, child) =>
@@ -110,14 +108,6 @@ extension GoRouterExtension on GoRouter {
   RouteBase? get shellRoute => indexShellRoute == -1
       ? null
       : shellRoutes.elementAtOrNull(indexShellRoute);
-
-  /// Function to show [AppBottomNavigationBar] widget.
-  void showBottomNavigationBar() =>
-      ContextUtility.context!.read<MainProvider>().showBottomNavigationBar();
-
-  /// Function to hide [AppBottomNavigationBar] widget.
-  void hideBottomNavigationBar() =>
-      ContextUtility.context!.read<MainProvider>().hideBottomNavigationBar();
 }
 
 class Nav {
@@ -127,19 +117,12 @@ class Nav {
     required Widget page,
     bool hideBottomNavigationBar = false,
   }) async {
-    if (hideBottomNavigationBar) router.hideBottomNavigationBar();
-
-    final value = await Navigator.push<T>(
+    return await Navigator.push<T>(
       context,
       Platform.isIOS
           ? CupertinoPageRoute(builder: (context) => page)
           : MaterialPageRoute(builder: (context) => page),
     );
-
-    if (hideBottomNavigationBar) router.showBottomNavigationBar();
-    
-
-    return value;
   }
 
   @optionalTypeArgs
@@ -149,19 +132,13 @@ class Nav {
     required RoutePredicate predicate,
     bool hideBottomNavigationBar = false,
   }) async {
-    if (hideBottomNavigationBar) router.hideBottomNavigationBar();
-    final value = await Navigator.pushAndRemoveUntil(
+    return await Navigator.pushAndRemoveUntil(
       context,
       Platform.isIOS
           ? CupertinoPageRoute(builder: (context) => page)
           : MaterialPageRoute(builder: (context) => page),
       predicate,
     );
-
-    if (hideBottomNavigationBar) router.showBottomNavigationBar();
-    
-
-    return value;
   }
 
   @optionalTypeArgs
@@ -170,17 +147,11 @@ class Nav {
     required Widget page,
     bool hideBottomNavigationBar = false,
   }) async {
-    if (hideBottomNavigationBar) router.hideBottomNavigationBar();
-    final value = await Navigator.pushReplacement(
+    return await Navigator.pushReplacement(
       context,
       Platform.isIOS
           ? CupertinoPageRoute(builder: (context) => page)
           : MaterialPageRoute(builder: (context) => page),
     );
-
-    if (hideBottomNavigationBar) router.showBottomNavigationBar();
-    
-
-    return value;
   }
 }

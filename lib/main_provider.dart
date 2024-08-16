@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_detextre4/models/profile_model.dart';
 import 'package:flutter_detextre4/utils/config/config.dart';
 import 'package:flutter_detextre4/utils/config/theme.dart';
-import 'package:flutter_detextre4/utils/general/custom_ticker_provider.dart';
 import 'package:flutter_detextre4/utils/services/local_data/hive_data_service.dart';
 
 class MainProvider extends ChangeNotifier {
@@ -38,14 +37,6 @@ class MainProvider extends ChangeNotifier {
     returnDioAuthError = value;
     notifyListeners();
   }
-
-  // ? ----------------------Bottom Navigation Bar Provider--------------------------- //
-  final bottomNavigationBarController = AnimationController(
-    vsync: CustomTickerProvider(),
-    duration: Durations.short3,
-  );
-  void showBottomNavigationBar() => bottomNavigationBarController.forward();
-  void hideBottomNavigationBar() => bottomNavigationBarController.reverse();
 
   // ? ------------------------Snackbar Provider----------------------------- //
   final List<Flushbar> snackbars = [];
