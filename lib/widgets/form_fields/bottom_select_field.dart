@@ -63,6 +63,7 @@ class BottomSelectField<T> extends StatefulWidget {
     this.dropdownSearchFunction,
     this.dropdownSearchLabelText,
     this.dropdownSearchHintText,
+    this.dropdownItemBuilder,
   });
   final String? restorationId;
   final void Function(T? value)? onSaved;
@@ -113,6 +114,7 @@ class BottomSelectField<T> extends StatefulWidget {
       dropdownSearchFunction;
   final String? dropdownSearchLabelText;
   final String? dropdownSearchHintText;
+  final Widget Function(BuildContext context, int index)? dropdownItemBuilder;
 
   @override
   State<BottomSelectField<T>> createState() => _BottomSelectFieldState<T>();
@@ -173,6 +175,7 @@ class _BottomSelectFieldState<T> extends State<BottomSelectField<T>>
       searchHintText: widget.dropdownSearchHintText,
       draggableFrameBgColor: Colors.transparent,
       draggableFrameColor: ThemeApp.colors(context).label,
+      itemBuilder: widget.dropdownItemBuilder,
     );
 
     if (canAnimateLabel) labelAnimationController.reverse();
