@@ -108,7 +108,7 @@ dependencies:
   dropdown_button2: ^2.3.9
   double_back_to_exit: ^1.1.0
   responsive_mixin_layout: ^1.1.0
-  flutter_gap: ^1.0.0
+  flutter_gap: ^1.1.1
   flutter_advanced_switch: ^3.1.0
   sticky_headers: ^0.3.0+2
   video_player: ^2.8.5

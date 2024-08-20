@@ -5,6 +5,7 @@ import 'package:flutter_detextre4/utils/general/custom_focus_node.dart';
 import 'package:flutter_detextre4/utils/general/variables.dart';
 import 'package:flutter_detextre4/widgets/form_fields/bottom_select_field.dart';
 import 'package:flutter_detextre4/widgets/form_fields/input_field.dart';
+import 'package:flutter_detextre4/widgets/sheets/bottom_sheet_card.dart';
 
 class SelectableInputField extends StatefulWidget {
   const SelectableInputField({
@@ -18,8 +19,12 @@ class SelectableInputField extends StatefulWidget {
     this.autovalidateMode,
     this.keyboardType,
     this.validator,
+    this.loading = false,
+    this.disabled = false,
     this.onFieldSubmitted,
     this.onTap,
+    this.hideSelectable = false,
+    this.initialPrefixValue,
   });
   final double selectWidth;
   final ValueNotifier<String?>? selectController;
@@ -30,8 +35,12 @@ class SelectableInputField extends StatefulWidget {
   final AutovalidateMode? autovalidateMode;
   final TextInputType? keyboardType;
   final String? Function(String?)? validator;
+  final bool loading;
+  final bool disabled;
   final void Function(String)? onFieldSubmitted;
   final void Function()? onTap;
+  final bool hideSelectable;
+  final String? initialPrefixValue;
 
   @override
   State<SelectableInputField> createState() => _SelectableInputFieldState();
@@ -48,17 +57,27 @@ class _SelectableInputFieldState extends State<SelectableInputField> {
   @override
   Widget build(BuildContext context) {
     return InputField(
-      prefixPadding: const EdgeInsets.only(right: Vars.gapMedium),
-      prefixIcon: BottomSelectField(
-        width: widget.selectWidth,
-        controller: selectController,
-        focusNode: focusNodePhonePrefix,
-        items: widget.items,
-        onChanged: (value) {
-          setState(() {});
-          if (value != null) focusNodePhone.requestFocus();
-        },
-      ),
+      prefixPadding: widget.hideSelectable
+          ? null
+          : const EdgeInsets.only(right: Vars.gapMedium),
+      prefixIcon: widget.hideSelectable
+          ? null
+          : BottomSelectField(
+              width: widget.selectWidth,
+              controller: selectController,
+              focusNode: focusNodePhonePrefix,
+              items: widget.items,
+              initialValue: widget.initialPrefixValue,
+              dropDownItemBuilder: (context, child) =>
+                  BottomDropdownItem(child: child),
+              disabled: widget.disabled,
+              loading: widget.loading,
+              onChanged: (value) {
+                setState(() {});
+                if (value != null) focusNodePhone.requestFocus();
+              },
+            ),
+      disabled: widget.disabled || widget.loading,
       controller: widget.inputController,
       focusNode: focusNodePhone,
       hintText: widget.hintText,
@@ -68,7 +87,7 @@ class _SelectableInputFieldState extends State<SelectableInputField> {
       keyboardType: widget.keyboardType,
       onFieldSubmitted: widget.onFieldSubmitted,
       onTap: () {
-        if (selectController.value.hasNotValue) {
+        if (!widget.hideSelectable && selectController.value.hasNotValue) {
           focusNodePhone.unfocus();
           focusNodePhonePrefix.focus();
         }

@@ -426,10 +426,10 @@ packages:
     dependency: "direct main"
     description:
       name: flutter_gap
-      sha256: a9cba8697cc016918e258a9e5373e84a786321dea6febb11f22a47e875f9ae1b
+      sha256: "9c2466a5a2d01e337c27e9d1e14a133d364560d5694033ce27eb07d9536f4e21"
       url: "https://pub.dev"
     source: hosted
-    version: "1.0.0"
+    version: "1.1.1"
   flutter_keyboard_visibility:
     dependency: "direct main"
     description:

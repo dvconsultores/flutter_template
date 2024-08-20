@@ -1,8 +1,8 @@
+import 'package:collection/collection.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_detextre4/models/country_model.dart';
 import 'package:flutter_detextre4/utils/helper_widgets/validator_field.dart';
 import 'package:flutter_detextre4/widgets/form_fields/selectable_input_field.dart';
-import 'package:collection/collection.dart';
-import 'package:flutter/material.dart';
 import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
 
 class PhoneField extends StatefulWidget {
@@ -12,15 +12,21 @@ class PhoneField extends StatefulWidget {
     required this.phone,
     required this.phoneList,
     this.mask,
+    this.loading = false,
+    this.disabled = false,
     this.onFieldSubmitted,
     this.onTap,
+    this.initialPrefixValue,
   });
   final ValueNotifier<String?> phonePrefix;
   final TextEditingController phone;
   final List<CountryModel> phoneList;
   final String? mask;
+  final bool loading;
+  final bool disabled;
   final void Function(String)? onFieldSubmitted;
   final void Function()? onTap;
+  final String? initialPrefixValue;
 
   @override
   State<PhoneField> createState() => _PhoneFieldState();
@@ -39,6 +45,7 @@ class _PhoneFieldState extends State<PhoneField> {
   @override
   Widget build(BuildContext context) {
     widget.phone.value = maskFormatter.updateMask(
+      newValue: widget.phone.value.copyWith(text: widget.phone.text),
       mask: widget.mask ??
           '(${"#" * (currentCountry?.lengthAreaCode ?? 0)}) ${"#" * ((currentCountry?.length ?? 0) - (currentCountry?.lengthAreaCode ?? 0))}',
     );
@@ -47,6 +54,9 @@ class _PhoneFieldState extends State<PhoneField> {
       selectWidth: (widget.phonePrefix.value?.length ?? 0) > 3 ? 110 : 100,
       inputController: widget.phone,
       selectController: widget.phonePrefix,
+      loading: widget.loading,
+      disabled: widget.disabled,
+      initialPrefixValue: widget.initialPrefixValue,
       items: widget.phoneList
           .map((e) => DropdownMenuItem(
                 value: e.prefix,
