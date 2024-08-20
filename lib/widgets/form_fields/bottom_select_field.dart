@@ -2,7 +2,6 @@ import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_detextre4/utils/config/theme.dart';
 import 'package:flutter_detextre4/utils/extensions/type_extensions.dart';
-import 'package:flutter_detextre4/utils/general/context_utility.dart';
 import 'package:flutter_detextre4/utils/general/custom_focus_node.dart';
 import 'package:flutter_detextre4/utils/general/variables.dart';
 import 'package:flutter_detextre4/widgets/defaults/error_text.dart';
@@ -60,10 +59,12 @@ class BottomSelectField<T> extends StatefulWidget {
     this.labelStyle,
     this.floatingLabelStyle,
     this.floatingLabelBehavior = FloatingLabelBehavior.auto,
+    this.hideBottomNavigationBarOnFocus = false,
     this.dropdownSearchFunction,
     this.dropdownSearchLabelText,
     this.dropdownSearchHintText,
-    this.dropdownItemBuilder,
+    this.dropDownItemBuilder,
+    this.selectBuilder,
   });
   final String? restorationId;
   final void Function(T? value)? onSaved;
@@ -110,11 +111,13 @@ class BottomSelectField<T> extends StatefulWidget {
   final TextStyle? labelStyle;
   final TextStyle? floatingLabelStyle;
   final FloatingLabelBehavior floatingLabelBehavior;
-  final bool Function(int index, DropdownMenuItem<T>, String)?
-      dropdownSearchFunction;
+  final bool hideBottomNavigationBarOnFocus;
+  final bool Function(int index, String search)? dropdownSearchFunction;
   final String? dropdownSearchLabelText;
   final String? dropdownSearchHintText;
-  final Widget Function(BuildContext context, int index)? dropdownItemBuilder;
+  final Widget Function(BuildContext context, Widget child)?
+      dropDownItemBuilder;
+  final Widget Function(BuildContext context, int index)? selectBuilder;
 
   @override
   State<BottomSelectField<T>> createState() => _BottomSelectFieldState<T>();
@@ -159,8 +162,10 @@ class _BottomSelectFieldState<T> extends State<BottomSelectField<T>>
     if (canAnimateLabel) labelAnimationController.forward();
 
     final item = await BottomSheetList.showModal<T>(
-      ContextUtility.context!,
+      context,
+      hideBottomNavigationBar: widget.hideBottomNavigationBarOnFocus,
       items: widget.items,
+      itemBuilder: widget.dropDownItemBuilder,
       title: widget.dropdownTitle,
       titleText: widget.dropdownTitleText,
       titleStyle: widget.dropdownTitleStyle,
@@ -173,14 +178,11 @@ class _BottomSelectFieldState<T> extends State<BottomSelectField<T>>
       searchFunction: widget.dropdownSearchFunction,
       searchLabelText: widget.dropdownSearchLabelText,
       searchHintText: widget.dropdownSearchHintText,
-      draggableFrameBgColor: Colors.transparent,
-      draggableFrameColor: ThemeApp.colors(context).label,
-      itemBuilder: widget.dropdownItemBuilder,
     );
 
     if (canAnimateLabel) labelAnimationController.reverse();
 
-    getController.value = item?.value ?? formState!.value;
+    getController.value = item ?? formState!.value;
     focusNode.unfocus();
   }
 
@@ -275,6 +277,7 @@ class _BottomSelectFieldState<T> extends State<BottomSelectField<T>>
                       floatingLabelStyle: widget.floatingLabelStyle,
                       hintText: widget.hintText,
                       hintStyle: widget.hintStyle,
+                      selectBuilder: widget.selectBuilder,
                     ),
                     if (!widget.hideTrailing) ...[
                       Gap(widget.gap).row,
@@ -315,6 +318,7 @@ class _ContentWidget<T> extends StatelessWidget {
     this.labelStyle,
     this.floatingLabelStyle,
     required this.state,
+    this.selectBuilder,
   });
   final bool loading;
   final double loaderHeight;
@@ -328,6 +332,7 @@ class _ContentWidget<T> extends StatelessWidget {
   final TextStyle? labelStyle;
   final TextStyle? floatingLabelStyle;
   final FormFieldState<T> state;
+  final Widget Function(BuildContext context, int index)? selectBuilder;
 
   @override
   Widget build(BuildContext context) {
@@ -348,6 +353,21 @@ class _ContentWidget<T> extends StatelessWidget {
       style: hs,
     );
 
+    (int, DropdownMenuItem<T>)? getValue() {
+      int index = 0;
+
+      final value = items.singleWhereIndexedOrNull((i, element) {
+        if (element.value != state.value) return false;
+        index = i;
+        return true;
+      });
+
+      if (value == null) return null;
+      return (index, value);
+    }
+
+    final value = getValue();
+
     return Expanded(
       child: LayoutBuilder(
           builder: (context, constraints) => loading
@@ -366,12 +386,11 @@ class _ContentWidget<T> extends StatelessWidget {
                       Align(
                         alignment: Alignment.centerLeft,
                         child: // value
-                            items
-                                    .singleWhereOrNull((element) =>
-                                        element.value == state.value)
-                                    ?.child ??
-
-                                // hintText
+                            value != null
+                                ? selectBuilder != null
+                                    ? selectBuilder!(context, value.$1)
+                                    : value.$2
+                                : // hintText
                                 hintWidget,
                       ),
 

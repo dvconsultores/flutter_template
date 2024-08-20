@@ -5,6 +5,7 @@ import 'package:flutter_detextre4/painters/draggable_frame_painter.dart';
 import 'package:flutter_detextre4/utils/config/theme.dart';
 import 'package:flutter_detextre4/utils/general/variables.dart';
 import 'package:flutter_detextre4/widgets/defaults/button.dart';
+import 'package:flutter_detextre4/widgets/defaults/button_aspect.dart';
 import 'package:flutter_detextre4/widgets/defaults/snackbar.dart';
 import 'package:flutter_detextre4/widgets/form_fields/input_field.dart';
 import 'package:flutter_detextre4/widgets/sheets/card_widget.dart';
@@ -25,8 +26,7 @@ class BottomSheetCard extends StatelessWidget {
     this.titleStyle,
     this.floatingActionButton,
     this.bottomWidget,
-    this.draggableFrameBgColor,
-    this.draggableFrameColor,
+    this.backgroundColor = Colors.transparent,
   });
   final EdgeInsets? padding;
   final bool expand;
@@ -40,11 +40,11 @@ class BottomSheetCard extends StatelessWidget {
   final TextStyle? titleStyle;
   final Widget? floatingActionButton;
   final Widget? bottomWidget;
-  final Color? draggableFrameBgColor;
-  final Color? draggableFrameColor;
+  final Color? backgroundColor;
 
   static Future<T?> showModal<T>(
     BuildContext context, {
+    bool hideBottomNavigationBar = false,
     ShapeBorder? shape,
     Color? backgroundColor,
     bool isScrollControlled = true,
@@ -63,10 +63,8 @@ class BottomSheetCard extends StatelessWidget {
     TextStyle? titleStyle,
     Widget? floatingActionButton,
     Widget? bottomWidget,
-    Color? draggableFrameBgColor,
-    Color? draggableFrameColor,
   }) async {
-    return await showModalBottomSheet<T>(
+    final value = await showModalBottomSheet<T>(
       context: context,
       clipBehavior: clipBehavior ?? Clip.hardEdge,
       isDismissible: isDismissible,
@@ -76,8 +74,8 @@ class BottomSheetCard extends StatelessWidget {
       shape: shape ??
           const RoundedRectangleBorder(
             borderRadius: BorderRadius.only(
-              topLeft: Radius.circular(Vars.radius30),
-              topRight: Radius.circular(Vars.radius30),
+              topLeft: Radius.circular(Vars.radius50),
+              topRight: Radius.circular(Vars.radius50),
             ),
           ),
       builder: builder ??
@@ -93,11 +91,11 @@ class BottomSheetCard extends StatelessWidget {
                 titleStyle: titleStyle,
                 floatingActionButton: floatingActionButton,
                 bottomWidget: bottomWidget,
-                draggableFrameBgColor: draggableFrameBgColor,
-                draggableFrameColor: draggableFrameColor,
                 child: child ?? const SizedBox.shrink(),
               ),
     );
+
+    return value;
   }
 
   @override
@@ -118,11 +116,9 @@ class BottomSheetCard extends StatelessWidget {
       builder: (context, scrollController) {
         final renderWidget = Column(children: [
           CustomPaint(
-              size: const Size(double.maxFinite, 38),
-              painter: DraggableFramePainter(
-                bgColor: draggableFrameBgColor,
-                color: draggableFrameColor,
-              )),
+            size: const Size(double.maxFinite, 38),
+            painter: DraggableFramePainter(bgColor: backgroundColor),
+          ),
 
           // title
           if (title != null) ...[
@@ -158,6 +154,7 @@ class BottomSheetCard extends StatelessWidget {
             ? Scaffold(
                 floatingActionButton: floatingActionButton,
                 bottomSheet: bottomWidget,
+                backgroundColor: backgroundColor,
                 body: renderWidget,
               )
             : renderWidget;
@@ -172,7 +169,6 @@ class BottomSheetList<T> extends StatefulWidget {
     this.padding,
     required this.items,
     this.itemBuilder,
-    this.onTap,
     this.expand = false,
     this.initialChildSize = .45,
     this.minChildSize = .2,
@@ -187,16 +183,14 @@ class BottomSheetList<T> extends StatefulWidget {
     this.floatingActionButton,
     this.bottomWidget,
     this.scrollable = true,
-    this.draggableFrameBgColor,
-    this.draggableFrameColor,
     this.searchFunction,
     this.searchLabelText,
     this.searchHintText,
+    this.backgroundColor = Colors.transparent,
   });
   final EdgeInsets? padding;
   final List<DropdownMenuItem<T>> items;
-  final Widget Function(BuildContext context, int index)? itemBuilder;
-  final void Function(DropdownMenuItem<T> item)? onTap;
+  final Widget Function(BuildContext context, Widget child)? itemBuilder;
   final bool expand;
   final double initialChildSize;
   final double minChildSize;
@@ -211,19 +205,17 @@ class BottomSheetList<T> extends StatefulWidget {
   final Widget? floatingActionButton;
   final Widget? bottomWidget;
   final bool scrollable;
-  final Color? draggableFrameBgColor;
-  final Color? draggableFrameColor;
-  final bool Function(int index, DropdownMenuItem<T> element, String search)?
-      searchFunction;
+  final bool Function(int index, String search)? searchFunction;
   final String? searchLabelText;
   final String? searchHintText;
+  final Color? backgroundColor;
 
-  static Future<DropdownMenuItem<T>?> showModal<T>(
+  static Future<T?> showModal<T>(
     BuildContext context, {
+    bool hideBottomNavigationBar = false,
     ShapeBorder? shape,
     Color? backgroundColor,
     bool isScrollControlled = true,
-    Widget Function(BuildContext context, int index)? itemBuilder,
     bool expand = false,
     double initialChildSize = .45,
     double maxChildSize = .45,
@@ -233,7 +225,7 @@ class BottomSheetList<T> extends StatefulWidget {
     Clip? clipBehavior,
     bool isDismissible = true,
     List<DropdownMenuItem<T>>? items,
-    void Function(DropdownMenuItem<T> bottomSheetListItem)? onTap,
+    Widget Function(BuildContext context, Widget child)? itemBuilder,
     Widget? title,
     String? titleText,
     TextStyle? titleStyle,
@@ -243,14 +235,11 @@ class BottomSheetList<T> extends StatefulWidget {
     double? itemsGap,
     Widget? floatingActionButton,
     Widget? bottomWidget,
-    Color? draggableFrameBgColor,
-    Color? draggableFrameColor,
-    bool Function(int index, DropdownMenuItem<T> element, String search)?
-        searchFunction,
+    bool Function(int index, String search)? searchFunction,
     String? searchLabelText,
     String? searchHintText,
   }) async {
-    return await showModalBottomSheet<DropdownMenuItem<T>>(
+    final value = await showModalBottomSheet<T>(
       context: context,
       clipBehavior: clipBehavior ?? Clip.hardEdge,
       isDismissible: isDismissible,
@@ -260,18 +249,17 @@ class BottomSheetList<T> extends StatefulWidget {
       shape: shape ??
           const RoundedRectangleBorder(
             borderRadius: BorderRadius.only(
-              topLeft: Radius.circular(Vars.radius30),
-              topRight: Radius.circular(Vars.radius30),
+              topLeft: Radius.circular(Vars.radius50),
+              topRight: Radius.circular(Vars.radius50),
             ),
           ),
       builder: (context) => BottomSheetList<T>(
         items: items ?? [],
-        onTap: onTap,
+        itemBuilder: itemBuilder,
         expand: expand,
         initialChildSize: initialChildSize,
         maxChildSize: maxChildSize,
         minChildSize: minChildSize,
-        itemBuilder: itemBuilder,
         emptyData: emptyData,
         emptyDataText: emptyDataText,
         emptyDataStyle: emptyDataStyle,
@@ -283,13 +271,13 @@ class BottomSheetList<T> extends StatefulWidget {
         floatingActionButton: floatingActionButton,
         bottomWidget: bottomWidget,
         scrollable: scrollable,
-        draggableFrameBgColor: draggableFrameBgColor,
-        draggableFrameColor: draggableFrameColor,
         searchFunction: searchFunction,
         searchLabelText: searchLabelText,
         searchHintText: searchHintText,
       ),
     );
+
+    return value;
   }
 
   @override
@@ -304,7 +292,7 @@ class _BottomSheetListState<T> extends State<BottomSheetList<T>> {
 
     return widget.items
         .whereIndexed((index, element) =>
-            widget.searchFunction!(index, element, searchController.text))
+            widget.searchFunction!(index, searchController.text))
         .toList();
   }
 
@@ -403,20 +391,12 @@ class _BottomSheetListState<T> extends State<BottomSheetList<T>> {
                     return GestureDetector(
                       onTap: () {
                         clearSnackbars();
-                        Navigator.pop<DropdownMenuItem<T>>(context, item);
-                        Future.delayed(Durations.short1, () {
-                          if (widget.onTap != null) widget.onTap!(item);
-                        });
+                        Navigator.pop<T>(context, item.value);
+                        if (item.onTap != null) item.onTap!();
                       },
                       child: widget.itemBuilder != null
-                          ? widget.itemBuilder!(context, index)
-                          : CardWidget(
-                              padding: const EdgeInsets.symmetric(
-                                horizontal: Vars.gapMedium,
-                                vertical: Vars.gapXLarge,
-                              ),
-                              child: item.child,
-                            ),
+                          ? widget.itemBuilder!(context, item.child)
+                          : item.child,
                     );
                   },
                 )
@@ -425,14 +405,12 @@ class _BottomSheetListState<T> extends State<BottomSheetList<T>> {
         return Scaffold(
           floatingActionButton: widget.floatingActionButton,
           bottomSheet: widget.bottomWidget,
-          backgroundColor: Colors.transparent,
+          backgroundColor: widget.backgroundColor,
           body: Column(children: [
             CustomPaint(
-                size: const Size(double.maxFinite, 38),
-                painter: DraggableFramePainter(
-                  bgColor: widget.draggableFrameBgColor,
-                  color: widget.draggableFrameColor,
-                )),
+              size: const Size(double.maxFinite, 38),
+              painter: DraggableFramePainter(bgColor: widget.backgroundColor),
+            ),
             widget.scrollable
                 ? Expanded(child: SingleChildScrollView(child: contentWidget))
                 : Expanded(child: contentWidget),
@@ -449,7 +427,6 @@ class BottomSheetListMultiple<T> extends StatefulWidget {
     this.contentPadding,
     this.initialItems,
     required this.items,
-    this.itemforegroundColor,
     this.itemBuilder,
     this.onComplete,
     this.expand = false,
@@ -473,19 +450,18 @@ class BottomSheetListMultiple<T> extends StatefulWidget {
     this.floatingActionButton,
     this.bottomWidget,
     this.scrollable = true,
-    this.draggableFrameBgColor,
-    this.draggableFrameColor,
     this.searchFunction,
     this.searchLabelText,
     this.searchHintText,
+    this.backgroundColor = Colors.transparent,
   });
 
   final EdgeInsets? contentPadding;
   final List<T>? initialItems;
   final List<DropdownMenuItem<T>> items;
-  final Color? itemforegroundColor;
-  final Widget Function(BuildContext context, Widget item)? itemBuilder;
-  final void Function(List<DropdownMenuItem<T>> item)? onComplete;
+  final Widget Function(BuildContext context, Widget child, bool isSelected)?
+      itemBuilder;
+  final void Function(List<T> item)? onComplete;
   final bool expand;
   final double initialChildSize;
   final double minChildSize;
@@ -508,19 +484,17 @@ class BottomSheetListMultiple<T> extends StatefulWidget {
   final Widget? floatingActionButton;
   final Widget? bottomWidget;
   final bool scrollable;
-  final Color? draggableFrameBgColor;
-  final Color? draggableFrameColor;
-  final bool Function(int index, DropdownMenuItem<T> element, String search)?
-      searchFunction;
+  final bool Function(int index, String search)? searchFunction;
   final String? searchLabelText;
   final String? searchHintText;
+  final Color? backgroundColor;
 
-  static Future<List<DropdownMenuItem<T>>?> showModal<T>(
+  static Future<List<T>?> showModal<T>(
     BuildContext context, {
+    bool hideBottomNavigationBar = false,
     ShapeBorder? shape,
     Color? backgroundColor,
     bool isScrollControlled = true,
-    Widget Function(BuildContext context, Widget item)? itemBuilder,
     bool expand = false,
     double initialChildSize = .45,
     double maxChildSize = .45,
@@ -529,10 +503,11 @@ class BottomSheetListMultiple<T> extends StatefulWidget {
     bool scrollable = true,
     Clip? clipBehavior,
     bool isDismissible = true,
-    List<DropdownMenuItem<T>>? items,
+    required List<DropdownMenuItem<T>> items,
+    Widget Function(BuildContext context, Widget child, bool isSelected)?
+        itemBuilder,
     List<T>? initialItems,
-    Color? itemforegroundColor,
-    void Function(List<DropdownMenuItem<T>> bottomSheetListItem)? onComplete,
+    void Function(List<T> bottomSheetListItem)? onComplete,
     Widget Function(BuildContext context, VoidCallback onComplete)?
         buttonBuilder,
     String? buttonText,
@@ -550,14 +525,11 @@ class BottomSheetListMultiple<T> extends StatefulWidget {
     double mainAxisSpacing = Vars.gapXLarge,
     Widget? floatingActionButton,
     Widget? bottomWidget,
-    Color? draggableFrameBgColor,
-    Color? draggableFrameColor,
-    bool Function(int index, DropdownMenuItem<T> element, String search)?
-        searchFunction,
+    bool Function(int index, String search)? searchFunction,
     String? searchLabelText,
     String? searchHintText,
   }) async {
-    return await showModalBottomSheet<List<DropdownMenuItem<T>>>(
+    final value = await showModalBottomSheet<List<T>>(
       context: context,
       clipBehavior: clipBehavior ?? Clip.hardEdge,
       isDismissible: isDismissible,
@@ -567,13 +539,12 @@ class BottomSheetListMultiple<T> extends StatefulWidget {
       shape: shape ??
           const RoundedRectangleBorder(
             borderRadius: BorderRadius.only(
-              topLeft: Radius.circular(Vars.radius30),
-              topRight: Radius.circular(Vars.radius30),
+              topLeft: Radius.circular(Vars.radius50),
+              topRight: Radius.circular(Vars.radius50),
             ),
           ),
       builder: (context) => BottomSheetListMultiple<T>(
-        items: items ?? [],
-        itemforegroundColor: itemforegroundColor,
+        items: items,
         itemBuilder: itemBuilder,
         onComplete: onComplete,
         expand: expand,
@@ -599,13 +570,13 @@ class BottomSheetListMultiple<T> extends StatefulWidget {
         scrollable: scrollable,
         floatingActionButton: floatingActionButton,
         bottomWidget: bottomWidget,
-        draggableFrameBgColor: draggableFrameBgColor,
-        draggableFrameColor: draggableFrameColor,
         searchFunction: searchFunction,
         searchLabelText: searchLabelText,
         searchHintText: searchHintText,
       ),
     );
+
+    return value;
   }
 
   @override
@@ -617,45 +588,39 @@ class _BottomSheetListMultipleState<T>
     extends State<BottomSheetListMultiple<T>> {
   final searchController = TextEditingController();
 
+  late final List<T> selectedItems = widget.items
+      .map((e) => e.value!)
+      .where((element) => (widget.initialItems ?? []).contains(element))
+      .toList();
+
+  bool isSelected(T? value) =>
+      selectedItems.singleWhereOrNull((element) => element == value) != null;
+
   List<DropdownMenuItem<T>> get filteredItems {
     if (widget.searchFunction == null) return widget.items;
 
     return widget.items
         .whereIndexed((index, element) =>
-            widget.searchFunction!(index, element, searchController.text))
+            widget.searchFunction!(index, searchController.text))
         .toList();
   }
 
-  late final selectedItems = widget.items
-      .where((element) => (widget.initialItems ?? []).contains(element.value))
-      .toList();
-
   void onComplete() {
-    Navigator.pop<List<DropdownMenuItem<T>>>(context, selectedItems);
+    Navigator.pop<List<T>>(context, selectedItems);
 
-    Future.delayed(Durations.short1, () {
-      if (widget.onComplete != null) widget.onComplete!(selectedItems);
-    });
+    if (widget.onComplete != null) widget.onComplete!(selectedItems);
   }
 
   @override
   Widget build(BuildContext context) {
-    final colors = ThemeApp.colors(context), theme = Theme.of(context);
-
-    bool isSelected(DropdownMenuItem<T> item) =>
-        selectedItems
-            .singleWhereOrNull((element) => element.value == item.value) !=
-        null;
-
-    void onPressed(DropdownMenuItem<T> item) => setState(() {
-          if (isSelected(item)) {
-            return selectedItems
-                .removeWhere((element) => element.value == item.value);
+    void onPressed(T value) => setState(() {
+          if (isSelected(value)) {
+            return selectedItems.removeWhere((element) => element == value);
           }
 
           if (widget.maxLenght == null ||
               selectedItems.length < widget.maxLenght!) {
-            selectedItems.add(item);
+            selectedItems.add(value);
           }
         });
 
@@ -684,10 +649,7 @@ class _BottomSheetListMultipleState<T>
                 child: Text(
                   widget.titleText!,
                   style: widget.titleStyle ??
-                      const TextStyle(
-                        fontWeight: FontWeight.w700,
-                        fontSize: 18,
-                      ),
+                      const TextStyle(fontWeight: FontWeight.w700),
                 )),
 
           // search
@@ -747,32 +709,16 @@ class _BottomSheetListMultipleState<T>
                       : const BouncingScrollPhysics(),
                   padding: p,
                   children: filteredItems
-                      .map(
-                        (item) => widget.itemBuilder != null
-                            ? GestureDetector(
-                                onTap: () => onPressed(item),
-                                child: widget.itemBuilder!(context, item.child),
-                              )
-                            : Button(
-                                borderRadius: const BorderRadius.all(
-                                  Radius.circular(Vars.radius10),
-                                ),
-                                boxShadow: [
-                                  if (!isSelected(item)) Vars.boxShadow2
-                                ],
-                                borderSide: BorderSide(
-                                  width: 1.3,
-                                  color: isSelected(item)
-                                      ? colors.primary
-                                      : Colors.transparent,
-                                ),
-                                bgColor: theme.cardColor,
-                                color:
-                                    widget.itemforegroundColor ?? colors.text,
-                                onPressed: () => onPressed(item),
-                                child: item.child,
-                              ),
-                      )
+                      .map((item) => GestureDetector(
+                            onTap: () => onPressed(item.value as T),
+                            child: widget.itemBuilder != null
+                                ? widget.itemBuilder!(
+                                    context,
+                                    item.child,
+                                    isSelected(item.value),
+                                  )
+                                : item.child,
+                          ))
                       .toList(),
                 )
         ]);
@@ -790,17 +736,110 @@ class _BottomSheetListMultipleState<T>
           backgroundColor: Colors.transparent,
           body: Column(children: [
             CustomPaint(
-                size: const Size(double.maxFinite, 38),
-                painter: DraggableFramePainter(
-                  bgColor: widget.draggableFrameBgColor,
-                  color: widget.draggableFrameColor,
-                )),
+              size: const Size(double.maxFinite, 38),
+              painter: DraggableFramePainter(bgColor: widget.backgroundColor),
+            ),
             widget.scrollable
                 ? Expanded(child: SingleChildScrollView(child: contentWidget))
                 : Expanded(child: contentWidget),
           ]),
         );
       },
+    );
+  }
+}
+
+class BottomDropdownItem extends StatelessWidget {
+  const BottomDropdownItem({
+    super.key,
+    this.color,
+    this.onTap,
+    this.padding = const EdgeInsets.symmetric(
+      horizontal: Vars.gapMedium,
+      vertical: Vars.gapXLarge,
+    ),
+    this.margin = const EdgeInsets.all(0),
+    this.constraints,
+    this.width,
+    this.height,
+    this.elevation = 12.5,
+    this.shadowColor = Colors.black54,
+    this.shape = const RoundedRectangleBorder(
+      borderRadius: BorderRadius.all(Radius.circular(Vars.radius15)),
+    ),
+    this.clipBehavior,
+    required this.child,
+  });
+
+  final Color? color;
+  final void Function()? onTap;
+  final EdgeInsets? padding;
+  final EdgeInsetsGeometry? margin;
+  final double elevation;
+  final BoxConstraints? constraints;
+  final double? width;
+  final double? height;
+  final Color? shadowColor;
+  final ShapeBorder? shape;
+  final Clip? clipBehavior;
+  final Widget child;
+
+  @override
+  Widget build(BuildContext context) {
+    return CardWidget(
+      padding: padding,
+      clipBehavior: clipBehavior,
+      color: color,
+      constraints: constraints,
+      elevation: elevation,
+      height: height,
+      margin: margin,
+      onTap: onTap,
+      shadowColor: shadowColor,
+      shape: shape,
+      width: width,
+      child: child,
+    );
+  }
+}
+
+class BottomDropdownItemMultiple extends StatelessWidget {
+  const BottomDropdownItemMultiple({
+    super.key,
+    this.borderRadius = const BorderRadius.all(
+      Radius.circular(Vars.radius10),
+    ),
+    this.color,
+    this.borderSide,
+    this.boxShadow = const [Vars.boxShadow2],
+    this.selectedColor,
+    this.isSelected = false,
+    required this.child,
+  });
+  final BorderRadius borderRadius;
+  final Color? color;
+  final BorderSide? borderSide;
+  final List<BoxShadow> boxShadow;
+  final Color? selectedColor;
+  final bool isSelected;
+  final Widget child;
+
+  @override
+  Widget build(BuildContext context) {
+    final colors = ThemeApp.colors(context), theme = Theme.of(context);
+
+    return ButtonAspect(
+      borderRadius: borderRadius,
+      boxShadow: [if (!isSelected) ...boxShadow],
+      borderSide: borderSide ??
+          BorderSide(
+            width: 1.3,
+            color: isSelected
+                ? (selectedColor ?? colors.primary)
+                : Colors.transparent,
+          ),
+      bgColor: color ?? theme.cardColor,
+      child: child,
     );
   }
 }

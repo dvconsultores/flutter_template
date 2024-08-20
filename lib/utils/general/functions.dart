@@ -165,10 +165,9 @@ Future<void> attachmentPressed(
     context,
     maxChildSize: context.height.isSmall ? .33 : .3,
     initialChildSize: context.height.isSmall ? .33 : .3,
-    onTap: (item) => (item.value as VoidCallback)(),
     items: items
         .map((item) => DropdownMenuItem(
-              value: item['action'] as VoidCallback,
+              onTap: item['action'] as VoidCallback,
               child:
                   Row(mainAxisAlignment: MainAxisAlignment.center, children: [
                 Icon(

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_detextre4/utils/config/theme.dart';
 
 class DraggableFramePainter extends CustomPainter {
   const DraggableFramePainter({
@@ -10,7 +11,10 @@ class DraggableFramePainter extends CustomPainter {
 
   @override
   void paint(Canvas canvas, Size size) {
-    final bgPaint = Paint()..color = bgColor ?? Colors.blue,
+    final colors = ThemeApp.colors(null), theme = ThemeApp.of(null);
+
+    final bgPaint = Paint()
+          ..color = bgColor ?? theme.dialogTheme.backgroundColor!,
         bgRect = RRect.fromRectAndRadius(
           Rect.fromLTWH(0, 0, size.width, size.height),
           const Radius.circular(0),
@@ -18,7 +22,7 @@ class DraggableFramePainter extends CustomPainter {
 
     canvas.drawRRect(bgRect, bgPaint);
 
-    final linePaint = Paint()..color = color ?? Colors.white,
+    final linePaint = Paint()..color = color ?? colors.text,
         width = 32.0,
         height = 4.0,
         lineRect = RRect.fromRectAndRadius(
