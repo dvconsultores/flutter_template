@@ -62,6 +62,9 @@ class CustomCircleAvatar extends HeroMode {
 
   static CustomCircleAvatar badged({
     Widget? badge,
+    List<BoxShadow> badgeBoxShadow = const [Vars.boxShadow3],
+    Color badgeColor = Colors.white,
+    BoxBorder? badgeBorder,
     double badgeSize = 20,
     double? offsetLeft,
     double? offsetRight = -3,
@@ -116,9 +119,9 @@ class CustomCircleAvatar extends HeroMode {
               child: Container(
                 width: badgeSize,
                 height: badgeSize,
-                decoration: const BoxDecoration(
-                  boxShadow: [Vars.boxShadow3],
-                  borderRadius: BorderRadius.all(Radius.circular(100)),
+                decoration: BoxDecoration(
+                  boxShadow: badgeBoxShadow,
+                  borderRadius: const BorderRadius.all(Radius.circular(100)),
                 ),
               ),
             ),
@@ -134,8 +137,9 @@ class CustomCircleAvatar extends HeroMode {
                 alignment: Alignment.center,
                 clipBehavior: Clip.hardEdge,
                 decoration: BoxDecoration(
-                  color: Colors.white,
-                  border: Border.all(width: 2, color: Colors.white),
+                  color: badgeColor,
+                  border:
+                      badgeBorder ?? Border.all(width: 2, color: badgeColor),
                   borderRadius: const BorderRadius.all(Radius.circular(100)),
                 ),
                 child: badge,
