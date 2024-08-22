@@ -300,6 +300,28 @@ extension IntExtension on int {
   }
 }
 
+String formatAmountManually(double value) {
+  // Divide el número en partes
+  final isNegative = value < 0;
+  final absoluteValue = value.abs();
+  final intValue = absoluteValue.truncate();
+  final decimalValue = (absoluteValue - intValue) *
+      100; // Multiplica por 100 para obtener los dos dígitos decimales
+
+  // Agrega las comas de los miles a la parte entera
+  final formattedIntValue = intValue
+      .toString()
+      .replaceAllMapped(RegExp(r'(\d)(?=(\d{3})+(?!\d))'), (match) {
+    return '${match.group(1)},';
+  });
+
+  // Une las partes nuevamente
+  final formattedAmount =
+      '${isNegative ? '-' : ''}$formattedIntValue.${decimalValue.toStringAsFixed(0)}';
+
+  return formattedAmount;
+}
+
 // ? Double extension
 extension DoubleExtension on double {
   // Returns this [num] clamped to be in the range [lowerLimit]-[upperLimit] but inverted.
@@ -784,7 +806,7 @@ extension StringExtension on String {
 //   }
 // }
 
-// ? screenshot extension
+// ? Screenshot extension
 extension ScreenshotExtension on ScreenshotController {
   Future<void> captureAndSaveAuto({
     String? message,
@@ -818,6 +840,11 @@ extension ScreenshotExtension on ScreenshotController {
     await file.writeAsBytes(imageBytes!, mode: io.FileMode.write);
     Share.shareXFiles([XFile(file.path)]);
   }
+}
+
+// ? TextEditingValue extension
+extension TextEditingValueExtension on TextEditingValue {
+  String unmaskPhoneText() => text.replaceAll(RegExp(r'[^\d.,]'), "");
 }
 
 // ? MultipartFile extension
