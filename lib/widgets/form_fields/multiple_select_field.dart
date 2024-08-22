@@ -73,7 +73,7 @@ class MultipleSelectField<T> extends StatefulWidget {
   final void Function(List<T>? value)? onSaved;
   final String? Function(List<T>? value)? validator;
   final AutovalidateMode? autovalidateMode;
-  final Function(List<T>? value)? onChanged;
+  final void Function(List<T>? value)? onChanged;
   final List<DropdownMenuItem<T>> items;
   final List<T>? initialValue;
   final ValueNotifier<List<T>>? controller;

@@ -70,7 +70,7 @@ class BottomSelectField<T> extends StatefulWidget {
   final void Function(T? value)? onSaved;
   final String? Function(T? value)? validator;
   final AutovalidateMode? autovalidateMode;
-  final Function(T? value)? onChanged;
+  final void Function(T? value)? onChanged;
   final List<DropdownMenuItem<T>> items;
   final ValueNotifier<T?>? controller;
   final T? initialValue;
