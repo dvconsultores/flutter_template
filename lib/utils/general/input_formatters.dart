@@ -5,6 +5,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_detextre4/utils/config/config.dart';
 import 'package:flutter_detextre4/utils/general/variables.dart';
 import 'package:intl/intl.dart';
+import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
 
 // ? Decimal text input formatter
 class DecimalTextInputFormatter extends TextInputFormatter {
@@ -254,5 +255,39 @@ class RestrictedCharactersFormatter extends TextInputFormatter {
       text: replaced,
       selection: TextSelection.collapsed(offset: cursorPosition),
     );
+  }
+}
+
+class MaskPhoneInputFormatter extends MaskTextInputFormatter {
+  static const int _lengthAreaCode = 3, _lengthDigits = 11;
+
+  MaskPhoneInputFormatter({
+    super.initialText,
+    super.type = MaskAutoCompletionType.lazy,
+    this.filter,
+    this.mask,
+    this.lengthAreaCode = _lengthAreaCode,
+    this.lengthDigits = _lengthDigits,
+  }) : super(
+          filter: filter ?? {"#": RegExp(r'[0-9]')},
+          mask: mask ??
+              getPhoneMask(
+                  lengthAreaCode: lengthAreaCode, lengthDigits: lengthDigits),
+        );
+
+  final Map<String, RegExp>? filter;
+  final String? mask;
+  final int? lengthAreaCode, lengthDigits;
+
+  static String getPhoneMask({int? lengthAreaCode, int? lengthDigits}) {
+    lengthAreaCode ??= _lengthAreaCode;
+    lengthDigits ??= _lengthDigits;
+
+    return '(${"#" * lengthAreaCode}) ${"#" * (lengthDigits - lengthAreaCode)}';
+  }
+
+  static String unmaskPhoneText(String text) {
+    final value = text.replaceAll(RegExp(r'[^\d.,]'), "");
+    return value.replaceFirst(RegExp(r'^0'), '');
   }
 }
