@@ -68,6 +68,7 @@ class _SelectableInputFieldState extends State<SelectableInputField> {
               focusNode: focusNodePhonePrefix,
               items: widget.items,
               initialValue: widget.initialPrefixValue,
+              dropdownScrollable: false,
               dropDownItemBuilder: (context, child) =>
                   BottomDropdownItem(child: child),
               disabled: widget.disabled,

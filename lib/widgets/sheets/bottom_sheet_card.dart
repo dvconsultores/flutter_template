@@ -312,6 +312,32 @@ class _BottomSheetListState<T> extends State<BottomSheetList<T>> {
       minChildSize: widget.minChildSize,
       maxChildSize: widget.maxChildSize,
       builder: (context, scrollController) {
+        final listView = ListView.separated(
+          padding: p,
+          shrinkWrap: widget.scrollable,
+          physics: widget.scrollable
+              ? const NeverScrollableScrollPhysics()
+              : const ClampingScrollPhysics(),
+          controller: scrollController,
+          itemCount: filteredItems.length,
+          separatorBuilder: (context, index) =>
+              Gap(widget.itemsGap ?? Vars.gapXLarge).column,
+          itemBuilder: (context, index) {
+            final item = filteredItems[index];
+
+            return GestureDetector(
+              onTap: () {
+                clearSnackbars();
+                Navigator.pop<T>(context, item.value);
+                if (item.onTap != null) item.onTap!();
+              },
+              child: widget.itemBuilder != null
+                  ? widget.itemBuilder!(context, item.child)
+                  : item.child,
+            );
+          },
+        );
+
         final contentWidget = Column(children: [
           // title
           if (widget.title != null) ...[
@@ -375,31 +401,9 @@ class _BottomSheetListState<T> extends State<BottomSheetList<T>> {
                         ),
                   ),
                 )
-              : ListView.separated(
-                  padding: p,
-                  shrinkWrap: widget.scrollable,
-                  physics: widget.scrollable
-                      ? const NeverScrollableScrollPhysics()
-                      : const ClampingScrollPhysics(),
-                  controller: scrollController,
-                  itemCount: filteredItems.length,
-                  separatorBuilder: (context, index) =>
-                      Gap(widget.itemsGap ?? Vars.gapXLarge).column,
-                  itemBuilder: (context, index) {
-                    final item = filteredItems[index];
-
-                    return GestureDetector(
-                      onTap: () {
-                        clearSnackbars();
-                        Navigator.pop<T>(context, item.value);
-                        if (item.onTap != null) item.onTap!();
-                      },
-                      child: widget.itemBuilder != null
-                          ? widget.itemBuilder!(context, item.child)
-                          : item.child,
-                    );
-                  },
-                )
+              : widget.scrollable
+                  ? listView
+                  : Expanded(child: listView)
         ]);
 
         return Scaffold(
@@ -638,6 +642,30 @@ class _BottomSheetListMultipleState<T>
       minChildSize: widget.minChildSize,
       maxChildSize: widget.maxChildSize,
       builder: (context, scrollController) {
+        final gridView = GridView.count(
+          crossAxisCount: widget.crossAxisCount,
+          childAspectRatio: widget.childAspectRatio,
+          crossAxisSpacing: widget.crossAxisSpacing,
+          mainAxisSpacing: widget.mainAxisSpacing,
+          shrinkWrap: widget.scrollable,
+          physics: widget.scrollable
+              ? const NeverScrollableScrollPhysics()
+              : const BouncingScrollPhysics(),
+          padding: p,
+          children: filteredItems
+              .map((item) => GestureDetector(
+                    onTap: () => onPressed(item.value as T),
+                    child: widget.itemBuilder != null
+                        ? widget.itemBuilder!(
+                            context,
+                            item.child,
+                            isSelected(item.value),
+                          )
+                        : item.child,
+                  ))
+              .toList(),
+        );
+
         final contentWidget = Column(children: [
           // title
           if (widget.title != null) ...[
@@ -698,29 +726,9 @@ class _BottomSheetListMultipleState<T>
                         ),
                   ),
                 )
-              : GridView.count(
-                  crossAxisCount: widget.crossAxisCount,
-                  childAspectRatio: widget.childAspectRatio,
-                  crossAxisSpacing: widget.crossAxisSpacing,
-                  mainAxisSpacing: widget.mainAxisSpacing,
-                  shrinkWrap: widget.scrollable,
-                  physics: widget.scrollable
-                      ? const NeverScrollableScrollPhysics()
-                      : const BouncingScrollPhysics(),
-                  padding: p,
-                  children: filteredItems
-                      .map((item) => GestureDetector(
-                            onTap: () => onPressed(item.value as T),
-                            child: widget.itemBuilder != null
-                                ? widget.itemBuilder!(
-                                    context,
-                                    item.child,
-                                    isSelected(item.value),
-                                  )
-                                : item.child,
-                          ))
-                      .toList(),
-                )
+              : widget.scrollable
+                  ? gridView
+                  : Expanded(child: gridView)
         ]);
 
         return Scaffold(
