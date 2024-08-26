@@ -19,6 +19,16 @@ class PhoneField extends StatefulWidget {
     this.onFieldSubmitted,
     this.onTap,
     this.initialPrefixValue,
+    this.dropdownBottomWidget,
+    this.dropdownInitialChildSize = 0.8,
+    this.dropdownMaxChildSize = 0.8,
+    this.dropdownMinChildSize = 0.2,
+    this.dropdownSearchFunction,
+    this.dropdownSearchHintText,
+    this.dropdownSearchLabelText,
+    this.dropdownTitle,
+    this.dropdownTitleStyle,
+    this.dropdownTitleText,
   });
   final ValueNotifier<String?>? phonePrefix;
   final TextEditingController phone;
@@ -31,6 +41,16 @@ class PhoneField extends StatefulWidget {
   final void Function(String)? onFieldSubmitted;
   final void Function()? onTap;
   final String? initialPrefixValue;
+  final Widget? dropdownBottomWidget;
+  final double dropdownInitialChildSize;
+  final double dropdownMaxChildSize;
+  final double dropdownMinChildSize;
+  final bool Function(int index, String search)? dropdownSearchFunction;
+  final String? dropdownSearchHintText;
+  final String? dropdownSearchLabelText;
+  final Widget? dropdownTitle;
+  final TextStyle? dropdownTitleStyle;
+  final String? dropdownTitleText;
 
   @override
   State<PhoneField> createState() => _PhoneFieldState();
@@ -81,6 +101,16 @@ class _PhoneFieldState extends State<PhoneField> {
           [],
       hintText: "(123) 1234567",
       inputFormatters: [maskFormatter],
+      dropdownBottomWidget: widget.dropdownBottomWidget,
+      dropdownInitialChildSize: widget.dropdownInitialChildSize,
+      dropdownMaxChildSize: widget.dropdownMaxChildSize,
+      dropdownMinChildSize: widget.dropdownMinChildSize,
+      dropdownSearchFunction: widget.dropdownSearchFunction,
+      dropdownSearchHintText: widget.dropdownSearchHintText,
+      dropdownSearchLabelText: widget.dropdownSearchLabelText,
+      dropdownTitle: widget.dropdownTitle,
+      dropdownTitleStyle: widget.dropdownTitleStyle,
+      dropdownTitleText: widget.dropdownTitleText,
       autovalidateMode: AutovalidateMode.onUserInteraction,
       keyboardType: TextInputType.phone,
       validator: (value) => ValidatorField.evaluate(

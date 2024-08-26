@@ -25,6 +25,16 @@ class SelectableInputField extends StatefulWidget {
     this.onTap,
     this.hideSelectable = false,
     this.initialPrefixValue,
+    this.dropdownBottomWidget,
+    this.dropdownInitialChildSize = 0.45,
+    this.dropdownMaxChildSize = 0.45,
+    this.dropdownMinChildSize = 0.2,
+    this.dropdownSearchFunction,
+    this.dropdownSearchHintText,
+    this.dropdownSearchLabelText,
+    this.dropdownTitle,
+    this.dropdownTitleStyle,
+    this.dropdownTitleText,
   });
   final double selectWidth;
   final ValueNotifier<String?>? selectController;
@@ -41,6 +51,16 @@ class SelectableInputField extends StatefulWidget {
   final void Function()? onTap;
   final bool hideSelectable;
   final String? initialPrefixValue;
+  final Widget? dropdownBottomWidget;
+  final double dropdownInitialChildSize;
+  final double dropdownMaxChildSize;
+  final double dropdownMinChildSize;
+  final bool Function(int index, String search)? dropdownSearchFunction;
+  final String? dropdownSearchHintText;
+  final String? dropdownSearchLabelText;
+  final Widget? dropdownTitle;
+  final TextStyle? dropdownTitleStyle;
+  final String? dropdownTitleText;
 
   @override
   State<SelectableInputField> createState() => _SelectableInputFieldState();
@@ -68,9 +88,19 @@ class _SelectableInputFieldState extends State<SelectableInputField> {
               focusNode: focusNodePhonePrefix,
               items: widget.items,
               initialValue: widget.initialPrefixValue,
-              dropdownScrollable: false,
               dropDownItemBuilder: (context, child) =>
                   BottomDropdownItem(child: child),
+              dropdownScrollable: false,
+              dropdownBottomWidget: widget.dropdownBottomWidget,
+              dropdownInitialChildSize: widget.dropdownInitialChildSize,
+              dropdownMaxChildSize: widget.dropdownMaxChildSize,
+              dropdownMinChildSize: widget.dropdownMinChildSize,
+              dropdownSearchFunction: widget.dropdownSearchFunction,
+              dropdownSearchHintText: widget.dropdownSearchHintText,
+              dropdownSearchLabelText: widget.dropdownSearchLabelText,
+              dropdownTitle: widget.dropdownTitle,
+              dropdownTitleStyle: widget.dropdownTitleStyle,
+              dropdownTitleText: widget.dropdownTitleText,
               disabled: widget.disabled,
               loading: widget.loading,
               onChanged: (value) {
