@@ -844,7 +844,10 @@ extension ScreenshotExtension on ScreenshotController {
 
 // ? TextEditingValue extension
 extension TextEditingValueExtension on TextEditingValue {
-  String unmaskPhoneText() => text.replaceAll(RegExp(r'[^\d.,]'), "");
+  String unformat() {
+    final value = text.replaceAll(RegExp(r'[^\d.,]'), "");
+    return value.split(',').join('.');
+  }
 }
 
 // ? MultipartFile extension
