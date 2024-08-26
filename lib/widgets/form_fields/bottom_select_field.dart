@@ -1,11 +1,12 @@
-import 'package:collection/collection.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_detextre4/utils/config/theme.dart';
 import 'package:flutter_detextre4/utils/extensions/type_extensions.dart';
 import 'package:flutter_detextre4/utils/general/custom_focus_node.dart';
 import 'package:flutter_detextre4/utils/general/variables.dart';
 import 'package:flutter_detextre4/widgets/defaults/error_text.dart';
+import 'package:flutter_detextre4/widgets/defaults/tooltip.dart';
 import 'package:flutter_detextre4/widgets/sheets/bottom_sheet_card.dart';
+import 'package:collection/collection.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_gap/flutter_gap.dart';
 
 class BottomSelectField<T> extends StatefulWidget {
@@ -26,6 +27,7 @@ class BottomSelectField<T> extends StatefulWidget {
     this.trailing,
     this.disabled = false,
     this.loading = false,
+    this.inactiveText,
     this.loaderHeight = 20,
     this.emptyDataMessage,
     this.hideTrailing = false,
@@ -81,6 +83,7 @@ class BottomSelectField<T> extends StatefulWidget {
   final Widget? trailing;
   final bool disabled;
   final bool loading;
+  final String? inactiveText;
   final String? emptyDataMessage;
   final bool hideTrailing;
   final String? hintText;
@@ -228,65 +231,68 @@ class _BottomSelectFieldState<T> extends State<BottomSelectField<T>>
             height = widget.height ??
                 (widget.dense ? Vars.minInputHeight : Vars.maxInputHeight);
 
+        final inactive = widget.disabled || widget.loading;
+
         return SizedBox(
           width: widget.width,
           child:
               Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
             // field
             GestureDetector(
-              onTap: () {
-                if (widget.loading) return;
-                focusNode.focus();
-              },
-              child: Container(
-                  width: widget.width,
-                  height: height,
-                  padding: widget.padding,
-                  decoration: widget.decoration ??
-                      BoxDecoration(
-                          borderRadius: widget.borderRadius,
-                          color: bgColor,
-                          boxShadow: widget.boxShadow ?? [Vars.boxShadow2],
-                          border: Border.fromBorderSide(
-                            widget.disabled
-                                ? widget.borderDisabled ??
-                                    const BorderSide(color: Colors.transparent)
-                                : isFocused
-                                    ? widget.borderFocused ??
-                                        BorderSide(color: theme.focusColor)
-                                    : widget.border ??
-                                        const BorderSide(
-                                          color: Colors.transparent,
-                                        ),
-                          )),
-                  child: Row(children: [
-                    if (widget.leading != null) ...[
-                      widget.leading!,
-                      Gap(widget.gap).row,
-                    ],
-                    _ContentWidget(
-                      items: widget.items,
-                      labelAnimationController: labelAnimationController,
-                      bgColor: bgColor,
-                      state: state,
-                      textAlignHint: widget.textAlignHint,
-                      loading: widget.loading,
-                      loaderHeight: widget.loaderHeight,
-                      labelText: widget.labelText,
-                      labelStyle: widget.labelStyle,
-                      floatingLabelStyle: widget.floatingLabelStyle,
-                      hintText: widget.hintText,
-                      hintStyle: widget.hintStyle,
-                      selectBuilder: widget.selectBuilder,
-                    ),
-                    if (!widget.hideTrailing) ...[
-                      Gap(widget.gap).row,
-                      widget.trailing ??
-                          (isFocused
-                              ? const Icon(Icons.arrow_drop_up_rounded)
-                              : const Icon(Icons.arrow_drop_down_rounded))
-                    ]
-                  ])),
+              onTap: inactive ? null : () => focusNode.focus(),
+              child: AppTooltip(
+                message: inactive ? widget.inactiveText : null,
+                child: Container(
+                    width: widget.width,
+                    height: height,
+                    padding: widget.padding,
+                    decoration: widget.decoration ??
+                        BoxDecoration(
+                            borderRadius: widget.borderRadius,
+                            color: bgColor,
+                            boxShadow: widget.boxShadow ?? [Vars.boxShadow2],
+                            border: Border.fromBorderSide(
+                              widget.disabled
+                                  ? widget.borderDisabled ??
+                                      const BorderSide(
+                                          color: Colors.transparent)
+                                  : isFocused
+                                      ? widget.borderFocused ??
+                                          BorderSide(color: theme.focusColor)
+                                      : widget.border ??
+                                          const BorderSide(
+                                            color: Colors.transparent,
+                                          ),
+                            )),
+                    child: Row(children: [
+                      if (widget.leading != null) ...[
+                        widget.leading!,
+                        Gap(widget.gap).row,
+                      ],
+                      _ContentWidget(
+                        items: widget.items,
+                        labelAnimationController: labelAnimationController,
+                        bgColor: bgColor,
+                        state: state,
+                        textAlignHint: widget.textAlignHint,
+                        loading: widget.loading,
+                        loaderHeight: widget.loaderHeight,
+                        labelText: widget.labelText,
+                        labelStyle: widget.labelStyle,
+                        floatingLabelStyle: widget.floatingLabelStyle,
+                        hintText: widget.hintText,
+                        hintStyle: widget.hintStyle,
+                        selectBuilder: widget.selectBuilder,
+                      ),
+                      if (!widget.hideTrailing) ...[
+                        Gap(widget.gap).row,
+                        widget.trailing ??
+                            (isFocused
+                                ? const Icon(Icons.arrow_drop_up_rounded)
+                                : const Icon(Icons.arrow_drop_down_rounded))
+                      ]
+                    ])),
+              ),
             ),
 
             // error text

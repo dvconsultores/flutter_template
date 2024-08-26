@@ -8,6 +8,7 @@ import 'package:flutter_detextre4/utils/general/custom_focus_node.dart';
 import 'package:flutter_detextre4/utils/general/functions.dart';
 import 'package:flutter_detextre4/utils/general/variables.dart';
 import 'package:flutter_detextre4/widgets/defaults/error_text.dart';
+import 'package:flutter_detextre4/widgets/defaults/tooltip.dart';
 import 'package:flutter_detextre4/widgets/sheets/bottom_sheet_card.dart';
 import 'package:flutter_gap/flutter_gap.dart';
 
@@ -30,6 +31,7 @@ class MultipleSelectField<T> extends StatefulWidget {
     this.trailing,
     this.indicator = false,
     this.disabled = false,
+    this.inactiveText,
     this.loading = false,
     this.loaderHeight = 20,
     this.maxLenght,
@@ -86,6 +88,7 @@ class MultipleSelectField<T> extends StatefulWidget {
   final bool indicator;
   final bool loading;
   final bool disabled;
+  final String? inactiveText;
   final int? maxLenght;
   final String? emptyDataMessage;
   final bool hideOpenIcon;
@@ -249,74 +252,77 @@ class _MultiSelectFieldState<T> extends State<MultipleSelectField<T>>
             height = widget.height ??
                 (widget.dense ? Vars.minInputHeight : Vars.maxInputHeight);
 
+        final inactive = widget.disabled || widget.loading;
+
         final widgetField = SizedBox(
           child:
               Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
             // field
             GestureDetector(
-              onTap: () {
-                if (widget.loading) return;
-                focusNode.focus();
-              },
-              child: Container(
-                width: widget.intrinsictWidth ? null : widget.width,
-                height: height,
-                padding: widget.padding,
-                decoration: widget.decoration ??
-                    BoxDecoration(
-                        borderRadius: widget.borderRadius,
-                        color: widget.bgColor ?? theme.colorScheme.background,
-                        boxShadow: widget.boxShadow ?? [Vars.boxShadow2],
-                        border: Border.fromBorderSide(
-                          widget.disabled
-                              ? widget.borderDisabled ??
-                                  const BorderSide(color: Colors.transparent)
-                              : isFocused
-                                  ? widget.borderFocused ??
-                                      BorderSide(color: theme.focusColor)
-                                  : widget.border ??
-                                      const BorderSide(
-                                        color: Colors.transparent,
-                                      ),
-                        )),
-                child: Row(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      if (widget.leading != null) ...[
-                        widget.leading!,
-                        Gap(widget.gap).row,
-                      ] else if (widget.indicator) ...[
-                        Icon(
-                          Icons.filter_alt_rounded,
-                          size: 16,
-                          color: state.value.hasValue ? theme.focusColor : null,
+              onTap: inactive ? null : () => focusNode.focus(),
+              child: AppTooltip(
+                message: inactive ? widget.inactiveText : null,
+                child: Container(
+                  width: widget.intrinsictWidth ? null : widget.width,
+                  height: height,
+                  padding: widget.padding,
+                  decoration: widget.decoration ??
+                      BoxDecoration(
+                          borderRadius: widget.borderRadius,
+                          color: widget.bgColor ?? theme.colorScheme.background,
+                          boxShadow: widget.boxShadow ?? [Vars.boxShadow2],
+                          border: Border.fromBorderSide(
+                            widget.disabled
+                                ? widget.borderDisabled ??
+                                    const BorderSide(color: Colors.transparent)
+                                : isFocused
+                                    ? widget.borderFocused ??
+                                        BorderSide(color: theme.focusColor)
+                                    : widget.border ??
+                                        const BorderSide(
+                                          color: Colors.transparent,
+                                        ),
+                          )),
+                  child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        if (widget.leading != null) ...[
+                          widget.leading!,
+                          Gap(widget.gap).row,
+                        ] else if (widget.indicator) ...[
+                          Icon(
+                            Icons.filter_alt_rounded,
+                            size: 16,
+                            color:
+                                state.value.hasValue ? theme.focusColor : null,
+                          ),
+                          Gap(widget.gap).row,
+                        ],
+                        _ContentWidget(
+                          items: widget.items,
+                          labelAnimationController: labelAnimationController,
+                          bgColor: bgColor,
+                          state: state,
+                          textAlignHint: widget.textAlignHint,
+                          loading: widget.loading,
+                          loaderHeight: widget.loaderHeight,
+                          labelText: widget.labelText,
+                          labelStyle: widget.labelStyle,
+                          floatingLabelStyle: widget.floatingLabelStyle,
+                          hintText: widget.hintText,
+                          hintStyle: widget.hintStyle,
+                          indicator: widget.indicator,
+                          selectedItems: selectedItems,
                         ),
-                        Gap(widget.gap).row,
-                      ],
-                      _ContentWidget(
-                        items: widget.items,
-                        labelAnimationController: labelAnimationController,
-                        bgColor: bgColor,
-                        state: state,
-                        textAlignHint: widget.textAlignHint,
-                        loading: widget.loading,
-                        loaderHeight: widget.loaderHeight,
-                        labelText: widget.labelText,
-                        labelStyle: widget.labelStyle,
-                        floatingLabelStyle: widget.floatingLabelStyle,
-                        hintText: widget.hintText,
-                        hintStyle: widget.hintStyle,
-                        indicator: widget.indicator,
-                        selectedItems: selectedItems,
-                      ),
-                      if (!widget.hideOpenIcon) ...[
-                        Gap(widget.gap).row,
-                        isFocused
-                            ? const Icon(Icons.arrow_drop_up_rounded)
-                            : const Icon(Icons.arrow_drop_down_rounded)
-                      ],
-                      if (widget.trailing != null) widget.trailing!
-                    ]),
+                        if (!widget.hideOpenIcon) ...[
+                          Gap(widget.gap).row,
+                          isFocused
+                              ? const Icon(Icons.arrow_drop_up_rounded)
+                              : const Icon(Icons.arrow_drop_down_rounded)
+                        ],
+                        if (widget.trailing != null) widget.trailing!
+                      ]),
+                ),
               ),
             ),
 
