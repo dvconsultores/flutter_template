@@ -55,7 +55,7 @@ class _PhoneFieldState extends State<PhoneField> {
       newValue: widget.phone.value.copyWith(text: widget.phone.text),
       mask: widget.mask ??
           MaskPhoneInputFormatter.getPhoneMask(
-            lengthDigits: widget.length ?? currentCountry?.lengthAreaCode,
+            lengthDigits: widget.length ?? currentCountry?.length,
             lengthAreaCode:
                 startsWithCero && lengthAreaCode == 3 ? 4 : lengthAreaCode,
           ),
