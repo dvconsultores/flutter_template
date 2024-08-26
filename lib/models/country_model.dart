@@ -14,8 +14,8 @@ class CountryModel implements DefaultModel {
   final String flag;
   final String code;
   final String prefix;
-  final int length;
-  final int lengthAreaCode;
+  final int? length;
+  final int? lengthAreaCode;
 
   @override
   Iterable get values => toJson().values;
