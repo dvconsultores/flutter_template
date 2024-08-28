@@ -1,3 +1,5 @@
+import 'package:collection/collection.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_detextre4/utils/config/theme.dart';
 import 'package:flutter_detextre4/utils/extensions/type_extensions.dart';
 import 'package:flutter_detextre4/utils/general/custom_focus_node.dart';
@@ -5,8 +7,6 @@ import 'package:flutter_detextre4/utils/general/variables.dart';
 import 'package:flutter_detextre4/widgets/defaults/error_text.dart';
 import 'package:flutter_detextre4/widgets/defaults/tooltip.dart';
 import 'package:flutter_detextre4/widgets/sheets/bottom_sheet_card.dart';
-import 'package:collection/collection.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_gap/flutter_gap.dart';
 
 class BottomSelectField<T> extends StatefulWidget {

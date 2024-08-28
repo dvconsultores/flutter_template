@@ -9,6 +9,7 @@ class CustomBadge extends badges.Badge {
     super.child,
     super.showBadge,
     required String text,
+    Color textColor = Colors.white,
     List<Color>? colors,
   }) : super(
           position: badges.BadgePosition.topEnd(top: 10, end: -8),
@@ -37,9 +38,9 @@ class CustomBadge extends badges.Badge {
                 ),
                 child: Text(
                   text,
-                  style: const TextStyle(
+                  style: TextStyle(
                     fontSize: 10.5,
-                    color: Colors.white,
+                    color: textColor,
                     fontWeight: FontWeight.w500,
                   ),
                 ),
