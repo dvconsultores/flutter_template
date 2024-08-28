@@ -37,7 +37,7 @@ class CustomBadge extends badges.Badge {
                 ),
                 child: Text(
                   text,
-                  style: TextStyle(
+                  style: const TextStyle(
                     fontSize: 10.5,
                     color: Colors.white,
                     fontWeight: FontWeight.w500,
