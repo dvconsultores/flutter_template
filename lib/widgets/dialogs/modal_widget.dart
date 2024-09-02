@@ -292,6 +292,7 @@ class Modal extends StatelessWidget {
         side: borderSide,
       ),
       iconPadding: const EdgeInsets.all(0),
+      insetPadding: insetPadding,
       titlePadding: tp,
       contentPadding: cp,
       clipBehavior: Clip.hardEdge,
