@@ -38,6 +38,7 @@ class Modal extends StatelessWidget {
     this.bgColor,
     this.borderSide = BorderSide.none,
     this.borderRadius = const BorderRadius.all(Radius.circular(Vars.radius30)),
+    this.elevation,
   });
   final Widget? icon;
   final Color? iconColor;
@@ -63,6 +64,7 @@ class Modal extends StatelessWidget {
   final Color? bgColor;
   final BorderSide borderSide;
   final BorderRadius borderRadius;
+  final double? elevation;
 
   static Future<T?> showModal<T>(
     BuildContext context, {
@@ -95,6 +97,7 @@ class Modal extends StatelessWidget {
     Widget Function(BuildContext context, Widget child)? builder,
     bool barrierDismissible = true,
     Color? barrierColor,
+    double? elevation,
   }) async =>
       await showDialog<T>(
           context: context,
@@ -126,6 +129,7 @@ class Modal extends StatelessWidget {
               bgColor: bgColor,
               borderSide: borderSide,
               borderRadius: borderRadius,
+              elevation: elevation,
             );
 
             if (builder != null) builder(context, child);
@@ -291,6 +295,7 @@ class Modal extends StatelessWidget {
         borderRadius: borderRadius,
         side: borderSide,
       ),
+      elevation: elevation,
       iconPadding: const EdgeInsets.all(0),
       insetPadding: insetPadding,
       titlePadding: tp,
