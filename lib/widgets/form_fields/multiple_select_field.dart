@@ -70,6 +70,7 @@ class MultipleSelectField<T> extends StatefulWidget {
     this.dropdownSearchLabelText,
     this.dropdownSearchHintText,
     this.dropdownItemBuilder,
+    this.dropdownContentPadding,
   });
   final String? restorationId;
   final void Function(List<T>? value)? onSaved;
@@ -127,6 +128,7 @@ class MultipleSelectField<T> extends StatefulWidget {
   final String? dropdownSearchHintText;
   final Widget Function(BuildContext context, Widget child, bool isSelected)?
       dropdownItemBuilder;
+  final EdgeInsets? dropdownContentPadding;
 
   @override
   State<MultipleSelectField<T>> createState() => _MultiSelectFieldState<T>();
@@ -201,6 +203,7 @@ class _MultiSelectFieldState<T> extends State<MultipleSelectField<T>>
       searchFunction: widget.dropdownSearchFunction,
       searchLabelText: widget.dropdownSearchLabelText,
       searchHintText: widget.dropdownSearchHintText,
+      contentPadding: widget.dropdownContentPadding,
     );
 
     if (canAnimateLabel) labelAnimationController.reverse();

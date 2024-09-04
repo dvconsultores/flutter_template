@@ -153,7 +153,7 @@ class BottomSheetCard extends StatelessWidget {
         return floatingActionButton != null || bottomWidget != null
             ? Scaffold(
                 floatingActionButton: floatingActionButton,
-                bottomSheet: bottomWidget,
+                bottomNavigationBar: bottomWidget,
                 backgroundColor: backgroundColor,
                 body: renderWidget,
               )
@@ -408,7 +408,7 @@ class _BottomSheetListState<T> extends State<BottomSheetList<T>> {
 
         return Scaffold(
           floatingActionButton: widget.floatingActionButton,
-          bottomSheet: widget.bottomWidget,
+          bottomNavigationBar: widget.bottomWidget,
           backgroundColor: widget.backgroundColor,
           body: Column(children: [
             CustomPaint(
@@ -733,7 +733,7 @@ class _BottomSheetListMultipleState<T>
 
         return Scaffold(
           floatingActionButton: widget.floatingActionButton,
-          bottomSheet: widget.bottomWidget ??
+          bottomNavigationBar: widget.bottomWidget ??
               (widget.buttonBuilder != null
                   ? widget.buttonBuilder!(context, onComplete)
                   : Button(
