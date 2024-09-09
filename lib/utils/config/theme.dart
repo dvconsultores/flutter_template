@@ -117,6 +117,23 @@ class ThemeApp {
     // textTheme
     ligthTheme = ligthTheme.copyWith(
       textTheme: GoogleFonts.latoTextTheme(ligthTheme.textTheme.copyWith(
+        // display
+        displayLarge: GoogleFonts.luckiestGuy(
+          fontSize: 30,
+          color: ligthTheme.extension<ThemeDataColorExtension>()!.title!,
+          height: 1.1,
+        ),
+        displayMedium: GoogleFonts.luckiestGuy(
+          fontSize: 28,
+          color: ligthTheme.extension<ThemeDataColorExtension>()!.title!,
+          height: 1.1,
+        ),
+        displaySmall: GoogleFonts.luckiestGuy(
+          fontSize: 26,
+          color: ligthTheme.extension<ThemeDataColorExtension>()!.title!,
+          height: 1.1,
+        ),
+        // title
         titleLarge: TextStyle(
           fontSize: 24,
           color: ligthTheme.extension<ThemeDataColorExtension>()!.title!,
@@ -138,6 +155,23 @@ class ThemeApp {
           letterSpacing: 0.15,
           height: 1.1,
         ),
+        // label
+        labelLarge: TextStyle(
+          fontSize: 20,
+          color: ligthTheme.extension<ThemeDataColorExtension>()!.label!,
+          height: 1.1,
+        ),
+        labelMedium: TextStyle(
+          fontSize: 18,
+          color: ligthTheme.extension<ThemeDataColorExtension>()!.label!,
+          height: 1.1,
+        ),
+        labelSmall: TextStyle(
+          color: ligthTheme.extension<ThemeDataColorExtension>()!.label!,
+          fontSize: 16,
+          height: 1.1,
+        ),
+        // body
         bodyLarge: TextStyle(
           fontSize: 18,
           color: ligthTheme.extension<ThemeDataColorExtension>()!.text!,
