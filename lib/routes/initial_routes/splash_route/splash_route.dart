@@ -5,14 +5,14 @@ import 'package:flutter_detextre4/utils/config/router_config.dart';
 import 'package:flutter_detextre4/utils/config/theme.dart';
 import 'package:flutter_detextre4/utils/general/variables.dart';
 
-class SplashPage extends StatefulWidget {
-  const SplashPage({super.key});
+class SplashRoute extends StatefulWidget {
+  const SplashRoute({super.key});
 
   @override
-  State<SplashPage> createState() => _SplashPageState();
+  State<SplashRoute> createState() => _SplashRouteState();
 }
 
-class _SplashPageState extends State<SplashPage>
+class _SplashRouteState extends State<SplashRoute>
     with SingleTickerProviderStateMixin {
   final int splashDuration = 1500;
   late final AnimationController animationController = AnimationController(

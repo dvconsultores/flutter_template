@@ -4,12 +4,13 @@ import 'package:collection/collection.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_detextre4/main_navigation.dart';
-import 'package:flutter_detextre4/routes/login_page.dart';
-import 'package:flutter_detextre4/routes/shell_routes/home/home_page.dart';
-import 'package:flutter_detextre4/routes/shell_routes/profile/pages/user_page.dart';
-import 'package:flutter_detextre4/routes/shell_routes/search/pages/list_page.dart';
-import 'package:flutter_detextre4/routes/splash_page.dart';
+import 'package:flutter_detextre4/layouts/navigation_layout/navigation_layout.dart';
+import 'package:flutter_detextre4/routes/initial_routes/landing_route/landing_route.dart';
+import 'package:flutter_detextre4/routes/initial_routes/splash_route/splash_route.dart';
+import 'package:flutter_detextre4/routes/login_route/login_route.dart';
+import 'package:flutter_detextre4/routes/shell_routes/home_route/home_route.dart';
+import 'package:flutter_detextre4/routes/shell_routes/profile_route/profile_route.dart';
+import 'package:flutter_detextre4/routes/shell_routes/search_route/search_route.dart';
 import 'package:flutter_detextre4/utils/general/context_utility.dart';
 import 'package:flutter_detextre4/utils/helper_widgets/custom_transition_wrapper.dart';
 import 'package:flutter_detextre4/utils/services/local_data/secure_storage_service.dart';
@@ -35,7 +36,7 @@ final GoRouter router = GoRouter(
       if (state.location == "/splash") {
         return null;
       } else if (router.requireAuth && !isLogged) {
-        return "/auth";
+        return kIsWeb ? "/landing" : "/auth";
       }
 
       return null;
@@ -44,40 +45,49 @@ final GoRouter router = GoRouter(
     // ? Registered Routes
     routes: [
       //* top level
-      GoRoute(
-        path: '/splash',
-        name: 'splash',
-        pageBuilder: (context, state) => _pageBuilder(const SplashPage()),
-      ),
+      if (kIsWeb)
+        GoRoute(
+          path: '/landing',
+          name: 'landing',
+          pageBuilder: (context, state) => _pageBuilder(const LandingRoute()),
+        )
+      else
+        GoRoute(
+          path: '/splash',
+          name: 'splash',
+          pageBuilder: (context, state) => _pageBuilder(const SplashRoute()),
+        ),
 
       GoRoute(
         path: '/auth',
         name: 'login',
-        pageBuilder: (context, state) => _pageBuilder(const LoginPage()),
+        pageBuilder: (context, state) => _pageBuilder(const LoginRoute()),
         routes: const [],
       ),
 
       // * shell routes
       ShellRoute(
           navigatorKey: ContextUtility.shellrouteKey,
-          builder: (context, state, child) => MainNavigation(state, child),
+          builder: (context, state, child) => NavigationLayout(state, child),
           routes: [
             GoRoute(
               path: '/profile',
               name: "profile",
-              pageBuilder: (context, state) => _pageBuilder(const UserPage()),
+              pageBuilder: (context, state) =>
+                  _pageBuilder(const ProfileRoute()),
               routes: const [],
             ),
             GoRoute(
               path: '/',
               name: "home",
-              pageBuilder: (context, state) => _pageBuilder(const HomePage()),
+              pageBuilder: (context, state) => _pageBuilder(const HomeRoute()),
               routes: const [],
             ),
             GoRoute(
               path: '/search',
               name: "search",
-              pageBuilder: (context, state) => _pageBuilder(const ListPage()),
+              pageBuilder: (context, state) =>
+                  _pageBuilder(const SearchRoute()),
               routes: const [],
             ),
           ]),

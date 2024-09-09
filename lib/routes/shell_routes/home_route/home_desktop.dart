@@ -1,54 +1,21 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_detextre4/routes/shell_routes/home_route/home_route.dart';
 import 'package:flutter_detextre4/utils/config/config.dart';
 import 'package:flutter_detextre4/utils/config/theme.dart';
 import 'package:flutter_detextre4/utils/extensions/widget_extensions.dart';
 import 'package:flutter_detextre4/utils/general/variables.dart';
 import 'package:flutter_detextre4/widgets/defaults/button.dart';
-import 'package:flutter_detextre4/widgets/defaults/scaffold.dart';
-import 'package:flutter_detextre4/widgets/defaults/snackbar.dart';
 import 'package:flutter_gap/flutter_gap.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:responsive_mixin_layout/responsive_mixin_layout.dart';
 
-class HomePage extends StatelessWidget with ResponsiveMixinLayout {
-  const HomePage({super.key});
-
-  @override
-  Widget? desktopLayout(BuildContext context, BoxConstraints constraints) {
-    return const AppScaffold(
-      body: _Page1(),
-    );
-  }
-
-  @override
-  Widget tabletLayout(BuildContext context, BoxConstraints constraints) {
-    return AppScaffold(
-      doubleBackToExit: true,
-      body: PageView(
-        children: const [
-          _Page1(),
-        ],
-      ),
-    );
-  }
-}
-
-class _Page1 extends StatefulWidget {
-  const _Page1();
-  @override
-  State<_Page1> createState() => _Page1State();
-}
-
-class _Page1State extends State<_Page1> {
-  int _counter = 0;
-
-  Future<void> _incrementCounter() async {
-    setState(() => _counter++);
-    showSnackbar("El contador ha incrementado");
-  }
+class HomeDesktop extends StatelessWidget {
+  const HomeDesktop(this.constraints, {super.key});
+  final BoxConstraints constraints;
 
   @override
   Widget build(BuildContext context) {
+    final inherited = context.getInheritedWidgetOfExactType<HomeInherited>()!;
+
     return Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
@@ -65,14 +32,14 @@ class _Page1State extends State<_Page1> {
           const Gap(Vars.gapMax).column,
           const Text('You have pushed the button this many times:'),
           Text(
-            '$_counter',
+            '${inherited.counter}',
             style: Theme.of(context).textTheme.headlineMedium,
           ),
           const Gap(Vars.gapMax).column,
           Container(
               margin: const EdgeInsets.only(bottom: 50),
               child: FloatingActionButton(
-                onPressed: _incrementCounter,
+                onPressed: inherited.incrementCounter,
                 tooltip: 'Increment',
                 heroTag: UniqueKey(),
                 child: const Icon(Icons.add).invertedColor(),

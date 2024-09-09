@@ -1,49 +1,32 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_detextre4/layouts/navigation_layout/navigation_layout.dart';
 import 'package:flutter_detextre4/utils/config/router_config.dart';
 import 'package:flutter_detextre4/widgets/defaults/bottom_navigation_bar.dart';
 import 'package:go_router/go_router.dart';
 
-class MainNavigation extends StatelessWidget {
-  const MainNavigation(
-    this.state,
-    this.child, {
+class NavigationMobile extends StatelessWidget {
+  const NavigationMobile(
+    this.constraints, {
     super.key,
+    required this.child,
     this.swipeNavigate = false,
   });
-  final GoRouterState state;
+  final BoxConstraints constraints;
   final Widget child;
   final bool swipeNavigate;
 
   @override
   Widget build(BuildContext context) {
-    if (router.indexShellRoute == -1) {
-      return const Scaffold(body: SizedBox.shrink());
-    }
-
-    final items = {
-      "profile": const BottomNavigationBarItem(
-        label: "",
-        tooltip: "Profile",
-        icon: Icon(Icons.person),
-      ),
-      "home": const BottomNavigationBarItem(
-        label: "",
-        tooltip: "Home",
-        icon: Icon(Icons.home),
-      ),
-      "search": const BottomNavigationBarItem(
-        label: "",
-        tooltip: "Search",
-        icon: Icon(Icons.search),
-      ),
-    };
+    final inherited =
+        context.getInheritedWidgetOfExactType<NavigationInherited>()!;
 
     return Scaffold(
       bottomNavigationBar: AppBottomNavigationBar(
         currentIndex: router.indexShellRoute,
-        onTap: (index) => context.goNamed(items.entries.elementAt(index).key),
+        onTap: (index) =>
+            context.goNamed(inherited.items.entries.elementAt(index).key),
         items: router.shellRoutes
-            .map((element) => items[(element as GoRoute).name]!)
+            .map((element) => inherited.items[(element as GoRoute).name]!)
             .toList(),
       ),
 
