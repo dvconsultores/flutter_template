@@ -162,6 +162,9 @@ flutter:
     - assets/images/
     - assets/themes/light/images/
     - assets/themes/dark/images/
+    - assets/animation/
+    - assets/json/
+    - assets/sounds/
     - .env
 
   # To add custom fonts to your application, add a fonts section here,
