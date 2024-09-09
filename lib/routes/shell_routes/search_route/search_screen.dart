@@ -4,8 +4,7 @@ import 'package:flutter_detextre4/widgets/defaults/scaffold.dart';
 import 'package:flutter_detextre4/widgets/loaders/refresh_indicator.dart';
 
 class SearchDesktop extends StatelessWidget {
-  const SearchDesktop(this.constraints, {super.key});
-  final BoxConstraints constraints;
+  const SearchDesktop({super.key});
 
   @override
   Widget build(BuildContext context) {

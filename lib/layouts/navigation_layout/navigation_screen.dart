@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
 
-class NavigationDesktop extends StatelessWidget {
-  const NavigationDesktop(
-    this.constraints, {
+class NavigationScreen extends StatelessWidget {
+  const NavigationScreen({
     super.key,
     required this.child,
     this.swipeNavigate = false,
+    required this.items,
   });
-  final BoxConstraints constraints;
   final Widget child;
   final bool swipeNavigate;
+  final Map<String, BottomNavigationBarItem> items;
 
   @override
   Widget build(BuildContext context) {

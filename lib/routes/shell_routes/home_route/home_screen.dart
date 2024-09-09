@@ -8,9 +8,8 @@ import 'package:flutter_detextre4/widgets/defaults/button.dart';
 import 'package:flutter_gap/flutter_gap.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
-class HomeDesktop extends StatelessWidget {
-  const HomeDesktop(this.constraints, {super.key});
-  final BoxConstraints constraints;
+class HomeScreen extends StatelessWidget {
+  const HomeScreen({super.key});
 
   @override
   Widget build(BuildContext context) {

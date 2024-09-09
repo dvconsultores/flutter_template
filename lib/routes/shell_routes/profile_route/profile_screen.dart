@@ -3,9 +3,8 @@ import 'package:flutter_detextre4/routes/shell_routes/profile_route/profile_rout
 import 'package:flutter_detextre4/widgets/defaults/button.dart';
 import 'package:flutter_detextre4/widgets/defaults/scaffold.dart';
 
-class ProfileMobile extends StatelessWidget {
-  const ProfileMobile(this.constraints, {super.key});
-  final BoxConstraints constraints;
+class ProfileScreen extends StatelessWidget {
+  const ProfileScreen({super.key});
 
   @override
   Widget build(BuildContext context) {

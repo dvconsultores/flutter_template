@@ -3,9 +3,8 @@ import 'package:flutter_detextre4/routes/login_route/login_route.dart';
 import 'package:flutter_detextre4/widgets/defaults/button.dart';
 import 'package:flutter_detextre4/widgets/defaults/scaffold.dart';
 
-class LoginMobile extends StatelessWidget {
-  const LoginMobile(this.constraints, {super.key});
-  final BoxConstraints constraints;
+class LoginScreen extends StatelessWidget {
+  const LoginScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -20,11 +19,11 @@ class LoginMobile extends StatelessWidget {
             child: Column(children: [
               Image.asset(
                 'assets/images/avatar.png',
-                height: constraints.maxHeight * 0.15,
+                height: 150,
               ),
               const Material(
                 color: Colors.transparent,
-                child: Text('Flutter Demo Mobile',
+                child: Text('Flutter Demo Desktop',
                     style:
                         TextStyle(fontSize: 35, fontWeight: FontWeight.bold)),
               ),

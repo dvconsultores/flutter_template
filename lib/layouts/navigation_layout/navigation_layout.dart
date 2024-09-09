@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_detextre4/layouts/navigation_layout/navigation_desktop.dart';
-import 'package:flutter_detextre4/layouts/navigation_layout/navigation_mobile.dart';
+import 'package:flutter_detextre4/layouts/navigation_layout/navigation_screen.dart';
 import 'package:flutter_detextre4/utils/config/router_config.dart';
 import 'package:go_router/go_router.dart';
-import 'package:responsive_mixin_layout/responsive_mixin_layout.dart';
 
 class NavigationLayout extends StatelessWidget {
   const NavigationLayout(
@@ -40,33 +38,10 @@ class NavigationLayout extends StatelessWidget {
       ),
     };
 
-    return NavigationInherited(
+    return NavigationScreen(
+      swipeNavigate: swipeNavigate,
       items: items,
-      child: ResponsiveLayout(
-        desktop: (context, constraints) => NavigationDesktop(
-          constraints,
-          swipeNavigate: swipeNavigate,
-          child: child,
-        ),
-        tablet: (context, constraints) => NavigationMobile(
-          constraints,
-          swipeNavigate: swipeNavigate,
-          child: child,
-        ),
-      ),
+      child: child,
     );
   }
-}
-
-class NavigationInherited extends InheritedWidget {
-  const NavigationInherited({
-    super.key,
-    required super.child,
-    required this.items,
-  });
-  final Map<String, BottomNavigationBarItem> items;
-
-  @override
-  bool updateShouldNotify(NavigationInherited oldWidget) =>
-      items != oldWidget.items;
 }

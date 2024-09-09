@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_detextre4/widgets/defaults/scaffold.dart';
 
-class LandingDesktop extends StatelessWidget {
-  const LandingDesktop(this.constraints, {super.key});
-  final BoxConstraints constraints;
+class LandingScreen extends StatelessWidget {
+  const LandingScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -11,7 +10,9 @@ class LandingDesktop extends StatelessWidget {
     //     context.getInheritedWidgetOfExactType<LandingInherited>()!;
 
     return const AppScaffold(
-      body: Text("here"),
+      body: Column(children: [
+        Text("data"),
+      ]),
     );
   }
 }

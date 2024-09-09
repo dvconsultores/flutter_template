@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_detextre4/repositories/auth_api.dart';
-import 'package:flutter_detextre4/routes/login_route/login_desktop.dart';
-import 'package:flutter_detextre4/routes/login_route/login_mobile.dart';
-import 'package:responsive_mixin_layout/responsive_mixin_layout.dart';
+import 'package:flutter_detextre4/routes/login_route/login_screen.dart';
 
 class LoginRoute extends StatefulWidget {
   const LoginRoute({super.key});
@@ -25,10 +23,7 @@ class _LoginRouteState extends State<LoginRoute> {
   Widget build(BuildContext context) {
     return LoginInherited(
       authApi: authApi,
-      child: ResponsiveLayout(
-        desktop: (context, constraints) => LoginDesktop(constraints),
-        tablet: (context, constraints) => LoginMobile(constraints),
-      ),
+      child: const LoginScreen(),
     );
   }
 }

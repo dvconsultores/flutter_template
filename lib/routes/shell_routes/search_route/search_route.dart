@@ -1,10 +1,8 @@
 import 'dart:math' as math;
 
-import 'package:flutter_detextre4/routes/shell_routes/search_route/search_desktop.dart';
-import 'package:flutter_detextre4/routes/shell_routes/search_route/search_mobile.dart';
-import 'package:flutter_detextre4/utils/general/list_filterable.dart';
 import 'package:flutter/material.dart';
-import 'package:responsive_mixin_layout/responsive_mixin_layout.dart';
+import 'package:flutter_detextre4/routes/shell_routes/search_route/search_screen.dart';
+import 'package:flutter_detextre4/utils/general/list_filterable.dart';
 
 class SearchRoute extends StatefulWidget {
   const SearchRoute({super.key});
@@ -38,10 +36,7 @@ class _ListViewExampleState extends State<SearchRoute> {
       items: items,
       onPullDown: onPullDown,
       onRefresh: onRefresh,
-      child: ResponsiveLayout(
-        desktop: (context, constraints) => SearchDesktop(constraints),
-        tablet: (context, constraints) => SearchMobile(constraints),
-      ),
+      child: const SearchDesktop(),
     );
   }
 }
