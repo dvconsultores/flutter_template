@@ -64,12 +64,7 @@ class InputField extends TextFormField {
     BoxConstraints? suffixIconConstraints,
   }) : super(
           style: textStyle ?? _ts,
-          keyboardType: numeric
-              ? const TextInputType.numberWithOptions(
-                  signed: true,
-                  decimal: true,
-                )
-              : keyboardType,
+          keyboardType: numeric ? TextInputType.number : keyboardType,
           inputFormatters: [
             if (numeric) ...[
               DecimalTextInputFormatter(
@@ -280,7 +275,7 @@ class InputField extends TextFormField {
         disabled: disabled,
         expands: expanded,
         keyboardType: numeric
-            ? const TextInputType.numberWithOptions(signed: true, decimal: true)
+            ? TextInputType.number
             : expanded && keyboardType == null
                 ? TextInputType.text
                 : keyboardType,
