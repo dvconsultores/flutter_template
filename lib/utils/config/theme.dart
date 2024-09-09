@@ -117,11 +117,30 @@ class ThemeApp {
     // textTheme
     ligthTheme = ligthTheme.copyWith(
       textTheme: GoogleFonts.latoTextTheme(ligthTheme.textTheme.copyWith(
-        bodyLarge: TextStyle(
-          fontSize: 18,
+        titleLarge: TextStyle(
+          fontSize: 24,
           color: ligthTheme.extension<ThemeDataColorExtension>()!.title!,
           fontWeight: FontWeight.w500,
           letterSpacing: 0.15,
+          height: 1.1,
+        ),
+        titleMedium: TextStyle(
+          fontSize: 22,
+          color: ligthTheme.extension<ThemeDataColorExtension>()!.title!,
+          fontWeight: FontWeight.w500,
+          letterSpacing: 0.15,
+          height: 1.1,
+        ),
+        titleSmall: TextStyle(
+          fontSize: 20,
+          color: ligthTheme.extension<ThemeDataColorExtension>()!.title!,
+          fontWeight: FontWeight.w500,
+          letterSpacing: 0.15,
+          height: 1.1,
+        ),
+        bodyLarge: TextStyle(
+          fontSize: 18,
+          color: ligthTheme.extension<ThemeDataColorExtension>()!.text!,
           height: 1.1,
         ),
         bodyMedium: TextStyle(
@@ -130,6 +149,7 @@ class ThemeApp {
           height: 1.1,
         ),
         bodySmall: TextStyle(
+          fontSize: 14,
           color: ligthTheme.extension<ThemeDataColorExtension>()!.text!,
           height: 1.1,
         ),
