@@ -191,12 +191,11 @@ class ThemeApp {
     );
     // text config
     ligthTheme = ligthTheme.copyWith(
-      extensions: ligthTheme.extensions.values.toList() +
-          <ThemeExtension<dynamic>>[
-            const ThemeDataStyleExtension(
-              customText: TextStyle(),
-            ),
-          ],
+      extensions: ligthTheme.extensions.values.followedBy([
+        const ThemeDataStyleExtension(
+          customText: TextStyle(),
+        ),
+      ]),
       // appbarTheme
       appBarTheme: ligthTheme.appBarTheme
           .copyWith(titleTextStyle: ligthTheme.textTheme.bodyLarge),
@@ -242,7 +241,7 @@ class ThemeApp {
 
   ///* Getter to current theme name.
   static ThemeType get theme =>
-      ContextUtility.context?.watch<MainProvider>().appTheme ?? ThemeType.light;
+      ContextUtility.context?.read<MainProvider>().appTheme ?? ThemeType.light;
 
   ///* Getter to current theme assets directory `assets/themes/${theme}/` + path provided.
   static String getAsset(BuildContext? context, String path) =>
