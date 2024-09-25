@@ -319,6 +319,22 @@ class ColorsApp {
   final Color accent;
   final Color success;
   final Color warning;
+
+  Map<String, dynamic> toJson() => {
+        "background": background,
+        "primary": primary,
+        "secondary": secondary,
+        "tertiary": tertiary,
+        "error": error,
+        "focusColor": focusColor,
+        "disabledColor": disabledColor,
+        "text": text,
+        "label": label,
+        "title": title,
+        "accent": accent,
+        "success": success,
+        "warning": warning,
+      };
 }
 
 // ? Theme data color extension
