@@ -4,7 +4,6 @@ import 'package:flutter_detextre4/utils/general/variables.dart';
 import 'package:flutter_detextre4/widgets/defaults/error_text.dart';
 import 'package:flutter_gap/flutter_gap.dart';
 
-// TODO checkout troubles in logic here
 class CheckboxField extends StatefulWidget {
   const CheckboxField({
     super.key,
@@ -133,7 +132,7 @@ class _CheckboxFieldState extends State<CheckboxField> {
                     width: widget.size != null ? widget.size! * 2 : null,
                     height: widget.size != null ? widget.size! * 2 : null,
                     child: Material(
-                        elevation: 7,
+                        elevation: 3,
                         shadowColor: ThemeApp.colors(context).secondary,
                         shape: const CircleBorder(),
                         child: Checkbox(
@@ -175,15 +174,10 @@ class _CheckboxFieldState extends State<CheckboxField> {
 }
 
 /// version without formState
-class CheckboxFieldV2 extends StatefulWidget {
-  const CheckboxFieldV2({
+class CheckboxV2 extends StatefulWidget {
+  const CheckboxV2({
     super.key,
-    this.restorationId,
-    this.onSaved,
-    this.validator,
-    this.autovalidateMode,
     this.controller,
-    this.initialValue,
     this.disabled = false,
     this.onChanged,
     this.splashRadius = 16,
@@ -191,8 +185,6 @@ class CheckboxFieldV2 extends StatefulWidget {
     this.label,
     this.labelText,
     this.textStyle,
-    this.errorText,
-    this.errorStyle,
     this.errorWidth,
     this.padding = const EdgeInsets.symmetric(
       horizontal: Vars.gapMedium,
@@ -204,21 +196,14 @@ class CheckboxFieldV2 extends StatefulWidget {
     this.mainAxisAlignment = MainAxisAlignment.start,
     this.borderRadius = Vars.radius40,
   });
-  final String? restorationId;
-  final void Function(bool? value)? onSaved;
-  final String? Function(bool? value)? validator;
-  final AutovalidateMode? autovalidateMode;
   final ValueNotifier<bool>? controller;
   final void Function(bool? value)? onChanged;
-  final bool? initialValue;
   final bool disabled;
   final double splashRadius;
   final double? size;
   final Widget? label;
   final String? labelText;
   final TextStyle? textStyle;
-  final String? errorText;
-  final TextStyle? errorStyle;
   final double? errorWidth;
   final EdgeInsetsGeometry padding;
   final double gap;
@@ -228,12 +213,10 @@ class CheckboxFieldV2 extends StatefulWidget {
   final double borderRadius;
 
   @override
-  State<CheckboxFieldV2> createState() => _CheckboxFieldV2State();
+  State<CheckboxV2> createState() => _CheckboxFieldV2State();
 }
 
-class _CheckboxFieldV2State extends State<CheckboxFieldV2> {
-  FormFieldState<bool>? formState;
-
+class _CheckboxFieldV2State extends State<CheckboxV2> {
   bool get getValue => widget.controller?.value ?? false;
 
   void onPressed() {
@@ -248,7 +231,7 @@ class _CheckboxFieldV2State extends State<CheckboxFieldV2> {
     final labelWidget = widget.label ?? Text(widget.labelText ?? '');
 
     return TextButton(
-      onPressed: onPressed,
+      onPressed: widget.disabled ? null : onPressed,
       style: ButtonStyle(
         padding: MaterialStatePropertyAll(widget.padding),
         textStyle: MaterialStatePropertyAll(
@@ -269,7 +252,7 @@ class _CheckboxFieldV2State extends State<CheckboxFieldV2> {
               width: widget.size != null ? widget.size! * 2 : null,
               height: widget.size != null ? widget.size! * 2 : null,
               child: Material(
-                  elevation: 7,
+                  elevation: 3,
                   shadowColor: ThemeApp.colors(context).secondary,
                   shape: const CircleBorder(),
                   child: Checkbox(
