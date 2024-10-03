@@ -2,19 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_detextre4/utils/general/variables.dart';
 import 'package:flutter_detextre4/widgets/defaults/error_text.dart';
 import 'package:flutter_detextre4/widgets/form_fields/checkbox.dart';
+import 'package:flutter_detextre4/widgets/form_fields/radio_group_field.dart';
 import 'package:flutter_gap/flutter_gap.dart';
 
-class RadioGroupItem<T> {
-  const RadioGroupItem({
-    this.labelText,
-    required this.value,
-  });
-  final String? labelText;
-  final T value;
-}
-
-class RadioGroupField<T> extends StatefulWidget {
-  const RadioGroupField({
+class MultipleRadioGroupField<T> extends StatefulWidget {
+  const MultipleRadioGroupField({
     super.key,
     required this.items,
     this.restorationId,
@@ -49,12 +41,12 @@ class RadioGroupField<T> extends StatefulWidget {
   });
   final List<RadioGroupItem<T>> items;
   final String? restorationId;
-  final void Function(T? value)? onSaved;
-  final String? Function(T? value)? validator;
+  final void Function(List<T>? value)? onSaved;
+  final String? Function(List<T>? value)? validator;
   final AutovalidateMode? autovalidateMode;
-  final ValueNotifier<T?>? controller;
-  final void Function(T? value)? onChanged;
-  final T? initialValue;
+  final ValueNotifier<List<T>?>? controller;
+  final void Function(List<T>? value)? onChanged;
+  final List<T>? initialValue;
   final bool disabled;
   final double splashRadius;
   final double? radioSize;
@@ -76,19 +68,27 @@ class RadioGroupField<T> extends StatefulWidget {
   final Axis direction;
 
   @override
-  State<RadioGroupField<T>> createState() => _RadioGroupFieldState<T>();
+  State<MultipleRadioGroupField<T>> createState() =>
+      _MultipleRadioGroupFieldState<T>();
 }
 
-class _RadioGroupFieldState<T> extends State<RadioGroupField<T>> {
-  FormFieldState<T?>? formState;
+class _MultipleRadioGroupFieldState<T>
+    extends State<MultipleRadioGroupField<T>> {
+  FormFieldState<List<T>?>? formState;
 
-  T? getValue(FormFieldState<T?> state) => state.value;
+  List<T>? getValue(FormFieldState<List<T>?> state) => state.value;
 
   void onPressed(RadioGroupItem<T> item) {
-    formState!.didChange(item.value);
+    final currentState = formState?.value ?? <T>[];
+
+    if (!currentState.remove(item.value)) {
+      currentState.add(item.value);
+    }
+
+    formState!.didChange(currentState);
     setState(() {});
 
-    if (widget.onChanged != null) widget.onChanged!(item.value);
+    if (widget.onChanged != null) widget.onChanged!(currentState);
   }
 
   void onListen() {
@@ -111,7 +111,7 @@ class _RadioGroupFieldState<T> extends State<RadioGroupField<T>> {
 
   @override
   Widget build(BuildContext context) {
-    return FormField<T?>(
+    return FormField<List<T>?>(
       restorationId: widget.restorationId,
       onSaved: widget.onSaved,
       initialValue: widget.initialValue,
@@ -134,7 +134,8 @@ class _RadioGroupFieldState<T> extends State<RadioGroupField<T>> {
               direction: widget.direction,
               children: widget.items.map((item) {
                 return CheckboxV2(
-                  controller: ValueNotifier(state.value == item.value),
+                  controller:
+                      ValueNotifier(state.value?.contains(item.value) ?? false),
                   onChanged: (_) => onPressed(item),
                   disabled: widget.disabled,
                   splashRadius: widget.splashRadius,

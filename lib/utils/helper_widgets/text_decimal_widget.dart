@@ -54,7 +54,7 @@ class TextDecimal extends StatelessWidget {
           compact: compact,
         ),
         values = formatted.split(decimalSeparator),
-        integers = values.first,
+        integers = values.first.replaceFirst('--', '-'),
         decimals = values.elementAtOrNull(1);
 
     return Text.rich(
