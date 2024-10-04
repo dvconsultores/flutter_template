@@ -4,6 +4,11 @@ import 'package:flutter_detextre4/widgets/defaults/error_text.dart';
 import 'package:flutter_detextre4/widgets/form_fields/checkbox.dart';
 import 'package:flutter_detextre4/widgets/form_fields/radio_group_field.dart';
 
+enum MultipleRadioGroupMode {
+  standard,
+  selectAllbackward;
+}
+
 class MultipleRadioGroupField<T> extends StatefulWidget {
   const MultipleRadioGroupField({
     super.key,
@@ -39,6 +44,7 @@ class MultipleRadioGroupField<T> extends StatefulWidget {
     this.height,
     this.separatorBuilder,
     this.itemBuilder,
+    this.mode = MultipleRadioGroupMode.standard,
   });
   final List<RadioGroupItem<T>> items;
   final String? restorationId;
@@ -72,8 +78,9 @@ class MultipleRadioGroupField<T> extends StatefulWidget {
     BuildContext context,
     int index,
     bool value,
-    void Function(RadioGroupItem<T> item) onPressed,
+    void Function(int index) onPressed,
   )? itemBuilder;
+  final MultipleRadioGroupMode mode;
 
   @override
   State<MultipleRadioGroupField<T>> createState() =>
@@ -86,11 +93,29 @@ class _MultipleRadioGroupFieldState<T>
 
   List<T>? getValue(FormFieldState<List<T>?> state) => state.value;
 
-  void onPressed(RadioGroupItem<T> item) {
-    final currentState = formState?.value ?? <T>[];
+  void onPressed(int index) {
+    final item = widget.items[index], currentState = formState?.value ?? <T>[];
 
-    if (!currentState.remove(item.value)) {
-      currentState.add(item.value);
+    switch (widget.mode) {
+      case MultipleRadioGroupMode.selectAllbackward:
+        {
+          final stateIndex = currentState.indexOf(item.value);
+
+          if (stateIndex.isNegative) {
+            currentState
+                .addAll(widget.items.take(index + 1).map((e) => e.value));
+          } else {
+            currentState.removeRange(stateIndex, currentState.length);
+          }
+        }
+        break;
+
+      default:
+        {
+          if (!currentState.remove(item.value)) {
+            currentState.add(item.value);
+          }
+        }
     }
 
     formState!.didChange(currentState);
@@ -164,7 +189,7 @@ class _MultipleRadioGroupFieldState<T>
                 return CheckboxV2(
                   controller:
                       ValueNotifier(state.value?.contains(item.value) ?? false),
-                  onChanged: (_) => onPressed(item),
+                  onChanged: (_) => onPressed(index),
                   disabled: widget.disabled,
                   splashRadius: widget.splashRadius,
                   size: widget.radioSize,
