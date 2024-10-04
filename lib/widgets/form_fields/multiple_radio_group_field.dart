@@ -3,7 +3,6 @@ import 'package:flutter_detextre4/utils/general/variables.dart';
 import 'package:flutter_detextre4/widgets/defaults/error_text.dart';
 import 'package:flutter_detextre4/widgets/form_fields/checkbox.dart';
 import 'package:flutter_detextre4/widgets/form_fields/radio_group_field.dart';
-import 'package:flutter_gap/flutter_gap.dart';
 
 class MultipleRadioGroupField<T> extends StatefulWidget {
   const MultipleRadioGroupField({
@@ -34,10 +33,12 @@ class MultipleRadioGroupField<T> extends StatefulWidget {
     this.radioMainAxisAlignment = MainAxisAlignment.start,
     this.radioBorderRadius = Vars.radius40,
     this.padding = const EdgeInsets.all(0),
-    this.crossAxisAlignment = CrossAxisAlignment.center,
-    this.mainAxisAlignment = MainAxisAlignment.start,
-    this.mainAxisSize = MainAxisSize.max,
-    this.direction = Axis.vertical,
+    this.scrollDirection = Axis.vertical,
+    this.scrollable = false,
+    this.width,
+    this.height,
+    this.separatorBuilder,
+    this.itemBuilder,
   });
   final List<RadioGroupItem<T>> items;
   final String? restorationId;
@@ -62,10 +63,17 @@ class MultipleRadioGroupField<T> extends StatefulWidget {
   final MainAxisAlignment radioMainAxisAlignment;
   final double radioBorderRadius;
   final EdgeInsets padding;
-  final CrossAxisAlignment crossAxisAlignment;
-  final MainAxisAlignment mainAxisAlignment;
-  final MainAxisSize mainAxisSize;
-  final Axis direction;
+  final Axis scrollDirection;
+  final bool scrollable;
+  final double? width;
+  final double? height;
+  final Widget Function(BuildContext context, int index)? separatorBuilder;
+  final Widget Function(
+    BuildContext context,
+    int index,
+    bool value,
+    void Function(RadioGroupItem<T> item) onPressed,
+  )? itemBuilder;
 
   @override
   State<MultipleRadioGroupField<T>> createState() =>
@@ -126,13 +134,33 @@ class _MultipleRadioGroupFieldState<T>
 
         return Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
           // field
-          Section(
+          SizedBox(
+            width: widget.width,
+            height: widget.height,
+            child: ListView.separated(
               padding: widget.padding,
-              crossAxisAlignment: widget.crossAxisAlignment,
-              mainAxisAlignment: widget.mainAxisAlignment,
-              mainAxisSize: widget.mainAxisSize,
-              direction: widget.direction,
-              children: widget.items.map((item) {
+              scrollDirection: widget.scrollDirection,
+              shrinkWrap: !widget.scrollable,
+              physics: widget.scrollable
+                  ? null
+                  : const NeverScrollableScrollPhysics(),
+              itemCount: widget.items.length,
+              separatorBuilder: (context, index) =>
+                  widget.separatorBuilder != null
+                      ? widget.separatorBuilder!(context, index)
+                      : const SizedBox.shrink(),
+              itemBuilder: (context, index) {
+                final item = widget.items[index];
+
+                if (widget.itemBuilder != null) {
+                  return widget.itemBuilder!(
+                    context,
+                    index,
+                    state.value?.contains(item.value) ?? false,
+                    onPressed,
+                  );
+                }
+
                 return CheckboxV2(
                   controller:
                       ValueNotifier(state.value?.contains(item.value) ?? false),
@@ -153,7 +181,9 @@ class _MultipleRadioGroupFieldState<T>
                   mainAxisAlignment: widget.radioMainAxisAlignment,
                   borderRadius: widget.radioBorderRadius,
                 );
-              }).toList()),
+              },
+            ),
+          ),
 
           // error text
           if (state.hasError && (widget.errorText?.isNotEmpty ?? true))
