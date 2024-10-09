@@ -102,6 +102,7 @@ class _MultipleRadioGroupFieldState<T>
           final stateIndex = currentState.indexOf(item.value);
 
           if (stateIndex.isNegative) {
+            currentState.clear();
             currentState
                 .addAll(widget.items.take(index + 1).map((e) => e.value));
           } else {
