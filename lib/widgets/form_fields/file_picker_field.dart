@@ -1,13 +1,11 @@
 import 'dart:io';
 
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:easy_debounce/easy_debounce.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter_detextre4/utils/config/theme.dart';
 import 'package:flutter_detextre4/utils/extensions/type_extensions.dart';
-import 'package:flutter_detextre4/utils/extensions/widget_extensions.dart';
 import 'package:flutter_detextre4/utils/general/functions.dart';
 import 'package:flutter_detextre4/utils/general/variables.dart';
 import 'package:flutter_detextre4/widgets/defaults/error_text.dart';
@@ -38,7 +36,7 @@ class FilePickerField extends StatefulWidget {
     this.boxShadow = const [Vars.boxShadow2],
     this.placeholderText,
     this.placeholder,
-    this.networkPlaceholder,
+    this.defaultPlaceholderSize = 45,
     this.errorText,
     this.errorStyle,
     this.onChanged,
@@ -66,7 +64,7 @@ class FilePickerField extends StatefulWidget {
   final List<BoxShadow> boxShadow;
   final String? placeholderText;
   final Widget? placeholder;
-  final String? networkPlaceholder;
+  final double defaultPlaceholderSize;
   final String? errorText;
   final TextStyle? errorStyle;
   final void Function(File? value)? onChanged;
@@ -182,6 +180,8 @@ class _FilePickerFieldState extends State<FilePickerField>
 
   @override
   Widget build(BuildContext context) {
+    final colors = ThemeApp.colors(context), theme = Theme.of(context);
+
     final clearButtonWidget = IconButton(
       onPressed: clear,
       visualDensity: VisualDensity.compact,
@@ -200,21 +200,19 @@ class _FilePickerFieldState extends State<FilePickerField>
         formState ??= state;
         widget.controller?.value = state.value;
 
-        final ps = TextStyle(color: ThemeApp.colors(context).label),
-            placeholderWidget =
-                widget.networkPlaceholder != null && state.value == null
-                    ? CachedNetworkImage(
-                        imageUrl: widget.networkPlaceholder!,
-                        width: double.maxFinite,
-                        height: double.maxFinite,
-                        fit: BoxFit.cover,
-                      ).prebuilder()
-                    : widget.placeholder ??
-                        Text(
-                          widget.placeholderText ?? '',
-                          textAlign: TextAlign.center,
-                          style: ps,
-                        );
+        final ps = TextStyle(color: colors.label),
+            placeholderWidget = widget.placeholder ??
+                (widget.placeholderText != null
+                    ? Text(
+                        widget.placeholderText ?? '',
+                        textAlign: TextAlign.center,
+                        style: ps,
+                      )
+                    : Icon(
+                        Icons.add_photo_alternate_outlined,
+                        size: widget.defaultPlaceholderSize,
+                        color: colors.primary,
+                      ));
 
         return Row(children: [
           SizedBox(
@@ -244,18 +242,15 @@ class _FilePickerFieldState extends State<FilePickerField>
                         height: widget.height,
                         clipBehavior: Clip.antiAlias,
                         decoration: BoxDecoration(
-                          color: ThemeApp.colors(context).background,
                           borderRadius: widget.borderRadius,
                           border: Border.fromBorderSide(
                             widget.disabled
                                 ? widget.borderDisabled ??
                                     BorderSide(
-                                        width: 0,
-                                        color: Theme.of(context).disabledColor)
+                                        width: 0, color: theme.disabledColor)
                                 : isOpen
                                     ? widget.borderFocused ??
-                                        BorderSide(
-                                            color: Theme.of(context).focusColor)
+                                        BorderSide(color: theme.focusColor)
                                     : widget.border ??
                                         const BorderSide(
                                             width: 0,
@@ -269,13 +264,7 @@ class _FilePickerFieldState extends State<FilePickerField>
                               height: double.maxFinite,
                               clipBehavior: Clip.antiAlias,
                               decoration: BoxDecoration(
-                                color: state.value != null
-                                    ? ThemeApp.colors(context)
-                                        .label
-                                        .withAlpha(180)
-                                    : ThemeApp.colors(context)
-                                        .label
-                                        .withAlpha(100),
+                                color: Colors.white,
                                 borderRadius: widget.borderRadius.subtract(
                                   const BorderRadius.all(Radius.circular(4)),
                                 ),
@@ -350,8 +339,8 @@ class _FilePickerFieldState extends State<FilePickerField>
                 ErrorText(
                   widget.errorText ?? state.errorText ?? '',
                   style: widget.errorStyle ??
-                      Theme.of(context).textTheme.labelMedium?.copyWith(
-                          color: Theme.of(context).colorScheme.error),
+                      theme.textTheme.labelMedium
+                          ?.copyWith(color: theme.colorScheme.error),
                 )
             ]),
           ),
