@@ -19,6 +19,8 @@ class AppLoader {
   final _controller = StreamController<bool>();
   Stream<bool> get stream => _controller.stream;
 
+  var cancelToken = CancelToken();
+
   void dispose() {
     disposed = true;
     if (!loading) return;
@@ -28,14 +30,19 @@ class AppLoader {
     loading = false;
   }
 
-  void stop<T>([T? value]) {
+  void stop<T>({bool cancelCurrentToken = false}) {
     if (disposed || !loading) return;
+
+    if (cancelCurrentToken) cancelToken.cancel();
+
     loading = false;
     _controller.sink.add(false);
   }
 
-  void close<T>([T? value]) {
+  void close<T>({T? value, bool cancelCurrentToken = false}) {
     if (disposed || !loading) return;
+
+    if (cancelCurrentToken) cancelToken.cancel();
 
     clearSnackbars();
     Navigator.pop(ContextUtility.context!, value);
@@ -47,6 +54,7 @@ class AppLoader {
     if (disposed || loading) return null;
     loading = true;
     _controller.sink.add(true);
+    cancelToken = CancelToken();
 
     if (future != null) {
       return await future().whenComplete(() {
@@ -59,103 +67,79 @@ class AppLoader {
   }
 
   Future<T?> open<T>({
-    String message = "Processing...",
+    String message = "Cargando...",
     Future<T> Function()? future,
-    void Function(CancelToken? cancelToken)? onUserWillPop,
-    CancelToken? cancelToken,
+    void Function(CancelToken cancelToken)? onUserWillPop,
+    CancelToken? customCancelToken,
   }) async {
     if (disposed || loading) return null;
     loading = true;
     _controller.sink.add(true);
+    cancelToken = CancelToken();
 
-    return await showDialog<T>(
-      context: ContextUtility.context!,
-      builder: (context) => _AppLoader<T>(
-        message: message,
-        future: future,
-        disposeLoader: dispose,
-        closeLoader: close,
-        onUserWillPop: onUserWillPop,
-        cancelToken: cancelToken,
-        child: child,
-      ),
-    );
-  }
-}
+    showDialog(
+        context: ContextUtility.context!,
+        builder: (context) => WillPopCustom(
+              onWillPop: () async {
+                if (onUserWillPop != null) {
+                  close();
+                  customCancelToken?.cancel();
+                  cancelToken.cancel();
+                  onUserWillPop(customCancelToken ?? cancelToken);
+                }
+                return false;
+              },
+              child: child ?? _AppLoader<T>(message: message),
+            ));
 
-class _AppLoader<T> extends StatefulWidget {
-  const _AppLoader({
-    required this.message,
-    this.future,
-    required this.disposeLoader,
-    required this.closeLoader,
-    this.onUserWillPop,
-    this.cancelToken,
-    this.child,
-  }) : super(key: const Key('loader_widget'));
-  final String message;
-  final Future<T?> Function()? future;
-  final VoidCallback disposeLoader;
-  final void Function([T? value]) closeLoader;
-  final void Function(CancelToken? cancelToken)? onUserWillPop;
-  final CancelToken? cancelToken;
-  final Widget? child;
+    if (future != null) {
+      try {
+        final value = await future();
 
-  @override
-  State<_AppLoader<T>> createState() => _AppLoaderState<T>();
-}
-
-class _AppLoaderState<T> extends State<_AppLoader<T>> {
-  @override
-  void initState() {
-    if (widget.future != null) {
-      widget.future!()
-          .then((value) => widget.closeLoader(value))
-          .catchError((_) => widget.closeLoader());
+        close(value: value);
+        return value;
+      } catch (error) {
+        close();
+        rethrow;
+      }
     }
 
-    super.initState();
+    return null;
   }
+}
+
+class _AppLoader<T> extends StatelessWidget {
+  const _AppLoader({required this.message})
+      : super(key: const Key('loader_widget'));
+  final String message;
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
 
-    return WillPopCustom(
-      key: widget.key,
-      onWillPop: () async {
-        if (widget.onUserWillPop != null) {
-          widget.closeLoader();
-          widget.cancelToken?.cancel();
-          widget.onUserWillPop!(widget.cancelToken);
-        }
-        return false;
-      },
-      child: widget.child ??
-          Scaffold(
-              backgroundColor: Colors.transparent,
-              body: Center(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    SizedBox(
-                      width: 70,
-                      height: 70,
-                      child: CircularProgressIndicator(
-                        strokeWidth: 8,
-                        color: theme.colorScheme.secondary,
-                        backgroundColor: theme.colorScheme.primary,
-                      ),
-                    ),
-                    const SizedBox(height: 8),
-                    Text(
-                      widget.message,
-                      style: theme.primaryTextTheme.titleLarge,
-                    ),
-                  ],
+    return Scaffold(
+        backgroundColor: Colors.transparent,
+        body: Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              SizedBox(
+                width: 70,
+                height: 70,
+                child: CircularProgressIndicator(
+                  strokeWidth: 8,
+                  color: theme.colorScheme.secondary,
+                  backgroundColor: theme.colorScheme.primary,
                 ),
-              )),
-    );
+              ),
+              const SizedBox(height: 8),
+              Text(
+                message,
+                style: theme.primaryTextTheme.titleLarge,
+              ),
+            ],
+          ),
+        ));
   }
 }
