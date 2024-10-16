@@ -371,10 +371,11 @@ extension DioExceptionExtension on DioException {
 
     fallback ??=
         "${response?.statusCode ?? 'Error'}: An unexpected error has occurred";
-    final responseData = response?.data.toString() ?? '';
+    final responseData = response?.data.toString() ?? message ?? '';
 
-    debugPrint("statusCode: ${response?.statusCode} ⭕");
-    debugPrint("data: ${response?.data} ⭕");
+    debugPrint("⭕ exceptionType: $type ⭕");
+    debugPrint(
+        "⭕ statusCode: ${response?.statusCode} ⭕\n⭕ data: ${response?.data} ⭕");
 
     if (responseData.isHtml()) return fallback;
     return responseData.isNotEmpty ? responseData : fallback;

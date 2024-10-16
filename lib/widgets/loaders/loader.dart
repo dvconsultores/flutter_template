@@ -1,5 +1,7 @@
+import 'dart:async';
+
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_detextre4/utils/config/theme.dart';
 import 'package:flutter_detextre4/utils/general/context_utility.dart';
 import 'package:flutter_detextre4/utils/helper_widgets/will_pop_custom.dart';
 import 'package:flutter_detextre4/widgets/defaults/snackbar.dart';
@@ -7,109 +9,153 @@ import 'package:flutter_detextre4/widgets/defaults/snackbar.dart';
 /// Global loader used for asyncronous process.
 /// if should be used on initState, need to call with
 /// [SchedulerBinding.instance.addPostFrameCallback((_) {})] method.
-class AppLoader<T> {
-  AppLoader({
-    this.context,
-    this.onUserWillPop,
-  });
-  final BuildContext? context;
-  final VoidCallback? onUserWillPop;
+class AppLoader {
+  AppLoader({this.child});
+  final Widget? child;
 
   bool loading = false;
-  final disposed = ValueNotifier<bool>(false);
+  bool disposed = false;
 
-  static AppLoader<T> of<T>(BuildContext context) =>
-      AppLoader<T>(context: context);
+  final _controller = StreamController<bool>();
+  Stream<bool> get stream => _controller.stream;
 
   void dispose() {
-    disposed.value = true;
+    disposed = true;
     if (!loading) return;
 
     clearSnackbars();
-    Navigator.pop(context ?? ContextUtility.context!);
+    Navigator.pop(ContextUtility.context!);
     loading = false;
   }
 
-  void close() {
-    if (disposed.value || !loading) return;
+  void stop<T>([T? value]) {
+    if (disposed || !loading) return;
+    loading = false;
+    _controller.sink.add(false);
+  }
+
+  void close<T>([T? value]) {
+    if (disposed || !loading) return;
 
     clearSnackbars();
-    Navigator.pop(context ?? ContextUtility.context!);
+    Navigator.pop(ContextUtility.context!, value);
     loading = false;
+    _controller.sink.add(false);
   }
 
-  Future<T?> init({
-    String message = "Processing...",
-    Future<T> Function()? callback,
-  }) async {
-    if (disposed.value || loading) return Future.value();
+  Future<T?> start<T>({Future<T> Function()? future}) async {
+    if (disposed || loading) return null;
     loading = true;
+    _controller.sink.add(true);
 
-    return await showDialog(
-      context: context ?? ContextUtility.context!,
+    if (future != null) {
+      return await future().whenComplete(() {
+        loading = false;
+        _controller.sink.add(false);
+      });
+    }
+
+    return null;
+  }
+
+  Future<T?> open<T>({
+    String message = "Processing...",
+    Future<T> Function()? future,
+    void Function(CancelToken? cancelToken)? onUserWillPop,
+    CancelToken? cancelToken,
+  }) async {
+    if (disposed || loading) return null;
+    loading = true;
+    _controller.sink.add(true);
+
+    return await showDialog<T>(
+      context: ContextUtility.context!,
       builder: (context) => _AppLoader<T>(
         message: message,
-        callback: callback,
+        future: future,
         disposeLoader: dispose,
+        closeLoader: close,
         onUserWillPop: onUserWillPop,
+        cancelToken: cancelToken,
+        child: child,
       ),
     );
   }
 }
 
-class _AppLoader<T> extends StatelessWidget {
+class _AppLoader<T> extends StatefulWidget {
   const _AppLoader({
     required this.message,
-    this.callback,
+    this.future,
     required this.disposeLoader,
+    required this.closeLoader,
     this.onUserWillPop,
+    this.cancelToken,
+    this.child,
   }) : super(key: const Key('loader_widget'));
   final String message;
-  final Future<T?> Function()? callback;
+  final Future<T?> Function()? future;
   final VoidCallback disposeLoader;
-  final VoidCallback? onUserWillPop;
+  final void Function([T? value]) closeLoader;
+  final void Function(CancelToken? cancelToken)? onUserWillPop;
+  final CancelToken? cancelToken;
+  final Widget? child;
+
+  @override
+  State<_AppLoader<T>> createState() => _AppLoaderState<T>();
+}
+
+class _AppLoaderState<T> extends State<_AppLoader<T>> {
+  @override
+  void initState() {
+    if (widget.future != null) {
+      widget.future!()
+          .then((value) => widget.closeLoader(value))
+          .catchError((_) => widget.closeLoader());
+    }
+
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
-    Future<void> onCallback() async => callback!()
-        .whenComplete(() => clearSnackbars())
-        .then((value) => Navigator.pop(context, value))
-        .catchError((_) => Navigator.pop(context));
-    if (callback != null) onCallback();
+    final theme = Theme.of(context);
 
     return WillPopCustom(
-      key: key,
+      key: widget.key,
       onWillPop: () async {
-        if (onUserWillPop != null) {
-          disposeLoader();
-          onUserWillPop!();
+        if (widget.onUserWillPop != null) {
+          widget.closeLoader();
+          widget.cancelToken?.cancel();
+          widget.onUserWillPop!(widget.cancelToken);
         }
         return false;
       },
-      child: Scaffold(
-          backgroundColor: Colors.transparent,
-          body: Center(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                SizedBox(
-                  width: 70,
-                  height: 70,
-                  child: CircularProgressIndicator(
-                    strokeWidth: 8,
-                    color: ThemeApp.colors(context).secondary,
-                    backgroundColor: ThemeApp.colors(context).primary,
-                  ),
+      child: widget.child ??
+          Scaffold(
+              backgroundColor: Colors.transparent,
+              body: Center(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    SizedBox(
+                      width: 70,
+                      height: 70,
+                      child: CircularProgressIndicator(
+                        strokeWidth: 8,
+                        color: theme.colorScheme.secondary,
+                        backgroundColor: theme.colorScheme.primary,
+                      ),
+                    ),
+                    const SizedBox(height: 8),
+                    Text(
+                      widget.message,
+                      style: theme.primaryTextTheme.titleLarge,
+                    ),
+                  ],
                 ),
-                const SizedBox(height: 8),
-                Text(
-                  message,
-                  style: Theme.of(context).primaryTextTheme.titleLarge,
-                ),
-              ],
-            ),
-          )),
+              )),
     );
   }
 }
