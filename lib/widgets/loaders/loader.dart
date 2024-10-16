@@ -8,16 +8,21 @@ import 'package:flutter_detextre4/widgets/defaults/snackbar.dart';
 /// if should be used on initState, need to call with
 /// [SchedulerBinding.instance.addPostFrameCallback((_) {})] method.
 class AppLoader<T> {
-  AppLoader([this.context]);
+  AppLoader({
+    this.context,
+    this.onUserWillPop,
+  });
   final BuildContext? context;
+  final void Function(BuildContext context)? onUserWillPop;
 
   bool loading = false;
-  bool disposed = false;
+  final disposed = ValueNotifier<bool>(false);
 
-  static AppLoader<T> of<T>(BuildContext context) => AppLoader<T>(context);
+  static AppLoader<T> of<T>(BuildContext context) =>
+      AppLoader<T>(context: context);
 
   void dispose() {
-    disposed = true;
+    disposed.value = true;
     if (!loading) return;
 
     clearSnackbars();
@@ -26,7 +31,7 @@ class AppLoader<T> {
   }
 
   void close() {
-    if (!loading) return;
+    if (disposed.value || !loading) return;
 
     clearSnackbars();
     Navigator.pop(context ?? ContextUtility.context!);
@@ -37,21 +42,32 @@ class AppLoader<T> {
     String message = "Processing...",
     Future<T> Function()? callback,
   }) async {
-    if (disposed) return Future.value();
+    if (disposed.value || loading) return Future.value();
     loading = true;
 
     return await showDialog(
       context: context ?? ContextUtility.context!,
-      builder: (context) => _AppLoader<T>(message, callback),
+      builder: (context) => _AppLoader<T>(
+        message: message,
+        callback: callback,
+        disposeLoader: dispose,
+        onUserWillPop: onUserWillPop,
+      ),
     );
   }
 }
 
 class _AppLoader<T> extends StatelessWidget {
-  const _AppLoader(this.message, this.callback)
-      : super(key: const Key('loader_widget'));
+  const _AppLoader({
+    required this.message,
+    this.callback,
+    required this.disposeLoader,
+    this.onUserWillPop,
+  }) : super(key: const Key('loader_widget'));
   final String message;
   final Future<T?> Function()? callback;
+  final VoidCallback disposeLoader;
+  final void Function(BuildContext context)? onUserWillPop;
 
   @override
   Widget build(BuildContext context) {
@@ -63,7 +79,13 @@ class _AppLoader<T> extends StatelessWidget {
 
     return WillPopCustom(
       key: key,
-      onWillPop: () async => false,
+      onWillPop: () async {
+        if (onUserWillPop != null) {
+          disposeLoader();
+          onUserWillPop!(context);
+        }
+        return false;
+      },
       child: Scaffold(
           backgroundColor: Colors.transparent,
           body: Center(

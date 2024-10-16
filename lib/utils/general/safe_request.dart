@@ -32,7 +32,7 @@ class SafeRequest {
     String textConfirm = "Retry",
     String texTCancel = "Cancel",
   }) async {
-    final load = loader ?? AppLoader(context);
+    final load = loader ?? AppLoader(context: context);
     int attempt = 0;
 
     while (maxAttempts == 0 || attempt < maxAttempts) {
