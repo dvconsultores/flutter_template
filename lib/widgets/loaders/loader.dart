@@ -13,7 +13,7 @@ class AppLoader<T> {
     this.onUserWillPop,
   });
   final BuildContext? context;
-  final void Function(BuildContext context)? onUserWillPop;
+  final VoidCallback? onUserWillPop;
 
   bool loading = false;
   final disposed = ValueNotifier<bool>(false);
@@ -67,7 +67,7 @@ class _AppLoader<T> extends StatelessWidget {
   final String message;
   final Future<T?> Function()? callback;
   final VoidCallback disposeLoader;
-  final void Function(BuildContext context)? onUserWillPop;
+  final VoidCallback? onUserWillPop;
 
   @override
   Widget build(BuildContext context) {
@@ -82,7 +82,7 @@ class _AppLoader<T> extends StatelessWidget {
       onWillPop: () async {
         if (onUserWillPop != null) {
           disposeLoader();
-          onUserWillPop!(context);
+          onUserWillPop!();
         }
         return false;
       },
