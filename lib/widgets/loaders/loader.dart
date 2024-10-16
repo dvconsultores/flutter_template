@@ -67,7 +67,7 @@ class AppLoader {
   }
 
   Future<T?> open<T>({
-    String message = "Cargando...",
+    String message = "Processing...",
     Future<T> Function()? future,
     void Function(CancelToken cancelToken)? onUserWillPop,
     CancelToken? customCancelToken,
