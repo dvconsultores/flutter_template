@@ -34,8 +34,8 @@ class SplashScreen extends StatelessWidget {
             child: Container(
                 decoration: BoxDecoration(
               gradient: LinearGradient(colors: [
-                ThemeApp.colors(context).primary,
-                ThemeApp.colors(context).secondary,
+                ThemeApp.of(context).colors.primary,
+                ThemeApp.of(context).colors.secondary,
               ]),
             )),
           ),
@@ -64,7 +64,7 @@ class SplashScreen extends StatelessWidget {
             height: 60,
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(Vars.gapMax),
-              color: ThemeApp.colors(context).accent,
+              color: ThemeApp.of(context).colors.accent,
             ),
           ),
         ),
@@ -125,7 +125,7 @@ class SplashScreen extends StatelessWidget {
               height: 150,
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(Vars.radius20),
-                color: ThemeApp.colors(context).focusColor,
+                color: ThemeApp.of(context).colors.focusColor,
               )),
         ),
       ]),

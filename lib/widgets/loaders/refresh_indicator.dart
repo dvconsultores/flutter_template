@@ -186,7 +186,7 @@ class AppRefreshIndicator extends StatelessWidget {
                       width: 28,
                       height: 28,
                       child: CircularProgressIndicator(
-                        color: ThemeApp.colors(context).primary,
+                        color: ThemeApp.of(context).colors.primary,
                         strokeWidth: 3,
                       ),
                     )
@@ -320,7 +320,7 @@ class AppRefreshIndicator extends StatelessWidget {
                       height: circleSize,
                       decoration: BoxDecoration(
                         boxShadow: defaultShadow,
-                        color: color ?? ThemeApp.colors(context).primary,
+                        color: color ?? ThemeApp.of(context).colors.primary,
                         shape: BoxShape.circle,
                       ),
                       child:
@@ -399,7 +399,7 @@ class AppRefreshIndicator extends StatelessWidget {
                                   decoration: BoxDecoration(
                                     boxShadow: defaultShadow,
                                     color: color ??
-                                        ThemeApp.colors(context).primary,
+                                        ThemeApp.of(context).colors.primary,
                                     shape: BoxShape.circle,
                                   ),
                                   child: Stack(
@@ -545,7 +545,7 @@ class AppRefreshIndicator extends StatelessWidget {
 /// to support older versions of the API as well.
 T? _ambiguate<T>(T? value) => value;
 
-Color _defaultStarColorGetter(int index) => ThemeApp.colors(null).primary;
+Color _defaultStarColorGetter(int index) => ThemeApp.of(null).colors.primary;
 
 enum WarpAnimationState {
   stopped,
@@ -770,7 +770,7 @@ class SpinRefreshIndicator extends StatelessWidget {
                     child: Stack(alignment: Alignment.center, children: [
                       const Icon(Icons.cached, color: Colors.blue, size: 30),
                       CircularProgressIndicator(
-                        color: ThemeApp.colors(context).primary,
+                        color: ThemeApp.of(context).colors.primary,
                         value: controller.value,
                       ),
                     ]),

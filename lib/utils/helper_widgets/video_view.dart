@@ -1,10 +1,10 @@
 import 'dart:io';
 
-import 'package:flutter_detextre4/utils/config/theme.dart';
-import 'package:flutter_detextre4/utils/extensions/type_extensions.dart';
 import 'package:appinio_video_player/appinio_video_player.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_detextre4/utils/config/theme.dart';
+import 'package:flutter_detextre4/utils/extensions/type_extensions.dart';
 
 class VideoView extends StatefulWidget {
   const VideoView({
@@ -25,9 +25,10 @@ class _VideoViewState extends State<VideoView> {
 
   @override
   void initState() {
-    SystemChrome.setSystemUIOverlayStyle(ThemeApp.systemUiOverlayStyle.copyWith(
-      systemNavigationBarColor: Colors.black,
-    ));
+    SystemChrome.setSystemUIOverlayStyle(
+        ThemeApp.of(context).systemUiOverlayStyle.copyWith(
+              systemNavigationBarColor: Colors.black,
+            ));
 
     previewVideoPlayerControler = widget.uri.hasNetworkPath
         ? VideoPlayerController.networkUrl(Uri.parse(widget.uri))

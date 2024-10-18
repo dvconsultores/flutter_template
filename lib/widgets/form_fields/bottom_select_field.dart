@@ -345,7 +345,7 @@ class _ContentWidget<T> extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final colors = ThemeApp.colors(context);
+    final colors = ThemeApp.of(context).colors;
 
     final hs = hintStyle ??
             TextStyle(

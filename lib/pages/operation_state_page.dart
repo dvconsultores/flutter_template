@@ -39,7 +39,7 @@ class OperationStatePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final colors = ThemeApp.colors(context), theme = Theme.of(context);
+    final colors = ThemeApp.of(context).colors, theme = Theme.of(context);
 
     Map<String, dynamic> defaultValues = switch (operationState) {
       OperationStateType.success => {

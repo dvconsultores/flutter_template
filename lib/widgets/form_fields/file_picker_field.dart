@@ -180,7 +180,7 @@ class _FilePickerFieldState extends State<FilePickerField>
 
   @override
   Widget build(BuildContext context) {
-    final colors = ThemeApp.colors(context), theme = Theme.of(context);
+    final colors = ThemeApp.of(context).colors, theme = Theme.of(context);
 
     final clearButtonWidget = IconButton(
       onPressed: clear,

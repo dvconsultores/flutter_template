@@ -49,32 +49,32 @@ void showSnackbar(
     switch (type) {
       case SnackbarType.success:
         return (
-          color ??= ThemeApp.colors(_context).success,
+          color ??= ThemeApp.of(_context).colors.success,
           Icon(Icons.check_circle_outline_rounded, color: color),
           FlushbarPosition.BOTTOM
         );
       case SnackbarType.warning:
         return (
-          color ??= ThemeApp.colors(_context).warning,
+          color ??= ThemeApp.of(_context).colors.warning,
           Icon(Icons.warning_amber_rounded, color: color),
           FlushbarPosition.BOTTOM
         );
       case SnackbarType.error:
         return (
-          color ??= ThemeApp.colors(_context).error,
+          color ??= ThemeApp.of(_context).colors.error,
           Icon(Icons.error_rounded, color: color),
           FlushbarPosition.BOTTOM
         );
       case SnackbarType.info:
         return (
-          color ??= ThemeApp.colors(_context).secondary,
+          color ??= ThemeApp.of(_context).colors.secondary,
           Icon(Icons.info_outline_rounded, color: color),
           FlushbarPosition.BOTTOM
         );
       case SnackbarType.neutral:
       default:
         return (
-          color ??= ThemeApp.colors(_context).text,
+          color ??= ThemeApp.of(_context).colors.text,
           null,
           FlushbarPosition.BOTTOM
         );
@@ -91,9 +91,9 @@ void showSnackbar(
       style: Theme.of(_context).textTheme.bodyMedium?.copyWith(fontSize: 14),
     ),
     icon: getValueByType().$2,
-    titleColor: ThemeApp.colors(_context).text,
-    messageColor: ThemeApp.colors(_context).text,
-    backgroundColor: ThemeApp.colors(_context).background,
+    titleColor: ThemeApp.of(_context).colors.text,
+    messageColor: ThemeApp.of(_context).colors.text,
+    backgroundColor: ThemeApp.of(_context).colors.background,
     borderRadius: const BorderRadius.all(Radius.circular(Vars.radius20)),
     borderColor: getValueByType().$1,
     borderWidth: 2.5,

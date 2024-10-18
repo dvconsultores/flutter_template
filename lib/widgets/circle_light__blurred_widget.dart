@@ -19,7 +19,8 @@ class CircleLightBlurredWidget extends StatelessWidget {
       child: ClipRRect(
         borderRadius: const BorderRadius.all(Radius.circular(200)),
         child: ColoredBox(
-          color: color ?? ThemeApp.colors(context).secondary.withOpacity(.66),
+          color:
+              color ?? ThemeApp.of(context).colors.secondary.withOpacity(.66),
         ),
       ),
     );

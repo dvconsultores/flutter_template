@@ -3,7 +3,6 @@ import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_detextre4/models/profile_model.dart';
 import 'package:flutter_detextre4/utils/config/config.dart';
-import 'package:flutter_detextre4/utils/config/theme.dart';
 import 'package:flutter_detextre4/utils/services/local_data/hive_data_service.dart';
 
 class MainProvider extends ChangeNotifier {
@@ -69,12 +68,12 @@ class MainProvider extends ChangeNotifier {
 
   // ? ----------------------Theme switcher Provider------------------------- //
   /// Current app theme.
-  ThemeType appTheme = ThemeType.values.firstWhereOrNull((element) =>
+  ThemeMode appTheme = ThemeMode.values.firstWhereOrNull((element) =>
           element.name == HiveData.read(HiveDataCollection.theme)) ??
-      ThemeType.light;
+      ThemeMode.system;
 
   /// Setter to switch the current app theme from [ThemeType] value.
-  set switchTheme(ThemeType newTheme) {
+  set switchTheme(ThemeMode newTheme) {
     appTheme = newTheme;
     HiveData.write(HiveDataCollection.theme, newTheme.name);
     notifyListeners();

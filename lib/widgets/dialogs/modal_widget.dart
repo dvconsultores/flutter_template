@@ -217,7 +217,7 @@ class Modal extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final colors = ThemeApp.colors(context);
+    final colors = ThemeApp.of(context).colors;
 
     final haveActions =
             onPressedConfirmBtn != null || onPressedCancelBtn != null,

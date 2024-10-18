@@ -84,7 +84,8 @@ class InputField extends TextFormField {
             onChanged(haveDecimals ? value.split(',').join('.') : value);
           },
           decoration: buildWidget<InputDecoration>(() {
-            final colors = ThemeApp.colors(context), theme = Theme.of(context);
+            final colors = ThemeApp.of(context).colors,
+                theme = Theme.of(context);
 
             final ts = textStyle ?? _ts,
                 hs = hintStyle ??

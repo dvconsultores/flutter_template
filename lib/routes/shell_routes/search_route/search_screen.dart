@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_detextre4/routes/shell_routes/search_route/search_route.dart';
+import 'package:flutter_detextre4/utils/extensions/type_extensions.dart';
 import 'package:flutter_detextre4/widgets/defaults/scaffold.dart';
 import 'package:flutter_detextre4/widgets/loaders/refresh_indicator.dart';
 

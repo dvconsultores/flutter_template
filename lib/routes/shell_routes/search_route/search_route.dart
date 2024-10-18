@@ -49,7 +49,7 @@ class SearchInherited extends InheritedWidget {
     required this.onRefresh,
     required this.onPullDown,
   });
-  final ListFilterable items;
+  final ListFilterable<String> items;
   final Future<void> Function() onRefresh;
   final Future<void> Function() onPullDown;
 

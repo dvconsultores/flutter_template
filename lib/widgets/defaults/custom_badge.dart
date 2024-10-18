@@ -31,7 +31,7 @@ class CustomBadge extends badges.Badge {
                   gradient: LinearGradient(
                       colors: colors ??
                           [
-                            ThemeApp.colors(null).tertiary,
+                            ThemeApp.of(null).colors.tertiary,
                           ]),
                   boxShadow: const [Vars.boxShadow2],
                   borderRadius: const BorderRadius.all(Radius.circular(2)),

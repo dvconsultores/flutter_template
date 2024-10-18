@@ -43,8 +43,8 @@ class SwitchField extends StatelessWidget {
       width: width,
       height: height,
       enabled: !disabled,
-      activeColor: ThemeApp.colors(context).secondary,
-      inactiveColor: ThemeApp.colors(context).error,
+      activeColor: ThemeApp.of(context).colors.secondary,
+      inactiveColor: ThemeApp.of(context).colors.error,
     );
 
     if (label != null || labelText.hasValue) {

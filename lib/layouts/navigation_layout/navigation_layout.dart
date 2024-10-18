@@ -38,10 +38,31 @@ class NavigationLayout extends StatelessWidget {
       ),
     };
 
-    return NavigationScreen(
-      swipeNavigate: swipeNavigate,
+    return NavigationInherited(
+      state: state,
       items: items,
-      child: child,
+      swipeNavigate: swipeNavigate,
+      child: NavigationScreen(
+        swipeNavigate: swipeNavigate,
+        items: items,
+        child: child,
+      ),
     );
   }
+}
+
+class NavigationInherited extends InheritedWidget {
+  const NavigationInherited({
+    super.key,
+    required this.state,
+    required super.child,
+    required this.items,
+    this.swipeNavigate = false,
+  });
+  final GoRouterState state;
+  final Map<String, BottomNavigationBarItem> items;
+  final bool swipeNavigate;
+
+  @override
+  bool updateShouldNotify(NavigationInherited oldWidget) => true;
 }

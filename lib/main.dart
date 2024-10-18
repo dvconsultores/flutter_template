@@ -39,8 +39,11 @@ class AppState extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     if (!kIsWeb) {
-      SystemChrome.setSystemUIOverlayStyle(ThemeApp.systemUiOverlayStyle
-          .copyWith(systemNavigationBarColor: Colors.amber));
+      SystemChrome.setSystemUIOverlayStyle(
+        ThemeApp.of(context)
+            .systemUiOverlayStyle
+            .copyWith(systemNavigationBarColor: Colors.amber),
+      );
     }
 
     // * Route blocs
@@ -92,7 +95,9 @@ class _AppState extends State<App> {
                     locale: value.locale,
                     debugShowCheckedModeBanner: true,
                     title: AppName.capitalize.value,
-                    theme: ThemeApp.of(context), // * Theme switcher
+                    theme: ThemeApp.lightTheme,
+                    darkTheme: ThemeApp.darkTheme,
+                    themeMode: value.appTheme, // * Theme switcher
                     localizationsDelegates:
                         AppLocalizations.localizationsDelegates,
                     supportedLocales: AppLocalizations.supportedLocales,

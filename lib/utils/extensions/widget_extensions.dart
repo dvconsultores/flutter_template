@@ -54,8 +54,8 @@ extension ImageExtension on Image {
             duration: shimmerDuration,
             shimmerGradient: shimmerGradient ??
                 LinearGradient(colors: [
-                  ThemeApp.colors(context).primary.withOpacity(.5),
-                  ThemeApp.colors(context).secondary.withOpacity(.5),
+                  ThemeApp.of(context).colors.primary.withOpacity(.5),
+                  ThemeApp.of(context).colors.secondary.withOpacity(.5),
                 ]),
             skeleton: SkeletonAvatar(
               style: SkeletonAvatarStyle(width: width, height: height),
@@ -152,8 +152,8 @@ extension CachedNetworkImageExtension on CachedNetworkImage {
             duration: shimmerDuration,
             shimmerGradient: shimmerGradient ??
                 LinearGradient(colors: [
-                  ThemeApp.colors(context).primary.withOpacity(.5),
-                  ThemeApp.colors(context).secondary.withOpacity(.5),
+                  ThemeApp.of(context).colors.primary.withOpacity(.5),
+                  ThemeApp.of(context).colors.secondary.withOpacity(.5),
                 ]),
             skeleton: SkeletonAvatar(
               style: SkeletonAvatarStyle(width: width, height: height),

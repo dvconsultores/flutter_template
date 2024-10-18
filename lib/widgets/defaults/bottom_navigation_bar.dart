@@ -86,7 +86,7 @@ class _CustomBottomNavigationBarState extends State<AppBottomNavigationBar>
     final size = MediaQuery.of(context).size;
     final foregroundColor =
             Theme.of(context).bottomNavigationBarTheme.backgroundColor,
-        colors = ThemeApp.colors(context),
+        colors = ThemeApp.of(context).colors,
         width = renderBox.value?.size.width;
 
     return AnimatedBuilder(

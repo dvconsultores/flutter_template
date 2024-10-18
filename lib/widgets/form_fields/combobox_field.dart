@@ -179,7 +179,7 @@ class _ComboboxFieldState<T> extends State<ComboboxField<T>> {
 
         final hs = widget.hintStyle ??
                 TextStyle(
-                  color: ThemeApp.colors(context).text.withOpacity(.7),
+                  color: ThemeApp.of(context).colors.text.withOpacity(.7),
                   fontSize: 13,
                   fontWeight: FontWeight.w400,
                 ),
@@ -188,7 +188,7 @@ class _ComboboxFieldState<T> extends State<ComboboxField<T>> {
                     width: widget.width,
                     child: LinearProgressIndicator(
                       borderRadius: const BorderRadius.all(Radius.circular(12)),
-                      color: ThemeApp.colors(context).primary,
+                      color: ThemeApp.of(context).colors.primary,
                       minHeight: widget.loaderHeight,
                     ),
                   )
@@ -233,7 +233,8 @@ class _ComboboxFieldState<T> extends State<ComboboxField<T>> {
                               padding: const EdgeInsets.symmetric(
                                   horizontal: Vars.gapMedium),
                               height: 30,
-                              bgColor: ThemeApp.colors(context)
+                              bgColor: ThemeApp.of(context)
+                                  .colors
                                   .primary
                                   .withAlpha(200),
                               trailing: IconButton(

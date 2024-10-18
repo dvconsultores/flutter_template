@@ -59,7 +59,8 @@ class SlicedAnimatedButton extends StatelessWidget {
                   child: ClipRRect(
                     borderRadius:
                         const BorderRadius.all(Radius.circular(Vars.radius40)),
-                    child: ColoredBox(color: ThemeApp.colors(context).tertiary),
+                    child:
+                        ColoredBox(color: ThemeApp.of(context).colors.tertiary),
                   ),
                 ),
                 if (loading)

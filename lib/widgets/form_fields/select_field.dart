@@ -167,7 +167,8 @@ class SelectField<T> extends StatefulWidget {
         color: color,
         iconEnabledColor: iconEnabledColor,
         borderRadius: borderRadius,
-        border: border ?? BorderSide(color: ThemeApp.colors(_context).primary),
+        border:
+            border ?? BorderSide(color: ThemeApp.of(_context).colors.primary),
         borderDisabled: borderDisabled,
         borderError: borderError,
         borderFocused: borderFocused,
@@ -306,12 +307,12 @@ class _SelectFieldState<T> extends State<SelectField<T>> {
   @override
   Widget build(BuildContext context) {
     final colorSwither = isMenuOpen
-            ? ThemeApp.colors(context).primary
-            : ThemeApp.colors(context).text,
+            ? ThemeApp.of(context).colors.primary
+            : ThemeApp.of(context).colors.text,
         ts = widget.textStyle ?? Theme.of(context).textTheme.bodyMedium!,
         hs = widget.hintStyle ??
             ts.copyWith(
-              color: ThemeApp.colors(context).text.withOpacity(.7),
+              color: ThemeApp.of(context).colors.text.withOpacity(.7),
               fontWeight: FontWeight.w400,
             ),
         ls =
@@ -352,7 +353,7 @@ class _SelectFieldState<T> extends State<SelectField<T>> {
               ? LinearProgressIndicator(
                   borderRadius:
                       const BorderRadius.all(Radius.circular(Vars.radius10)),
-                  color: ThemeApp.colors(context).primary,
+                  color: ThemeApp.of(context).colors.primary,
                   minHeight: widget.loaderHeight,
                 )
               : widget.customButton,
@@ -380,7 +381,7 @@ class _SelectFieldState<T> extends State<SelectField<T>> {
             labelStyle: ls,
             floatingLabelStyle: fls,
             floatingLabelBehavior: widget.floatingLabelBehavior,
-            fillColor: widget.color ?? ThemeApp.colors(context).background,
+            fillColor: widget.color ?? ThemeApp.of(context).colors.background,
             filled: widget.filled,
             border: checkBorder(defaultBorder),
             enabledBorder: checkBorder(defaultBorder),
@@ -425,7 +426,7 @@ class _SelectFieldState<T> extends State<SelectField<T>> {
               scrollbarTheme: widget.dropdownStyleData?.scrollbarTheme ??
                   ScrollbarThemeData(
                     thumbColor: MaterialStatePropertyAll(
-                        ThemeApp.colors(context).secondary),
+                        ThemeApp.of(context).colors.secondary),
                   ),
               useRootNavigator:
                   widget.dropdownStyleData?.useRootNavigator ?? false,
@@ -434,7 +435,8 @@ class _SelectFieldState<T> extends State<SelectField<T>> {
                   BoxDecoration(
                     borderRadius:
                         const BorderRadius.all(Radius.circular(Vars.radius10)),
-                    border: Border.all(color: ThemeApp.colors(context).primary),
+                    border:
+                        Border.all(color: ThemeApp.of(context).colors.primary),
                   )),
           menuItemStyleData: widget.menuItemStyleData,
           items: widget.items,

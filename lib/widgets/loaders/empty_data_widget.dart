@@ -47,7 +47,7 @@ class _EmptyDataWidgetState extends State<EmptyDataWidget>
           textAlign: TextAlign.center,
           style: widget.labelStyle ??
               TextStyle(
-                color: ThemeApp.colors(context).tertiary,
+                color: ThemeApp.of(context).colors.tertiary,
                 fontWeight: FontWeight.w500,
                 fontFamily: FontFamily.lato("500"),
               ),

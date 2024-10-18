@@ -84,7 +84,7 @@ class ButtonTip extends StatelessWidget {
           padding: const EdgeInsets.all(0),
           constraints: constraints,
           iconSize: iconSize,
-          color: color ?? ThemeApp.colors(context).primary,
+          color: color ?? ThemeApp.of(context).colors.primary,
           icon: icon,
         ),
       ),

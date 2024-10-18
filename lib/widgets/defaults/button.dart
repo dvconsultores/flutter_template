@@ -126,7 +126,7 @@ class Button extends StatelessWidget {
     Widget? content,
     Widget? child,
   }) {
-    final colors = ThemeApp.colors(context),
+    final colors = ThemeApp.of(context).colors,
         backgroundColor = bgColor ?? colors.secondary;
 
     return Button(
@@ -210,7 +210,7 @@ class Button extends StatelessWidget {
     Widget? content,
     Widget? child,
   }) {
-    final colors = ThemeApp.colors(context);
+    final colors = ThemeApp.of(context).colors;
 
     return Button(
       onPressed: onPressed,
@@ -293,7 +293,7 @@ class Button extends StatelessWidget {
     Widget? content,
     Widget? child,
   }) {
-    final colors = ThemeApp.colors(context);
+    final colors = ThemeApp.of(context).colors;
 
     return Button(
       onPressed: onPressed,
@@ -404,7 +404,7 @@ class Button extends StatelessWidget {
     Widget? customLoader,
     required Widget? icon,
   }) {
-    final colors = ThemeApp.colors(context),
+    final colors = ThemeApp.of(context).colors,
         backgroundColor = bgColor ?? colors.tertiary;
 
     return Button(
@@ -454,7 +454,7 @@ class Button extends StatelessWidget {
     Widget? customLoader,
     required Widget? icon,
   }) {
-    final colors = ThemeApp.colors(context),
+    final colors = ThemeApp.of(context).colors,
         backgroundColor = bgColor ?? Colors.white;
 
     return Button(
@@ -484,7 +484,7 @@ class Button extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final colors = ThemeApp.colors(context);
+    final colors = ThemeApp.of(context).colors;
 
     final ts = textStyle ??
             const TextStyle(

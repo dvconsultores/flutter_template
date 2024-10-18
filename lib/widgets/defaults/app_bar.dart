@@ -14,7 +14,7 @@ class CustomAppBar extends AppBar {
     VoidCallback? onPop,
     super.centerTitle = true,
   }) : super(
-          systemOverlayStyle: ThemeApp.systemUiOverlayStyle,
+          systemOverlayStyle: ThemeApp.of(null).systemUiOverlayStyle,
           surfaceTintColor: Colors.transparent,
           leading: IconButton(
             icon: const Icon(Icons.chevron_left_rounded),
@@ -32,8 +32,8 @@ class CustomAppBar extends AppBar {
                     margin: Vars.paddingScaffold.copyWith(top: 0, bottom: 0),
                     decoration: BoxDecoration(
                       border: Border(
-                          bottom:
-                              BorderSide(color: ThemeApp.colors(null).label)),
+                          bottom: BorderSide(
+                              color: ThemeApp.of(null).colors.label)),
                     )),
               )),
           toolbarHeight: subTitleText.hasValue ? 66 : 56,

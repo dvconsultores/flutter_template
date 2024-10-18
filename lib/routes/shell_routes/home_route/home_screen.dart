@@ -44,23 +44,24 @@ class HomeScreen extends StatelessWidget {
                 child: const Icon(Icons.add).invertedColor(),
               )),
           Text(
-            ThemeApp.theme.name,
+            ThemeApp.of(context).theme.name,
             style: Theme.of(context).textTheme.displaySmall,
           ),
           Row(mainAxisAlignment: MainAxisAlignment.center, children: [
             Button.icon(
-              onPressed: () => ThemeApp.switchTheme(context, ThemeType.light),
+              onPressed: () =>
+                  ThemeApp.of(context).switchTheme(ThemeMode.light),
               icon: Icon(
                 Icons.light_mode,
-                color: ThemeApp.colors(context).tertiary,
+                color: ThemeApp.of(context).colors.tertiary,
               ),
             ),
             const Gap(Vars.gapMax).row,
             Button.icon(
-              onPressed: () => ThemeApp.switchTheme(context, ThemeType.dark),
+              onPressed: () => ThemeApp.of(context).switchTheme(ThemeMode.dark),
               icon: Icon(
                 Icons.dark_mode,
-                color: ThemeApp.colors(context).secondary,
+                color: ThemeApp.of(context).colors.secondary,
               ),
             ),
           ]),

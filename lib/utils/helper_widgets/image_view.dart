@@ -25,9 +25,10 @@ class _ImageViewState extends State<ImageView> {
 
   @override
   void initState() {
-    SystemChrome.setSystemUIOverlayStyle(ThemeApp.systemUiOverlayStyle.copyWith(
-      systemNavigationBarColor: Colors.black,
-    ));
+    SystemChrome.setSystemUIOverlayStyle(
+        ThemeApp.of(context).systemUiOverlayStyle.copyWith(
+              systemNavigationBarColor: Colors.black,
+            ));
 
     pageController = PageController(initialPage: widget.initialImage ?? 0);
     super.initState();

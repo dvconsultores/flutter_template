@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_detextre4/utils/config/theme.dart';
+import 'package:flutter_detextre4/utils/general/context_utility.dart';
 
 class DraggableFramePainter extends CustomPainter {
   const DraggableFramePainter({
@@ -11,7 +12,8 @@ class DraggableFramePainter extends CustomPainter {
 
   @override
   void paint(Canvas canvas, Size size) {
-    final colors = ThemeApp.colors(null), theme = ThemeApp.of(null);
+    final colors = ThemeApp.of(null).colors,
+        theme = Theme.of(ContextUtility.context!);
 
     final bgPaint = Paint()
           ..color = bgColor ?? theme.dialogTheme.backgroundColor!,

@@ -6,12 +6,6 @@ import 'package:flutter_detextre4/utils/general/context_utility.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 
-///? A Collection of app themes.
-enum ThemeType {
-  light,
-  dark;
-}
-
 ///? A Class to get some weigth of current font families.
 /// use like `FontFamily.lato("400")`
 class FontFamily {
@@ -28,68 +22,161 @@ class FontFamily {
   };
 
   static String lato(String value) => 'Lato_${_conversion[value] ?? value}';
+
+  static String luckiestGuy(String value) =>
+      'luckiestGuy_${_conversion[value] ?? value}';
 }
 
 /// Themes configuration class from app.
 class ThemeApp {
-  static SystemUiOverlayStyle get systemUiOverlayStyle =>
-      theme == ThemeType.light
-          ? const SystemUiOverlayStyle(
-              statusBarIconBrightness: Brightness.light,
-              systemStatusBarContrastEnforced: true,
-              systemNavigationBarIconBrightness: Brightness.light,
-            )
-          : const SystemUiOverlayStyle(
-              statusBarIconBrightness: Brightness.dark,
-              systemStatusBarContrastEnforced: true,
-              systemNavigationBarIconBrightness: Brightness.dark,
-            );
+  ThemeApp([this.context]);
+  final BuildContext? context;
 
-  static Map<ThemeType, ThemeData> get _themes {
-    var ligthTheme = ThemeData.light(useMaterial3: false),
-        darkTheme = ThemeData.dark(useMaterial3: false);
+  SystemUiOverlayStyle get systemUiOverlayStyle => switch (theme) {
+        Brightness.light => const SystemUiOverlayStyle(
+            statusBarIconBrightness: Brightness.light,
+            systemStatusBarContrastEnforced: true,
+            systemNavigationBarIconBrightness: Brightness.light,
+          ),
+        Brightness.dark => const SystemUiOverlayStyle(
+            statusBarIconBrightness: Brightness.dark,
+            systemStatusBarContrastEnforced: true,
+            systemNavigationBarIconBrightness: Brightness.dark,
+          ),
+      };
 
-    //? light
-    ligthTheme = ligthTheme.copyWith(
+  static T _getExtension<T>(Map<Object, ThemeExtension<dynamic>> extensions) =>
+      extensions[T] as T;
+
+  static ThemeData get lightTheme {
+    final extensions = <Object, ThemeExtension<dynamic>>{
+          ThemeDataColorExtension: const ThemeDataColorExtension(
+            text: Color(0xFF4E444B),
+            label: Color(0xFF777680),
+            title: Color(0xFF4E444B),
+            accent: Colors.red,
+            success: Colors.green,
+            warning: Color(0xFFFFDD00),
+          ),
+          ThemeDataStyleExtension: const ThemeDataStyleExtension(
+            customText: TextStyle(),
+          )
+        },
+        colorScheme = const ColorScheme.light(
+          background: Color(0xFFF9F9F9),
+          primary: Color(0xff001689),
+          secondary: Color(0xFFFF5100),
+          tertiary: Color(0xFFF7E388),
+          error: Color(0xFFFF5100),
+          outline: Color(0xFF4E444B),
+          brightness: Brightness.light,
+        ),
+        textTheme = TextTheme(
+          // display
+          displayLarge: GoogleFonts.luckiestGuy().copyWith(
+            fontSize: 30,
+            color: _getExtension<ThemeDataColorExtension>(extensions).title!,
+            height: 1.1,
+          ),
+          displayMedium: GoogleFonts.luckiestGuy().copyWith(
+            fontSize: 28,
+            color: _getExtension<ThemeDataColorExtension>(extensions).title!,
+            height: 1.1,
+          ),
+          displaySmall: GoogleFonts.luckiestGuy().copyWith(
+            fontSize: 26,
+            color: _getExtension<ThemeDataColorExtension>(extensions).title!,
+            height: 1.1,
+          ),
+          // title
+          titleLarge: TextStyle(
+            fontSize: 24,
+            color: _getExtension<ThemeDataColorExtension>(extensions).title!,
+            fontWeight: FontWeight.w500,
+            letterSpacing: 0.15,
+            height: 1.1,
+          ),
+          titleMedium: TextStyle(
+            fontSize: 22,
+            color: _getExtension<ThemeDataColorExtension>(extensions).title!,
+            fontWeight: FontWeight.w500,
+            letterSpacing: 0.15,
+            height: 1.1,
+          ),
+          titleSmall: TextStyle(
+            fontSize: 20,
+            color: _getExtension<ThemeDataColorExtension>(extensions).title!,
+            fontWeight: FontWeight.w500,
+            letterSpacing: 0.15,
+            height: 1.1,
+          ),
+          // label
+          labelLarge: TextStyle(
+            fontSize: 20,
+            color: _getExtension<ThemeDataColorExtension>(extensions).label!,
+            height: 1.1,
+          ),
+          labelMedium: TextStyle(
+            fontSize: 18,
+            color: _getExtension<ThemeDataColorExtension>(extensions).label!,
+            height: 1.1,
+          ),
+          labelSmall: TextStyle(
+            color: _getExtension<ThemeDataColorExtension>(extensions).label!,
+            fontSize: 16,
+            height: 1.1,
+          ),
+          // body
+          bodyLarge: TextStyle(
+            fontSize: 18,
+            color: _getExtension<ThemeDataColorExtension>(extensions).text!,
+            height: 1.1,
+          ),
+          bodyMedium: TextStyle(
+            fontSize: 16,
+            color: _getExtension<ThemeDataColorExtension>(extensions).text!,
+            height: 1.1,
+          ),
+          bodySmall: TextStyle(
+            fontSize: 14,
+            color: _getExtension<ThemeDataColorExtension>(extensions).text!,
+            height: 1.1,
+          ),
+        );
+
+    return ThemeData(
+      fontFamily: GoogleFonts.lato().fontFamily,
+      useMaterial3: false,
+      brightness: Brightness.light,
       // values config
       visualDensity: VisualDensity.compact,
+
       // color config
-      primaryColor: const Color(0xff001689),
+      primaryColor: colorScheme.primary,
       focusColor: const Color(0xFF3B4279),
       disabledColor: const Color.fromARGB(255, 209, 175, 172),
       cardColor: Colors.white,
       scaffoldBackgroundColor: const Color(0xfffafafa),
-      colorScheme: const ColorScheme.light(
-        background: Color(0xFFF9F9F9),
-        primary: Color(0xff001689),
-        secondary: Color(0xFFFF5100),
-        tertiary: Color(0xFFF7E388),
-        error: Color(0xFFFF5100),
-        outline: Color(0xFF4E444B),
-      ),
-      extensions: const <ThemeExtension<dynamic>>[
-        ThemeDataColorExtension(
-          text: Color(0xFF4E444B),
-          label: Color(0xFF777680),
-          title: Color(0xFF4E444B),
-          accent: Colors.red,
-          success: Colors.green,
-          warning: Color(0xFFFFDD00),
-        ),
-      ],
+      colorScheme: colorScheme,
+      extensions: extensions.values,
+
       // dividerTheme
       dividerTheme: const DividerThemeData(color: Color(0xFF4E444B)),
       // appBarTheme
-      appBarTheme: const AppBarTheme(
-        backgroundColor: Color(0xfffafafa),
+      appBarTheme: AppBarTheme(
+        backgroundColor: const Color(0xfffafafa),
+        titleTextStyle: textTheme.bodyLarge,
+        iconTheme: const IconThemeData(),
       ),
       // bottomNavigationBarTheme
       bottomNavigationBarTheme: const BottomNavigationBarThemeData(
         backgroundColor: Color.fromARGB(235, 224, 221, 221),
       ),
       // dialogTheme
-      dialogTheme: const DialogTheme(
-        backgroundColor: Color(0xFFF9F9F9),
+      dialogTheme: DialogTheme(
+        backgroundColor: const Color(0xFFF9F9F9),
+        titleTextStyle: textTheme.bodyLarge,
+        contentTextStyle: textTheme.bodyMedium,
       ),
       // bottomSheetTheme
       bottomSheetTheme: const BottomSheetThemeData(
@@ -97,11 +184,35 @@ class ThemeApp {
         surfaceTintColor: Colors.transparent,
       ),
       // datePickerTheme
-      datePickerTheme: const DatePickerThemeData(
-        headerBackgroundColor: Color(0xff001689),
+      datePickerTheme: DatePickerThemeData(
+        headerBackgroundColor: const Color(0xff001689),
         headerForegroundColor: Colors.white,
-        dayForegroundColor: MaterialStatePropertyAll(Color(0xFF535256)),
-        weekdayStyle: TextStyle(color: Color(0xFF001689)),
+        dayForegroundColor: const MaterialStatePropertyAll(Color(0xFF535256)),
+        weekdayStyle: const TextStyle(color: Color(0xFF001689)),
+        dayStyle: textTheme.bodyMedium?.copyWith(fontWeight: FontWeight.w400),
+        cancelButtonStyle: ButtonStyle(
+          textStyle: MaterialStatePropertyAll(
+            textTheme.bodyMedium?.copyWith(fontWeight: FontWeight.w500),
+          ),
+        ),
+        confirmButtonStyle: ButtonStyle(
+          textStyle: MaterialStatePropertyAll(
+            textTheme.bodyMedium?.copyWith(fontWeight: FontWeight.w500),
+          ),
+        ),
+      ),
+      // timePickerTheme
+      timePickerTheme: TimePickerThemeData(
+        cancelButtonStyle: ButtonStyle(
+          textStyle: MaterialStatePropertyAll(
+            textTheme.bodyMedium?.copyWith(fontWeight: FontWeight.w500),
+          ),
+        ),
+        confirmButtonStyle: ButtonStyle(
+          textStyle: MaterialStatePropertyAll(
+            textTheme.bodyMedium?.copyWith(fontWeight: FontWeight.w500),
+          ),
+        ),
       ),
       // inputDecorationTheme
       inputDecorationTheme: const InputDecorationTheme(
@@ -113,154 +224,78 @@ class ThemeApp {
         circularTrackColor: Colors.red,
         color: Color(0xff001689),
       ),
-    );
-    // textTheme
-    ligthTheme = ligthTheme.copyWith(
-      textTheme: GoogleFonts.latoTextTheme(ligthTheme.textTheme.copyWith(
-        // display
-        displayLarge: GoogleFonts.luckiestGuy(
-          fontSize: 30,
-          color: ligthTheme.extension<ThemeDataColorExtension>()!.title!,
-          height: 1.1,
-        ),
-        displayMedium: GoogleFonts.luckiestGuy(
-          fontSize: 28,
-          color: ligthTheme.extension<ThemeDataColorExtension>()!.title!,
-          height: 1.1,
-        ),
-        displaySmall: GoogleFonts.luckiestGuy(
-          fontSize: 26,
-          color: ligthTheme.extension<ThemeDataColorExtension>()!.title!,
-          height: 1.1,
-        ),
-        // title
-        titleLarge: TextStyle(
-          fontSize: 24,
-          color: ligthTheme.extension<ThemeDataColorExtension>()!.title!,
-          fontWeight: FontWeight.w500,
-          letterSpacing: 0.15,
-          height: 1.1,
-        ),
-        titleMedium: TextStyle(
-          fontSize: 22,
-          color: ligthTheme.extension<ThemeDataColorExtension>()!.title!,
-          fontWeight: FontWeight.w500,
-          letterSpacing: 0.15,
-          height: 1.1,
-        ),
-        titleSmall: TextStyle(
-          fontSize: 20,
-          color: ligthTheme.extension<ThemeDataColorExtension>()!.title!,
-          fontWeight: FontWeight.w500,
-          letterSpacing: 0.15,
-          height: 1.1,
-        ),
-        // label
-        labelLarge: TextStyle(
-          fontSize: 20,
-          color: ligthTheme.extension<ThemeDataColorExtension>()!.label!,
-          height: 1.1,
-        ),
-        labelMedium: TextStyle(
-          fontSize: 18,
-          color: ligthTheme.extension<ThemeDataColorExtension>()!.label!,
-          height: 1.1,
-        ),
-        labelSmall: TextStyle(
-          color: ligthTheme.extension<ThemeDataColorExtension>()!.label!,
-          fontSize: 16,
-          height: 1.1,
-        ),
-        // body
-        bodyLarge: TextStyle(
-          fontSize: 18,
-          color: ligthTheme.extension<ThemeDataColorExtension>()!.text!,
-          height: 1.1,
-        ),
-        bodyMedium: TextStyle(
-          fontSize: 16,
-          color: ligthTheme.extension<ThemeDataColorExtension>()!.text!,
-          height: 1.1,
-        ),
-        bodySmall: TextStyle(
-          fontSize: 14,
-          color: ligthTheme.extension<ThemeDataColorExtension>()!.text!,
-          height: 1.1,
-        ),
-      )),
-    );
-    // text config
-    ligthTheme = ligthTheme.copyWith(
-      extensions: ligthTheme.extensions.values.followedBy([
-        const ThemeDataStyleExtension(
-          customText: TextStyle(),
-        ),
-      ]),
-      // appbarTheme
-      appBarTheme: ligthTheme.appBarTheme
-          .copyWith(titleTextStyle: ligthTheme.textTheme.bodyLarge),
-      // dialogTheme
-      dialogTheme: ligthTheme.dialogTheme.copyWith(
-        titleTextStyle: ligthTheme.textTheme.bodyLarge,
-        contentTextStyle: ligthTheme.textTheme.bodyMedium,
-      ),
-      // datePickerTheme
-      datePickerTheme: ligthTheme.datePickerTheme.copyWith(
-        dayStyle: GoogleFonts.lato(fontWeight: FontWeight.w400),
-        cancelButtonStyle: ButtonStyle(
-          textStyle: MaterialStatePropertyAll(
-            GoogleFonts.lato(fontWeight: FontWeight.w500),
-          ),
-        ),
-        confirmButtonStyle: ButtonStyle(
-          textStyle: MaterialStatePropertyAll(
-            GoogleFonts.lato(fontWeight: FontWeight.w500),
-          ),
-        ),
-      ),
-      // timePickerTheme
-      timePickerTheme: ligthTheme.timePickerTheme.copyWith(
-        cancelButtonStyle: ButtonStyle(
-          textStyle: MaterialStatePropertyAll(
-            GoogleFonts.lato(fontWeight: FontWeight.w500),
-          ),
-        ),
-        confirmButtonStyle: ButtonStyle(
-          textStyle: MaterialStatePropertyAll(
-            GoogleFonts.lato(fontWeight: FontWeight.w500),
-          ),
-        ),
-      ),
-    );
 
-    return {
-      ThemeType.light: ligthTheme,
-      ThemeType.dark: darkTheme,
-    };
+      // textTheme
+      textTheme: textTheme,
+    );
   }
 
+  static ThemeData get darkTheme {
+    final extensions = <Object, ThemeExtension<dynamic>>{
+          ThemeDataColorExtension: const ThemeDataColorExtension(
+            text: Color(0xFF4E444B),
+            label: Color(0xFF777680),
+            title: Color(0xFF4E444B),
+            accent: Colors.red,
+            success: Colors.green,
+            warning: Color(0xFFFFDD00),
+          ),
+          ThemeDataStyleExtension: const ThemeDataStyleExtension(
+            customText: TextStyle(),
+          )
+        },
+        colorScheme = const ColorScheme.dark(
+          brightness: Brightness.dark,
+        ),
+        textTheme = const TextTheme();
+
+    return ThemeData(
+      fontFamily: GoogleFonts.lato().fontFamily,
+      useMaterial3: false,
+      brightness: Brightness.dark,
+      // values config
+      visualDensity: VisualDensity.compact,
+
+      // color config
+      primaryColor: colorScheme.primary,
+      focusColor: const Color(0xFF3B4279),
+      disabledColor: const Color.fromARGB(255, 209, 175, 172),
+      cardColor: Colors.black,
+      scaffoldBackgroundColor: Colors.black26,
+      colorScheme: colorScheme,
+      extensions: extensions.values,
+
+      // bottomNavigationBarTheme
+      bottomNavigationBarTheme: const BottomNavigationBarThemeData(
+        backgroundColor: Color.fromARGB(255, 17, 17, 17),
+      ),
+
+      // textTheme
+      textTheme: textTheme,
+    );
+  }
+
+  ///* Getter to [ThemeApp] instance
+  static ThemeApp of(BuildContext? context) =>
+      ThemeApp(context ?? ContextUtility.context);
+
   ///* Getter to current theme name.
-  static ThemeType get theme =>
-      ContextUtility.context?.read<MainProvider>().appTheme ?? ThemeType.light;
+  Brightness get theme => Theme.of(context!).brightness;
 
   ///* Getter to current theme assets directory `assets/themes/${theme}/` + path provided.
-  static String getAsset(BuildContext? context, String path) =>
-      'assets/themes/${(context ?? ContextUtility.context!).watch<MainProvider>().appTheme.name}/$path';
+  String getAsset(String path) {
+    final brightness = MediaQuery.of(context!).platformBrightness;
 
-  ///* Getter to current themeData.
-  static ThemeData of(BuildContext? context) {
-    final ctx = context ?? ContextUtility.context!;
-    return _themes[ctx.watch<MainProvider>().appTheme]!;
+    return 'assets/themes/${brightness.name}/$path';
   }
 
   ///* Switch between themeData.
-  static void switchTheme(BuildContext? context, ThemeType themeType) =>
-      (context ?? ContextUtility.context!).read<MainProvider>().switchTheme =
-          themeType;
+  void switchTheme(ThemeMode themeType) =>
+      context!.read<MainProvider>().switchTheme = themeType;
 
   ///* Getter to all custom colors registered in themeData.
-  static ColorsApp colors(BuildContext? context) {
-    final themeData = Theme.of(context ?? ContextUtility.context!);
+  ColorsApp get colors {
+    final themeData = Theme.of(context!);
 
     return ColorsApp(
       background: themeData.colorScheme.background,
@@ -280,8 +315,8 @@ class ThemeApp {
   }
 
   ///* Getter to all custom styles registered in themeData.
-  static ThemeDataStyleExtension styles(BuildContext? context) {
-    final themeData = Theme.of(context ?? ContextUtility.context!);
+  ThemeDataStyleExtension get styles {
+    final themeData = Theme.of(context!);
 
     return ThemeDataStyleExtension(
       customText: themeData.extension<ThemeDataStyleExtension>()!.customText,

@@ -24,15 +24,17 @@ class AppDrawer extends StatelessWidget {
     };
 
     return Drawer(
-        child: Column(
-      children: [
-        for (final element in items.entries) ...[
-          Button(
-            text: element.key,
-            onPressed: () => goToRouterPage(element.value),
-          ),
+        child: SafeArea(
+      child: Column(
+        children: [
+          for (final element in items.entries) ...[
+            Button(
+              text: element.key,
+              onPressed: () => goToRouterPage(element.value),
+            ),
+          ],
         ],
-      ],
+      ),
     ));
   }
 }

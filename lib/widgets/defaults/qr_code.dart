@@ -25,8 +25,8 @@ class AppQrCode extends StatelessWidget {
         side: BorderSide(
           width: 4,
           color: colored
-              ? ThemeApp.colors(context).primary
-              : ThemeApp.colors(context).text,
+              ? ThemeApp.of(context).colors.primary
+              : ThemeApp.of(context).colors.text,
         ),
       ),
       clipBehavior: Clip.antiAliasWithSaveLayer,
@@ -40,13 +40,13 @@ class AppQrCode extends StatelessWidget {
           backgroundColor: Colors.white,
           eyeStyle: QrEyeStyle(
             color: colored
-                ? ThemeApp.colors(context).tertiary
-                : ThemeApp.colors(context).text,
+                ? ThemeApp.of(context).colors.tertiary
+                : ThemeApp.of(context).colors.text,
             eyeShape: QrEyeShape.circle,
           ),
           gapless: true,
           dataModuleStyle: QrDataModuleStyle(
-            color: ThemeApp.colors(context).text,
+            color: ThemeApp.of(context).colors.text,
             dataModuleShape: QrDataModuleShape.circle,
           ),
           embeddedImage:

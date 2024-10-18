@@ -81,12 +81,15 @@ class AsyncInputField extends AsyncTextFormField {
                 final ts = textStyle ?? _ts,
                     hs = hintStyle ??
                         ts.copyWith(
-                            color:
-                                ThemeApp.colors(context).text.withOpacity(.7),
+                            color: ThemeApp.of(context)
+                                .colors
+                                .text
+                                .withOpacity(.7),
                             fontSize: 13),
                     ls = labelStyle ??
                         ts.copyWith(
-                            color: ThemeApp.colors(context).text, fontSize: 13),
+                            color: ThemeApp.of(context).colors.text,
+                            fontSize: 13),
                     fls = floatingLabelStyle ?? ls;
 
                 InputBorder checkBorder(BorderSide border) =>
@@ -120,7 +123,7 @@ class AsyncInputField extends AsyncTextFormField {
                   floatingLabelStyle: fls,
                   floatingLabelBehavior: floatingLabelBehavior,
                   filled: filled,
-                  fillColor: color ?? ThemeApp.colors(context).background,
+                  fillColor: color ?? ThemeApp.of(context).colors.background,
                   border: checkBorder(defaultBorder),
                   enabledBorder: checkBorder(defaultBorder),
                   disabledBorder: checkBorder(disabledBorder),
@@ -153,7 +156,7 @@ class AsyncInputField extends AsyncTextFormField {
         );
   static final context = ContextUtility.context!,
       _ts = TextStyle(
-        color: ThemeApp.colors(context).text,
+        color: ThemeApp.of(context).colors.text,
         fontSize: 16,
         fontWeight: FontWeight.w400,
       );

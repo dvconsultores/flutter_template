@@ -120,9 +120,9 @@ class _CheckboxFieldState extends State<CheckboxField> {
                     BorderRadius.all(Radius.circular(widget.borderRadius)),
               )),
               overlayColor: MaterialStatePropertyAll(
-                  ThemeApp.colors(context).secondary.withOpacity(.3)),
+                  ThemeApp.of(context).colors.secondary.withOpacity(.3)),
               foregroundColor: MaterialStatePropertyAll(
-                  widget.textStyle?.color ?? ThemeApp.colors(context).text),
+                  widget.textStyle?.color ?? ThemeApp.of(context).colors.text),
             ),
             child: Row(
                 crossAxisAlignment: widget.crossAxisAlignment,
@@ -133,7 +133,7 @@ class _CheckboxFieldState extends State<CheckboxField> {
                     height: widget.size != null ? widget.size! * 2 : null,
                     child: Material(
                         elevation: 3,
-                        shadowColor: ThemeApp.colors(context).secondary,
+                        shadowColor: ThemeApp.of(context).colors.secondary,
                         shape: const CircleBorder(),
                         child: Checkbox(
                           value: getValue(state),
@@ -142,7 +142,7 @@ class _CheckboxFieldState extends State<CheckboxField> {
                           splashRadius: widget.splashRadius,
                           fillColor: MaterialStateProperty.all<Color>(
                               Colors.transparent),
-                          checkColor: ThemeApp.colors(context).secondary,
+                          checkColor: ThemeApp.of(context).colors.secondary,
                           materialTapTargetSize:
                               MaterialTapTargetSize.shrinkWrap,
                           visualDensity: VisualDensity.compact,
@@ -240,9 +240,9 @@ class _CheckboxFieldV2State extends State<CheckboxV2> {
           borderRadius: BorderRadius.all(Radius.circular(widget.borderRadius)),
         )),
         overlayColor: MaterialStatePropertyAll(
-            ThemeApp.colors(context).secondary.withOpacity(.3)),
+            ThemeApp.of(context).colors.secondary.withOpacity(.3)),
         foregroundColor: MaterialStatePropertyAll(
-            widget.textStyle?.color ?? ThemeApp.colors(context).text),
+            widget.textStyle?.color ?? ThemeApp.of(context).colors.text),
       ),
       child: Row(
           crossAxisAlignment: widget.crossAxisAlignment,
@@ -253,7 +253,7 @@ class _CheckboxFieldV2State extends State<CheckboxV2> {
               height: widget.size != null ? widget.size! * 2 : null,
               child: Material(
                   elevation: 3,
-                  shadowColor: ThemeApp.colors(context).secondary,
+                  shadowColor: ThemeApp.of(context).colors.secondary,
                   shape: const CircleBorder(),
                   child: Checkbox(
                     value: getValue,
@@ -262,7 +262,7 @@ class _CheckboxFieldV2State extends State<CheckboxV2> {
                     splashRadius: widget.splashRadius,
                     fillColor:
                         MaterialStateProperty.all<Color>(Colors.transparent),
-                    checkColor: ThemeApp.colors(context).secondary,
+                    checkColor: ThemeApp.of(context).colors.secondary,
                     materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
                     visualDensity: VisualDensity.compact,
                   )),

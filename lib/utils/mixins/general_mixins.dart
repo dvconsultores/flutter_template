@@ -7,8 +7,7 @@ import 'package:provider/provider.dart';
 final _context = ContextUtility.context!;
 
 mixin ThemesMixin {
-  final colors = ThemeApp.colors(_context),
-      styles = ThemeApp.styles(_context),
+  final themeApp = ThemeApp.of(_context),
       theme = Theme.of(_context),
       media = MediaQuery.of(_context);
 }

@@ -834,7 +834,7 @@ class BottomDropdownItemMultiple extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final colors = ThemeApp.colors(context), theme = Theme.of(context);
+    final colors = ThemeApp.of(context).colors, theme = Theme.of(context);
 
     return ButtonAspect(
       borderRadius: borderRadius,
