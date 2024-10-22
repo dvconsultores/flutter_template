@@ -55,3 +55,6 @@ ios/Podfile.lock
 key.properties
 **/*.keystore
 **/*.jks
+
+# FVM Version Cache
+.fvm/
