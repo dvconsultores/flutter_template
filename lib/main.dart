@@ -82,13 +82,13 @@ class _AppState extends State<App> {
   }
 
   @override
-  Widget build(BuildContext context) =>
-      Consumer<MainProvider>(builder: (context, value, child) {
-        return SessionTimeoutManager(
-          sessionConfig: sessionTimeoutConfig.instance,
-          child: ScreenSizes(
+  Widget build(BuildContext context) => ScreenSizes(
+        child: Consumer<MainProvider>(builder: (context, value, child) {
+          return SessionTimeoutManager(
+            sessionConfig: sessionTimeoutConfig.instance,
             child: ScreenUtilInit(
-                designSize: Vars.mSize,
+                designSize:
+                    context.width.isMobile ? Vars.mobileSize : Vars.desktopSize,
                 builder: (context, child) {
                   return MaterialApp.router(
                     scaffoldMessengerKey: ContextUtility.scaffoldMessengerKey,
@@ -111,7 +111,7 @@ class _AppState extends State<App> {
                     // },
                   );
                 }),
-          ),
-        );
-      });
+          );
+        }),
+      );
 }

@@ -13,7 +13,7 @@ mixin Vars {
   static const maxDecimals = 3;
 
   // * Sizing
-  static const mSize = Size(360, 690);
+  static const mobileSize = Size(360, 690), desktopSize = Size(1512, 720);
 
   static const bottomNavbarHeight = 75.0;
 
