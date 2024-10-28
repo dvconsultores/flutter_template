@@ -68,7 +68,7 @@ class AppLoader {
 
   Future<T?> open<T>({
     String message = "Processing...",
-    Future<T> Function()? future,
+    Future<T> Function(CancelToken cancelToken)? future,
     void Function(CancelToken cancelToken)? onUserWillPop,
     CancelToken? customCancelToken,
   }) async {
@@ -94,7 +94,7 @@ class AppLoader {
 
     if (future != null) {
       try {
-        final value = await future();
+        final value = await future(customCancelToken ?? cancelToken);
 
         close(value: value);
         return value;
