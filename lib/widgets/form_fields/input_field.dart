@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_detextre4/painters/decorated_input_border.dart';
@@ -64,7 +66,15 @@ class InputField extends TextFormField {
     BoxConstraints? suffixIconConstraints,
   }) : super(
           style: textStyle ?? _ts,
-          keyboardType: numeric ? TextInputType.number : keyboardType,
+          keyboardType: buildWidget(() {
+            if (!numeric) return keyboardType;
+
+            if (Platform.isIOS) {
+              return const TextInputType.numberWithOptions(decimal: true);
+            }
+
+            return TextInputType.number;
+          }),
           inputFormatters: [
             if (numeric) ...[
               DecimalTextInputFormatter(
@@ -89,12 +99,12 @@ class InputField extends TextFormField {
 
             final ts = textStyle ?? _ts,
                 hs = hintStyle ??
-                    ts?.copyWith(
+                    ts.copyWith(
                       color: colors.text.withOpacity(.7),
                       fontSize: 13,
                     ),
                 ls = labelStyle ??
-                    ts?.copyWith(
+                    ts.copyWith(
                       color: colors.text,
                       fontSize: 13,
                     ),
@@ -200,7 +210,7 @@ class InputField extends TextFormField {
           }),
         );
   static final context = ContextUtility.context!,
-      _ts = Theme.of(context).textTheme.bodyMedium;
+      _ts = Theme.of(context).textTheme.bodyMedium!;
 
   static Widget sizedBox({
     double? width,
@@ -275,11 +285,19 @@ class InputField extends TextFormField {
         hintText: hintText,
         disabled: disabled,
         expands: expanded,
-        keyboardType: numeric
-            ? TextInputType.number
-            : expanded && keyboardType == null
+        keyboardType: buildWidget(() {
+          if (!numeric) {
+            return expanded && keyboardType == null
                 ? TextInputType.text
-                : keyboardType,
+                : keyboardType;
+          }
+
+          if (Platform.isIOS) {
+            return const TextInputType.numberWithOptions(decimal: true);
+          }
+
+          return TextInputType.number;
+        }),
         maxLines: maxLines,
         minLines: minLines,
         labelText: labelText,

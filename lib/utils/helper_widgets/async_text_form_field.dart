@@ -16,7 +16,7 @@ class AsyncTextFormField extends StatefulWidget {
     this.autocorrect = true,
     this.autofillHints,
     this.autofocus = false,
-    this.autovalidateMode = AutovalidateMode.onUserInteraction,
+    this.autovalidateMode,
     this.buildCounter,
     this.contextMenuBuilder,
     this.controller,
@@ -38,7 +38,7 @@ class AsyncTextFormField extends StatefulWidget {
     this.keyboardType,
     this.maxLength,
     this.maxLengthEnforcement,
-    this.maxLines = 1,
+    this.maxLines,
     this.minLines,
     this.mouseCursor,
     this.obscureText = false,
@@ -73,7 +73,7 @@ class AsyncTextFormField extends StatefulWidget {
   final bool autocorrect;
   final Iterable<String>? autofillHints;
   final bool autofocus;
-  final AutovalidateMode autovalidateMode;
+  final AutovalidateMode? autovalidateMode;
   final Widget? Function(BuildContext context,
       {required int currentLength,
       required bool isFocused,
@@ -100,7 +100,7 @@ class AsyncTextFormField extends StatefulWidget {
   final TextInputType? keyboardType;
   final int? maxLength;
   final MaxLengthEnforcement? maxLengthEnforcement;
-  final int maxLines;
+  final int? maxLines;
   final int? minLines;
   final MouseCursor? mouseCursor;
   final bool obscureText;

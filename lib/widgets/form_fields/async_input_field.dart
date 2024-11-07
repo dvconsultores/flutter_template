@@ -1,12 +1,14 @@
-import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
+import 'dart:io';
+
 import 'package:flutter_detextre4/painters/decorated_input_border.dart';
 import 'package:flutter_detextre4/utils/config/theme.dart';
 import 'package:flutter_detextre4/utils/general/context_utility.dart';
-import 'package:flutter_detextre4/utils/general/functions.dart';
 import 'package:flutter_detextre4/utils/general/input_formatters.dart';
+import 'package:flutter_detextre4/utils/general/functions.dart';
 import 'package:flutter_detextre4/utils/general/variables.dart';
 import 'package:flutter_detextre4/utils/helper_widgets/async_text_form_field.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 class AsyncInputField extends AsyncTextFormField {
   AsyncInputField({
@@ -23,50 +25,57 @@ class AsyncInputField extends AsyncTextFormField {
     super.maxLines,
     super.minLines,
     super.maxLength,
-    super.onChanged,
+    void Function(String value)? onChanged,
     super.textAlign = TextAlign.start,
     super.onFieldSubmitted,
     super.autocorrect,
     super.autofocus,
-    this.typeKeyboard,
-    this.formatters,
-    this.labelText,
-    this.hintText,
-    this.disabled = false,
-    this.prefixIcon,
-    this.prefix,
-    this.suffixIcon,
-    this.suffix,
-    this.maxWidthPrefix = double.infinity,
-    this.numeric = false,
-    this.maxEntires = 10,
-    this.maxDecimals = 3,
-    this.prefixPadding,
-    this.borderRadius = const BorderRadius.all(Radius.circular(Vars.radius10)),
-    this.border,
-    this.borderDisabled,
-    this.borderError,
-    this.borderFocused,
-    this.underline = false,
-    this.floatingLabelBehavior = FloatingLabelBehavior.never,
-    this.contentPadding,
-    this.textStyle,
-    this.hintStyle,
-    this.labelStyle,
-    this.floatingLabelStyle,
-    this.filled = true,
-    this.color,
-    this.inputDecoration,
-    this.errorMaxLines,
-    this.shadow,
-    this.counterText,
-    this.isCollapsed = false,
+    String? labelText,
+    String? hintText,
+    bool disabled = false,
+    Widget? prefixIcon,
+    Widget? prefix,
+    Widget? suffixIcon,
+    Widget? suffix,
+    double maxWidthPrefix = double.infinity,
+    bool numeric = false,
+    List<TextInputFormatter>? inputFormatters,
+    int maxEntires = 10,
+    int maxDecimals = 3,
+    EdgeInsetsGeometry? prefixPadding,
+    BorderRadius borderRadius =
+        const BorderRadius.all(Radius.circular(Vars.radius10)),
+    BorderSide? border,
+    BorderSide? borderDisabled,
+    BorderSide? borderError,
+    BorderSide? borderFocused,
+    bool underline = false,
+    FloatingLabelBehavior floatingLabelBehavior = FloatingLabelBehavior.never,
+    EdgeInsets? contentPadding,
+    TextStyle? textStyle,
+    TextStyle? hintStyle,
+    TextStyle? labelStyle,
+    TextStyle? floatingLabelStyle,
+    bool filled = true,
+    Color? color,
+    TextInputType? keyboardType,
+    InputDecoration? decoration,
+    int? errorMaxLines,
+    BoxShadow? shadow,
+    String? counterText,
+    bool isCollapsed = false,
+    BoxConstraints? suffixIconConstraints,
   }) : super(
           style: textStyle ?? _ts,
-          keyboardType: numeric
-              ? const TextInputType.numberWithOptions(
-                  signed: true, decimal: true)
-              : typeKeyboard,
+          keyboardType: buildWidget(() {
+            if (!numeric) return keyboardType;
+
+            if (Platform.isIOS) {
+              return const TextInputType.numberWithOptions(decimal: true);
+            }
+
+            return TextInputType.number;
+          }),
           inputFormatters: [
             if (numeric) ...[
               DecimalTextInputFormatter(
@@ -74,64 +83,82 @@ class AsyncInputField extends AsyncTextFormField {
                 maxDecimals: maxDecimals,
               ),
             ],
-            if (formatters != null && formatters.isNotEmpty) ...formatters
+            if (inputFormatters != null && inputFormatters.isNotEmpty)
+              ...inputFormatters
           ],
-          decoration: inputDecoration ??
-              buildWidget<InputDecoration>(() {
-                final ts = textStyle ?? _ts,
-                    hs = hintStyle ??
-                        ts.copyWith(
-                            color: ThemeApp.of(context)
-                                .colors
-                                .text
-                                .withOpacity(.7),
-                            fontSize: 13),
-                    ls = labelStyle ??
-                        ts.copyWith(
-                            color: ThemeApp.of(context).colors.text,
-                            fontSize: 13),
-                    fls = floatingLabelStyle ?? ls;
+          onChanged: (value) {
+            if (onChanged == null) return;
 
-                InputBorder checkBorder(BorderSide border) =>
-                    DecoratedInputBorder(
-                      child: underline
-                          ? UnderlineInputBorder(
-                              borderSide: border, borderRadius: borderRadius)
-                          : OutlineInputBorder(
-                              borderSide: border, borderRadius: borderRadius),
-                      shadow: shadow ?? Vars.boxShadow2,
-                    );
+            final haveDecimals =
+                (keyboardType?.decimal ?? numeric) && value.contains(',');
 
-                final defaultBorder =
-                        border ?? const BorderSide(color: Colors.transparent),
-                    disabledBorder = borderDisabled ??
-                        const BorderSide(color: Colors.transparent),
-                    errorBorder = borderError ??
-                        BorderSide(color: Theme.of(context).colorScheme.error),
-                    focusedBorder = borderFocused ??
-                        BorderSide(color: Theme.of(context).focusColor);
+            onChanged(haveDecimals ? value.split(',').join('.') : value);
+          },
+          decoration: buildWidget<InputDecoration>(() {
+            final colors = ThemeApp.of(context).colors,
+                theme = Theme.of(context);
 
-                return InputDecoration(
-                  prefixIconConstraints:
-                      BoxConstraints(maxWidth: maxWidthPrefix),
-                  enabled: !disabled,
-                  counterText: counterText,
-                  hintText: hintText,
-                  hintStyle: hs,
-                  labelText: labelText,
-                  labelStyle: ls,
-                  floatingLabelStyle: fls,
-                  floatingLabelBehavior: floatingLabelBehavior,
-                  filled: filled,
-                  fillColor: color ?? ThemeApp.of(context).colors.background,
-                  border: checkBorder(defaultBorder),
-                  enabledBorder: checkBorder(defaultBorder),
-                  disabledBorder: checkBorder(disabledBorder),
-                  errorBorder: checkBorder(errorBorder),
-                  focusedBorder: checkBorder(focusedBorder),
-                  errorMaxLines: errorMaxLines,
-                  prefix: prefix,
-                  prefixIcon: prefixIcon != null
+            final ts = textStyle ?? _ts,
+                hs = hintStyle ??
+                    ts.copyWith(
+                      color: colors.text.withOpacity(.7),
+                      fontSize: 13,
+                    ),
+                ls = labelStyle ??
+                    ts.copyWith(
+                      color: colors.text,
+                      fontSize: 13,
+                    ),
+                fls = floatingLabelStyle ?? ls;
+
+            InputBorder checkBorder(BorderSide border) => DecoratedInputBorder(
+                  child: underline
+                      ? UnderlineInputBorder(
+                          borderSide: border,
+                          borderRadius: borderRadius,
+                        )
+                      : OutlineInputBorder(
+                          borderSide: border,
+                          borderRadius: borderRadius,
+                        ),
+                  shadow: shadow ?? Vars.boxShadow2,
+                );
+
+            final defaultBorder =
+                    border ?? const BorderSide(color: Colors.transparent),
+                disabledBorder = borderDisabled ??
+                    const BorderSide(color: Colors.transparent),
+                errorBorder =
+                    borderError ?? BorderSide(color: theme.colorScheme.error),
+                focusedBorder =
+                    borderFocused ?? BorderSide(color: theme.focusColor);
+
+            return InputDecoration(
+              prefixIconConstraints: decoration?.prefixIconConstraints ??
+                  BoxConstraints(maxWidth: maxWidthPrefix),
+              enabled: decoration?.enabled ?? !disabled,
+              counterText: decoration?.counterText ?? counterText,
+              hintText: decoration?.hintText ?? hintText,
+              hintStyle: decoration?.hintStyle ?? hs,
+              labelText: decoration?.labelText ?? labelText,
+              labelStyle: decoration?.labelStyle ?? ls,
+              floatingLabelStyle: decoration?.floatingLabelStyle ?? fls,
+              floatingLabelBehavior:
+                  decoration?.floatingLabelBehavior ?? floatingLabelBehavior,
+              filled: decoration?.filled ?? filled,
+              fillColor: decoration?.fillColor ?? color,
+              border: decoration?.border ?? checkBorder(defaultBorder),
+              enabledBorder:
+                  decoration?.enabledBorder ?? checkBorder(defaultBorder),
+              disabledBorder:
+                  decoration?.disabledBorder ?? checkBorder(disabledBorder),
+              errorBorder: decoration?.errorBorder ?? checkBorder(errorBorder),
+              focusedBorder:
+                  decoration?.focusedBorder ?? checkBorder(focusedBorder),
+              errorMaxLines: decoration?.errorMaxLines ?? errorMaxLines,
+              prefix: decoration?.prefix ?? prefix,
+              prefixIcon: decoration?.prefixIcon ??
+                  (prefixIcon != null
                       ? IntrinsicWidth(
                           child: Padding(
                             padding: prefixPadding ??
@@ -141,59 +168,50 @@ class AsyncInputField extends AsyncTextFormField {
                             child: prefixIcon,
                           ),
                         )
-                      : null,
-                  suffix: suffix,
-                  suffixIcon: suffixIcon,
-                  isCollapsed: isCollapsed,
-                  isDense: true,
-                  contentPadding: contentPadding ??
-                      const EdgeInsets.symmetric(
-                        horizontal: Vars.gapMedium,
-                        vertical: Vars.gapMax,
-                      ),
-                );
-              }),
+                      : null),
+              suffix: decoration?.suffix ?? suffix,
+              suffixIcon: decoration?.suffixIcon ?? suffixIcon,
+              suffixIconConstraints:
+                  decoration?.suffixIconConstraints ?? suffixIconConstraints,
+              isCollapsed: decoration?.isCollapsed ?? isCollapsed,
+              isDense: decoration?.isDense ?? true,
+              contentPadding: contentPadding ??
+                  const EdgeInsets.symmetric(
+                    horizontal: Vars.gapMedium,
+                    vertical: Vars.gapMax,
+                  ),
+              alignLabelWithHint: decoration?.alignLabelWithHint,
+              constraints: decoration?.constraints,
+              counter: decoration?.counter,
+              counterStyle: decoration?.counterStyle,
+              error: decoration?.error,
+              errorStyle: decoration?.errorStyle,
+              errorText: decoration?.errorText,
+              floatingLabelAlignment: decoration?.floatingLabelAlignment,
+              focusColor: decoration?.focusColor,
+              focusedErrorBorder: decoration?.focusedErrorBorder,
+              helperMaxLines: decoration?.helperMaxLines,
+              helperStyle: decoration?.helperStyle,
+              helperText: decoration?.helperText,
+              hintFadeDuration: decoration?.hintFadeDuration,
+              hintMaxLines: decoration?.hintMaxLines,
+              hintTextDirection: decoration?.hintTextDirection,
+              hoverColor: decoration?.hoverColor,
+              icon: decoration?.icon,
+              iconColor: decoration?.iconColor,
+              label: decoration?.label,
+              prefixIconColor: decoration?.prefixIconColor,
+              prefixStyle: decoration?.prefixStyle,
+              prefixText: decoration?.prefixText,
+              semanticCounterText: decoration?.semanticCounterText,
+              suffixIconColor: decoration?.suffixIconColor,
+              suffixStyle: decoration?.suffixStyle,
+              suffixText: decoration?.suffixText,
+            );
+          }),
         );
   static final context = ContextUtility.context!,
-      _ts = TextStyle(
-        color: ThemeApp.of(context).colors.text,
-        fontSize: 16,
-        fontWeight: FontWeight.w400,
-      );
-
-  final String? labelText;
-  final String? hintText;
-  final bool disabled;
-  final Widget? prefixIcon;
-  final Widget? prefix;
-  final Widget? suffixIcon;
-  final Widget? suffix;
-  final double maxWidthPrefix;
-  final bool numeric;
-  final List<TextInputFormatter>? formatters;
-  final int maxEntires;
-  final int maxDecimals;
-  final EdgeInsetsGeometry? prefixPadding;
-  final BorderRadius borderRadius;
-  final BorderSide? border;
-  final BorderSide? borderDisabled;
-  final BorderSide? borderError;
-  final BorderSide? borderFocused;
-  final bool underline;
-  final FloatingLabelBehavior floatingLabelBehavior;
-  final EdgeInsets? contentPadding;
-  final TextStyle? textStyle;
-  final TextStyle? hintStyle;
-  final TextStyle? labelStyle;
-  final TextStyle? floatingLabelStyle;
-  final bool filled;
-  final Color? color;
-  final TextInputType? typeKeyboard;
-  final InputDecoration? inputDecoration;
-  final int? errorMaxLines;
-  final BoxShadow? shadow;
-  final String? counterText;
-  final bool isCollapsed;
+      _ts = Theme.of(context).textTheme.bodyMedium!;
 
   static Widget sizedBox({
     double? width,
@@ -209,7 +227,7 @@ class AsyncInputField extends AsyncTextFormField {
     TextInputType? keyboardType,
     Widget? prefixIcon,
     Widget? suffixIcon,
-    int maxLines = 1,
+    int? maxLines,
     int? minLines,
     int? maxLength,
     FocusNode? focusNode,
@@ -231,7 +249,10 @@ class AsyncInputField extends AsyncTextFormField {
     BorderSide? borderFocused,
     bool underline = false,
     FloatingLabelBehavior floatingLabelBehavior = FloatingLabelBehavior.auto,
-    EdgeInsets? contentPadding,
+    EdgeInsets? contentPadding = const EdgeInsets.symmetric(
+      vertical: Vars.gapMedium,
+      horizontal: Vars.gapMedium,
+    ),
     double maxWidthPrefix = double.infinity,
     TextStyle? textStyle,
     TextStyle? hintStyle,
@@ -247,8 +268,11 @@ class AsyncInputField extends AsyncTextFormField {
     bool autofocus = false,
     String? counterText,
     bool isCollapsed = false,
+    BoxConstraints? suffixIconConstraints,
+    int maxEntires = 10,
+    int maxDecimals = 3,
   }) {
-    final expanded = height != null;
+    final expanded = maxLines == null;
 
     return SizedBox(
       width: width,
@@ -262,20 +286,27 @@ class AsyncInputField extends AsyncTextFormField {
         hintText: hintText,
         disabled: disabled,
         expands: expanded,
-        typeKeyboard: numeric
-            ? const TextInputType.numberWithOptions(signed: true, decimal: true)
-            : expanded && keyboardType == null
+        keyboardType: buildWidget(() {
+          if (!numeric) {
+            return expanded && keyboardType == null
                 ? TextInputType.text
-                : keyboardType,
-        maxLines: expanded ? 1 : maxLines,
+                : keyboardType;
+          }
+
+          if (Platform.isIOS) {
+            return const TextInputType.numberWithOptions(decimal: true);
+          }
+
+          return TextInputType.number;
+        }),
+        maxLines: maxLines,
         minLines: minLines,
         labelText: labelText,
         maxLength: maxLength,
         prefixIcon: prefixIcon,
         suffixIcon: suffixIcon,
         textAlign: textAlign,
-        autovalidateMode:
-            autovalidateMode ?? AutovalidateMode.onUserInteraction,
+        autovalidateMode: autovalidateMode,
         borderRadius: borderRadius,
         border: border,
         borderDisabled: borderDisabled,
@@ -284,7 +315,7 @@ class AsyncInputField extends AsyncTextFormField {
         underline: underline,
         contentPadding: contentPadding,
         floatingLabelBehavior: floatingLabelBehavior,
-        formatters: inputFormatters,
+        inputFormatters: inputFormatters,
         maxWidthPrefix: maxWidthPrefix,
         numeric: numeric,
         obscureText: obscureText,
@@ -299,7 +330,7 @@ class AsyncInputField extends AsyncTextFormField {
         floatingLabelStyle: floatingLabelStyle,
         filled: filled,
         color: color,
-        inputDecoration: decoration,
+        decoration: decoration,
         errorMaxLines: errorMaxLines,
         onFieldSubmitted: onFieldSubmitted,
         autocorrect: autocorrect,
@@ -307,6 +338,9 @@ class AsyncInputField extends AsyncTextFormField {
         autofocus: autofocus,
         counterText: counterText,
         isCollapsed: isCollapsed,
+        suffixIconConstraints: suffixIconConstraints,
+        maxEntires: maxEntires,
+        maxDecimals: maxDecimals,
       ),
     );
   }
