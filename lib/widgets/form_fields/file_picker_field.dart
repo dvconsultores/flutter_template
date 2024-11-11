@@ -108,8 +108,8 @@ class _FilePickerFieldState extends State<FilePickerField>
         platformFile = result?.files.single;
 
     if (platformFile != null &&
-        allowedExtensions.contains(platformFile.extension)) {
-      fileExtension = platformFile.extension;
+        allowedExtensions.contains(platformFile.extension?.toLowerCase())) {
+      fileExtension = platformFile.extension?.toLowerCase();
 
       animation.reverse();
       getController.value = File(platformFile.path!);
