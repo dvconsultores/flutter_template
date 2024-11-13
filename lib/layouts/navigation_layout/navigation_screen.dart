@@ -11,11 +11,9 @@ class NavigationScreen extends StatelessWidget {
     super.key,
     required this.child,
     this.swipeNavigate = false,
-    required this.items,
   });
   final Widget child;
   final bool swipeNavigate;
-  final Map<String, BottomNavigationBarItem> items;
 
   @override
   Widget build(BuildContext context) {

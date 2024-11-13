@@ -66,12 +66,12 @@ class App extends StatefulWidget {
 }
 
 class _AppState extends State<App> {
-  late final sessionTimeoutConfig = SessionTimeoutConfig(context);
+  late final SessionTimeoutConfig sessionTimeoutConfig;
 
   @override
   void initState() {
     DioService.init();
-    sessionTimeoutConfig.listen();
+    sessionTimeoutConfig = SessionTimeoutConfig(context)..listen();
     super.initState();
   }
 

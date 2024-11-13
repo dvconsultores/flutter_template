@@ -44,7 +44,6 @@ class NavigationLayout extends StatelessWidget {
       swipeNavigate: swipeNavigate,
       child: NavigationScreen(
         swipeNavigate: swipeNavigate,
-        items: items,
         child: child,
       ),
     );
