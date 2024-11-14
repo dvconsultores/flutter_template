@@ -20,8 +20,8 @@ class CustomAppBar extends AppBar {
             icon: const Icon(Icons.chevron_left_rounded),
             iconSize: 28,
             onPressed: onPop ??
-                () => router.canPop()
-                    ? router.pop()
+                () => routerConfig.router.canPop()
+                    ? routerConfig.router.pop()
                     : Navigator.pop(ContextUtility.context!),
           ),
           bottom: PreferredSize(

@@ -28,20 +28,23 @@ class NavigationScreen extends StatelessWidget {
 
               // Right Swipe
               if (details.delta.dx > sensitivity) {
-                final index = router.indexShellRoute == 0
+                final index = routerConfig.router.indexShellRoute == 0
                     ? 0
-                    : router.indexShellRoute - 1;
-                final previousRoute =
-                    router.shellRoutes.elementAtOrNull(index) as GoRoute?;
+                    : routerConfig.router.indexShellRoute - 1;
+                final previousRoute = routerConfig.router.shellRoutes
+                    .elementAtOrNull(index) as GoRoute?;
 
-                if (previousRoute != null) router.go((previousRoute).path);
+                if (previousRoute != null) {
+                  context.go((previousRoute).path);
+                }
 
                 // Left Swipe
               } else if (details.delta.dx < -sensitivity) {
-                final nextRoute = router.shellRoutes
-                    .elementAtOrNull(router.indexShellRoute + 1) as GoRoute?;
+                final nextRoute = routerConfig.router.shellRoutes
+                    .elementAtOrNull(
+                        routerConfig.router.indexShellRoute + 1) as GoRoute?;
 
-                if (nextRoute != null) router.go((nextRoute).path);
+                if (nextRoute != null) routerConfig.router.go((nextRoute).path);
               }
             }
           : null,
@@ -53,17 +56,20 @@ class NavigationScreen extends StatelessWidget {
           appBar: AppBar(
             title: Text(
               inherited.items.entries
-                  .elementAt(router.indexShellRoute)
+                  .elementAt(routerConfig.router.indexShellRoute)
                   .key
                   .toCapitalize(),
             ),
           ),
-          bottomNavigationBar: AppBottomNavigationBar(
-            currentIndex: router.indexShellRoute,
-            onTap: (index) =>
-                router.goNamed(inherited.items.entries.elementAt(index).key),
-            items: inherited.items.values.toList(),
-          ),
+          bottomNavigationBar: Builder(builder: (context) {
+            inherited.setScaffoldState(context);
+
+            return AppBottomNavigationBar(
+              currentIndex: inherited.currentIndex,
+              onTap: (index) => inherited.handlerTapItem(context, index),
+              items: inherited.items.values.toList(),
+            );
+          }),
         ),
       ),
     );

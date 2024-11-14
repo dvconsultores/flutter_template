@@ -75,6 +75,13 @@ class _CustomBottomNavigationBarState extends State<AppBottomNavigationBar>
   }
 
   @override
+  void didUpdateWidget(covariant AppBottomNavigationBar oldWidget) {
+    if (oldWidget.currentIndex != widget.currentIndex) startAnimation();
+
+    super.didUpdateWidget(oldWidget);
+  }
+
+  @override
   void dispose() {
     animation.dispose();
     opacityAnim.dispose();
@@ -140,10 +147,7 @@ class _CustomBottomNavigationBarState extends State<AppBottomNavigationBar>
                             message: item.tooltip,
                             waitDuration: const Duration(milliseconds: 200),
                             child: IconButton(
-                              onPressed: () {
-                                widget.onTap(i);
-                                startAnimation();
-                              },
+                              onPressed: () => widget.onTap(i),
                               visualDensity: VisualDensity.comfortable,
                               icon: item.icon,
                             ),

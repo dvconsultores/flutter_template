@@ -3,7 +3,7 @@ import 'package:flutter_detextre4/layouts/navigation_layout/navigation_screen.da
 import 'package:flutter_detextre4/utils/config/router_config.dart';
 import 'package:go_router/go_router.dart';
 
-class NavigationLayout extends StatelessWidget {
+class NavigationLayout extends StatefulWidget {
   const NavigationLayout(
     this.state,
     this.child, {
@@ -15,8 +15,17 @@ class NavigationLayout extends StatelessWidget {
   final bool swipeNavigate;
 
   @override
+  State<NavigationLayout> createState() => _NavigationLayoutState();
+}
+
+class _NavigationLayoutState extends State<NavigationLayout> {
+  ScaffoldState? scaffoldState;
+  void setScaffoldState(BuildContext context) =>
+      scaffoldState ??= Scaffold.of(context);
+
+  @override
   Widget build(BuildContext context) {
-    if (router.indexShellRoute == -1) {
+    if (routerConfig.router.indexShellRoute == -1) {
       return const Scaffold(body: SizedBox.shrink());
     }
 
@@ -38,12 +47,18 @@ class NavigationLayout extends StatelessWidget {
       ),
     };
 
+    void handlerTapItem(BuildContext context, int index) =>
+        routerConfig.router.goNamed(items.entries.elementAt(index).key);
+
     return NavigationInherited(
-      state: state,
+      state: widget.state,
       items: items,
+      currentIndex: routerConfig.router.indexShellRoute,
+      handlerTapItem: handlerTapItem,
+      setScaffoldState: setScaffoldState,
       child: NavigationScreen(
-        swipeNavigate: swipeNavigate,
-        child: child,
+        swipeNavigate: widget.swipeNavigate,
+        child: widget.child,
       ),
     );
   }
@@ -55,9 +70,15 @@ class NavigationInherited extends InheritedWidget {
     required this.state,
     required super.child,
     required this.items,
+    required this.currentIndex,
+    required this.handlerTapItem,
+    required this.setScaffoldState,
   });
   final GoRouterState state;
   final Map<String, BottomNavigationBarItem> items;
+  final int currentIndex;
+  final void Function(BuildContext context, int index) handlerTapItem;
+  final void Function(BuildContext context) setScaffoldState;
 
   @override
   bool updateShouldNotify(NavigationInherited oldWidget) => true;

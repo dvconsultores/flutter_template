@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_detextre4/routes/initial_routes/splash_route/splash_screen.dart';
-import 'package:flutter_detextre4/utils/config/router_config.dart';
+import 'package:go_router/go_router.dart';
 
 class SplashRoute extends StatefulWidget {
   const SplashRoute({super.key});
@@ -21,7 +21,7 @@ class _SplashRouteState extends State<SplashRoute>
 
   @override
   void initState() {
-    animationController.forward().then((_) => router.go("/"));
+    animationController.forward().then((_) => context.goNamed("home"));
     super.initState();
   }
 

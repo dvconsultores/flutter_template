@@ -72,7 +72,7 @@ class DioService {
         //* catch unauthorized request
         if (error.response?.statusCode == 401) {
           final mainProvider = ContextUtility.context!.read<MainProvider>();
-          router.goNamed("login");
+          routerConfig.router.goNamed("login");
 
           Modal.showSystemAlert(
             ContextUtility.context!,

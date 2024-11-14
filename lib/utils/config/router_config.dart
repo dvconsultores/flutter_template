@@ -16,90 +16,103 @@ import 'package:flutter_detextre4/utils/helper_widgets/custom_transition_wrapper
 import 'package:flutter_detextre4/utils/services/local_data/secure_storage_service.dart';
 import 'package:go_router/go_router.dart';
 
-Page _pageBuilder(Widget child) => CustomTransitionPage(
-      transitionsBuilder: (context, animation, secondaryAnimation, child) =>
-          CustomTransitionWrapper(animation: animation, child: child),
-      child: child,
-    );
+final routerConfig = AppRouterConfig();
 
-final GoRouter router = GoRouter(
-    navigatorKey: ContextUtility.navigatorKey,
-    initialLocation: kIsWeb ? "/" : "/splash",
-    // errorBuilder: (context, state) {
-    //   return const ErrorPage();
-    // },
-    redirect: (context, state) async {
-      final isLogged =
-          (await SecureStorage.read<String?>(SecureCollection.tokenAuth)) !=
-              null;
+class AppRouterConfig {
+  late GoRouter router;
+  static Page pageBuilder(Widget child) => CustomTransitionPage(
+        transitionsBuilder: (context, animation, secondaryAnimation, child) =>
+            CustomTransitionWrapper(animation: animation, child: child),
+        child: child,
+      );
 
-      if (state.location == "/splash") {
-        return null;
-      } else if (router.requireAuth && !isLogged) {
-        return kIsWeb ? "/landing" : "/auth";
-      }
+  AppRouterConfig() {
+    setRouter();
+  }
 
-      return null;
-    },
+  void setRouter() => router = GoRouter(
+          navigatorKey: ContextUtility.navigatorKey,
+          initialLocation: kIsWeb ? "/" : "/splash",
+          // errorBuilder: (context, state) {
+          //   return const ErrorPage();
+          // },
+          redirect: (context, state) async {
+            final isLogged = (await SecureStorage.read<String?>(
+                    SecureCollection.tokenAuth)) !=
+                null;
 
-    // ? Registered Routes
-    routes: [
-      //* top level
-      if (kIsWeb)
-        GoRoute(
-          path: '/landing',
-          name: 'landing',
-          pageBuilder: (context, state) => _pageBuilder(const LandingRoute()),
-        )
-      else
-        GoRoute(
-          path: '/splash',
-          name: 'splash',
-          pageBuilder: (context, state) => _pageBuilder(const SplashRoute()),
-        ),
+            if (state.location == "/splash") {
+              return null;
+            } else if (router.requireAuth && !isLogged) {
+              return kIsWeb ? "/landing" : "/auth";
+            }
 
-      GoRoute(
-        path: '/auth',
-        name: 'login',
-        pageBuilder: (context, state) => _pageBuilder(const LoginRoute()),
-        routes: const [],
-      ),
+            return null;
+          },
 
-      // * shell routes
-      ShellRoute(
-          navigatorKey: ContextUtility.shellrouteKey,
-          builder: (context, state, child) => NavigationLayout(state, child),
+          // ? Registered Routes
           routes: [
+            //* top level
+            if (kIsWeb)
+              GoRoute(
+                path: '/landing',
+                name: 'landing',
+                pageBuilder: (context, state) =>
+                    pageBuilder(const LandingRoute()),
+              )
+            else
+              GoRoute(
+                path: '/splash',
+                name: 'splash',
+                pageBuilder: (context, state) =>
+                    pageBuilder(const SplashRoute()),
+              ),
+
             GoRoute(
-              path: '/profile',
-              name: "profile",
-              pageBuilder: (context, state) =>
-                  _pageBuilder(const ProfileRoute()),
+              path: '/auth',
+              name: 'login',
+              pageBuilder: (context, state) => pageBuilder(const LoginRoute()),
               routes: const [],
             ),
-            GoRoute(
-              path: '/',
-              name: "home",
-              pageBuilder: (context, state) => _pageBuilder(const HomeRoute()),
-              routes: const [],
-            ),
-            GoRoute(
-              path: '/search',
-              name: "search",
-              pageBuilder: (context, state) =>
-                  _pageBuilder(const SearchRoute()),
-              routes: const [],
-            ),
-          ]),
-    ]);
+
+            // * shell routes
+            ShellRoute(
+                navigatorKey: ContextUtility.shellrouteKey,
+                builder: (context, state, child) =>
+                    NavigationLayout(state, child),
+                routes: [
+                  GoRoute(
+                    path: '/profile',
+                    name: "profile",
+                    pageBuilder: (context, state) =>
+                        pageBuilder(const ProfileRoute()),
+                    routes: const [],
+                  ),
+                  GoRoute(
+                    path: '/',
+                    name: "home",
+                    pageBuilder: (context, state) =>
+                        pageBuilder(const HomeRoute()),
+                    routes: const [],
+                  ),
+                  GoRoute(
+                    path: '/search',
+                    name: "search",
+                    pageBuilder: (context, state) =>
+                        pageBuilder(const SearchRoute()),
+                    routes: const [],
+                  ),
+                ]),
+          ]);
+}
 
 //! //FIXME search better practices
 extension GoRouterExtension on GoRouter {
   /// Getter yo know if current route require authentication
-  get requireAuth => !router.location.contains('/auth');
+  get requireAuth => !routerConfig.router.location.contains('/auth');
 
   /// Get list of main routes on the [ShellRoute].
-  List<RouteBase> get shellRoutes => router.configuration.routes
+  List<RouteBase> get shellRoutes => routerConfig.router.configuration.routes
       .firstWhere((element) => element is ShellRoute)
       .routes;
 

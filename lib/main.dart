@@ -101,7 +101,7 @@ class _AppState extends State<App> {
                     localizationsDelegates:
                         AppLocalizations.localizationsDelegates,
                     supportedLocales: AppLocalizations.supportedLocales,
-                    routerConfig: router,
+                    routerConfig: routerConfig.router,
                     // // * global text scale factorized
                     // builder: (context, child) {
                     //   return MediaQuery(
