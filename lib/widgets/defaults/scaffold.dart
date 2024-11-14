@@ -1,7 +1,9 @@
+import 'package:custom_refresh_indicator/custom_refresh_indicator.dart';
 import 'package:double_back_to_exit/double_back_to_exit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_detextre4/utils/general/variables.dart';
 import 'package:flutter_detextre4/utils/helper_widgets/will_pop_custom.dart';
+import 'package:flutter_detextre4/widgets/loaders/refresh_indicator.dart';
 import 'package:go_router/go_router.dart';
 
 // * Custom background styled
@@ -12,7 +14,14 @@ class _BackgroundStyled extends StatelessWidget {
     this.gradient,
     this.decorationImage,
     this.padding,
+    this.scrollController,
     required this.scrollable,
+    this.indicatorController,
+    this.notificationPredicate = defaultScrollNotificationPredicate,
+    this.offsetToArmed,
+    this.textOnPullDown = "Pull to fetch more",
+    this.onRefresh,
+    this.onPullDown,
     this.backgroundStack,
     this.foregroundStack,
   });
@@ -20,7 +29,14 @@ class _BackgroundStyled extends StatelessWidget {
   final Color? color;
   final Gradient? gradient;
   final DecorationImage? decorationImage;
+  final ScrollController? scrollController;
   final bool scrollable;
+  final ValueNotifier<IndicatorController>? indicatorController;
+  final bool Function(ScrollNotification) notificationPredicate;
+  final double? offsetToArmed;
+  final String textOnPullDown;
+  final Future<void> Function()? onRefresh;
+  final Future<void> Function()? onPullDown;
   final List<Positioned>? backgroundStack;
   final List<Positioned>? foregroundStack;
   final Widget child;
@@ -30,9 +46,43 @@ class _BackgroundStyled extends StatelessWidget {
     final c = color ?? Theme.of(context).scaffoldBackgroundColor;
 
     final body = Padding(
-      padding: padding ?? Vars.paddingScaffold,
-      child: child,
-    );
+          padding: padding ?? Vars.paddingScaffold,
+          child: child,
+        ),
+        bodyScrollable = SingleChildScrollView(
+          controller: scrollController,
+          physics:
+              onRefresh != null ? const AlwaysScrollableScrollPhysics() : null,
+          child: body,
+        );
+
+    Widget renderBody() {
+      if (!scrollable) return body;
+
+      if (onPullDown != null) {
+        return AppRefreshIndicator.pullDown(
+          controller: indicatorController,
+          notificationPredicate: notificationPredicate,
+          offsetToArmed: offsetToArmed,
+          onRefresh: onRefresh,
+          onPullDown: onPullDown,
+          textOnPullDown: textOnPullDown,
+          child: bodyScrollable,
+        );
+      }
+
+      if (onRefresh != null) {
+        return AppRefreshIndicator(
+          controller: indicatorController,
+          notificationPredicate: notificationPredicate,
+          offsetToArmed: offsetToArmed,
+          onRefresh: onRefresh!,
+          child: bodyScrollable,
+        );
+      }
+
+      return bodyScrollable;
+    }
 
     return SafeArea(
       child: Stack(fit: StackFit.expand, children: [
@@ -44,7 +94,7 @@ class _BackgroundStyled extends StatelessWidget {
           image: decorationImage,
         ))),
         if (backgroundStack != null) ...backgroundStack!,
-        scrollable ? SingleChildScrollView(child: body) : body,
+        renderBody(),
         if (foregroundStack != null) ...foregroundStack!,
       ]),
     );
@@ -64,7 +114,14 @@ class AppScaffold extends StatelessWidget {
     this.color,
     this.gradient,
     this.decorationImage,
+    this.scrollController,
     this.scrollable = false,
+    this.indicatorController,
+    this.notificationPredicate = defaultScrollNotificationPredicate,
+    this.offsetToArmed,
+    this.textOnPullDown = "Pull to fetch more",
+    this.onRefresh,
+    this.onPullDown,
     this.doubleBackToExit = false,
     this.goHomeOnBack = false,
     this.onPop,
@@ -80,7 +137,14 @@ class AppScaffold extends StatelessWidget {
   final Color? color;
   final Gradient? gradient;
   final DecorationImage? decorationImage;
+  final ScrollController? scrollController;
   final bool scrollable;
+  final ValueNotifier<IndicatorController>? indicatorController;
+  final bool Function(ScrollNotification) notificationPredicate;
+  final double? offsetToArmed;
+  final String textOnPullDown;
+  final Future<void> Function()? onRefresh;
+  final Future<void> Function()? onPullDown;
   final bool doubleBackToExit;
   final bool goHomeOnBack;
   final VoidCallback? onPop;
@@ -115,7 +179,14 @@ class AppScaffold extends StatelessWidget {
             color: color,
             gradient: gradient,
             decorationImage: decorationImage,
+            scrollController: scrollController,
             scrollable: scrollable,
+            indicatorController: indicatorController,
+            notificationPredicate: notificationPredicate,
+            offsetToArmed: offsetToArmed,
+            textOnPullDown: textOnPullDown,
+            onRefresh: onRefresh,
+            onPullDown: onPullDown,
             backgroundStack: backgroundStack,
             foregroundStack: foregroundStack,
             child: body,
