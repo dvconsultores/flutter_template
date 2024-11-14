@@ -41,7 +41,6 @@ class NavigationLayout extends StatelessWidget {
     return NavigationInherited(
       state: state,
       items: items,
-      swipeNavigate: swipeNavigate,
       child: NavigationScreen(
         swipeNavigate: swipeNavigate,
         child: child,
