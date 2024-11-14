@@ -56,11 +56,9 @@ class NavigationInherited extends InheritedWidget {
     required this.state,
     required super.child,
     required this.items,
-    this.swipeNavigate = false,
   });
   final GoRouterState state;
   final Map<String, BottomNavigationBarItem> items;
-  final bool swipeNavigate;
 
   @override
   bool updateShouldNotify(NavigationInherited oldWidget) => true;
