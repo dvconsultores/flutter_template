@@ -27,6 +27,8 @@ class UniLinksService {
 
   /// Initialization method to [UniLinksService]. Just run once.
   static Future<void> init({checkActualVersion = false}) async {
+    if (kIsWeb) return;
+
     // This is used for cases when: APP is not running and the user clicks on a link.
     try {
       final Uri? uri = await getInitialUri();
