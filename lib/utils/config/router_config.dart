@@ -98,8 +98,8 @@ class AppRouterConfig {
 
 //! //FIXME search better practices
 extension GoRouterExtension on GoRouter {
-  /// Getter yo know if current route require authentication
-  get requireAuth => !routerConfig.router.location.contains('/auth');
+  /// Getter yo know if current route require authentication to show it
+  bool get requireAuth => !routerConfig.router.location.contains('/auth');
 
   /// Get list of main routes on the [ShellRoute].
   List<RouteBase> get shellRoutes => routerConfig.router.configuration.routes
