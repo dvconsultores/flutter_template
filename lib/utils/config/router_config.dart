@@ -5,8 +5,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_detextre4/layouts/navigation_layout/navigation_layout.dart';
-import 'package:flutter_detextre4/routes/initial_routes/landing_route/landing_route.dart';
-import 'package:flutter_detextre4/routes/initial_routes/splash_route/splash_route.dart';
+import 'package:flutter_detextre4/routes/landing_route/landing_route.dart';
 import 'package:flutter_detextre4/routes/login_route/login_route.dart';
 import 'package:flutter_detextre4/routes/shell_routes/home_route/home_route.dart';
 import 'package:flutter_detextre4/routes/shell_routes/profile_route/profile_route.dart';
@@ -32,7 +31,7 @@ class AppRouterConfig {
 
   void setRouter() => router = GoRouter(
           navigatorKey: ContextUtility.navigatorKey,
-          initialLocation: kIsWeb ? "/" : "/splash",
+          initialLocation: "/",
           // errorBuilder: (context, state) {
           //   return const ErrorPage();
           // },
@@ -41,9 +40,7 @@ class AppRouterConfig {
                     SecureCollection.tokenAuth)) !=
                 null;
 
-            if (state.location == "/splash") {
-              return null;
-            } else if (router.requireAuth && !isLogged) {
+            if (router.requireAuth && !isLogged) {
               return kIsWeb ? "/landing" : "/auth";
             }
 
@@ -59,13 +56,6 @@ class AppRouterConfig {
                 name: 'landing',
                 pageBuilder: (context, state) =>
                     pageBuilder(const LandingRoute()),
-              )
-            else
-              GoRoute(
-                path: '/splash',
-                name: 'splash',
-                pageBuilder: (context, state) =>
-                    pageBuilder(const SplashRoute()),
               ),
 
             GoRoute(

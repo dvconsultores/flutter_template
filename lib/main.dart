@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_detextre4/blocs/main_bloc.dart';
 import 'package:flutter_detextre4/main_provider.dart';
+import 'package:flutter_detextre4/material_fetching.dart';
 import 'package:flutter_detextre4/utils/config/config.dart';
 import 'package:flutter_detextre4/utils/config/router_config.dart';
 import 'package:flutter_detextre4/utils/config/session_timeout_config.dart';
@@ -90,25 +91,28 @@ class _AppState extends State<App> {
                 designSize:
                     context.width.isMobile ? Vars.mobileSize : Vars.desktopSize,
                 builder: (context, child) {
-                  return MaterialApp.router(
-                    scaffoldMessengerKey: ContextUtility.scaffoldMessengerKey,
-                    locale: value.locale,
-                    debugShowCheckedModeBanner: true,
-                    title: AppName.capitalize.value,
-                    theme: ThemeApp.lightTheme,
-                    darkTheme: ThemeApp.darkTheme,
-                    themeMode: value.appTheme, // * Theme switcher
-                    localizationsDelegates:
-                        AppLocalizations.localizationsDelegates,
-                    supportedLocales: AppLocalizations.supportedLocales,
-                    routerConfig: routerConfig.router,
-                    // // * global text scale factorized
-                    // builder: (context, child) {
-                    //   return MediaQuery(
-                    //     data: MediaQuery.of(context).copyWith(textScaleFactor: 1),
-                    //     child: child!,
-                    //   );
-                    // },
+                  return MaterialFetching(
+                    provider: value,
+                    child: MaterialApp.router(
+                      scaffoldMessengerKey: ContextUtility.scaffoldMessengerKey,
+                      locale: value.locale,
+                      debugShowCheckedModeBanner: true,
+                      title: AppName.capitalize.value,
+                      theme: ThemeApp.lightTheme,
+                      darkTheme: ThemeApp.darkTheme,
+                      themeMode: value.appTheme, // * Theme switcher
+                      localizationsDelegates:
+                          AppLocalizations.localizationsDelegates,
+                      supportedLocales: AppLocalizations.supportedLocales,
+                      routerConfig: routerConfig.router,
+                      // // * global text scale factorized
+                      // builder: (context, child) {
+                      //   return MediaQuery(
+                      //     data: MediaQuery.of(context).copyWith(textScaleFactor: 1),
+                      //     child: child!,
+                      //   );
+                      // },
+                    ),
                   );
                 }),
           );

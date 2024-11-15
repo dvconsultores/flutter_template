@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_detextre4/routes/initial_routes/landing_route/landing_screen.dart';
+import 'package:flutter_detextre4/routes/landing_route/landing_screen.dart';
 
 class LandingRoute extends StatelessWidget {
   const LandingRoute({super.key});

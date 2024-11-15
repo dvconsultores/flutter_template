@@ -4,24 +4,44 @@ import 'package:flutter/material.dart';
 import 'package:flutter_detextre4/utils/config/theme.dart';
 import 'package:flutter_detextre4/utils/general/variables.dart';
 
-class SplashScreen extends StatelessWidget {
-  const SplashScreen({
+class SplashPage extends StatefulWidget {
+  const SplashPage({
     super.key,
     required this.animationController,
-    required this.animationCurve,
-    required this.animMoveText,
-    required this.animMoveFirstCube,
-    required this.animMoveSecondCube,
   });
   final AnimationController animationController;
-  final Animation<double> animationCurve;
-  final Animation<double> animMoveText;
-  final Animation<double> animMoveFirstCube;
-  final Animation<double> animMoveSecondCube;
+
+  @override
+  State<SplashPage> createState() => _SplashPageState();
+}
+
+class _SplashPageState extends State<SplashPage> {
+  @override
+  void dispose() {
+    widget.animationController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
+
+    final Animation<double> animationCurve = CurvedAnimation(
+      parent: widget.animationController,
+      curve: Curves.fastLinearToSlowEaseIn,
+    );
+    final Animation<double> animMoveText = Tween<double>(
+      begin: 30.0,
+      end: 0.0,
+    ).animate(animationCurve);
+    final Animation<double> animMoveFirstCube = Tween<double>(
+      begin: 0.0,
+      end: -125,
+    ).animate(widget.animationController);
+    final Animation<double> animMoveSecondCube = Tween<double>(
+      begin: 0.0,
+      end: 125,
+    ).animate(widget.animationController);
 
     return Scaffold(
       body: Stack(children: [
@@ -78,7 +98,7 @@ class SplashScreen extends StatelessWidget {
             tag: "logo demo",
             child: Column(children: [
               AnimatedBuilder(
-                animation: animationController,
+                animation: widget.animationController,
                 builder: (context, child) => Transform.scale(
                   scale: animationCurve.value,
                   child: child,
@@ -89,7 +109,7 @@ class SplashScreen extends StatelessWidget {
                 ),
               ),
               AnimatedBuilder(
-                animation: animationController,
+                animation: widget.animationController,
                 builder: (context, child) => Transform.scale(
                     scale: animationCurve.value,
                     child: Transform.translate(
