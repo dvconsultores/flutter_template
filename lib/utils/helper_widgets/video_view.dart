@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:appinio_video_player/appinio_video_player.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_detextre4/utils/config/theme.dart';
 import 'package:flutter_detextre4/utils/extensions/type_extensions.dart';
@@ -25,10 +26,12 @@ class _VideoViewState extends State<VideoView> {
 
   @override
   void initState() {
-    SystemChrome.setSystemUIOverlayStyle(
-        ThemeApp.of(context).systemUiOverlayStyle.copyWith(
-              systemNavigationBarColor: Colors.black,
-            ));
+    SchedulerBinding.instance.addPostFrameCallback((_) {
+      SystemChrome.setSystemUIOverlayStyle(
+          ThemeApp.of(context).systemUiOverlayStyle.copyWith(
+                systemNavigationBarColor: Colors.black,
+              ));
+    });
 
     previewVideoPlayerControler = widget.uri.hasNetworkPath
         ? VideoPlayerController.networkUrl(Uri.parse(widget.uri))

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_detextre4/utils/config/theme.dart';
 import 'package:photo_view/photo_view.dart';
@@ -25,10 +26,12 @@ class _ImageViewState extends State<ImageView> {
 
   @override
   void initState() {
-    SystemChrome.setSystemUIOverlayStyle(
-        ThemeApp.of(context).systemUiOverlayStyle.copyWith(
-              systemNavigationBarColor: Colors.black,
-            ));
+    SchedulerBinding.instance.addPostFrameCallback((_) {
+      SystemChrome.setSystemUIOverlayStyle(
+          ThemeApp.of(context).systemUiOverlayStyle.copyWith(
+                systemNavigationBarColor: Colors.black,
+              ));
+    });
 
     pageController = PageController(initialPage: widget.initialImage ?? 0);
     super.initState();

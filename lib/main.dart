@@ -1,4 +1,3 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_detextre4/blocs/main_bloc.dart';
@@ -39,13 +38,11 @@ class AppState extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    if (!kIsWeb) {
-      SystemChrome.setSystemUIOverlayStyle(
-        ThemeApp.of(context)
-            .systemUiOverlayStyle
-            .copyWith(systemNavigationBarColor: Colors.amber),
-      );
-    }
+    SystemChrome.setSystemUIOverlayStyle(
+      ThemeApp.of(context)
+          .systemUiOverlayStyle
+          .copyWith(systemNavigationBarColor: Colors.amber),
+    );
 
     // * Route blocs
     return BlocProvider<MainBloc>(
