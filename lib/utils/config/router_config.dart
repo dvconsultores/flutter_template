@@ -37,10 +37,11 @@ class AppRouterConfig {
           // },
           redirect: (context, state) async {
             final isLogged = (await SecureStorage.read<String?>(
-                    SecureCollection.tokenAuth)) !=
-                null;
+                        SecureCollection.tokenAuth)) !=
+                    null,
+                requireAuth = !state.location.contains("/auth");
 
-            if (router.requireAuth && !isLogged) {
+            if (requireAuth && !isLogged) {
               return kIsWeb ? "/landing" : "/auth";
             }
 
