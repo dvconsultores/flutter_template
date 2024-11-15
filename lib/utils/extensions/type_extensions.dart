@@ -5,6 +5,7 @@ import 'dart:math' as math;
 
 import 'package:csv/csv.dart';
 import 'package:dio/dio.dart' as dio;
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_detextre4/utils/config/config.dart';
@@ -396,8 +397,10 @@ extension DoubleExtension on double {
 
         final amountWithoutThousands =
             withoutThousands.replaceAllMapped(RegExp(r'\d+(\.\d+)?'), (match) {
-          final value = toDouble().maxDecimals(maxDecimals).toString(),
-              resultSplitted = value.split('.'),
+          var value = this.maxDecimals(maxDecimals).toString();
+          if (kIsWeb && this is int) value = toStringAsFixed(1);
+
+          final resultSplitted = value.split('.'),
               multiplier =
                   minimumFractionDigits - resultSplitted.elementAt(1).length;
 
@@ -673,8 +676,12 @@ extension StringExtension on String {
 
         final amountWithoutThousands =
             withoutThousands.replaceAllMapped(RegExp(r'\d+(\.\d+)?'), (match) {
-          final value = toDouble().maxDecimals(maxDecimals).toString(),
-              resultSplitted = value.split('.'),
+          var value = toDouble().maxDecimals(maxDecimals).toString();
+          if (kIsWeb && value.toDouble() is int) {
+            value = value.toDouble().toStringAsFixed(1);
+          }
+
+          final resultSplitted = value.split('.'),
               multiplier =
                   minimumFractionDigits - resultSplitted.elementAt(1).length;
 
