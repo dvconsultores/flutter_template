@@ -3,7 +3,9 @@ import 'dart:async';
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:flutter_detextre4/main_provider.dart';
+import 'package:flutter_detextre4/utils/config/router_config.dart';
 import 'package:flutter_detextre4/utils/config/theme.dart';
 import 'package:flutter_detextre4/utils/general/context_utility.dart';
 import 'package:flutter_detextre4/utils/services/dio_service.dart';
@@ -13,8 +15,6 @@ import 'package:flutter_detextre4/widgets/defaults/snackbar.dart';
 import 'package:flutter_detextre4/widgets/dialogs/modal_widget.dart';
 import 'package:flutter_detextre4/widgets/loaders/loader.dart';
 import 'package:flutter_detextre4/widgets/loaders/splash_page.dart';
-import 'package:go_router/go_router.dart';
-import 'package:provider/provider.dart';
 
 class MaterialFetching extends StatefulWidget {
   const MaterialFetching({
@@ -46,11 +46,11 @@ class _MaterialFetchingState extends State<MaterialFetching>
   bool isLogged = false;
 
   Future<void> getData({bool restart = false}) async {
-    context.read<MainProvider>().setReturnDioAuthError = true;
+    widget.provider.setReturnDioAuthError = true;
 
     if (restart) {
       loader.open();
-      if (mounted) setState(() {});
+      updateState(() {});
     } else {
       animationController.forward().then((value) {
         if (!mounted) return;
@@ -58,12 +58,15 @@ class _MaterialFetchingState extends State<MaterialFetching>
         notifier.value = (true, notifier.value.$2);
 
         if (fetchingData) loader.open();
-        setState(() {});
+        updateState(() {});
       });
     }
 
     try {
-      final [tokenAuth as String?, _] = await Future.wait([
+      final [
+        tokenAuth as String?,
+        _,
+      ] = await Future.wait([
         SecureStorage.read<String?>(SecureCollection.tokenAuth),
 
         // initialize deep links
@@ -95,22 +98,30 @@ class _MaterialFetchingState extends State<MaterialFetching>
   Future<void> goTo() async {
     if (isLogged) return await goToHome();
 
-    setState(loader.dispose);
+    handlerNextMaterial();
     if (kIsWeb) return;
-    context.goNamed("login");
+    routerConfig.router.goNamed("login");
   }
 
   Future<void> goToHome() async {
-    context.goNamed("home");
+    routerConfig.router.goNamed("home");
+  }
+
+  void updateState(void Function() fn) {
+    if (!loader.disposed) setState(fn);
+  }
+
+  void handlerNextMaterial() {
+    updateState(loader.dispose);
   }
 
   String handlerError(Object error) {
     final errorMessage =
         error is DioException ? error.catchErrorMessage() : error.toString();
-    debugPrint("$errorMessage ⭕");
+    debugPrint("MaterialhandlerError: $errorMessage ⭕");
     fetchingData = false;
     loader.close();
-    if (mounted) setState(() {});
+    updateState(() {});
 
     return errorMessage;
   }
@@ -125,21 +136,28 @@ class _MaterialFetchingState extends State<MaterialFetching>
       }
     });
 
-    getData();
+    SchedulerBinding.instance.addPostFrameCallback((_) {
+      getData();
+    });
 
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    if (loader.disposed) return widget.child;
+    if (loader.disposed) {
+      return Material(
+        color: ThemeApp.lightTheme.colorScheme.tertiary,
+        child: widget.child,
+      );
+    }
 
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       theme: ThemeApp.lightTheme,
       darkTheme: ThemeApp.darkTheme,
       themeMode: widget.provider.appTheme, // * Theme switch
-      navigatorKey: ContextUtility.navigatorKey,
+      navigatorKey: !loader.disposed ? ContextUtility.navigatorKey : null,
       home: SplashPage(animationController: animationController),
     );
   }

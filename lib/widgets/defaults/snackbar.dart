@@ -9,7 +9,7 @@ import 'package:flutter_detextre4/utils/general/context_utility.dart';
 import 'package:flutter_detextre4/utils/general/variables.dart';
 import 'package:provider/provider.dart';
 
-final _context = ContextUtility.context!;
+BuildContext get _context => ContextUtility.context!;
 
 // * App snackbar types
 enum SnackbarType {
