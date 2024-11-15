@@ -2,7 +2,7 @@ import 'dart:io' as io;
 
 import 'package:device_info_plus/device_info_plus.dart';
 import 'package:disk_space_update/disk_space_update.dart';
-import 'package:flutter/material.dart';
+import 'package:flutter/foundation.dart';
 
 /// Physical memory state collection
 enum PhysicalMemoryState {
@@ -82,7 +82,7 @@ class _Android {
 
   /// Display device information
   Future<String> info() async {
-    if (!io.Platform.isAndroid) throw "Android device not founded";
+    if (!kIsWeb && !io.Platform.isAndroid) throw "Android device not founded";
 
     final value =
         'Android ${await release} (SDK ${await sdkInt}), ${await manufacturer} ${await model}';
@@ -122,7 +122,7 @@ class _IOS {
 
   /// Display device information
   Future<String> ios() async {
-    if (!io.Platform.isIOS) throw "IOS device not founded";
+    if (!kIsWeb && !io.Platform.isIOS) throw "IOS device not founded";
 
     final value =
         '${await systemName} ${await version}, ${await name} ${await model}';

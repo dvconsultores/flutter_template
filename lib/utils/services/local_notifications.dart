@@ -4,6 +4,7 @@ import 'dart:io' show Platform;
 
 import 'package:collection/collection.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_detextre4/utils/extensions/type_extensions.dart';
 import 'package:flutter_detextre4/utils/general/functions.dart';
@@ -172,7 +173,7 @@ class LocalNotifications {
       payload: payload,
     );
 
-    if (Platform.isAndroid) {
+    if (!kIsWeb && Platform.isAndroid) {
       await showGroupNotification(
         summaryText: summaryText,
         channel: channel,
@@ -224,7 +225,7 @@ class LocalNotifications {
     FLNClickAction? clickAction,
     required NotificationChannel channel,
   }) async {
-    if (!Platform.isAndroid) return null;
+    if (kIsWeb || !Platform.isAndroid) return null;
 
     final avatarIcon =
             await buildAndroidBitmap(avatarUrl, size: const Size(50, 50)),
@@ -278,7 +279,7 @@ class LocalNotifications {
     String? subtitle,
     required NotificationChannel channel,
   }) async {
-    if (!Platform.isIOS) return null;
+    if (kIsWeb || !Platform.isIOS) return null;
 
     final savedImage = await downloadAndSavePicture(imageUrl),
         attachments = savedImage != null

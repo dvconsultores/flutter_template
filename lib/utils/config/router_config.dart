@@ -142,7 +142,7 @@ class Nav {
   }) async {
     return await Navigator.push<T>(
       context,
-      Platform.isIOS
+      !kIsWeb && Platform.isIOS
           ? CupertinoPageRoute(builder: (context) => page)
           : MaterialPageRoute(builder: (context) => page),
     );
@@ -157,7 +157,7 @@ class Nav {
   }) async {
     return await Navigator.pushAndRemoveUntil(
       context,
-      Platform.isIOS
+      !kIsWeb && Platform.isIOS
           ? CupertinoPageRoute(builder: (context) => page)
           : MaterialPageRoute(builder: (context) => page),
       predicate,
@@ -172,7 +172,7 @@ class Nav {
   }) async {
     return await Navigator.pushReplacement(
       context,
-      Platform.isIOS
+      !kIsWeb && Platform.isIOS
           ? CupertinoPageRoute(builder: (context) => page)
           : MaterialPageRoute(builder: (context) => page),
     );

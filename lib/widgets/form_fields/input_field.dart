@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_detextre4/painters/decorated_input_border.dart';
@@ -69,7 +70,7 @@ class InputField extends TextFormField {
           keyboardType: buildWidget(() {
             if (!numeric) return keyboardType;
 
-            if (Platform.isIOS) {
+            if (!kIsWeb && Platform.isIOS) {
               return const TextInputType.numberWithOptions(decimal: true);
             }
 
@@ -292,7 +293,7 @@ class InputField extends TextFormField {
                 : keyboardType;
           }
 
-          if (Platform.isIOS) {
+          if (!kIsWeb && Platform.isIOS) {
             return const TextInputType.numberWithOptions(decimal: true);
           }
 
