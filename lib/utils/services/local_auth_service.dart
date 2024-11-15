@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:local_auth/local_auth.dart';
 
 class LocalAuth {
@@ -6,6 +7,8 @@ class LocalAuth {
 
   /// @returns [true] if has biometrics, [false] otherwise
   static Future<bool> hasBiometrics() async {
+    if (kIsWeb) return false;
+
     final List<BiometricType> availableBiometrics =
         await auth.getAvailableBiometrics();
 
