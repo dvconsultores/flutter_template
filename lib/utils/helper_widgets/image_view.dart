@@ -1,9 +1,13 @@
+import 'package:cached_network_image/cached_network_image.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_detextre4/utils/config/theme.dart';
+import 'package:flutter_detextre4/utils/general/functions.dart';
 import 'package:photo_view/photo_view.dart';
 import 'package:photo_view/photo_view_gallery.dart';
+import 'package:universal_html/html.dart' as html;
 
 class ImageView extends StatefulWidget {
   const ImageView({
@@ -49,6 +53,28 @@ class _ImageViewState extends State<ImageView> {
           ),
         );
 
+    PhotoViewHeroAttributes? heroAttributes([int? index]) =>
+        widget.photoViewProvider[index ?? 0].heroTag != null
+            ? PhotoViewHeroAttributes(
+                tag: widget.photoViewProvider[index ?? 0].heroTag!,
+              )
+            : null;
+
+    Widget customChild([int? index]) => HtmlElementView.fromTagName(
+          tagName: "img",
+          onElementCreated: (image) {
+            image as html.ImageElement;
+
+            final imageProvider =
+                widget.photoViewProvider[index ?? 0].imageProvider;
+            image.src = imageProvider is CachedNetworkImageProvider
+                ? imageProvider.url
+                : imageProvider is NetworkImage
+                    ? imageProvider.url
+                    : null;
+          },
+        );
+
     return Scaffold(
       backgroundColor: Colors.black,
       appBar: AppBar(
@@ -62,7 +88,7 @@ class _ImageViewState extends State<ImageView> {
         backgroundColor: Colors.white10,
         centerTitle: true,
         title: Text(
-          "Previsualizar ${widget.photoViewProvider.singleOrNull != null ? 'Imagen' : 'Imágenes'}",
+          "Preview ${widget.photoViewProvider.singleOrNull != null ? 'Image' : 'Images'}",
           style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                 fontSize: 17,
                 color: Colors.white,
@@ -71,29 +97,45 @@ class _ImageViewState extends State<ImageView> {
       ),
       body: Center(
         child: widget.photoViewProvider.singleOrNull != null
-            ? PhotoView(
-                minScale: .25,
-                heroAttributes: widget.photoViewProvider.single.heroTag != null
-                    ? PhotoViewHeroAttributes(
-                        tag: widget.photoViewProvider.single.heroTag!,
-                      )
-                    : null,
-                loadingBuilder: loadingBuilder,
-                imageProvider: widget.photoViewProvider.first.imageProvider,
-              )
+
+            /// one image
+            ? buildWidget(() {
+                if (kIsWeb && widget.photoViewProvider.single.isNetworkImage) {
+                  return PhotoView.customChild(
+                    minScale: .25,
+                    heroAttributes: heroAttributes(),
+                    childSize: const Size(300, 300),
+                    child: customChild(),
+                  );
+                }
+
+                return PhotoView(
+                  minScale: .25,
+                  heroAttributes: heroAttributes(),
+                  loadingBuilder: loadingBuilder,
+                  imageProvider: widget.photoViewProvider.single.imageProvider,
+                );
+              })
+
+            /// multiple images
             : PhotoViewGallery.builder(
                 itemCount: widget.photoViewProvider.length,
                 pageController: pageController,
                 loadingBuilder: loadingBuilder,
                 builder: (context, index) {
+                  if (kIsWeb &&
+                      widget.photoViewProvider[index].isNetworkImage) {
+                    return PhotoViewGalleryPageOptions.customChild(
+                      minScale: .25,
+                      heroAttributes: heroAttributes(index),
+                      childSize: const Size(300, 300),
+                      child: customChild(),
+                    );
+                  }
+
                   return PhotoViewGalleryPageOptions(
                     minScale: .25,
-                    heroAttributes:
-                        widget.photoViewProvider[index].heroTag != null
-                            ? PhotoViewHeroAttributes(
-                                tag: widget.photoViewProvider[index].heroTag!,
-                              )
-                            : null,
+                    heroAttributes: heroAttributes(index),
                     imageProvider:
                         widget.photoViewProvider[index].imageProvider,
                   );
@@ -111,4 +153,8 @@ class PhotoViewProvider {
   });
   final Object? heroTag;
   final ImageProvider<Object> imageProvider;
+
+  bool get isNetworkImage =>
+      imageProvider is CachedNetworkImageProvider ||
+      imageProvider is NetworkImage;
 }

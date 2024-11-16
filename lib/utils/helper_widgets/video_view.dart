@@ -71,7 +71,7 @@ class _VideoViewState extends State<VideoView> {
         backgroundColor: Colors.white10,
         centerTitle: true,
         title: Text(
-          "Previsualizar Video",
+          "Preview Video",
           style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                 fontSize: 17,
                 color: Colors.white,

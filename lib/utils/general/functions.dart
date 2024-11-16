@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:io' show Directory, File;
 import 'dart:ui' as ui;
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_detextre4/utils/extensions/type_extensions.dart';
@@ -137,7 +138,7 @@ Future<void> attachmentPressed(
 }) async {
   final items = <Map<String, dynamic>>[];
 
-  if (onVideo != null) {
+  if (!kIsWeb && onVideo != null) {
     items.add({
       "text": "Make video",
       "icon": Icons.video_camera_back_outlined,
@@ -145,7 +146,7 @@ Future<void> attachmentPressed(
     });
   }
 
-  if (onImage != null) {
+  if (!kIsWeb && onImage != null) {
     items.add({
       "text": "Take photo",
       "icon": Icons.camera_alt_outlined,

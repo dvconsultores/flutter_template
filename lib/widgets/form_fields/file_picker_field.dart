@@ -2,15 +2,14 @@ import 'dart:io';
 
 import 'package:easy_debounce/easy_debounce.dart';
 import 'package:file_picker/file_picker.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/scheduler.dart';
 import 'package:flutter_detextre4/utils/config/theme.dart';
 import 'package:flutter_detextre4/utils/extensions/type_extensions.dart';
 import 'package:flutter_detextre4/utils/general/functions.dart';
 import 'package:flutter_detextre4/utils/general/variables.dart';
 import 'package:flutter_detextre4/widgets/defaults/error_text.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:path/path.dart' as path;
 
 enum FilePickerMode {
   fromCamera,
@@ -50,11 +49,11 @@ class FilePickerField extends StatefulWidget {
   });
 
   final String? restorationId;
-  final void Function(File? value)? onSaved;
-  final String? Function(File? value)? validator;
+  final void Function(PlatformFile? value)? onSaved;
+  final String? Function(PlatformFile? value)? validator;
   final AutovalidateMode? autovalidateMode;
-  final ValueNotifier<File?>? controller;
-  final File? initialValue;
+  final ValueNotifier<PlatformFile?>? controller;
+  final PlatformFile? initialValue;
   final double width;
   final double? height;
   final BorderRadius borderRadius;
@@ -67,7 +66,7 @@ class FilePickerField extends StatefulWidget {
   final double defaultPlaceholderSize;
   final String? errorText;
   final TextStyle? errorStyle;
-  final void Function(File? value)? onChanged;
+  final void Function(PlatformFile? value)? onChanged;
   final bool disabled;
   final EdgeInsetsGeometry padding;
   final bool showClearButton;
@@ -82,13 +81,13 @@ class FilePickerField extends StatefulWidget {
 
 class _FilePickerFieldState extends State<FilePickerField>
     with SingleTickerProviderStateMixin {
-  FormFieldState<File>? formState;
+  FormFieldState<PlatformFile>? formState;
 
   late final AnimationController animation;
 
-  final localController = ValueNotifier<File?>(null);
+  final localController = ValueNotifier<PlatformFile?>(null);
 
-  ValueNotifier<File?> get getController =>
+  ValueNotifier<PlatformFile?> get getController =>
       widget.controller ?? localController;
 
   final docsAllowed = ["pdf", "doc"],
@@ -112,7 +111,7 @@ class _FilePickerFieldState extends State<FilePickerField>
       fileExtension = platformFile.extension?.toLowerCase();
 
       animation.reverse();
-      getController.value = File(platformFile.path!);
+      getController.value = platformFile;
     } else {
       animation.reverse();
       getController.value = formState?.value;
@@ -133,7 +132,12 @@ class _FilePickerFieldState extends State<FilePickerField>
       fileExtension = xfile.path.split('.').last;
 
       animation.reverse();
-      getController.value = File(xfile.path);
+      getController.value = PlatformFile(
+        name: xfile.name,
+        path: xfile.path,
+        size: await xfile.length(),
+        bytes: await xfile.readAsBytes(),
+      );
     } else {
       animation.reverse();
       getController.value = formState?.value;
@@ -161,11 +165,6 @@ class _FilePickerFieldState extends State<FilePickerField>
   @override
   void initState() {
     animation = AnimationController(vsync: this, duration: Durations.short1);
-
-    SchedulerBinding.instance.addPostFrameCallback((_) {
-      fileExtension = formState!.value?.path.split('.').last;
-      setState(() {});
-    });
     getController.addListener(onListen);
     super.initState();
   }
@@ -188,7 +187,7 @@ class _FilePickerFieldState extends State<FilePickerField>
       icon: const Icon(Icons.close_sharp),
     );
 
-    return FormField<File>(
+    return FormField<PlatformFile>(
       restorationId: widget.restorationId,
       onSaved: widget.onSaved,
       initialValue: widget.initialValue,
@@ -272,11 +271,17 @@ class _FilePickerFieldState extends State<FilePickerField>
                               child:
                                   Stack(alignment: Alignment.center, children: [
                                 if (state.value != null) ...[
-                                  if (imagesAllowed.contains(fileExtension))
-                                    Image.file(
-                                      state.value!,
-                                      fit: BoxFit.contain,
-                                    )
+                                  if (imagesAllowed.contains(
+                                      state.value?.extension?.toLowerCase()))
+                                    kIsWeb
+                                        ? Image.memory(
+                                            state.value!.bytes!,
+                                            fit: BoxFit.contain,
+                                          )
+                                        : Image.file(
+                                            File(state.value!.path!),
+                                            fit: BoxFit.contain,
+                                          )
                                   else
                                     Transform.translate(
                                       offset: const Offset(-4, 0),
@@ -286,24 +291,16 @@ class _FilePickerFieldState extends State<FilePickerField>
                                             mainAxisAlignment:
                                                 MainAxisAlignment.center,
                                             children: [
-                                              const Expanded(
-                                                child: Icon(
-                                                    Icons.file_copy_rounded),
-                                              ),
+                                              const Icon(
+                                                  Icons.file_copy_rounded),
                                               Expanded(
-                                                flex: 6,
                                                 child: Text(
-                                                  path
-                                                      .basename(
-                                                          state.value!.path)
-                                                      .split(".$fileExtension")
-                                                      .first,
+                                                  state.value!.name,
                                                   textAlign: TextAlign.right,
                                                   overflow:
                                                       TextOverflow.ellipsis,
                                                 ),
                                               ),
-                                              Text(".$fileExtension")
                                             ]),
                                       ),
                                     ),
@@ -313,9 +310,7 @@ class _FilePickerFieldState extends State<FilePickerField>
                                       child: Chip(
                                         visualDensity: VisualDensity.compact,
                                         label: Text(
-                                          state.value!
-                                              .lengthSync()
-                                              .formatBytes(),
+                                          state.value!.size.formatBytes(),
                                           textAlign: TextAlign.center,
                                           style: ps.copyWith(fontSize: 13),
                                         ),

@@ -4,6 +4,7 @@ import 'dart:io';
 
 import 'package:collection/collection.dart';
 import 'package:dio/dio.dart';
+import 'package:file_picker/file_picker.dart' as file_picker;
 import 'package:flutter/material.dart';
 import 'package:flutter_detextre4/main_provider.dart';
 import 'package:flutter_detextre4/utils/config/router_config.dart';
@@ -15,7 +16,6 @@ import 'package:flutter_detextre4/utils/services/local_data/secure_storage_servi
 import 'package:flutter_detextre4/widgets/dialogs/modal_widget.dart';
 import 'package:http/http.dart' as http;
 import 'package:http_parser/http_parser.dart';
-import 'package:path/path.dart';
 import 'package:provider/provider.dart';
 
 Future<bool> get haveConnection async {
@@ -335,20 +335,21 @@ class MultipartContructor {
     this.format,
     this.type,
   });
-  final File file;
+  final file_picker.PlatformFile file;
   final String name;
   final String? format;
   final String? type;
 
   Future<http.MultipartFile> build() async {
-    final typeFile = type ?? FileType.fromPath(file.path)?.name ?? "unknow",
-        formatFile = format ?? FileType.extension(file.path);
+    final typeFile =
+            type ?? FileType.fromExtension(file.extension!)?.name ?? "unknow",
+        formatFile = format ?? FileType.extension(file.extension!);
 
     return http.MultipartFile.fromBytes(
       name,
-      await file.readAsBytes(),
+      file.bytes!,
       contentType: MediaType(typeFile, formatFile),
-      filename: basename(file.path),
+      filename: file.name,
     );
   }
 }
