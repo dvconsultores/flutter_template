@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_detextre4/utils/config/theme.dart';
 import 'package:flutter_detextre4/utils/services/local_data/env_service.dart';
+import 'package:responsive_mixin_layout/responsive_mixin_layout.dart';
 
 /// Used to storage a collection of global constant Vars.
 mixin Vars {
@@ -14,6 +15,8 @@ mixin Vars {
 
   // * Sizing
   static const mobileSize = Size(360, 690), desktopSize = Size(1512, 720);
+  static Size getDesignSize(BuildContext context) =>
+      context.width.isMobile ? Vars.mobileSize : Vars.desktopSize;
 
   static const bottomNavbarHeight = 75.0;
 

@@ -93,8 +93,6 @@ class _FilePickerFieldState extends State<FilePickerField>
   final docsAllowed = ["pdf", "doc"],
       imagesAllowed = ["png", "jpg", "bmp", "webp", "tiff"];
 
-  String? fileExtension;
-
   Future<void> pickFile() async {
     animation.forward();
 
@@ -108,8 +106,6 @@ class _FilePickerFieldState extends State<FilePickerField>
 
     if (platformFile != null &&
         allowedExtensions.contains(platformFile.extension?.toLowerCase())) {
-      fileExtension = platformFile.extension?.toLowerCase();
-
       animation.reverse();
       getController.value = platformFile;
     } else {
@@ -129,8 +125,6 @@ class _FilePickerFieldState extends State<FilePickerField>
     );
 
     if (xfile != null) {
-      fileExtension = xfile.path.split('.').last;
-
       animation.reverse();
       getController.value = PlatformFile(
         name: xfile.name,

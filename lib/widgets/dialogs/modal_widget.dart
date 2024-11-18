@@ -39,6 +39,7 @@ class Modal extends StatelessWidget {
     this.borderSide = BorderSide.none,
     this.borderRadius = const BorderRadius.all(Radius.circular(Vars.radius30)),
     this.elevation,
+    this.constraints,
   });
   final Widget? icon;
   final Color? iconColor;
@@ -65,6 +66,7 @@ class Modal extends StatelessWidget {
   final BorderSide borderSide;
   final BorderRadius borderRadius;
   final double? elevation;
+  final BoxConstraints? constraints;
 
   static Future<T?> showModal<T>(
     BuildContext context, {
@@ -246,15 +248,22 @@ class Modal extends StatelessWidget {
                   bottom: haveActions ? 0 : Vars.gapNormal,
                 ));
 
+    final boxConstraints = constraints ??
+        BoxConstraints(maxWidth: Vars.getDesignSize(context).width);
+
     // widgets
-    final titleWidget = title ??
-            (titleText != null
-                ? Text(titleText!, textAlign: TextAlign.center)
-                : null),
-        contentWidget = content ??
-            (contentText != null
-                ? Text(contentText!, textAlign: TextAlign.center)
-                : null),
+    final titleWidget = ConstrainedBox(
+            constraints: boxConstraints,
+            child: title ??
+                (titleText != null
+                    ? Text(titleText!, textAlign: TextAlign.center)
+                    : null)),
+        contentWidget = ConstrainedBox(
+            constraints: boxConstraints,
+            child: content ??
+                (contentText != null
+                    ? Text(contentText!, textAlign: TextAlign.center)
+                    : null)),
         actionWidgets = actions ??
             [
               if (onPressedCancelBtn != null)

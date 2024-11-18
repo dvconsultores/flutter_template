@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter_detextre4/utils/extensions/type_extensions.dart';
 import 'package:flutter_detextre4/utils/general/variables.dart';
 import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
@@ -94,7 +95,12 @@ class ValidatorField {
   }
 
   String? maxFileLength([int bytes = 3000000]) {
-    final fileLength = (value as File?)?.lengthSync() ?? 0;
+    late int fileLength;
+    if (value is PlatformFile?) {
+      fileLength = (value as PlatformFile?)?.size ?? 0;
+    } else if (value is File?) {
+      fileLength = (value as File?)?.lengthSync() ?? 0;
+    }
 
     return fileLength > bytes
         ? "maximum file size is ${bytes.formatBytes()}"

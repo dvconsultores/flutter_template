@@ -3,6 +3,7 @@ import 'package:easy_debounce/easy_debounce.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_detextre4/painters/draggable_frame_painter.dart';
 import 'package:flutter_detextre4/utils/config/theme.dart';
+import 'package:flutter_detextre4/utils/general/context_utility.dart';
 import 'package:flutter_detextre4/utils/general/variables.dart';
 import 'package:flutter_detextre4/widgets/defaults/button.dart';
 import 'package:flutter_detextre4/widgets/defaults/button_aspect.dart';
@@ -10,6 +11,9 @@ import 'package:flutter_detextre4/widgets/defaults/snackbar.dart';
 import 'package:flutter_detextre4/widgets/form_fields/input_field.dart';
 import 'package:flutter_detextre4/widgets/sheets/card_widget.dart';
 import 'package:flutter_gap/flutter_gap.dart';
+
+BoxConstraints _defaultConstraints(BuildContext context) =>
+    BoxConstraints(maxWidth: Vars.getDesignSize(ContextUtility.context!).width);
 
 class BottomSheetCard extends StatelessWidget {
   const BottomSheetCard({
@@ -63,12 +67,14 @@ class BottomSheetCard extends StatelessWidget {
     TextStyle? titleStyle,
     Widget? floatingActionButton,
     Widget? bottomWidget,
+    BoxConstraints? constraints,
   }) async {
     final value = await showModalBottomSheet<T>(
       context: context,
       clipBehavior: clipBehavior ?? Clip.hardEdge,
       isDismissible: isDismissible,
       isScrollControlled: isScrollControlled,
+      constraints: constraints ?? _defaultConstraints(context),
       backgroundColor:
           backgroundColor ?? Theme.of(context).dialogTheme.backgroundColor,
       shape: shape ??
@@ -238,12 +244,14 @@ class BottomSheetList<T> extends StatefulWidget {
     bool Function(int index, String search)? searchFunction,
     String? searchLabelText,
     String? searchHintText,
+    BoxConstraints? constraints,
   }) async {
     final value = await showModalBottomSheet<T>(
       context: context,
       clipBehavior: clipBehavior ?? Clip.hardEdge,
       isDismissible: isDismissible,
       isScrollControlled: isScrollControlled,
+      constraints: constraints ?? _defaultConstraints(context),
       backgroundColor:
           backgroundColor ?? Theme.of(context).dialogTheme.backgroundColor,
       shape: shape ??
@@ -532,12 +540,14 @@ class BottomSheetListMultiple<T> extends StatefulWidget {
     bool Function(int index, String search)? searchFunction,
     String? searchLabelText,
     String? searchHintText,
+    BoxConstraints? constraints,
   }) async {
     final value = await showModalBottomSheet<List<T>>(
       context: context,
       clipBehavior: clipBehavior ?? Clip.hardEdge,
       isDismissible: isDismissible,
       isScrollControlled: isScrollControlled,
+      constraints: constraints ?? _defaultConstraints(context),
       backgroundColor:
           backgroundColor ?? Theme.of(context).dialogTheme.backgroundColor,
       shape: shape ??

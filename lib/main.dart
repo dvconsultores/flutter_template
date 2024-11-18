@@ -85,8 +85,7 @@ class _AppState extends State<App> {
           return SessionTimeoutManager(
             sessionConfig: sessionTimeoutConfig.instance,
             child: ScreenUtilInit(
-                designSize:
-                    context.width.isMobile ? Vars.mobileSize : Vars.desktopSize,
+                designSize: Vars.getDesignSize(context),
                 builder: (context, child) {
                   return MaterialFetching(
                     provider: value,
