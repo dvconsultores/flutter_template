@@ -34,6 +34,7 @@ void showSnackbar(
   FlushbarStyle flushbarStyle = FlushbarStyle.FLOATING,
   String searchBy = "message",
   String fallback = "Error",
+  double? maxWidth,
 }) {
   if (message.hasNotValue) return;
 
@@ -83,6 +84,7 @@ void showSnackbar(
 
   Flushbar? flushbar;
   flushbar = Flushbar(
+    maxWidth: maxWidth ?? Vars.getDesignSize(_context).width,
     titleText: title.hasValue
         ? Text(title!, style: Theme.of(_context).textTheme.bodyLarge)
         : null,
