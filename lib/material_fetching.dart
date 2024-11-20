@@ -105,7 +105,18 @@ class _MaterialFetchingState extends State<MaterialFetching>
   }
 
   Future<void> goToHome() async {
-    routerConfig.router.goNamed("home");
+    try {
+      routerConfig.router.goNamed("home");
+    } catch (error) {
+      final errorMessage = handlerError(error);
+
+      showSnackbar(
+        "An error has occurred while running the app 😞, please contact our support team for more information",
+        type: SnackbarType.error,
+      );
+
+      throw errorMessage;
+    }
   }
 
   void updateState(void Function() fn) {
@@ -117,11 +128,20 @@ class _MaterialFetchingState extends State<MaterialFetching>
   }
 
   String handlerError(Object error) {
+    notifier.value = (notifier.value.$1, false);
+
     final errorMessage =
         error is DioException ? error.catchErrorMessage() : error.toString();
     debugPrint("MaterialhandlerError: $errorMessage ⭕");
     fetchingData = false;
-    loader.close();
+
+    if (error is DioException && error.response?.statusCode == 401) {
+      notifier.dispose();
+      loader.dispose();
+    } else {
+      loader.close();
+    }
+
     updateState(() {});
 
     return errorMessage;
@@ -133,7 +153,7 @@ class _MaterialFetchingState extends State<MaterialFetching>
       final (a, b) = notifier.value;
 
       if (a && b && mounted) {
-        goTo().then((value) => notifier.dispose());
+        goTo().then((_) => notifier.dispose());
       }
     });
 
