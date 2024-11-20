@@ -2,6 +2,7 @@ import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_detextre4/utils/config/theme.dart';
 import 'package:flutter_detextre4/utils/extensions/type_extensions.dart';
+import 'package:flutter_detextre4/utils/general/context_utility.dart';
 import 'package:flutter_detextre4/utils/general/custom_focus_node.dart';
 import 'package:flutter_detextre4/utils/general/variables.dart';
 import 'package:flutter_detextre4/widgets/defaults/error_text.dart';
@@ -167,7 +168,7 @@ class _BottomSelectFieldState<T> extends State<BottomSelectField<T>>
     if (canAnimateLabel) labelAnimationController.forward();
 
     final item = await BottomSheetList.showModal<T>(
-      context,
+      ContextUtility.context!,
       hideBottomNavigationBar: widget.hideBottomNavigationBarOnFocus,
       items: widget.items,
       itemBuilder: widget.dropDownItemBuilder,
