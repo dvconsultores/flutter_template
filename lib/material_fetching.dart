@@ -5,6 +5,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter_detextre4/main_provider.dart';
+import 'package:flutter_detextre4/utils/config/config.dart';
 import 'package:flutter_detextre4/utils/config/router_config.dart';
 import 'package:flutter_detextre4/utils/config/theme.dart';
 import 'package:flutter_detextre4/utils/general/context_utility.dart';
@@ -154,6 +155,7 @@ class _MaterialFetchingState extends State<MaterialFetching>
 
     return MaterialApp(
       debugShowCheckedModeBanner: false,
+      title: AppName.capitalize.value,
       theme: ThemeApp.lightTheme,
       darkTheme: ThemeApp.darkTheme,
       themeMode: widget.provider.appTheme, // * Theme switch
