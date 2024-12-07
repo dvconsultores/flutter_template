@@ -7,11 +7,6 @@ on:
  # A new push to the "main" branch.
  push:
    branches: [ "master" ]
- # A new pull request to the "main" branch.
- pull_request:
-   branches: [ "master" ]
- # Allows to trigger the workflow from GitHub interfaces.
- workflow_dispatch:
 
 # A single workflow can have multiple jobs.
 jobs:
