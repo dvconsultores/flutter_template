@@ -46,6 +46,15 @@ class _MaterialFetchingState extends State<MaterialFetching>
 
   bool isLogged = false;
 
+  void onFinishAnimation(_) {
+    if (!mounted) return;
+
+    notifier.value = (true, notifier.value.$2);
+
+    if (fetchingData) loader.open();
+    updateState(() {});
+  }
+
   Future<void> getData({bool restart = false}) async {
     widget.provider.setReturnDioAuthError = true;
 
@@ -53,14 +62,7 @@ class _MaterialFetchingState extends State<MaterialFetching>
       loader.open();
       updateState(() {});
     } else {
-      animationController.forward().then((value) {
-        if (!mounted) return;
-
-        notifier.value = (true, notifier.value.$2);
-
-        if (fetchingData) loader.open();
-        updateState(() {});
-      });
+      animationController.forward().then(onFinishAnimation);
     }
 
     try {
