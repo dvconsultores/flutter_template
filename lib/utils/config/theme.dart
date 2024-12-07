@@ -51,6 +51,7 @@ class ThemeApp {
   static ThemeData get lightTheme {
     final extensions = <Object, ThemeExtension<dynamic>>{
           ThemeDataColorExtension: const ThemeDataColorExtension(
+            brightness: Colors.white,
             text: Color(0xFF4E444B),
             label: Color(0xFF777680),
             title: Color(0xFF4E444B),
@@ -233,6 +234,7 @@ class ThemeApp {
   static ThemeData get darkTheme {
     final extensions = <Object, ThemeExtension<dynamic>>{
           ThemeDataColorExtension: const ThemeDataColorExtension(
+            brightness: Colors.black,
             text: Color(0xFF4E444B),
             label: Color(0xFF777680),
             title: Color(0xFF4E444B),
@@ -305,6 +307,7 @@ class ThemeApp {
       error: themeData.colorScheme.error,
       focusColor: themeData.focusColor,
       disabledColor: themeData.disabledColor,
+      brightness: themeData.extension<ThemeDataColorExtension>()!.brightness!,
       text: themeData.extension<ThemeDataColorExtension>()!.text!,
       label: themeData.extension<ThemeDataColorExtension>()!.label!,
       title: themeData.extension<ThemeDataColorExtension>()!.title!,
@@ -334,6 +337,7 @@ class ColorsApp {
     required this.error,
     required this.focusColor,
     required this.disabledColor,
+    required this.brightness,
     required this.text,
     required this.label,
     required this.title,
@@ -348,6 +352,7 @@ class ColorsApp {
   final Color error;
   final Color focusColor;
   final Color disabledColor;
+  final Color brightness;
   final Color text;
   final Color label;
   final Color title;
@@ -363,6 +368,7 @@ class ColorsApp {
         "error": error,
         "focusColor": focusColor,
         "disabledColor": disabledColor,
+        "brightness": brightness,
         "text": text,
         "label": label,
         "title": title,
@@ -376,6 +382,7 @@ class ColorsApp {
 @immutable
 class ThemeDataColorExtension extends ThemeExtension<ThemeDataColorExtension> {
   const ThemeDataColorExtension({
+    this.brightness,
     this.text,
     this.label,
     this.title,
@@ -383,6 +390,7 @@ class ThemeDataColorExtension extends ThemeExtension<ThemeDataColorExtension> {
     this.success,
     this.warning,
   });
+  final Color? brightness;
   final Color? text;
   final Color? label;
   final Color? title;
@@ -392,6 +400,7 @@ class ThemeDataColorExtension extends ThemeExtension<ThemeDataColorExtension> {
 
   @override
   ThemeDataColorExtension copyWith({
+    Color? brightness,
     Color? text,
     Color? label,
     Color? title,
@@ -400,6 +409,7 @@ class ThemeDataColorExtension extends ThemeExtension<ThemeDataColorExtension> {
     Color? warning,
   }) {
     return ThemeDataColorExtension(
+      brightness: brightness ?? this.brightness,
       text: text ?? this.text,
       label: label ?? this.label,
       title: title ?? this.title,
@@ -414,6 +424,7 @@ class ThemeDataColorExtension extends ThemeExtension<ThemeDataColorExtension> {
     if (other is! ThemeDataColorExtension) return this;
 
     return ThemeDataColorExtension(
+      brightness: Color.lerp(brightness, other.brightness, t),
       text: Color.lerp(text, other.text, t),
       label: Color.lerp(label, other.label, t),
       title: Color.lerp(title, other.title, t),
@@ -425,7 +436,7 @@ class ThemeDataColorExtension extends ThemeExtension<ThemeDataColorExtension> {
 
   @override
   String toString() =>
-      'ThemeDataColorExtension(text: $text, label: $label, title: $title, accent: $accent, success: $success, warning: $warning)';
+      'ThemeDataColorExtension(brightness: $brightness, text: $text, label: $label, title: $title, accent: $accent, success: $success, warning: $warning)';
 }
 
 // ? Theme data style extension
