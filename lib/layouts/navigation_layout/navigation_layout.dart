@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_detextre4/layouts/navigation_layout/navigation_screen.dart';
+import 'package:flutter_detextre4/main_provider.dart';
 import 'package:flutter_detextre4/utils/config/router_config.dart';
+import 'package:flutter_detextre4/utils/general/context_utility.dart';
 import 'package:go_router/go_router.dart';
+import 'package:provider/provider.dart';
 
 class NavigationLayout extends StatefulWidget {
   const NavigationLayout(
@@ -19,9 +22,17 @@ class NavigationLayout extends StatefulWidget {
 }
 
 class _NavigationLayoutState extends State<NavigationLayout> {
+  late final MainProvider mainProvider;
+
   ScaffoldState? scaffoldState;
   void setScaffoldState(BuildContext context) =>
       scaffoldState ??= Scaffold.of(context);
+
+  @override
+  void initState() {
+    mainProvider = context.read<MainProvider>();
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -47,8 +58,14 @@ class _NavigationLayoutState extends State<NavigationLayout> {
       ),
     };
 
-    void handlerTapItem(BuildContext context, int index) =>
-        routerConfig.router.goNamed(items.entries.elementAt(index).key);
+    void handlerTapItem(BuildContext context, int index) {
+      Navigator.popUntil(
+        mainProvider.currentNavContext ?? ContextUtility.context!,
+        (route) => route.isFirst,
+      );
+
+      routerConfig.router.goNamed(items.entries.elementAt(index).key);
+    }
 
     return NavigationInherited(
       state: widget.state,

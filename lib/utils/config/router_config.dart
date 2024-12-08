@@ -5,6 +5,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_detextre4/layouts/navigation_layout/navigation_layout.dart';
+import 'package:flutter_detextre4/main_provider.dart';
 import 'package:flutter_detextre4/routes/landing_route/landing_route.dart';
 import 'package:flutter_detextre4/routes/login_route/login_route.dart';
 import 'package:flutter_detextre4/routes/shell_routes/home_route/home_route.dart';
@@ -14,6 +15,7 @@ import 'package:flutter_detextre4/utils/general/context_utility.dart';
 import 'package:flutter_detextre4/utils/helper_widgets/custom_transition_wrapper.dart';
 import 'package:flutter_detextre4/utils/services/local_data/secure_storage_service.dart';
 import 'package:go_router/go_router.dart';
+import 'package:provider/provider.dart';
 
 final routerConfig = AppRouterConfig();
 
@@ -131,12 +133,18 @@ class Nav {
     required Widget page,
     bool hideBottomNavigationBar = false,
   }) async {
-    return await Navigator.push<T>(
+    final mainProvider = context.read<MainProvider>();
+    mainProvider.setCurrentNavContext = context;
+
+    final value = await Navigator.push<T>(
       context,
       !kIsWeb && Platform.isIOS
           ? CupertinoPageRoute(builder: (context) => page)
           : MaterialPageRoute(builder: (context) => page),
     );
+
+    mainProvider.setCurrentNavContext = null;
+    return value;
   }
 
   @optionalTypeArgs
@@ -146,13 +154,19 @@ class Nav {
     required RoutePredicate predicate,
     bool hideBottomNavigationBar = false,
   }) async {
-    return await Navigator.pushAndRemoveUntil(
+    final mainProvider = context.read<MainProvider>();
+    mainProvider.setCurrentNavContext = context;
+
+    final value = await Navigator.pushAndRemoveUntil(
       context,
       !kIsWeb && Platform.isIOS
           ? CupertinoPageRoute(builder: (context) => page)
           : MaterialPageRoute(builder: (context) => page),
       predicate,
     );
+
+    mainProvider.setCurrentNavContext = null;
+    return value;
   }
 
   @optionalTypeArgs
@@ -161,11 +175,17 @@ class Nav {
     required Widget page,
     bool hideBottomNavigationBar = false,
   }) async {
-    return await Navigator.pushReplacement(
+    final mainProvider = context.read<MainProvider>();
+    mainProvider.setCurrentNavContext = context;
+
+    final value = await Navigator.pushReplacement(
       context,
       !kIsWeb && Platform.isIOS
           ? CupertinoPageRoute(builder: (context) => page)
           : MaterialPageRoute(builder: (context) => page),
     );
+
+    mainProvider.setCurrentNavContext = null;
+    return value;
   }
 }

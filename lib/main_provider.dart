@@ -37,6 +37,12 @@ class MainProvider extends ChangeNotifier {
     notifyListeners();
   }
 
+  BuildContext? currentNavContext;
+  set setCurrentNavContext(BuildContext? context) {
+    currentNavContext = context;
+    notifyListeners();
+  }
+
   // ? ------------------------Snackbar Provider----------------------------- //
   final List<Flushbar> snackbars = [];
 
