@@ -23,6 +23,7 @@ class TextDecimal extends StatelessWidget {
     this.decimalRecognizer,
     this.compact = false,
     this.textAlign,
+    this.overflow,
   });
   final String value;
   final String? symbol;
@@ -37,6 +38,7 @@ class TextDecimal extends StatelessWidget {
   final GestureRecognizer? decimalRecognizer;
   final bool compact;
   final TextAlign? textAlign;
+  final TextOverflow? overflow;
 
   @override
   Widget build(BuildContext context) {
@@ -79,8 +81,9 @@ class TextDecimal extends StatelessWidget {
         ],
         recognizer: recognizer,
       ),
-      style: style,
+      overflow: overflow,
       textAlign: textAlign,
+      style: style,
     );
   }
 }
