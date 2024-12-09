@@ -19,7 +19,7 @@ class ButtonAspect extends StatelessWidget {
     this.boxShadow = const [Vars.boxShadow3],
     this.color,
     this.bgColor,
-    this.padding = const EdgeInsets.symmetric(horizontal: 15),
+    this.padding,
     this.margin,
     this.child,
     this.leading,
@@ -202,7 +202,7 @@ class ButtonAspect extends StatelessWidget {
     List<BoxShadow> boxShadow = const [Vars.boxShadow3],
     Color? color,
     Color? bgColor,
-    EdgeInsets padding = const EdgeInsets.all(0),
+    EdgeInsets padding = EdgeInsets.zero,
     EdgeInsets? margin,
     required Widget? icon,
   }) =>
@@ -230,7 +230,7 @@ class ButtonAspect extends StatelessWidget {
     List<BoxShadow> boxShadow = const [],
     Color? color,
     Color? bgColor,
-    EdgeInsets padding = const EdgeInsets.all(0),
+    EdgeInsets padding = EdgeInsets.zero,
     EdgeInsets? margin,
     required Widget? icon,
   }) =>
@@ -258,7 +258,7 @@ class ButtonAspect extends StatelessWidget {
     List<BoxShadow> boxShadow = const [Vars.boxShadow3],
     Color? color,
     Color? bgColor,
-    EdgeInsets padding = const EdgeInsets.all(0),
+    EdgeInsets padding = EdgeInsets.zero,
     EdgeInsets? margin,
     required Widget? icon,
   }) =>
@@ -283,7 +283,6 @@ class ButtonAspect extends StatelessWidget {
             TextStyle(
               color: color ?? Colors.white,
               fontSize: 14,
-              letterSpacing: 3.9,
               fontWeight: FontWeight.w500,
             ),
         textWidget = Text(
@@ -296,7 +295,7 @@ class ButtonAspect extends StatelessWidget {
 
     return Container(
       margin: margin,
-      padding: padding,
+      padding: padding ?? const EdgeInsets.symmetric(horizontal: 15),
       width: width,
       height: height,
       constraints: constraints,
