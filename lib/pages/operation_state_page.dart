@@ -96,15 +96,15 @@ class OperationStatePage extends StatelessWidget {
           const Positioned(
               top: -20,
               left: -30,
-              width: 211,
-              height: 211,
-              child: CircleLightBlurredWidget(blur: 110)),
+              child: CircleLightBlurredWidget(
+                size: 211,
+                blur: 110,
+              )),
           Positioned(
               top: -20,
               right: -30,
-              width: 211,
-              height: 211,
               child: CircleLightBlurredWidget(
+                size: 211,
                 blur: 110,
                 color: colors.success.withOpacity(.66),
               ))

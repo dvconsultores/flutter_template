@@ -1,27 +1,26 @@
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_detextre4/utils/config/theme.dart';
+import 'package:flutter_detextre4/painters/circle_painter.dart';
 
 class CircleLightBlurredWidget extends StatelessWidget {
   const CircleLightBlurredWidget({
     super.key,
-    this.blur = 100,
+    required this.size,
     this.color,
+    this.blur = 100,
   });
-  final double blur;
+  final double size;
   final Color? color;
+  final double blur;
 
   @override
   Widget build(BuildContext context) {
     return ImageFiltered(
       imageFilter: ImageFilter.blur(sigmaX: blur, sigmaY: blur),
-      child: ClipRRect(
-        borderRadius: const BorderRadius.all(Radius.circular(200)),
-        child: ColoredBox(
-          color:
-              color ?? ThemeApp.of(context).colors.secondary.withOpacity(.66),
-        ),
+      child: CustomPaint(
+        size: Size(size, size),
+        painter: CirclePainter(color: color),
       ),
     );
   }
