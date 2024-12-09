@@ -170,7 +170,7 @@ class ButtonAspect extends StatelessWidget {
         shape: shape,
         borderRadius: borderRadius,
         borderSide: borderSide ??
-            BorderSide(width: 1, color: ThemeApp.of(context).colors.primary),
+            BorderSide(color: ThemeApp.of(context).colors.primary),
         boxShadow: boxShadow,
         color: color ?? ThemeApp.of(context).colors.primary,
         bgColor: bgColor,
@@ -225,7 +225,7 @@ class ButtonAspect extends StatelessWidget {
     double size = Vars.buttonHeight,
     BoxConstraints? constraints,
     BorderRadius borderRadius = const BorderRadius.all(Radius.circular(100)),
-    BorderSide borderSide = const BorderSide(width: 1),
+    BorderSide borderSide = const BorderSide(),
     BoxShape shape = BoxShape.circle,
     List<BoxShadow> boxShadow = const [],
     Color? color,
