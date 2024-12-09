@@ -63,6 +63,7 @@ class CardWidgetV2 extends StatelessWidget {
     super.key,
     required this.child,
     this.color,
+    this.image,
     this.border,
     this.padding = const EdgeInsets.all(Vars.gapMedium),
     this.margin,
@@ -75,6 +76,7 @@ class CardWidgetV2 extends StatelessWidget {
   });
   final Widget child;
   final Color? color;
+  final DecorationImage? image;
   final BoxBorder? border;
   final EdgeInsetsGeometry? padding;
   final EdgeInsetsGeometry? margin;
@@ -101,6 +103,7 @@ class CardWidgetV2 extends StatelessWidget {
           border: border,
           borderRadius: borderRadius,
           color: color ?? theme.cardColor,
+          image: image,
           boxShadow: boxShadow,
         ),
         child: child,
