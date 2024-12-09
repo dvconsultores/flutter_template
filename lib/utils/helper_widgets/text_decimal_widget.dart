@@ -78,8 +78,8 @@ class TextDecimal extends StatelessWidget {
           ),
         ],
         recognizer: recognizer,
-        style: style,
       ),
+      style: style,
       textAlign: textAlign,
     );
   }
