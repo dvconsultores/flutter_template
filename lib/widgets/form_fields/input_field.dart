@@ -104,11 +104,8 @@ class InputField extends TextFormField {
                       color: colors.text.withOpacity(.7),
                       fontSize: 13,
                     ),
-                ls = labelStyle ??
-                    ts.copyWith(
-                      color: colors.text,
-                      fontSize: 13,
-                    ),
+                ls =
+                    labelStyle ?? ts.copyWith(color: colors.text, fontSize: 13),
                 fls = floatingLabelStyle ?? ls;
 
             InputBorder checkBorder(BorderSide border) => DecoratedInputBorder(

@@ -32,10 +32,7 @@ class SelectField<T> extends StatefulWidget {
     this.borderFocused,
     this.iconEnabledColor,
     this.underline = false,
-    this.contentPadding = const EdgeInsets.symmetric(
-      horizontal: Vars.gapMedium,
-      vertical: Vars.gapLarge,
-    ),
+    this.contentPadding,
     this.prefixPadding,
     this.maxWidthPrefix = double.infinity,
     this.prefixIcon,
@@ -125,10 +122,7 @@ class SelectField<T> extends StatefulWidget {
     BorderSide? borderFocused,
     Color? iconEnabledColor,
     bool underline = false,
-    EdgeInsetsGeometry contentPadding = const EdgeInsets.symmetric(
-      horizontal: Vars.gapMedium,
-      vertical: Vars.gapLarge,
-    ),
+    EdgeInsetsGeometry? contentPadding,
     EdgeInsetsGeometry? prefixPadding,
     double maxWidthPrefix = double.infinity,
     Widget? prefixIcon,
@@ -306,24 +300,29 @@ class _SelectFieldState<T> extends State<SelectField<T>> {
 
   @override
   Widget build(BuildContext context) {
-    final colorSwither = isMenuOpen
-            ? ThemeApp.of(context).colors.primary
-            : ThemeApp.of(context).colors.text,
-        ts = widget.textStyle ?? Theme.of(context).textTheme.bodyMedium!,
+    final theme = Theme.of(context), themeApp = ThemeApp.of(context);
+
+    final colorSwither =
+            isMenuOpen ? themeApp.colors.primary : themeApp.colors.text,
+        ts = widget.textStyle ?? theme.textTheme.bodyMedium!,
         hs = widget.hintStyle ??
             ts.copyWith(
-              color: ThemeApp.of(context).colors.text.withOpacity(.7),
-              fontWeight: FontWeight.w400,
+              color: themeApp.colors.text.withOpacity(.7),
+              fontSize: 13,
             ),
         ls =
-            widget.labelStyle ?? ts.copyWith(color: colorSwither, fontSize: 12),
+            widget.labelStyle ?? ts.copyWith(color: colorSwither, fontSize: 13),
         fls = widget.floatingLabelStyle ?? ls;
 
     InputBorder checkBorder(BorderSide border) => widget.underline
         ? UnderlineInputBorder(
-            borderSide: border, borderRadius: widget.borderRadius)
+            borderSide: border,
+            borderRadius: widget.borderRadius,
+          )
         : OutlineInputBorder(
-            borderSide: border, borderRadius: widget.borderRadius);
+            borderSide: border,
+            borderRadius: widget.borderRadius,
+          );
 
     final defaultBorder =
             widget.border ?? const BorderSide(color: Colors.transparent),
@@ -369,9 +368,9 @@ class _SelectFieldState<T> extends State<SelectField<T>> {
           iconStyleData: IconStyleData(
             iconEnabledColor: widget.iconEnabledColor ?? colorSwither,
             icon:
-                widget.openedIcon ?? const Icon(Icons.arrow_drop_down_rounded),
+                widget.closedIcon ?? const Icon(Icons.arrow_drop_down_rounded),
             openMenuIcon:
-                widget.closedIcon ?? const Icon(Icons.arrow_drop_up_rounded),
+                widget.openedIcon ?? const Icon(Icons.arrow_drop_up_rounded),
           ),
           decoration: InputDecoration(
             enabled: !widget.disabled,
@@ -408,7 +407,7 @@ class _SelectFieldState<T> extends State<SelectField<T>> {
             contentPadding: widget.contentPadding ??
                 const EdgeInsets.symmetric(
                   horizontal: Vars.gapMedium,
-                  vertical: Vars.gapMedium,
+                  vertical: Vars.gapLarge,
                 ),
           ),
           dropdownStyleData: DropdownStyleData(
