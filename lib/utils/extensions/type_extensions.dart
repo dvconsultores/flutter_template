@@ -78,7 +78,11 @@ extension FileExtension on io.File {
 
 // ? Duration extension
 extension DurationExtension on Duration {
-  String formatToClock({bool showSeconds = true, bool militaryTime = false}) {
+  String formatToClock({
+    bool showHours = true,
+    bool showSeconds = true,
+    bool militaryTime = false,
+  }) {
     String twoDigits(int n) => n.toString().padLeft(2, "0");
     String twoDigitMinutes = twoDigits(inMinutes.remainder(60)),
         twoDigitSeconds = twoDigits(inSeconds.remainder(60));
@@ -86,7 +90,7 @@ extension DurationExtension on Duration {
 
     if (!militaryTime && hours > 12) hours = hours - 12;
 
-    return "${twoDigits(hours)}:$twoDigitMinutes${showSeconds ? ':$twoDigitSeconds' : ''}";
+    return "${showHours ? '${twoDigits(hours)}:' : ''}$twoDigitMinutes${showSeconds ? ':$twoDigitSeconds' : ''}";
   }
 
   String formatToString() {
