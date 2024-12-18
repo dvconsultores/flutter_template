@@ -284,6 +284,9 @@ class ThemeApp {
   ///* Getter to current theme name.
   Brightness get theme => Theme.of(context!).brightness;
 
+  ///* Getter to current [ThemeData].
+  ThemeData get themeData => Theme.of(context!);
+
   ///* Getter to current theme assets directory `assets/themes/${theme}/` + path provided.
   String getAsset(String path) {
     final brightness = MediaQuery.of(context!).platformBrightness;
