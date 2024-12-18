@@ -108,6 +108,7 @@ class _MaterialFetchingState extends State<MaterialFetching>
 
   Future<void> goToHome() async {
     try {
+      handlerNextMaterial();
       routerConfig.router.goNamed("home");
     } catch (error) {
       final errorMessage = handlerError(error);
