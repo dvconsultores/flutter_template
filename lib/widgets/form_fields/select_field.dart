@@ -97,6 +97,7 @@ class SelectField<T> extends StatefulWidget {
   final Widget? closedIcon;
 
   static SelectField<T> variant<T>({
+    Key? key,
     T? value,
     TextStyle? textStyle,
     List<DropdownMenuItem<T>>? items,
@@ -142,6 +143,7 @@ class SelectField<T> extends StatefulWidget {
     Widget? closedIcon,
   }) =>
       SelectField<T>(
+        key: key,
         value: value,
         textStyle: textStyle,
         items: items,

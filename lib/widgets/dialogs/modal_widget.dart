@@ -70,6 +70,7 @@ class Modal extends StatelessWidget {
 
   static Future<T?> showModal<T>(
     BuildContext context, {
+    Key? key,
     Widget? icon,
     Color? iconColor,
     Widget? title,
@@ -107,6 +108,7 @@ class Modal extends StatelessWidget {
           barrierDismissible: barrierDismissible,
           builder: (context) {
             final child = Modal(
+              key: key,
               icon: icon,
               iconColor: iconColor,
               title: title,
@@ -140,6 +142,7 @@ class Modal extends StatelessWidget {
 
   static Future<bool?> showAlertToContinue(
     BuildContext context, {
+    Key? key,
     Widget? icon,
     Color? iconColor,
     String? titleText,
@@ -152,6 +155,7 @@ class Modal extends StatelessWidget {
   }) async =>
       await showModal<bool>(
         context,
+        key: key,
         barrierDismissible: barrierDismissible,
         barrierColor: barrierColor,
         icon: icon,
@@ -167,6 +171,7 @@ class Modal extends StatelessWidget {
 
   static Future<bool?> showSystemAlert(
     BuildContext context, {
+    Key? key,
     Widget? icon,
     Color? iconColor,
     String? titleText,
@@ -185,6 +190,7 @@ class Modal extends StatelessWidget {
 
     final value = await showModal<bool>(
       context,
+      key: key,
       barrierDismissible: dismissible,
       barrierColor: barrierColor,
       icon: icon,

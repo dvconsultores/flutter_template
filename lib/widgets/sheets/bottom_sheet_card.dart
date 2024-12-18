@@ -48,6 +48,7 @@ class BottomSheetCard extends StatelessWidget {
 
   static Future<T?> showModal<T>(
     BuildContext context, {
+    Key? key,
     bool hideBottomNavigationBar = false,
     ShapeBorder? shape,
     Color? backgroundColor,
@@ -86,6 +87,7 @@ class BottomSheetCard extends StatelessWidget {
           ),
       builder: builder ??
           (context) => BottomSheetCard(
+                key: key,
                 expand: expand,
                 initialChildSize: initialChildSize,
                 maxChildSize: maxChildSize,
@@ -218,6 +220,7 @@ class BottomSheetList<T> extends StatefulWidget {
 
   static Future<T?> showModal<T>(
     BuildContext context, {
+    Key? key,
     bool hideBottomNavigationBar = false,
     ShapeBorder? shape,
     Color? backgroundColor,
@@ -262,6 +265,7 @@ class BottomSheetList<T> extends StatefulWidget {
             ),
           ),
       builder: (context) => BottomSheetList<T>(
+        key: key,
         items: items ?? [],
         itemBuilder: itemBuilder,
         expand: expand,
@@ -503,6 +507,7 @@ class BottomSheetListMultiple<T> extends StatefulWidget {
 
   static Future<List<T>?> showModal<T>(
     BuildContext context, {
+    Key? key,
     bool hideBottomNavigationBar = false,
     ShapeBorder? shape,
     Color? backgroundColor,
@@ -558,6 +563,7 @@ class BottomSheetListMultiple<T> extends StatefulWidget {
             ),
           ),
       builder: (context) => BottomSheetListMultiple<T>(
+        key: key,
         items: items,
         itemBuilder: itemBuilder,
         onComplete: onComplete,

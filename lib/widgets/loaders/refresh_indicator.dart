@@ -98,6 +98,7 @@ class AppRefreshIndicator extends StatelessWidget {
 
   /// A variant used to fetch data on pull down.
   static Widget pullDown({
+    Key? key,
     ValueNotifier<IndicatorController>? controller,
     required Widget child,
     RefreshCallback? onRefresh,
@@ -113,6 +114,7 @@ class AppRefreshIndicator extends StatelessWidget {
     const height = 150.0;
 
     return AppRefreshIndicator(
+      key: key,
       offsetToArmed: offsetToArmed,
       notificationPredicate: notificationPredicate,
       controller: controller,
@@ -223,6 +225,7 @@ class AppRefreshIndicator extends StatelessWidget {
 
   /// [envelope] variant of `RefreshIndicator`.
   static Widget envelope({
+    Key? key,
     ValueNotifier<IndicatorController>? controller,
     required Widget child,
     RefreshCallback? onRefresh,
@@ -241,6 +244,7 @@ class AppRefreshIndicator extends StatelessWidget {
         defaultShadow = [BoxShadow(blurRadius: 10, color: Colors.black26)];
 
     return AppRefreshIndicator(
+      key: key,
       offsetToArmed: offsetToArmed,
       notificationPredicate: notificationPredicate,
       controller: controller,
@@ -457,6 +461,7 @@ class AppRefreshIndicator extends StatelessWidget {
 
   /// [warp] variant of `RefreshIndicator`.
   static Widget warp({
+    Key? key,
     required Widget child,
     int starsCount = 30,
     required AsyncCallback onRefresh,
@@ -468,6 +473,7 @@ class AppRefreshIndicator extends StatelessWidget {
     Key? indicatorKey,
   }) {
     return WarpRefreshIndicator(
+      key: key,
       indicatorKey: indicatorKey,
       onRefresh: onRefresh,
       controller: controller,
@@ -481,6 +487,7 @@ class AppRefreshIndicator extends StatelessWidget {
 
   /// Package widget to liquid effect on refresh.
   static Widget liquid({
+    Key? key,
     required Future<void> Function() onRefresh,
     required Widget child,
     double animSpeedFactor = 1.0,
@@ -492,6 +499,7 @@ class AppRefreshIndicator extends StatelessWidget {
     int springAnimationDurationInMilliseconds = 1000,
   }) =>
       liq.LiquidPullToRefresh(
+        key: key,
         onRefresh: onRefresh,
         animSpeedFactor: animSpeedFactor,
         backgroundColor: backgroundColor,
@@ -506,6 +514,7 @@ class AppRefreshIndicator extends StatelessWidget {
 
   /// [spin] variant of `RefreshIndicator` with transition widget.
   static Widget spin({
+    Key? key,
     ValueNotifier<IndicatorController>? controller,
     required Widget child,
     RefreshCallback? onRefresh,
@@ -519,6 +528,7 @@ class AppRefreshIndicator extends StatelessWidget {
         secondaryhIndicator,
   }) =>
       SecondaryRefreshIndicator(
+        key: key,
         controller: controller,
         trigger: IndicatorTrigger.leadingEdge,
         onRefresh: onRefresh,

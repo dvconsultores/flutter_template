@@ -69,6 +69,7 @@ class ButtonAspect extends StatelessWidget {
   final Widget? child;
 
   static ButtonAspect variant({
+    Key? key,
     String? text,
     TextStyle? textStyle,
     double? width,
@@ -100,6 +101,7 @@ class ButtonAspect extends StatelessWidget {
     Widget? child,
   }) =>
       ButtonAspect(
+        key: key,
         text: text,
         textStyle: textStyle,
         width: width,
@@ -131,6 +133,7 @@ class ButtonAspect extends StatelessWidget {
       );
 
   static ButtonAspect variant2({
+    Key? key,
     String? text,
     TextStyle? textStyle,
     double? width,
@@ -162,6 +165,7 @@ class ButtonAspect extends StatelessWidget {
     Widget? child,
   }) =>
       ButtonAspect(
+        key: key,
         text: text,
         textStyle: textStyle,
         width: width,
@@ -194,6 +198,7 @@ class ButtonAspect extends StatelessWidget {
       );
 
   static ButtonAspect icon({
+    Key? key,
     double size = Vars.buttonHeight,
     BoxConstraints? constraints,
     BorderRadius borderRadius = const BorderRadius.all(Radius.circular(100)),
@@ -207,6 +212,7 @@ class ButtonAspect extends StatelessWidget {
     required Widget? icon,
   }) =>
       ButtonAspect(
+        key: key,
         width: size,
         height: size,
         shape: shape,
@@ -222,6 +228,7 @@ class ButtonAspect extends StatelessWidget {
       );
 
   static ButtonAspect iconVariant({
+    Key? key,
     double size = Vars.buttonHeight,
     BoxConstraints? constraints,
     BorderRadius borderRadius = const BorderRadius.all(Radius.circular(100)),
@@ -235,6 +242,7 @@ class ButtonAspect extends StatelessWidget {
     required Widget? icon,
   }) =>
       ButtonAspect(
+        key: key,
         width: size,
         height: size,
         shape: shape,
@@ -250,6 +258,7 @@ class ButtonAspect extends StatelessWidget {
       );
 
   static ButtonAspect iconVariant2({
+    Key? key,
     double size = Vars.buttonHeight,
     BoxConstraints? constraints,
     BorderRadius borderRadius = const BorderRadius.all(Radius.circular(100)),
@@ -263,6 +272,7 @@ class ButtonAspect extends StatelessWidget {
     required Widget? icon,
   }) =>
       ButtonAspect(
+        key: key,
         width: size,
         height: size,
         shape: shape,

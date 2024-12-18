@@ -87,6 +87,7 @@ class Button extends StatelessWidget {
   final Widget? child;
 
   static Button variant({
+    Key? key,
     String? text,
     void Function()? onPressed,
     void Function()? onLongPress,
@@ -130,6 +131,7 @@ class Button extends StatelessWidget {
         backgroundColor = bgColor ?? colors.secondary;
 
     return Button(
+      key: key,
       onPressed: onPressed,
       onLongPress: onLongPress,
       text: text,
@@ -171,6 +173,7 @@ class Button extends StatelessWidget {
   }
 
   static Button variant2({
+    Key? key,
     String? text,
     void Function()? onPressed,
     void Function()? onLongPress,
@@ -213,6 +216,7 @@ class Button extends StatelessWidget {
     final colors = ThemeApp.of(context).colors;
 
     return Button(
+      key: key,
       onPressed: onPressed,
       onLongPress: onLongPress,
       text: text,
@@ -254,6 +258,7 @@ class Button extends StatelessWidget {
   }
 
   static Button textVariant({
+    Key? key,
     String? text,
     void Function()? onPressed,
     void Function()? onLongPress,
@@ -296,6 +301,7 @@ class Button extends StatelessWidget {
     final colors = ThemeApp.of(context).colors;
 
     return Button(
+      key: key,
       onPressed: onPressed,
       onLongPress: onLongPress,
       text: text,
@@ -337,6 +343,7 @@ class Button extends StatelessWidget {
   }
 
   static Button icon({
+    Key? key,
     required void Function()? onPressed,
     void Function()? onLongPress,
     bool loading = false,
@@ -359,6 +366,7 @@ class Button extends StatelessWidget {
     required Widget? icon,
   }) =>
       Button(
+        key: key,
         width: size,
         height: size,
         loaderSize: loaderSize,
@@ -383,6 +391,7 @@ class Button extends StatelessWidget {
       );
 
   static Button iconVariant({
+    Key? key,
     required void Function()? onPressed,
     void Function()? onLongPress,
     bool loading = false,
@@ -408,6 +417,7 @@ class Button extends StatelessWidget {
         backgroundColor = bgColor ?? colors.tertiary;
 
     return Button(
+      key: key,
       width: size,
       height: size,
       loaderSize: loaderSize,
@@ -433,6 +443,7 @@ class Button extends StatelessWidget {
   }
 
   static Button iconVariant2({
+    Key? key,
     required void Function()? onPressed,
     void Function()? onLongPress,
     bool loading = false,
@@ -458,6 +469,7 @@ class Button extends StatelessWidget {
         backgroundColor = bgColor ?? Colors.white;
 
     return Button(
+      key: key,
       width: size,
       height: size,
       loaderSize: loaderSize,

@@ -216,6 +216,7 @@ class DatePickerField extends InputField {
         );
 
   static Widget sizedBox({
+    Key? key,
     double? width,
     double? height,
     bool dense = false,
@@ -326,6 +327,7 @@ class DatePickerField extends InputField {
     final expanded = maxLines == null;
 
     return SizedBox(
+      key: key,
       width: width,
       height: height ?? (dense ? Vars.minInputHeight : Vars.maxInputHeight),
       child: DatePickerField(
