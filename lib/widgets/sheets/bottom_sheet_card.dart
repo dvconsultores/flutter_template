@@ -1,10 +1,10 @@
 import 'package:collection/collection.dart';
 import 'package:easy_debounce/easy_debounce.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_detextre4/painters/draggable_frame_painter.dart';
 import 'package:flutter_detextre4/utils/config/theme.dart';
 import 'package:flutter_detextre4/utils/general/context_utility.dart';
 import 'package:flutter_detextre4/utils/general/variables.dart';
+import 'package:flutter_detextre4/utils/painters/draggable_frame_painter.dart';
 import 'package:flutter_detextre4/widgets/defaults/button.dart';
 import 'package:flutter_detextre4/widgets/defaults/button_aspect.dart';
 import 'package:flutter_detextre4/widgets/defaults/snackbar.dart';

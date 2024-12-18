@@ -1,7 +1,7 @@
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_detextre4/painters/circle_painter.dart';
+import 'package:flutter_detextre4/utils/painters/circle_painter.dart';
 
 class CircleLightBlurredWidget extends StatelessWidget {
   const CircleLightBlurredWidget({

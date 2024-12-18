@@ -4,10 +4,10 @@ import 'package:custom_refresh_indicator/custom_refresh_indicator.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
-import 'package:flutter_detextre4/painters/sky_painter.dart';
-import 'package:flutter_detextre4/painters/triangule_painter.dart';
 import 'package:flutter_detextre4/utils/config/theme.dart';
 import 'package:flutter_detextre4/utils/general/variables.dart';
+import 'package:flutter_detextre4/utils/painters/sky_painter.dart';
+import 'package:flutter_detextre4/utils/painters/triangule_painter.dart';
 import 'package:liquid_pull_to_refresh/liquid_pull_to_refresh.dart' as liq;
 
 /// A `RefreshIndicator` with Custom app loader on refresh list.
