@@ -295,6 +295,9 @@ class ThemeApp {
   void switchTheme(ThemeMode themeType) =>
       context!.read<MainProvider>().switchTheme = themeType;
 
+  ///* Getter to current [TextTheme]
+  TextTheme get textTheme => Theme.of(context!).textTheme;
+
   ///* Getter to all custom colors registered in themeData.
   ColorsApp get colors {
     final themeData = Theme.of(context!);
