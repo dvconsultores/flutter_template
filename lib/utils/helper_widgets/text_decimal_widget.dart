@@ -14,7 +14,7 @@ class TextDecimal extends StatelessWidget {
     this.symbol,
     this.style,
     this.styleDecimals,
-    this.customPatterm = '#,##0.00 ¤',
+    this.customPattern = '#,##0.00 ¤',
     this.locale,
     this.maxDecimals = Vars.maxDecimals,
     this.minimumFractionDigits = Vars.maxDecimals,
@@ -29,7 +29,7 @@ class TextDecimal extends StatelessWidget {
   final String? symbol;
   final TextStyle? style;
   final TextStyle? styleDecimals;
-  final String? customPatterm;
+  final String? customPattern;
   final String? locale;
   final int maxDecimals;
   final int minimumFractionDigits;
@@ -49,7 +49,7 @@ class TextDecimal extends StatelessWidget {
             LanguageList.get(locale ?? defaultLocale).decimalSeparator,
         formatted = value.formatAmount(
           symbol: symbol,
-          customPattern: customPatterm,
+          customPattern: customPattern,
           locale: locale ?? defaultLocale,
           maxDecimals: maxDecimals,
           minimumFractionDigits: minimumFractionDigits,
