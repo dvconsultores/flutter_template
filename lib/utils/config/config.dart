@@ -158,7 +158,8 @@ enum LanguageList {
       LanguageList.values.singleWhereOrNull(
         (element) =>
             element.lcidString == locale ||
-            element.locale.toLanguageTag() == locale,
+            element.locale.toLanguageTag() == locale ||
+            element.name == locale,
       ) ??
       deviceLanguage;
 }
