@@ -5,6 +5,7 @@ import 'dart:ui' as ui;
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_detextre4/utils/config/theme.dart';
 import 'package:flutter_detextre4/utils/extensions/type_extensions.dart';
 import 'package:flutter_detextre4/utils/general/variables.dart';
 import 'package:flutter_detextre4/widgets/dialogs/modal_widget.dart';
@@ -88,16 +89,17 @@ T buildWidget<T>(T Function() callback) => callback();
 Future<String?> showPopup(
   BuildContext context, {
   required List<PopupMenuItem<String>> items,
-  double? offsetY,
+  double offsetY = 10,
   ShapeBorder? shape,
   BoxConstraints? constraints,
-  clipBehavior = Clip.none,
+  Clip clipBehavior = Clip.none,
   String? initialValue,
   double? elevation,
   Color? shadowColor,
-  Color? color = Colors.white,
+  Color? color,
   bool useRootNavigator = false,
   RouteSettings? routeSettings,
+  bool overlaped = true,
 }) async {
   //*get the render box from the context
   final RenderBox renderBox = context.findRenderObject() as RenderBox;
@@ -106,9 +108,11 @@ Future<String?> showPopup(
 
   //*calculate the start point in this case, below the button
   final left = offset.dx;
-  final top = offset.dy /* + renderBox.size.height */ + (offsetY ?? 0);
+  final top = offset.dy + (overlaped ? renderBox.size.height : 0) + offsetY;
   //*The right does not indicates the width
   final right = left + renderBox.size.width;
+
+  final themeApp = ThemeApp.of(context);
 
   return await showMenu<String>(
     context: context,
@@ -119,9 +123,9 @@ Future<String?> showPopup(
     useRootNavigator: useRootNavigator,
     shape: shape ??
         const RoundedRectangleBorder(
-          borderRadius: BorderRadius.all(Radius.circular(Vars.radius15)),
+          borderRadius: BorderRadius.all(Radius.circular(Vars.radius30)),
         ),
-    color: color,
+    color: color ?? themeApp.themeData.cardColor,
     elevation: elevation,
     constraints:
         constraints ?? BoxConstraints(minWidth: context.size?.width ?? 100),
