@@ -73,6 +73,7 @@ class CardWidgetV2 extends StatelessWidget {
     this.constraints,
     this.width = double.maxFinite,
     this.height,
+    this.clipBehavior = Clip.none,
   });
   final Widget child;
   final Color? color;
@@ -86,6 +87,7 @@ class CardWidgetV2 extends StatelessWidget {
   final BoxConstraints? constraints;
   final double? width;
   final double? height;
+  final Clip clipBehavior;
 
   @override
   Widget build(BuildContext context) {
@@ -99,6 +101,7 @@ class CardWidgetV2 extends StatelessWidget {
         constraints: constraints,
         padding: padding,
         margin: margin,
+        clipBehavior: clipBehavior,
         decoration: BoxDecoration(
           border: border,
           borderRadius: borderRadius,

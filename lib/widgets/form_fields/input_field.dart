@@ -41,7 +41,7 @@ class InputField extends TextFormField {
     bool numeric = false,
     List<TextInputFormatter>? inputFormatters,
     int maxEntires = 10,
-    int maxDecimals = 3,
+    int maxDecimals = Vars.maxDecimals,
     EdgeInsetsGeometry? prefixPadding,
     BorderRadius borderRadius =
         const BorderRadius.all(Radius.circular(Vars.radius10)),
@@ -268,7 +268,7 @@ class InputField extends TextFormField {
     bool isCollapsed = false,
     BoxConstraints? suffixIconConstraints,
     int maxEntires = 10,
-    int maxDecimals = 3,
+    int maxDecimals = Vars.maxDecimals,
   }) {
     final expanded = maxLines == null;
 
