@@ -41,8 +41,6 @@ if (flutterVersionName == null) {
 }
 
 apply plugin: 'com.android.application'
-//? 🖊️ FlutterFire Configuration 🖊️
-// apply plugin: 'com.google.gms.google-services'
 apply plugin: 'kotlin-android'
 apply from: "$flutterRoot/packages/flutter_tools/gradle/flutter.gradle"
 
@@ -72,11 +70,17 @@ android {
     defaultConfig {
         // You can update the following values to match your application needs.
         // For more information, see: https://docs.flutter.dev/deployment/android#reviewing-the-build-configuration.
-        minSdkVersion 21
+        minSdkVersion 29
         multiDexEnabled true
         targetSdkVersion 34
         versionCode flutterVersionCode.toInteger()
         versionName flutterVersionName
+        //? 🖊️ FlutterFire Configuration 🖊️
+        // resValue "string", "storage_bucket", System.getProperty("env.FB_STORAGE_BUCKET")
+        // resValue "string", "google_app_id", System.getProperty("env.FB_APP_ID_ANDROID")
+        // resValue "string", "gcm_defaultSenderId", System.getProperty("env.FB_MESSAGING_SENDER_ID")
+        // resValue "string", "google_api_key", System.getProperty("env.FB_API_KEY_ANDROID")
+        // resValue "string", "project_id", System.getProperty("env.FB_PROJECT_ID")
     }
 
     flavorDimensions "version"
@@ -132,46 +136,6 @@ android {
     lint {
         checkReleaseBuilds false
     }
-
-    //? 🖊️ Generate production google services (google services task) 🖊️
-    // tasks.register('createGoogleServicesJson') {
-    //     doLast {
-
-    //         // Check if the google services dev file already exists
-    //         def googleServicesFile = file("$projectDir/google-services.json")
-    //         if (!googleServicesFile.exists()) {
-    //             def jsonContent = System.getenv("GOOGLE_SERVICES")
-    //             googleServicesFile.text = jsonContent
-    //         }
-
-
-    //         // Check if the google services prod file already exists
-    //         def googleServicesProdFile = file("$projectDir/src/prod/google-services.json")
-    //         if (!googleServicesProdFile.exists()) {
-    //             def jsonContent = System.getenv("GOOGLE_SERVICES_PROD")
-    //             if (jsonContent == null) {
-    //                 // If the GOOGLE_SERVICES environment variable is not defined,
-    //                 // reads the content of the default google-services.json file
-    //                 def defaultFile = file("$projectDir/google-services.json")
-    //                 jsonContent = defaultFile.text
-    //             }
-
-    //             // Convert the file content to a JSON object
-    //             def slurped = new JsonSlurper()
-    //             def jsonObject = slurped.parseText(jsonContent)
-
-    //             // Modify the package_name field
-    //             jsonObject.client[0].client_info.android_client_info.package_name = bundleIdProd
-
-    //             // Convert the modified JSON object back to a string
-    //             def updatedJsonContent = JsonOutput.prettyPrint(JsonOutput.toJson(jsonObject))
-
-    //             googleServicesProdFile.text = updatedJsonContent
-    //         }
-    //     }
-    // }
-
-    // preBuild.dependsOn(createGoogleServicesJson)
 }
 
 flutter {
