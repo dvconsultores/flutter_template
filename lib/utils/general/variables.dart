@@ -20,15 +20,6 @@ mixin Vars {
 
   static const bottomNavbarHeight = 75.0;
 
-  static double getBodyHeight(
-    BuildContext context, {
-    double headerHeight = 0,
-    double other = 0,
-  }) {
-    final media = MediaQuery.of(context);
-    return media.size.height - (headerHeight + media.viewPadding.top + other);
-  }
-
   static const double buttonHeight = 45;
 
   static const paddingScaffold = EdgeInsets.symmetric(
