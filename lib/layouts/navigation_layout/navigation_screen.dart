@@ -28,9 +28,9 @@ class NavigationScreen extends StatelessWidget {
 
               // Right Swipe
               if (details.delta.dx > sensitivity) {
-                final index = routerConfig.router.indexShellRoute == 0
+                final index = routerConfig.router.currentIndexShellRoute == 0
                     ? 0
-                    : routerConfig.router.indexShellRoute - 1;
+                    : routerConfig.router.currentIndexShellRoute - 1;
                 final previousRoute = routerConfig.router.shellRoutes
                     .elementAtOrNull(index) as GoRoute?;
 
@@ -41,8 +41,9 @@ class NavigationScreen extends StatelessWidget {
                 // Left Swipe
               } else if (details.delta.dx < -sensitivity) {
                 final nextRoute = routerConfig.router.shellRoutes
-                    .elementAtOrNull(
-                        routerConfig.router.indexShellRoute + 1) as GoRoute?;
+                        .elementAtOrNull(
+                            routerConfig.router.currentIndexShellRoute + 1)
+                    as GoRoute?;
 
                 if (nextRoute != null) routerConfig.router.go((nextRoute).path);
               }
@@ -56,7 +57,7 @@ class NavigationScreen extends StatelessWidget {
           appBar: AppBar(
             title: Text(
               inherited.items.entries
-                  .elementAt(routerConfig.router.indexShellRoute)
+                  .elementAt(routerConfig.router.currentIndexShellRoute)
                   .key
                   .toCapitalize(),
             ),

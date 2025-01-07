@@ -51,7 +51,7 @@ class HomeScreen extends StatelessWidget {
               style: Theme.of(context).textTheme.displaySmall,
             ),
             Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-              Button.icon(
+              ButtonIcon(
                 onPressed: () =>
                     ThemeApp.of(context).switchTheme(ThemeMode.light),
                 icon: Icon(
@@ -60,7 +60,7 @@ class HomeScreen extends StatelessWidget {
                 ),
               ),
               const Gap(Vars.gapMax).row,
-              Button.icon(
+              ButtonIcon(
                 onPressed: () =>
                     ThemeApp.of(context).switchTheme(ThemeMode.dark),
                 icon: Icon(

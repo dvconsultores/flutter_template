@@ -117,13 +117,13 @@ extension GoRouterExtension on GoRouter {
 
   /// Get index of the current [ShellRoute] displayed in Page.
   /// Returns -1 if [element] is not found.
-  int get indexShellRoute => shellRoutes.indexWhere(
+  int get currentIndexShellRoute => shellRoutes.indexWhere(
       (element) => (element as GoRoute).path == "/${location.split('/')[1]}");
 
   /// Get the current [ShellRoute] displayed in Page.
-  RouteBase? get shellRoute => indexShellRoute == -1
+  RouteBase? get currentShellRoute => currentIndexShellRoute == -1
       ? null
-      : shellRoutes.elementAtOrNull(indexShellRoute);
+      : shellRoutes.elementAtOrNull(currentIndexShellRoute);
 }
 
 class Nav {

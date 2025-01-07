@@ -252,7 +252,7 @@ class _AutocompleteFieldState extends State<AutocompleteField> {
           underline: widget.underline,
           validator: widget.validator,
           suffixIcon: textEditingController.text.isNotEmpty
-              ? Button.icon(
+              ? ButtonIcon(
                   onPressed: () {
                     textEditingController.clear();
                     setState(() {});

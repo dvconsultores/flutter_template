@@ -274,7 +274,7 @@ class Modal extends StatelessWidget {
             [
               if (onPressedCancelBtn != null)
                 Expanded(
-                  child: Button.variant2(
+                  child: ButtonVariant(
                     height: actionButtonsHeight,
                     text: textCancelBtn ?? "Cancel",
                     textFitted: BoxFit.scaleDown,

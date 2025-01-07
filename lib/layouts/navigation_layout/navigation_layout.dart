@@ -36,7 +36,7 @@ class _NavigationLayoutState extends State<NavigationLayout> {
 
   @override
   Widget build(BuildContext context) {
-    if (routerConfig.router.indexShellRoute == -1) {
+    if (routerConfig.router.currentIndexShellRoute == -1) {
       return const Scaffold(body: SizedBox.shrink());
     }
 
@@ -70,7 +70,7 @@ class _NavigationLayoutState extends State<NavigationLayout> {
     return NavigationInherited(
       state: widget.state,
       items: items,
-      currentIndex: routerConfig.router.indexShellRoute,
+      currentIndex: routerConfig.router.currentIndexShellRoute,
       handlerTapItem: handlerTapItem,
       setScaffoldState: setScaffoldState,
       child: NavigationScreen(
