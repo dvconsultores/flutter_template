@@ -4,6 +4,25 @@ import 'package:flutter_detextre4/utils/extensions/type_extensions.dart';
 import 'package:flutter_detextre4/utils/general/variables.dart';
 import 'package:flutter_gap/flutter_gap.dart';
 
+class ButtonListenable extends StatefulWidget {
+  const ButtonListenable({super.key, required this.button});
+  final Button Function(BuildContext context, bool hasHover) button;
+
+  @override
+  State<ButtonListenable> createState() => _ButtonListenableState();
+}
+
+class _ButtonListenableState extends State<ButtonListenable> {
+  bool hasHover = false;
+
+  @override
+  Widget build(BuildContext context) {
+    return widget
+        .button(context, hasHover)
+        .copyWith(onHover: (value) => setState(() => hasHover = value));
+  }
+}
+
 class Button extends StatelessWidget {
   const Button({
     super.key,
@@ -95,6 +114,97 @@ class Button extends StatelessWidget {
   final FocusNode? focusNode;
   final MaterialStatesController? statesController;
   final Clip clipBehavior;
+
+  Button copyWith({
+    String? text,
+    void Function()? onPressed,
+    void Function()? onLongPress,
+    TextStyle? textStyle,
+    bool? loading,
+    bool? disabled,
+    double? width,
+    double? height,
+    double? loaderSize,
+    BoxConstraints? constraints,
+    BorderRadius? borderRadius,
+    BorderSide? borderSide,
+    OutlinedBorder? shape,
+    List<BoxShadow>? boxShadow,
+    Color? color,
+    Color? bgColor,
+    Color? bgColorDisabled,
+    InteractiveInkFeatureFactory? splashFactory,
+    Color? overlayColor,
+    EdgeInsets? padding,
+    EdgeInsets? margin,
+    MainAxisAlignment? buttonAxisAlignment,
+    double? gap,
+    double? leadingGap,
+    double? trailingGap,
+    bool? leadingSpacer,
+    bool? trailingSpacer,
+    Widget? leading,
+    Widget? trailing,
+    bool? textSoftWrap,
+    TextOverflow? textOverflow,
+    TextAlign? textAlign,
+    bool? textExpanded,
+    BoxFit? textFitted,
+    Widget? customLoader,
+    Widget? content,
+    Widget? child,
+    bool? autofocus,
+    void Function(bool value)? onHover,
+    void Function(bool value)? onFocusChange,
+    FocusNode? focusNode,
+    MaterialStatesController? statesController,
+    Clip? clipBehavior,
+  }) =>
+      Button(
+        text: text ?? this.text,
+        onPressed: onPressed ?? this.onPressed,
+        onLongPress: onLongPress ?? this.onLongPress,
+        textStyle: textStyle ?? this.textStyle,
+        loading: loading ?? this.loading,
+        disabled: disabled ?? this.disabled,
+        width: width ?? this.width,
+        height: height ?? this.height,
+        loaderSize: loaderSize ?? this.loaderSize,
+        constraints: constraints ?? this.constraints,
+        borderRadius: borderRadius ?? this.borderRadius,
+        borderSide: borderSide ?? this.borderSide,
+        shape: shape ?? this.shape,
+        boxShadow: boxShadow ?? this.boxShadow,
+        color: color ?? this.color,
+        bgColor: bgColor ?? this.bgColor,
+        bgColorDisabled: bgColorDisabled ?? this.bgColorDisabled,
+        splashFactory: splashFactory ?? this.splashFactory,
+        overlayColor: overlayColor ?? this.overlayColor,
+        padding: padding ?? this.padding,
+        margin: margin ?? this.margin,
+        buttonAxisAlignment: buttonAxisAlignment ?? this.buttonAxisAlignment,
+        gap: gap ?? this.gap,
+        leadingGap: leadingGap ?? this.leadingGap,
+        trailingGap: trailingGap ?? this.trailingGap,
+        leadingSpacer: leadingSpacer ?? this.leadingSpacer,
+        trailingSpacer: trailingSpacer ?? this.trailingSpacer,
+        leading: leading ?? this.leading,
+        trailing: trailing ?? this.trailing,
+        textSoftWrap: textSoftWrap ?? this.textSoftWrap,
+        textOverflow: textOverflow ?? this.textOverflow,
+        textAlign: textAlign ?? this.textAlign,
+        textExpanded: textExpanded ?? this.textExpanded,
+        textFitted: textFitted ?? this.textFitted,
+        customLoader: customLoader ?? this.customLoader,
+        content: content ?? this.content,
+        autofocus: autofocus ?? this.autofocus,
+        onHover: onHover ?? this.onHover,
+        onFocusChange: onFocusChange ?? this.onFocusChange,
+        focusNode: focusNode ?? this.focusNode,
+        statesController: statesController ?? this.statesController,
+        clipBehavior: clipBehavior ?? this.clipBehavior,
+        child: child ?? this.child,
+      );
 
   @override
   Widget build(BuildContext context) {
