@@ -2,7 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_detextre4/utils/extensions/widget_extensions.dart';
 import 'package:flutter_detextre4/utils/general/variables.dart';
-import 'package:flutter_gap/flutter_gap.dart';
+import 'package:flutter_detextre4/utils/helper_widgets/expands_wrapper.dart';
 import 'package:skeletons/skeletons.dart';
 
 class ListTileWidget extends StatelessWidget {
@@ -42,7 +42,7 @@ class ListTileWidget extends StatelessWidget {
 
     return Material(
       shadowColor: Colors.black54,
-      elevation: 10,
+      elevation: 5,
       shape: border,
       child: ListTile(
         dense: dense,
@@ -51,17 +51,19 @@ class ListTileWidget extends StatelessWidget {
         onTap: onTap,
         horizontalTitleGap: horizontalTitleGap,
         leading: leading ??
-            ClipRRect(
-              borderRadius: BorderRadius.all(
-                Radius.circular(leadingRadius),
-              ),
-              child: CachedNetworkImage(
-                imageUrl: leadingImage ?? '',
-                width: leadingSize / 2,
-                height: leadingSize / 2,
-                fit: BoxFit.cover,
-              ).prebuilder(),
-            ),
+            (leadingImage != null
+                ? ClipRRect(
+                    borderRadius: BorderRadius.all(
+                      Radius.circular(leadingRadius),
+                    ),
+                    child: CachedNetworkImage(
+                      imageUrl: leadingImage ?? '',
+                      width: leadingSize / 2,
+                      height: leadingSize / 2,
+                      fit: BoxFit.cover,
+                    ).prebuilder(),
+                  )
+                : null),
         title: title,
         subtitle: subTitle,
         trailing: trailing,
@@ -70,7 +72,7 @@ class ListTileWidget extends StatelessWidget {
   }
 }
 
-class ListTileExpandedWidget extends StatefulWidget {
+class ListTileExpandedWidget extends StatelessWidget {
   final VoidCallback? onTap;
   final Widget? title;
   final Widget? subTitle;
@@ -84,8 +86,12 @@ class ListTileExpandedWidget extends StatefulWidget {
   final EdgeInsetsGeometry? contentPadding;
   final bool dense;
   final ShapeBorder? shape;
+  final Color bgColor;
+  final Color? menuIconColor;
   final double? horizontalTitleGap;
   final AnimationController? expandsController;
+  final double elevation;
+  final bool disabled;
   const ListTileExpandedWidget({
     super.key,
     this.onTap,
@@ -101,112 +107,72 @@ class ListTileExpandedWidget extends StatefulWidget {
     this.contentPadding,
     this.dense = true,
     this.shape,
+    this.bgColor = Colors.white,
+    this.menuIconColor,
     this.horizontalTitleGap,
     this.expandsController,
+    this.elevation = 5,
+    this.disabled = false,
   });
 
   @override
-  State<ListTileExpandedWidget> createState() => _ListTileExpandedWidgetState();
-}
-
-class _ListTileExpandedWidgetState extends State<ListTileExpandedWidget>
-    with SingleTickerProviderStateMixin {
-  late final AnimationController animController;
-
-  AnimationController get animationController =>
-      widget.expandsController ?? animController;
-
-  @override
-  void initState() {
-    animController =
-        AnimationController(vsync: this, duration: Durations.short2)
-          ..drive(CurveTween(curve: Curves.bounceIn));
-    super.initState();
-  }
-
-  @override
-  void dispose() {
-    animController.dispose();
-    super.dispose();
-  }
-
-  @override
   Widget build(BuildContext context) {
-    final border = widget.shape ??
+    final border = shape ??
         RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(Vars.radius15));
+          borderRadius: BorderRadius.circular(Vars.radius15),
+          side: const BorderSide(color: Color(0xffE3E3E3)),
+        );
 
-    return Column(children: [
-      Material(
-        shadowColor: Colors.black54,
-        elevation: 10,
-        shape: border,
-        child: ListTile(
-          onTap: () {
-            animationController.isCompleted
-                ? animationController.reverse()
-                : animationController.forward();
-
-            if (widget.onTap != null) widget.onTap!();
-          },
-          dense: widget.dense,
-          contentPadding: widget.contentPadding,
+    return ExpandsWrapper(
+      key: key,
+      desplegableBuilder: desplegableBuilder,
+      desplegableGap: desplegableGap,
+      onTap: onTap,
+      child: (context, animationController, handlerExpands) {
+        return Material(
+          shadowColor: Colors.black54,
+          elevation: elevation,
+          color: bgColor,
           shape: border,
-          horizontalTitleGap: widget.horizontalTitleGap,
-          leading: widget.leading ??
-              ClipRRect(
-                borderRadius: BorderRadius.all(
-                  Radius.circular(widget.leadingRadius),
+          child: ListTile(
+            onTap: disabled
+                ? null
+                : () {
+                    handlerExpands();
+                    if (onTap != null) onTap!();
+                  },
+            dense: dense,
+            contentPadding: contentPadding,
+            shape: border,
+            horizontalTitleGap: horizontalTitleGap,
+            leading: leading ??
+                ClipRRect(
+                  borderRadius: BorderRadius.all(
+                    Radius.circular(leadingRadius),
+                  ),
+                  child: CachedNetworkImage(
+                    imageUrl: leadingImage ?? '',
+                    width: leadingSize / 2,
+                    height: leadingSize / 2,
+                    fit: BoxFit.cover,
+                  ).prebuilder(),
                 ),
-                child: CachedNetworkImage(
-                  imageUrl: widget.leadingImage ?? '',
-                  width: widget.leadingSize / 2,
-                  height: widget.leadingSize / 2,
-                  fit: BoxFit.cover,
-                ).prebuilder(),
-              ),
-          title: widget.title,
-          subtitle: widget.subTitle,
-          trailing: widget.trailing ??
-              AnimatedBuilder(
-                animation: animationController,
-                builder: (context, child) => Icon(
-                  animationController.isCompleted
-                      ? Icons.arrow_drop_up
-                      : Icons.arrow_drop_down,
+            title: title,
+            subtitle: subTitle,
+            trailing: trailing ??
+                AnimatedBuilder(
+                  animation: animationController,
+                  builder: (context, child) => Icon(
+                    animationController.isCompleted
+                        ? Icons.arrow_drop_up
+                        : Icons.arrow_drop_down,
+                    color: menuIconColor,
+                  ),
                 ),
-              ),
-        ),
-      ),
-      if (widget.desplegableBuilder != null)
-        AnimatedBuilder(
-          animation: animationController,
-          builder: (context, child) {
-            final translate =
-                    Tween<double>(begin: -widget.desplegableGap, end: 0)
-                        .animate(animationController),
-                opacity = Tween<double>(begin: 0, end: 1)
-                    .animate(animationController);
-
-            if (animationController.isAnimating ||
-                animationController.isCompleted) {
-              return Opacity(
-                opacity: opacity.value,
-                child: Transform.translate(
-                  offset: Offset(0, translate.value),
-                  child: child!,
-                ),
-              );
-            }
-
-            return const SizedBox.shrink();
-          },
-          child: Column(children: [
-            Gap(widget.desplegableGap).column,
-            widget.desplegableBuilder!(context)
-          ]),
-        ),
-    ]);
+          ),
+        );
+      },
+    );
   }
 }
 
@@ -227,11 +193,9 @@ class ListTileSkeleton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    const duration = Duration(milliseconds: 1500);
-
     return Material(
       shadowColor: Colors.black54,
-      elevation: 10,
+      elevation: 5,
       shape: shape ??
           RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(Vars.radius15)),
@@ -239,7 +203,7 @@ class ListTileSkeleton extends StatelessWidget {
         constraints: BoxConstraints(minHeight: minHeight),
         child: Skeleton(
           isLoading: true,
-          duration: duration,
+          duration: Vars.skeletonDuration,
           shimmerGradient: Vars.getGradient(context),
           skeleton: SkeletonListTile(
             contentSpacing: 20,

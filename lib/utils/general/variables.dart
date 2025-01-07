@@ -12,6 +12,7 @@ mixin Vars {
 
   // * values
   static const maxDecimals = 3;
+  static const skeletonDuration = Duration(milliseconds: 1500);
 
   // * Sizing
   static const mobileSize = Size(360, 690), desktopSize = Size(1512, 720);

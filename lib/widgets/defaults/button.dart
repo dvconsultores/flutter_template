@@ -17,9 +17,14 @@ class _ButtonListenableState extends State<ButtonListenable> {
 
   @override
   Widget build(BuildContext context) {
-    return widget
-        .button(context, hasHover)
-        .copyWith(onHover: (value) => setState(() => hasHover = value));
+    final button = widget.button(context, hasHover);
+
+    return button.copyWith(
+      onHover: (value) {
+        setState(() => hasHover = value);
+        if (button.onHover != null) button.onHover!(value);
+      },
+    );
   }
 }
 
