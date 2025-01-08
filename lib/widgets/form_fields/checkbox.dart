@@ -32,6 +32,7 @@ class CheckboxField extends StatefulWidget {
     this.crossAxisAlignment = CrossAxisAlignment.center,
     this.mainAxisAlignment = MainAxisAlignment.start,
     this.borderRadius = Vars.radius40,
+    this.overlayColor,
   });
   final String? restorationId;
   final void Function(bool? value)? onSaved;
@@ -55,6 +56,7 @@ class CheckboxField extends StatefulWidget {
   final CrossAxisAlignment crossAxisAlignment;
   final MainAxisAlignment mainAxisAlignment;
   final double borderRadius;
+  final Color? overlayColor;
 
   @override
   State<CheckboxField> createState() => _CheckboxFieldState();
@@ -120,7 +122,9 @@ class _CheckboxFieldState extends State<CheckboxField> {
                     BorderRadius.all(Radius.circular(widget.borderRadius)),
               )),
               overlayColor: MaterialStatePropertyAll(
-                  ThemeApp.of(context).colors.secondary.withOpacity(.3)),
+                widget.overlayColor ??
+                    ThemeApp.of(context).colors.secondary.withOpacity(.3),
+              ),
               foregroundColor: MaterialStatePropertyAll(
                   widget.textStyle?.color ?? ThemeApp.of(context).colors.text),
             ),
@@ -195,6 +199,7 @@ class CheckboxV2 extends StatefulWidget {
     this.crossAxisAlignment = CrossAxisAlignment.center,
     this.mainAxisAlignment = MainAxisAlignment.start,
     this.borderRadius = Vars.radius40,
+    this.overlayColor,
   });
   final ValueNotifier<bool>? controller;
   final void Function(bool? value)? onChanged;
@@ -211,6 +216,7 @@ class CheckboxV2 extends StatefulWidget {
   final CrossAxisAlignment crossAxisAlignment;
   final MainAxisAlignment mainAxisAlignment;
   final double borderRadius;
+  final Color? overlayColor;
 
   @override
   State<CheckboxV2> createState() => _CheckboxFieldV2State();
@@ -240,7 +246,9 @@ class _CheckboxFieldV2State extends State<CheckboxV2> {
           borderRadius: BorderRadius.all(Radius.circular(widget.borderRadius)),
         )),
         overlayColor: MaterialStatePropertyAll(
-            ThemeApp.of(context).colors.secondary.withOpacity(.3)),
+          widget.overlayColor ??
+              ThemeApp.of(context).colors.secondary.withOpacity(.3),
+        ),
         foregroundColor: MaterialStatePropertyAll(
             widget.textStyle?.color ?? ThemeApp.of(context).colors.text),
       ),
