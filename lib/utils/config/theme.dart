@@ -64,7 +64,7 @@ class ThemeApp {
           )
         },
         colorScheme = const ColorScheme.light(
-          background: Color(0xFFF9F9F9),
+          surface: Color(0xFFF9F9F9),
           primary: Color(0xff001689),
           secondary: Color(0xFFFF5100),
           tertiary: Color(0xFFF7E388),
@@ -188,16 +188,16 @@ class ThemeApp {
       datePickerTheme: DatePickerThemeData(
         headerBackgroundColor: const Color(0xff001689),
         headerForegroundColor: Colors.white,
-        dayForegroundColor: const MaterialStatePropertyAll(Color(0xFF535256)),
+        dayForegroundColor: const WidgetStatePropertyAll(Color(0xFF535256)),
         weekdayStyle: const TextStyle(color: Color(0xFF001689)),
         dayStyle: textTheme.bodyMedium?.copyWith(fontWeight: FontWeight.w400),
         cancelButtonStyle: ButtonStyle(
-          textStyle: MaterialStatePropertyAll(
+          textStyle: WidgetStatePropertyAll(
             textTheme.bodyMedium?.copyWith(fontWeight: FontWeight.w500),
           ),
         ),
         confirmButtonStyle: ButtonStyle(
-          textStyle: MaterialStatePropertyAll(
+          textStyle: WidgetStatePropertyAll(
             textTheme.bodyMedium?.copyWith(fontWeight: FontWeight.w500),
           ),
         ),
@@ -205,12 +205,12 @@ class ThemeApp {
       // timePickerTheme
       timePickerTheme: TimePickerThemeData(
         cancelButtonStyle: ButtonStyle(
-          textStyle: MaterialStatePropertyAll(
+          textStyle: WidgetStatePropertyAll(
             textTheme.bodyMedium?.copyWith(fontWeight: FontWeight.w500),
           ),
         ),
         confirmButtonStyle: ButtonStyle(
-          textStyle: MaterialStatePropertyAll(
+          textStyle: WidgetStatePropertyAll(
             textTheme.bodyMedium?.copyWith(fontWeight: FontWeight.w500),
           ),
         ),
@@ -306,7 +306,7 @@ class ThemeApp {
     final themeData = Theme.of(context!);
 
     return ColorsApp(
-      background: themeData.colorScheme.background,
+      surface: themeData.colorScheme.surface,
       primary: themeData.colorScheme.primary,
       secondary: themeData.colorScheme.secondary,
       tertiary: themeData.colorScheme.tertiary,
@@ -336,7 +336,7 @@ class ThemeApp {
 ///? Collection of all custom colors registered in themeData
 class ColorsApp {
   const ColorsApp({
-    required this.background,
+    required this.surface,
     required this.primary,
     required this.secondary,
     required this.tertiary,
@@ -351,7 +351,7 @@ class ColorsApp {
     required this.success,
     required this.warning,
   });
-  final Color background;
+  final Color surface;
   final Color primary;
   final Color secondary;
   final Color tertiary;
@@ -367,7 +367,7 @@ class ColorsApp {
   final Color warning;
 
   Map<String, dynamic> toJson() => {
-        "background": background,
+        "surface": surface,
         "primary": primary,
         "secondary": secondary,
         "tertiary": tertiary,

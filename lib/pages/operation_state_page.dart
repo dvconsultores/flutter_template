@@ -106,7 +106,7 @@ class OperationStatePage extends StatelessWidget {
               child: CircleLightBlurredWidget(
                 size: 211,
                 blur: 110,
-                color: colors.success.withOpacity(.66),
+                color: colors.success.withAlpha(168),
               ))
         ],
 

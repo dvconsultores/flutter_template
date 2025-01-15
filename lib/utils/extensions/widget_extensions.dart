@@ -2,7 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_detextre4/utils/config/theme.dart';
 import 'package:flutter_detextre4/utils/general/context_utility.dart';
-import 'package:skeletons/skeletons.dart';
+import 'package:flutter_detextre4/utils/skeletons/skeleton_widgets.dart';
 
 // ? text extension
 extension TextExtension on Text {
@@ -12,9 +12,13 @@ extension TextExtension on Text {
       data ?? "",
       style: style?.copyWith(
           color: Color.fromARGB(
+        // ignore: deprecated_member_use
         (color.opacity * 255).round(),
+        // ignore: deprecated_member_use
         255 - color.red,
+        // ignore: deprecated_member_use
         255 - color.green,
+        // ignore: deprecated_member_use
         255 - color.blue,
       )),
     );
@@ -28,9 +32,13 @@ extension IconExtension on Icon {
     return Icon(
       icon,
       color: Color.fromARGB(
+        // ignore: deprecated_member_use
         (newColor.opacity * 255).round(),
+        // ignore: deprecated_member_use
         255 - newColor.red,
+        // ignore: deprecated_member_use
         255 - newColor.green,
+        // ignore: deprecated_member_use
         255 - newColor.blue,
       ),
     );
@@ -54,8 +62,8 @@ extension ImageExtension on Image {
             duration: shimmerDuration,
             shimmerGradient: shimmerGradient ??
                 LinearGradient(colors: [
-                  ThemeApp.of(context).colors.primary.withOpacity(.5),
-                  ThemeApp.of(context).colors.secondary.withOpacity(.5),
+                  ThemeApp.of(context).colors.primary.withAlpha(128),
+                  ThemeApp.of(context).colors.secondary.withAlpha(128),
                 ]),
             skeleton: SkeletonAvatar(
               style: SkeletonAvatarStyle(width: width, height: height),
@@ -152,8 +160,8 @@ extension CachedNetworkImageExtension on CachedNetworkImage {
             duration: shimmerDuration,
             shimmerGradient: shimmerGradient ??
                 LinearGradient(colors: [
-                  ThemeApp.of(context).colors.primary.withOpacity(.5),
-                  ThemeApp.of(context).colors.secondary.withOpacity(.5),
+                  ThemeApp.of(context).colors.primary.withAlpha(128),
+                  ThemeApp.of(context).colors.secondary.withAlpha(128),
                 ]),
             skeleton: SkeletonAvatar(
               style: SkeletonAvatarStyle(width: width, height: height),

@@ -95,7 +95,7 @@ void showSnackbar(
     icon: getValueByType().$2,
     titleColor: ThemeApp.of(_context).colors.text,
     messageColor: ThemeApp.of(_context).colors.text,
-    backgroundColor: ThemeApp.of(_context).colors.background,
+    backgroundColor: ThemeApp.of(_context).colors.surface,
     borderRadius: const BorderRadius.all(Radius.circular(Vars.radius20)),
     borderColor: getValueByType().$1,
     borderWidth: 2.5,

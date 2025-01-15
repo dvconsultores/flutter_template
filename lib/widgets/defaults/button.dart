@@ -117,7 +117,7 @@ class Button extends StatelessWidget {
   final void Function(bool value)? onHover;
   final void Function(bool value)? onFocusChange;
   final FocusNode? focusNode;
-  final MaterialStatesController? statesController;
+  final WidgetStatesController? statesController;
   final Clip clipBehavior;
 
   Button copyWith({
@@ -162,7 +162,7 @@ class Button extends StatelessWidget {
     void Function(bool value)? onHover,
     void Function(bool value)? onFocusChange,
     FocusNode? focusNode,
-    MaterialStatesController? statesController,
+    WidgetStatesController? statesController,
     Clip? clipBehavior,
   }) =>
       Button(
@@ -249,19 +249,19 @@ class Button extends StatelessWidget {
         onHover: onHover,
         statesController: statesController,
         style: ButtonStyle(
-          elevation: const MaterialStatePropertyAll(0),
-          padding: MaterialStatePropertyAll(
+          elevation: const WidgetStatePropertyAll(0),
+          padding: WidgetStatePropertyAll(
             padding ?? const EdgeInsets.all(Vars.gapMedium),
           ),
-          foregroundColor: MaterialStatePropertyAll(color ?? Colors.white),
+          foregroundColor: WidgetStatePropertyAll(color ?? Colors.white),
           splashFactory: splashFactory,
-          overlayColor: MaterialStatePropertyAll(overlayColor),
+          overlayColor: WidgetStatePropertyAll(overlayColor),
           backgroundColor: disabled
-              ? MaterialStatePropertyAll(
-                  bgColorDisabled ?? backgroundColor.withOpacity(.4),
+              ? WidgetStatePropertyAll(
+                  bgColorDisabled ?? backgroundColor.withAlpha(102),
                 )
-              : MaterialStatePropertyAll(backgroundColor),
-          shape: MaterialStatePropertyAll(
+              : WidgetStatePropertyAll(backgroundColor),
+          shape: WidgetStatePropertyAll(
             shape ??
                 RoundedRectangleBorder(
                   borderRadius: borderRadius,
@@ -364,7 +364,7 @@ class ButtonVariant extends Button {
   }) : super(
           bgColor: backgroundColor(bgColor),
           bgColorDisabled:
-              bgColorDisabled ?? backgroundColor(bgColor).withOpacity(.4),
+              bgColorDisabled ?? backgroundColor(bgColor).withAlpha(102),
         );
 
   static Color backgroundColor(Color? bgColor) =>
@@ -473,7 +473,7 @@ class ButtonIcon extends Button {
           width: size,
           height: size,
           shape: shape ?? CircleBorder(side: borderSide),
-          bgColorDisabled: bgColorDisabled ?? bgColor?.withOpacity(.4),
+          bgColorDisabled: bgColorDisabled ?? bgColor?.withAlpha(102),
         );
 }
 
@@ -530,7 +530,7 @@ class ButtonIconVariant extends Button {
           color: color ?? _themeApp.colors.text,
           bgColor: backgroundColor(bgColor),
           bgColorDisabled:
-              bgColorDisabled ?? backgroundColor(bgColor).withOpacity(.4),
+              bgColorDisabled ?? backgroundColor(bgColor).withAlpha(102),
         );
 
   static Color backgroundColor(Color? bgColor) =>

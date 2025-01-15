@@ -231,7 +231,7 @@ class _BottomSelectFieldState<T> extends State<BottomSelectField<T>>
         formState ??= state;
         widget.controller?.value = state.value;
 
-        final bgColor = widget.bgColor ?? theme.colorScheme.background,
+        final bgColor = widget.bgColor ?? theme.colorScheme.surface,
             height = widget.height ??
                 (widget.dense ? Vars.minInputHeight : Vars.maxInputHeight);
 
@@ -350,7 +350,7 @@ class _ContentWidget<T> extends StatelessWidget {
 
     final hs = hintStyle ??
             TextStyle(
-              color: colors.text.withOpacity(.7),
+              color: colors.text.withAlpha(179),
               fontSize: 13,
               fontWeight: FontWeight.w400,
             ),

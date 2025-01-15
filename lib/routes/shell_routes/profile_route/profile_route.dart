@@ -7,7 +7,7 @@ class ProfileRoute extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final authApi = AuthApi(context);
+    final authApi = AuthApi();
 
     return ProfileInherited(
       authApi: authApi,

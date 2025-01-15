@@ -38,10 +38,12 @@ class AppRouterConfig {
           //   return const ErrorPage();
           // },
           redirect: (context, state) async {
+            final location = state.path ?? '';
+
             final isLogged = (await SecureStorage.read<String?>(
                         SecureCollection.tokenAuth)) !=
                     null,
-                requireAuth = !state.location.contains("/auth");
+                requireAuth = !location.contains("/auth");
 
             if (requireAuth && !isLogged) {
               return kIsWeb ? "/landing" : "/auth";
@@ -102,23 +104,23 @@ class AppRouterConfig {
 //! //FIXME search better practices
 extension GoRouterExtension on GoRouter {
   /// Getter yo know if current route require authentication to show it
-  bool get requireAuth => !routerConfig.router.location.contains('/auth');
+  bool get requireAuth => !(state?.path ?? '').contains('/auth');
 
   /// Get list of main routes on the [ShellRoute].
-  List<RouteBase> get shellRoutes => routerConfig.router.configuration.routes
+  List<RouteBase> get shellRoutes => configuration.routes
       .firstWhere((element) => element is ShellRoute)
       .routes;
 
   /// Get list of sub routes on the [ShellRoute].
   List<RouteBase>? get subShellRoutes => shellRoutes
       .firstWhereOrNull(
-          (element) => (element as GoRoute).path.startsWith(location))
+          (element) => (element as GoRoute).path.startsWith(state?.path ?? ''))
       ?.routes;
 
   /// Get index of the current [ShellRoute] displayed in Page.
   /// Returns -1 if [element] is not found.
-  int get currentIndexShellRoute => shellRoutes.indexWhere(
-      (element) => (element as GoRoute).path == "/${location.split('/')[1]}");
+  int get currentIndexShellRoute => shellRoutes.indexWhere((element) =>
+      (element as GoRoute).path == "/${(state?.path ?? '').split('/')[1]}");
 
   /// Get the current [ShellRoute] displayed in Page.
   RouteBase? get currentShellRoute => currentIndexShellRoute == -1

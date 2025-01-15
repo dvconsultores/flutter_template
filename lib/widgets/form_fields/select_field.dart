@@ -309,7 +309,7 @@ class _SelectFieldState<T> extends State<SelectField<T>> {
         ts = widget.textStyle ?? theme.textTheme.bodyMedium!,
         hs = widget.hintStyle ??
             ts.copyWith(
-              color: themeApp.colors.text.withOpacity(.7),
+              color: themeApp.colors.text.withAlpha(179),
               fontSize: 13,
             ),
         ls =
@@ -382,7 +382,7 @@ class _SelectFieldState<T> extends State<SelectField<T>> {
             labelStyle: ls,
             floatingLabelStyle: fls,
             floatingLabelBehavior: widget.floatingLabelBehavior,
-            fillColor: widget.color ?? ThemeApp.of(context).colors.background,
+            fillColor: widget.color ?? ThemeApp.of(context).colors.surface,
             filled: widget.filled,
             border: checkBorder(defaultBorder),
             enabledBorder: checkBorder(defaultBorder),
@@ -426,7 +426,7 @@ class _SelectFieldState<T> extends State<SelectField<T>> {
               scrollPadding: widget.dropdownStyleData?.scrollPadding,
               scrollbarTheme: widget.dropdownStyleData?.scrollbarTheme ??
                   ScrollbarThemeData(
-                    thumbColor: MaterialStatePropertyAll(
+                    thumbColor: WidgetStatePropertyAll(
                         ThemeApp.of(context).colors.secondary),
                   ),
               useRootNavigator:

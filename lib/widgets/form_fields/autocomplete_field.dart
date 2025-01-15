@@ -179,7 +179,7 @@ class _AutocompleteFieldState extends State<AutocompleteField> {
 
                           return TextButton(
                             style: const ButtonStyle(
-                              minimumSize: MaterialStatePropertyAll(
+                              minimumSize: WidgetStatePropertyAll(
                                 Size(double.maxFinite, Vars.buttonHeight),
                               ),
                             ),

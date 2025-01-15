@@ -49,9 +49,9 @@ mixin Vars {
           transform: const GradientRotation(-30),
           tileMode: TileMode.mirror,
           colors: [
-            ThemeApp.of(context).colors.tertiary.withOpacity(.2),
-            ThemeApp.of(context).colors.primary.withOpacity(.3),
-            ThemeApp.of(context).colors.tertiary.withOpacity(.2),
+            ThemeApp.of(context).colors.tertiary.withAlpha(51),
+            ThemeApp.of(context).colors.primary.withAlpha(77),
+            ThemeApp.of(context).colors.tertiary.withAlpha(51),
           ]);
 
   // * others

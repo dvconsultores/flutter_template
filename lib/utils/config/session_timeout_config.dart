@@ -7,7 +7,7 @@ class SessionTimeoutConfig {
   SessionTimeoutConfig(this.context);
   final BuildContext context;
 
-  late final authApi = AuthApi(context);
+  final authApi = AuthApi();
 
   final instance = SessionConfig(
       // invalidateSessionForAppLostFocus: const Duration(seconds: 15),

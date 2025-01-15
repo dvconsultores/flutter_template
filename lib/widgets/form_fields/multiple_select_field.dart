@@ -252,7 +252,7 @@ class _MultiSelectFieldState<T> extends State<MultipleSelectField<T>>
         formState ??= state;
         if (state.value != null) getController.value = state.value!;
 
-        final bgColor = widget.bgColor ?? theme.colorScheme.background,
+        final bgColor = widget.bgColor ?? theme.colorScheme.surface,
             height = widget.height ??
                 (widget.dense ? Vars.minInputHeight : Vars.maxInputHeight);
 
@@ -273,7 +273,7 @@ class _MultiSelectFieldState<T> extends State<MultipleSelectField<T>>
                   decoration: widget.decoration ??
                       BoxDecoration(
                           borderRadius: widget.borderRadius,
-                          color: widget.bgColor ?? theme.colorScheme.background,
+                          color: widget.bgColor ?? theme.colorScheme.surface,
                           boxShadow: widget.boxShadow ?? [Vars.boxShadow2],
                           border: Border.fromBorderSide(
                             widget.disabled
@@ -390,7 +390,7 @@ class _ContentWidget<T> extends StatelessWidget {
 
     final hs = hintStyle ??
             TextStyle(
-              color: colors.text.withOpacity(.7),
+              color: colors.text.withAlpha(179),
               fontSize: 13,
               fontWeight: FontWeight.w400,
             ),

@@ -206,7 +206,7 @@ class _BNBCustomPainter extends CustomPainter {
       ..lineTo(0, size.width)
       ..close();
 
-    canvas.drawShadow(path, Colors.black.withOpacity(.8), 5, true);
+    canvas.drawShadow(path, Colors.black.withAlpha(204), 5, true);
     canvas.drawPath(path, paint);
   }
 

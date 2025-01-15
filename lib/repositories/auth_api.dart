@@ -1,14 +1,10 @@
-import 'package:flutter/material.dart';
 import 'package:flutter_detextre4/models/profile_model.dart';
 import 'package:flutter_detextre4/repositories/auth_api_interface.dart';
+import 'package:flutter_detextre4/utils/config/router_config.dart';
 import 'package:flutter_detextre4/utils/services/local_data/hive_data_service.dart';
 import 'package:flutter_detextre4/utils/services/local_data/secure_storage_service.dart';
-import 'package:go_router/go_router.dart';
 
 class AuthApi implements AuthApiInterface {
-  AuthApi(this.context);
-  final BuildContext context;
-
   @override
   Future<void> signIn() async {
     // ? just for showcase - when go work uncomment other lines and delete this
@@ -34,7 +30,7 @@ class AuthApi implements AuthApiInterface {
     await SecureStorage.write(
       SecureCollection.tokenAuth,
       value.$1,
-    ).then((value) => context.goNamed('home'));
+    ).then((value) => routerConfig.router.goNamed('home'));
   }
 
   @override
@@ -44,7 +40,7 @@ class AuthApi implements AuthApiInterface {
 
   @override
   void signOut() => SecureStorage.delete(SecureCollection.tokenAuth)
-      .then((_) => context.goNamed("login"));
+      .then((_) => routerConfig.router.goNamed("login"));
 
   @override
   Future<void> clearTokenAuth() async {

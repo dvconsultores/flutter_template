@@ -179,7 +179,7 @@ class _ComboboxFieldState<T> extends State<ComboboxField<T>> {
 
         final hs = widget.hintStyle ??
                 TextStyle(
-                  color: ThemeApp.of(context).colors.text.withOpacity(.7),
+                  color: ThemeApp.of(context).colors.text.withAlpha(179),
                   fontSize: 13,
                   fontWeight: FontWeight.w400,
                 ),
@@ -287,7 +287,7 @@ class _ComboboxFieldState<T> extends State<ComboboxField<T>> {
                     BoxDecoration(
                       borderRadius: widget.borderRadius,
                       color: widget.bgColor ??
-                          Theme.of(context).colorScheme.background,
+                          Theme.of(context).colorScheme.surface,
                       boxShadow: widget.boxShadow ?? [Vars.boxShadow2],
                       border: Border.fromBorderSide(
                         widget.disabled

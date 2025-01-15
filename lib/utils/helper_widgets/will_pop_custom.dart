@@ -27,6 +27,7 @@ class WillPopCustom extends StatelessWidget {
 
     // * Android
     if (io.Platform.isAndroid) {
+      // ignore: deprecated_member_use
       return WillPopScope(
         onWillPop: onWillPopCallback,
         child: child,
@@ -34,6 +35,7 @@ class WillPopCustom extends StatelessWidget {
     }
 
     // * IOS
+    // ignore: deprecated_member_use
     return WillPopScope(
       onWillPop: () async => false,
       child: GestureDetector(

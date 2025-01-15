@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_detextre4/utils/extensions/widget_extensions.dart';
 import 'package:flutter_detextre4/utils/general/variables.dart';
 import 'package:flutter_detextre4/utils/helper_widgets/expands_wrapper.dart';
-import 'package:skeletons/skeletons.dart';
+import 'package:flutter_detextre4/utils/skeletons/skeleton_widgets.dart';
 
 class ListTileWidget extends StatelessWidget {
   final VoidCallback? onTap;

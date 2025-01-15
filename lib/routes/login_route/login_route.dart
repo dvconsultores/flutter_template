@@ -10,11 +10,10 @@ class LoginRoute extends StatefulWidget {
 }
 
 class _LoginRouteState extends State<LoginRoute> {
-  late final AuthApi authApi;
+  final authApi = AuthApi();
 
   @override
   void initState() {
-    authApi = AuthApi(context);
     authApi.clearTokenAuth();
     super.initState();
   }

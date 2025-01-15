@@ -101,7 +101,7 @@ class InputField extends TextFormField {
             final ts = textStyle ?? _ts,
                 hs = hintStyle ??
                     ts.copyWith(
-                      color: colors.text.withOpacity(.7),
+                      color: colors.text.withAlpha(179),
                       fontSize: 13,
                     ),
                 ls =

@@ -207,7 +207,7 @@ Future<void> checkVersion(BuildContext context) =>
       if (context.mounted && hasUpdate) {
         await Modal.showSystemAlert(
           context,
-          barrierColor: Colors.black.withOpacity(.1),
+          barrierColor: Colors.black.withAlpha(26),
           titleText: "Update Available!",
           contentText: requireUpdate
               ? "You must to update the application to continue"

@@ -114,18 +114,18 @@ class _CheckboxFieldState extends State<CheckboxField> {
           TextButton(
             onPressed: onPressed,
             style: ButtonStyle(
-              padding: MaterialStatePropertyAll(widget.padding),
-              textStyle: MaterialStatePropertyAll(
+              padding: WidgetStatePropertyAll(widget.padding),
+              textStyle: WidgetStatePropertyAll(
                   widget.textStyle ?? const TextStyle(fontSize: 12)),
-              shape: MaterialStatePropertyAll(RoundedRectangleBorder(
+              shape: WidgetStatePropertyAll(RoundedRectangleBorder(
                 borderRadius:
                     BorderRadius.all(Radius.circular(widget.borderRadius)),
               )),
-              overlayColor: MaterialStatePropertyAll(
+              overlayColor: WidgetStatePropertyAll(
                 widget.overlayColor ??
-                    ThemeApp.of(context).colors.secondary.withOpacity(.3),
+                    ThemeApp.of(context).colors.secondary.withAlpha(77),
               ),
-              foregroundColor: MaterialStatePropertyAll(
+              foregroundColor: WidgetStatePropertyAll(
                   widget.textStyle?.color ?? ThemeApp.of(context).colors.text),
             ),
             child: Row(
@@ -144,7 +144,7 @@ class _CheckboxFieldState extends State<CheckboxField> {
                           onChanged: null,
                           side: BorderSide.none,
                           splashRadius: widget.splashRadius,
-                          fillColor: MaterialStateProperty.all<Color>(
+                          fillColor: WidgetStateProperty.all<Color>(
                               Colors.transparent),
                           checkColor: ThemeApp.of(context).colors.secondary,
                           materialTapTargetSize:
@@ -239,17 +239,17 @@ class _CheckboxFieldV2State extends State<CheckboxV2> {
     return TextButton(
       onPressed: widget.disabled ? null : onPressed,
       style: ButtonStyle(
-        padding: MaterialStatePropertyAll(widget.padding),
-        textStyle: MaterialStatePropertyAll(
+        padding: WidgetStatePropertyAll(widget.padding),
+        textStyle: WidgetStatePropertyAll(
             widget.textStyle ?? const TextStyle(fontSize: 12)),
-        shape: MaterialStatePropertyAll(RoundedRectangleBorder(
+        shape: WidgetStatePropertyAll(RoundedRectangleBorder(
           borderRadius: BorderRadius.all(Radius.circular(widget.borderRadius)),
         )),
-        overlayColor: MaterialStatePropertyAll(
+        overlayColor: WidgetStatePropertyAll(
           widget.overlayColor ??
-              ThemeApp.of(context).colors.secondary.withOpacity(.3),
+              ThemeApp.of(context).colors.secondary.withAlpha(77),
         ),
-        foregroundColor: MaterialStatePropertyAll(
+        foregroundColor: WidgetStatePropertyAll(
             widget.textStyle?.color ?? ThemeApp.of(context).colors.text),
       ),
       child: Row(
@@ -269,7 +269,7 @@ class _CheckboxFieldV2State extends State<CheckboxV2> {
                     side: BorderSide.none,
                     splashRadius: widget.splashRadius,
                     fillColor:
-                        MaterialStateProperty.all<Color>(Colors.transparent),
+                        WidgetStateProperty.all<Color>(Colors.transparent),
                     checkColor: ThemeApp.of(context).colors.secondary,
                     materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
                     visualDensity: VisualDensity.compact,

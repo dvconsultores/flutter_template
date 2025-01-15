@@ -35,7 +35,7 @@ class StarPainter {
     );
     final t = speedScale / maxSpeedScale;
     final opacity = _minOpacity + (_maxOpacity - _minOpacity) * t;
-    color = initialColor.withOpacity(opacity);
+    color = initialColor.withAlpha((opacity * 255).round());
   }
 
   draw(Canvas canvas, Rect rect) {
