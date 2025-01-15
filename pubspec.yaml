@@ -106,7 +106,7 @@ dependencies:
   lottie: ^3.0.0 # ? official animation site https://lottiefiles.com/es/animation/flutter
   dropdown_button2: ^2.3.9
   double_back_to_exit: ^1.1.0
-  responsive_mixin_layout: ^1.1.0
+  responsive_mixin_layout: ^1.5.0
   flutter_gap: ^1.2.0
   flutter_advanced_switch: ^3.1.0
   sticky_headers: ^0.3.0+2

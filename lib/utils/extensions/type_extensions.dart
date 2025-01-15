@@ -110,6 +110,32 @@ extension DurationExtension on Duration {
 
 // ? list extension
 extension ListExtension<T> on List<T> {
+  /// Extension for the List class that allows pagination of list elements.
+  ///
+  /// This method divides the list into pages of a specified size and returns
+  /// a list of lists, where each sublist represents a page.
+  ///
+  /// Example usage:
+  ///
+  /// ```dart
+  /// List<int> items = [1, 2, 3, 4, 5, 6, 7, 8, 9];
+  /// List<List<int>> pages = items.paginate(3);
+  /// // pages = [[1, 2, 3], [4, 5, 6], [7, 8, 9]]
+  /// ```
+  ///
+  /// @param itemsPerPage The number of items per page.
+  /// @return A list of lists, where each sublist contains the items of a page.
+  List<List<T>> paginate(int itemsPerPage) {
+    List<List<T>> pages = [];
+
+    for (int i = 0; i < length; i += itemsPerPage) {
+      int end = (i + itemsPerPage < length) ? i + itemsPerPage : length;
+      pages.add(sublist(i, end));
+    }
+
+    return pages;
+  }
+
   /// Sorts this list according to the order specified by the [compare] function.
   /// The [compare] `String` value.
   void sortMap(String sortBy, {bool ascending = true}) => sort((a, b) {
@@ -329,28 +355,6 @@ String formatAmountManually(double value) {
 
 // ? Double extension
 extension DoubleExtension on double {
-  // Returns this [num] clamped to be in the range [lowerLimit]-[upperLimit] but inverted.
-  double clampInverted(double lowerLimit, double upperLimit) =>
-      lowerLimit + upperLimit - clamp(lowerLimit, upperLimit);
-
-  // Map the value from one range to another
-  double clampMapRanged({
-    bool invert = false,
-    required double fromMin,
-    required double fromMax,
-    required double toMin,
-    required double toMax,
-  }) {
-    double mappedValue =
-        ((this - fromMin) / (fromMax - fromMin)) * (toMax - toMin) + toMin;
-
-    // Make sure the mapped value is within the toMin and toMax ranges
-    mappedValue = mappedValue.clamp(toMin, toMax);
-
-    // Inverts return values if invert is specified as true
-    return invert ? toMax + toMin - mappedValue : mappedValue;
-  }
-
   /// Format `double` to decimal number system with nested currency.
   ///
   /// by default [locale] has deviceLanguage value and 3 decimals max.
