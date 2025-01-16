@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_detextre4/widgets/defaults/scaffold.dart';
+import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 
 class LandingScreen extends StatelessWidget {
   const LandingScreen({super.key});
@@ -9,9 +10,16 @@ class LandingScreen extends StatelessWidget {
     // final inherited =
     //     context.getInheritedWidgetOfExactType<LandingInherited>()!;
 
-    return const AppScaffold(
+    return AppScaffold(
       body: Column(children: [
-        Text("data"),
+        RatingBar(
+          ratingWidget: RatingWidget(
+            empty: Icon(Icons.face),
+            half: Icon(Icons.face_3),
+            full: Icon(Icons.face_retouching_natural_sharp),
+          ),
+          onRatingUpdate: (value) {},
+        )
       ]),
     );
   }

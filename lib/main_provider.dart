@@ -3,9 +3,16 @@ import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_detextre4/models/profile_model.dart';
 import 'package:flutter_detextre4/utils/config/config.dart';
+import 'package:flutter_detextre4/utils/general/context_utility.dart';
 import 'package:flutter_detextre4/utils/services/local_data/hive_data_service.dart';
+import 'package:provider/provider.dart';
 
 class MainProvider extends ChangeNotifier {
+  static MainProvider read([BuildContext? context]) =>
+      (context ?? ContextUtility.context!).read<MainProvider>();
+  static MainProvider watch([BuildContext? context]) =>
+      (context ?? ContextUtility.context!).watch<MainProvider>();
+
   // ? ---------------------------Collections-------------------------------- //
   //
 

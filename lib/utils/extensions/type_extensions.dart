@@ -34,6 +34,9 @@ extension AssetBundleExtension on AssetBundle {
 
 // ? Dynamic extension
 extension DynamicExtension on dynamic {
+  /// Shortcut to convert type of any value
+  T as<T>() => this as T;
+
   /// Getter to know if value is not `null`.
   bool get isExist => this != null;
 
@@ -872,4 +875,18 @@ extension MultipartFileExtension on dio.MultipartFile {
         "filename": filename,
         "length": length,
       };
+}
+
+// ? Key extension
+extension KeyExtension on Key? {
+  String? get value {
+    if (this == null) return null;
+
+    String? keyValue = this!.toString();
+
+    return keyValue.substring(
+      keyValue.indexOf("'") + 1,
+      keyValue.lastIndexOf("'"),
+    );
+  }
 }

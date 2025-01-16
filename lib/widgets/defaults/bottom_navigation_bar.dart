@@ -9,18 +9,18 @@ class AppBottomNavigationBar extends StatefulWidget {
   const AppBottomNavigationBar({
     super.key,
     this.height = 80,
-    required this.currentIndex,
+    required this.routeName,
     required this.onTap,
     this.selectedItemColor,
     this.selectedIconColor,
     required this.items,
   });
   final double height;
-  final int currentIndex;
-  final void Function(int index) onTap;
+  final String? routeName;
+  final void Function(String routeName) onTap;
   final Color? selectedItemColor;
   final Color? selectedIconColor;
-  final List<BottomNavigationBarItem> items;
+  final Map<String, BottomNavigationBarItem> items;
 
   @override
   State<AppBottomNavigationBar> createState() =>
@@ -76,7 +76,7 @@ class _CustomBottomNavigationBarState extends State<AppBottomNavigationBar>
 
   @override
   void didUpdateWidget(covariant AppBottomNavigationBar oldWidget) {
-    if (oldWidget.currentIndex != widget.currentIndex) startAnimation();
+    if (oldWidget.routeName != widget.routeName) startAnimation();
 
     super.didUpdateWidget(oldWidget);
   }
@@ -123,12 +123,14 @@ class _CustomBottomNavigationBarState extends State<AppBottomNavigationBar>
               ),
               child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: widget.items.mapIndexed((i, item) {
-                    return i == widget.currentIndex
+                  children: widget.items.entries.mapIndexed((i, item) {
+                    final child = item.value;
+
+                    return item.key == widget.routeName
                         ? Transform.translate(
                             offset: Offset(0, translateAnim.value),
                             child: Tooltip(
-                              message: item.tooltip,
+                              message: child.tooltip,
                               waitDuration: const Duration(milliseconds: 200),
                               child: FloatingActionButton(
                                 key: selectedKey,
@@ -139,17 +141,17 @@ class _CustomBottomNavigationBarState extends State<AppBottomNavigationBar>
                                 foregroundColor:
                                     widget.selectedIconColor ?? foregroundColor,
                                 elevation: .1,
-                                child: item.icon,
+                                child: child.icon,
                               ),
                             ),
                           )
                         : Tooltip(
-                            message: item.tooltip,
+                            message: child.tooltip,
                             waitDuration: const Duration(milliseconds: 200),
                             child: IconButton(
-                              onPressed: () => widget.onTap(i),
+                              onPressed: () => widget.onTap(item.key),
                               visualDensity: VisualDensity.comfortable,
-                              icon: item.icon,
+                              icon: child.icon,
                             ),
                           );
                   }).toList()),

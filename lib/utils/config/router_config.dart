@@ -1,6 +1,5 @@
 import 'dart:io';
 
-import 'package:collection/collection.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -101,31 +100,14 @@ class AppRouterConfig {
           ]);
 }
 
-//! //FIXME search better practices
 extension GoRouterExtension on GoRouter {
   /// Getter yo know if current route require authentication to show it
-  bool get requireAuth => !(state?.path ?? '').contains('/auth');
+  bool get requireAuth => !(state?.fullPath ?? '').contains('/auth');
 
   /// Get list of main routes on the [ShellRoute].
   List<RouteBase> get shellRoutes => configuration.routes
       .firstWhere((element) => element is ShellRoute)
       .routes;
-
-  /// Get list of sub routes on the [ShellRoute].
-  List<RouteBase>? get subShellRoutes => shellRoutes
-      .firstWhereOrNull(
-          (element) => (element as GoRoute).path.startsWith(state?.path ?? ''))
-      ?.routes;
-
-  /// Get index of the current [ShellRoute] displayed in Page.
-  /// Returns -1 if [element] is not found.
-  int get currentIndexShellRoute => shellRoutes.indexWhere((element) =>
-      (element as GoRoute).path == "/${(state?.path ?? '').split('/')[1]}");
-
-  /// Get the current [ShellRoute] displayed in Page.
-  RouteBase? get currentShellRoute => currentIndexShellRoute == -1
-      ? null
-      : shellRoutes.elementAtOrNull(currentIndexShellRoute);
 }
 
 class Nav {

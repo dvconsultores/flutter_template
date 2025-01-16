@@ -4,7 +4,6 @@ import 'package:flutter_detextre4/main_provider.dart';
 import 'package:flutter_detextre4/utils/config/router_config.dart';
 import 'package:flutter_detextre4/utils/general/context_utility.dart';
 import 'package:go_router/go_router.dart';
-import 'package:provider/provider.dart';
 
 class NavigationLayout extends StatefulWidget {
   const NavigationLayout(
@@ -30,16 +29,12 @@ class _NavigationLayoutState extends State<NavigationLayout> {
 
   @override
   void initState() {
-    mainProvider = context.read<MainProvider>();
+    mainProvider = MainProvider.read();
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    if (routerConfig.router.currentIndexShellRoute == -1) {
-      return const Scaffold(body: SizedBox.shrink());
-    }
-
     final items = {
       "profile": const BottomNavigationBarItem(
         label: "",
@@ -58,45 +53,23 @@ class _NavigationLayoutState extends State<NavigationLayout> {
       ),
     };
 
-    void handlerTapItem(BuildContext context, int index) {
+    void handlerTapItem(String routeName) {
       Navigator.popUntil(
         mainProvider.currentNavContext ?? ContextUtility.context!,
         (route) => route.isFirst,
       );
 
-      routerConfig.router.goNamed(items.entries.elementAt(index).key);
+      context.goNamed(routeName);
     }
 
-    return NavigationInherited(
+    return NavigationScreen(
       state: widget.state,
       items: items,
-      currentIndex: routerConfig.router.currentIndexShellRoute,
+      currentRoute: routerConfig.router.state?.topRoute,
       handlerTapItem: handlerTapItem,
       setScaffoldState: setScaffoldState,
-      child: NavigationScreen(
-        swipeNavigate: widget.swipeNavigate,
-        child: widget.child,
-      ),
+      swipeNavigate: widget.swipeNavigate,
+      child: widget.child,
     );
   }
-}
-
-class NavigationInherited extends InheritedWidget {
-  const NavigationInherited({
-    super.key,
-    required this.state,
-    required super.child,
-    required this.items,
-    required this.currentIndex,
-    required this.handlerTapItem,
-    required this.setScaffoldState,
-  });
-  final GoRouterState state;
-  final Map<String, BottomNavigationBarItem> items;
-  final int currentIndex;
-  final void Function(BuildContext context, int index) handlerTapItem;
-  final void Function(BuildContext context) setScaffoldState;
-
-  @override
-  bool updateShouldNotify(NavigationInherited oldWidget) => true;
 }

@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_detextre4/layouts/navigation_layout/navigation_layout.dart';
-import 'package:flutter_detextre4/utils/config/router_config.dart';
 import 'package:flutter_detextre4/utils/extensions/type_extensions.dart';
 import 'package:flutter_detextre4/widgets/defaults/bottom_navigation_bar.dart';
 import 'package:flutter_detextre4/widgets/defaults/drawer.dart';
@@ -11,41 +9,42 @@ class NavigationScreen extends StatelessWidget {
     super.key,
     required this.child,
     this.swipeNavigate = false,
+    required this.state,
+    required this.items,
+    required this.currentRoute,
+    required this.handlerTapItem,
+    required this.setScaffoldState,
   });
   final Widget child;
   final bool swipeNavigate;
+  final GoRouterState state;
+  final Map<String, BottomNavigationBarItem> items;
+  final GoRoute? currentRoute;
+  final void Function(String routeName) handlerTapItem;
+  final void Function(BuildContext context) setScaffoldState;
 
   @override
   Widget build(BuildContext context) {
-    final inherited =
-        context.getInheritedWidgetOfExactType<NavigationInherited>()!;
-
     return GestureDetector(
       onHorizontalDragUpdate: swipeNavigate
           ? (details) {
               // Note: Sensitivity is integer used when you don't want to mess up vertical drag
               int sensitivity = 8;
 
+              final navigationItems = items.keys.toList();
+
               // Right Swipe
               if (details.delta.dx > sensitivity) {
-                final index = routerConfig.router.currentIndexShellRoute == 0
-                    ? 0
-                    : routerConfig.router.currentIndexShellRoute - 1;
-                final previousRoute = routerConfig.router.shellRoutes
-                    .elementAtOrNull(index) as GoRoute?;
-
-                if (previousRoute != null) {
-                  context.go((previousRoute).path);
-                }
+                final index = navigationItems.indexOf(currentRoute?.name ?? '');
+                if (index > 0) context.goNamed(navigationItems[index - 1]);
 
                 // Left Swipe
               } else if (details.delta.dx < -sensitivity) {
-                final nextRoute = routerConfig.router.shellRoutes
-                        .elementAtOrNull(
-                            routerConfig.router.currentIndexShellRoute + 1)
-                    as GoRoute?;
+                final index = navigationItems.indexOf(currentRoute?.name ?? '');
 
-                if (nextRoute != null) routerConfig.router.go((nextRoute).path);
+                if (index < navigationItems.length) {
+                  context.goNamed(navigationItems[index + 1]);
+                }
               }
             }
           : null,
@@ -55,20 +54,15 @@ class NavigationScreen extends StatelessWidget {
           body: child,
           drawer: const AppDrawer(),
           appBar: AppBar(
-            title: Text(
-              inherited.items.entries
-                  .elementAt(routerConfig.router.currentIndexShellRoute)
-                  .key
-                  .toCapitalize(),
-            ),
+            title: Text(currentRoute?.name?.toCapitalize() ?? ''),
           ),
           bottomNavigationBar: Builder(builder: (context) {
-            inherited.setScaffoldState(context);
+            setScaffoldState(context);
 
             return AppBottomNavigationBar(
-              currentIndex: inherited.currentIndex,
-              onTap: (index) => inherited.handlerTapItem(context, index),
-              items: inherited.items.values.toList(),
+              routeName: currentRoute?.name,
+              onTap: (routeName) => handlerTapItem(routeName),
+              items: items,
             );
           }),
         ),
