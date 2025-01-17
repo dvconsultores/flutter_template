@@ -1,3 +1,4 @@
+import 'package:double_back_to_exit/double_back_to_exit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_detextre4/utils/extensions/type_extensions.dart';
 import 'package:flutter_detextre4/widgets/defaults/bottom_navigation_bar.dart';
@@ -25,6 +26,8 @@ class NavigationScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isHome = currentRoute?.name == 'home';
+
     return GestureDetector(
       onHorizontalDragUpdate: swipeNavigate
           ? (details) {
@@ -48,23 +51,34 @@ class NavigationScreen extends StatelessWidget {
               }
             }
           : null,
-      child: Material(
-        color: Colors.transparent,
-        child: Scaffold(
-          body: child,
-          drawer: const AppDrawer(),
-          appBar: AppBar(
-            title: Text(currentRoute?.name?.toCapitalize() ?? ''),
-          ),
-          bottomNavigationBar: Builder(builder: (context) {
-            setScaffoldState(context);
+      child: DoubleBackToExit(
+        mode: isHome ? DoubleBackMode.doublePop : DoubleBackMode.pop,
+        snackBarMessage: "Press again to leave",
+        onWillPop: () {
+          if (context.canPop()) {
+            context.pop();
+          } else if (!isHome) {
+            context.goNamed("home");
+          }
+        },
+        child: Material(
+          color: Colors.transparent,
+          child: Scaffold(
+            body: child,
+            drawer: const AppDrawer(),
+            appBar: AppBar(
+              title: Text(currentRoute?.name?.toCapitalize() ?? ''),
+            ),
+            bottomNavigationBar: Builder(builder: (context) {
+              setScaffoldState(context);
 
-            return AppBottomNavigationBar(
-              routeName: currentRoute?.name,
-              onTap: (routeName) => handlerTapItem(routeName),
-              items: items,
-            );
-          }),
+              return AppBottomNavigationBar(
+                routeName: currentRoute?.name,
+                onTap: (routeName) => handlerTapItem(routeName),
+                items: items,
+              );
+            }),
+          ),
         ),
       ),
     );

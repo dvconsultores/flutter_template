@@ -17,7 +17,6 @@ class HomeScreen extends StatelessWidget {
     final inherited = context.getInheritedWidgetOfExactType<HomeInherited>()!;
 
     return AppScaffold(
-      doubleBackToExit: true,
       body: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[

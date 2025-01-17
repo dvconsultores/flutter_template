@@ -2,7 +2,6 @@ import 'package:custom_refresh_indicator/custom_refresh_indicator.dart';
 import 'package:double_back_to_exit/double_back_to_exit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_detextre4/utils/general/variables.dart';
-import 'package:flutter_detextre4/utils/helper_widgets/will_pop_custom.dart';
 import 'package:flutter_detextre4/widgets/loaders/refresh_indicator.dart';
 import 'package:go_router/go_router.dart';
 
@@ -122,7 +121,7 @@ class AppScaffold extends StatelessWidget {
     this.textOnPullDown = "Pull to fetch more",
     this.onRefresh,
     this.onPullDown,
-    this.doubleBackToExit = false,
+    this.messageOnDoubleBack,
     this.goHomeOnBack = false,
     this.onPop,
     this.backgroundStack,
@@ -145,7 +144,7 @@ class AppScaffold extends StatelessWidget {
   final String textOnPullDown;
   final Future<void> Function()? onRefresh;
   final Future<void> Function()? onPullDown;
-  final bool doubleBackToExit;
+  final String? messageOnDoubleBack;
   final bool goHomeOnBack;
   final VoidCallback? onPop;
   final List<Positioned>? backgroundStack;
@@ -154,46 +153,41 @@ class AppScaffold extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return DoubleBackToExit(
-      enabled: doubleBackToExit,
-      snackBarMessage: "Press again to leave",
-      child: WillPopCustom(
-        enabled: !doubleBackToExit,
-        onWillPop: () {
-          if (onPop != null) {
-            onPop!();
-          } else if (goHomeOnBack) {
-            context.goNamed("home");
-          } else if (context.canPop()) {
-            context.pop();
-          } else {
-            return true;
-          }
-
-          return false;
-        },
-        child: Scaffold(
-          drawer: drawer,
-          appBar: appBar,
-          body: _BackgroundStyled(
-            padding: padding,
-            color: color,
-            gradient: gradient,
-            decorationImage: decorationImage,
-            scrollController: scrollController,
-            scrollable: scrollable,
-            indicatorController: indicatorController,
-            notificationPredicate: notificationPredicate,
-            offsetToArmed: offsetToArmed,
-            textOnPullDown: textOnPullDown,
-            onRefresh: onRefresh,
-            onPullDown: onPullDown,
-            backgroundStack: backgroundStack,
-            foregroundStack: foregroundStack,
-            child: body,
-          ),
-          bottomSheet: bottomWidget,
-          floatingActionButton: floatingActionButton,
+      mode: messageOnDoubleBack != null
+          ? DoubleBackMode.doublePop
+          : DoubleBackMode.pop,
+      snackBarMessage: messageOnDoubleBack ?? '',
+      onWillPop: () {
+        if (onPop != null) {
+          onPop!();
+        } else if (goHomeOnBack) {
+          context.goNamed("home");
+        } else if (context.canPop()) {
+          context.pop();
+        }
+      },
+      child: Scaffold(
+        drawer: drawer,
+        appBar: appBar,
+        body: _BackgroundStyled(
+          padding: padding,
+          color: color,
+          gradient: gradient,
+          decorationImage: decorationImage,
+          scrollController: scrollController,
+          scrollable: scrollable,
+          indicatorController: indicatorController,
+          notificationPredicate: notificationPredicate,
+          offsetToArmed: offsetToArmed,
+          textOnPullDown: textOnPullDown,
+          onRefresh: onRefresh,
+          onPullDown: onPullDown,
+          backgroundStack: backgroundStack,
+          foregroundStack: foregroundStack,
+          child: body,
         ),
+        bottomSheet: bottomWidget,
+        floatingActionButton: floatingActionButton,
       ),
     );
   }
