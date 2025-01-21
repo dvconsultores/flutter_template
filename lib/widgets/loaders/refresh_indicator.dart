@@ -5,6 +5,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter_detextre4/utils/config/theme.dart';
+import 'package:flutter_detextre4/utils/general/scroll_behavior.dart';
 import 'package:flutter_detextre4/utils/general/variables.dart';
 import 'package:flutter_detextre4/utils/painters/sky_painter.dart';
 import 'package:flutter_detextre4/utils/painters/triangule_painter.dart';
@@ -58,41 +59,46 @@ class AppRefreshIndicator extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return CustomRefreshIndicator(
-      autoRebuild: autoRebuild,
-      completeStateDuration: completeStateDuration,
-      containerExtentPercentageToArmed: containerExtentPercentageToArmed,
-      indicatorCancelDuration: indicatorCancelDuration,
-      indicatorFinalizeDuration: indicatorFinalizeDuration,
-      indicatorSettleDuration: indicatorSettleDuration,
-      onStateChanged: onStateChanged,
-      triggerMode: triggerMode,
-      notificationPredicate: notificationPredicate,
-      offsetToArmed: offsetToArmed,
-      controller: controller?.value,
-      builder: (context, child, localController) {
-        controller?.value = localController;
-        IndicatorController getController() =>
-            controller?.value ?? localController;
-        if (builder != null) return builder!(context, child, getController());
+    return ScrollConfiguration(
+      behavior: CustomScrollBehavior.of(context).copyWith(
+        physics: const ClampingScrollPhysics(),
+      ),
+      child: CustomRefreshIndicator(
+        autoRebuild: autoRebuild,
+        completeStateDuration: completeStateDuration,
+        containerExtentPercentageToArmed: containerExtentPercentageToArmed,
+        indicatorCancelDuration: indicatorCancelDuration,
+        indicatorFinalizeDuration: indicatorFinalizeDuration,
+        indicatorSettleDuration: indicatorSettleDuration,
+        onStateChanged: onStateChanged,
+        triggerMode: triggerMode,
+        notificationPredicate: notificationPredicate,
+        offsetToArmed: offsetToArmed,
+        controller: controller?.value,
+        builder: (context, child, localController) {
+          controller?.value = localController;
+          IndicatorController getController() =>
+              controller?.value ?? localController;
+          if (builder != null) return builder!(context, child, getController());
 
-        return MaterialIndicatorDelegate(
-          builder: (context, controller) => AnimatedOpacity(
-            duration: const Duration(milliseconds: 500),
-            opacity: controller.value.clamp(0, 1),
-            child: const Icon(
-              Icons.cached,
-              color: Colors.blue,
-              size: 30,
+          return MaterialIndicatorDelegate(
+            builder: (context, controller) => AnimatedOpacity(
+              duration: const Duration(milliseconds: 500),
+              opacity: controller.value.clamp(0, 1),
+              child: const Icon(
+                Icons.cached,
+                color: Colors.blue,
+                size: 30,
+              ),
             ),
-          ),
-        )(context, child, getController());
-      },
-      trailingScrollIndicatorVisible: trailingScrollIndicatorVisible,
-      leadingScrollIndicatorVisible: leadingScrollIndicatorVisible,
-      trigger: trigger,
-      onRefresh: onRefresh,
-      child: child,
+          )(context, child, getController());
+        },
+        trailingScrollIndicatorVisible: trailingScrollIndicatorVisible,
+        leadingScrollIndicatorVisible: leadingScrollIndicatorVisible,
+        trigger: trigger,
+        onRefresh: onRefresh,
+        child: child,
+      ),
     );
   }
 

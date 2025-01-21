@@ -8,6 +8,7 @@ import 'package:flutter_detextre4/utils/config/router_config.dart';
 import 'package:flutter_detextre4/utils/config/session_timeout_config.dart';
 import 'package:flutter_detextre4/utils/config/theme.dart';
 import 'package:flutter_detextre4/utils/general/context_utility.dart';
+import 'package:flutter_detextre4/utils/general/scroll_behavior.dart';
 import 'package:flutter_detextre4/utils/general/variables.dart';
 import 'package:flutter_detextre4/utils/helper_widgets/restart_widget.dart';
 import 'package:flutter_detextre4/utils/services/dio_service.dart';
@@ -90,6 +91,7 @@ class _AppState extends State<App> {
                   return MaterialFetching(
                     provider: value,
                     child: MaterialApp.router(
+                      scrollBehavior: CustomScrollBehavior.of(context),
                       scaffoldMessengerKey: ContextUtility.scaffoldMessengerKey,
                       locale: value.locale,
                       debugShowCheckedModeBanner: true,
