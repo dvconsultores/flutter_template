@@ -72,8 +72,11 @@ class AppRouterConfig {
             // * shell routes
             ShellRoute(
                 navigatorKey: ContextUtility.shellrouteKey,
-                builder: (context, state, child) =>
-                    NavigationLayout(state, child),
+                builder: (context, state, child) => NavigationLayout(
+                      state,
+                      child,
+                      routerConfig.router.state?.topRoute,
+                    ),
                 routes: [
                   GoRoute(
                     path: '/profile',
