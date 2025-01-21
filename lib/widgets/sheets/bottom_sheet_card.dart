@@ -1,6 +1,7 @@
 import 'package:collection/collection.dart';
 import 'package:easy_debounce/easy_debounce.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_detextre4/main_provider.dart';
 import 'package:flutter_detextre4/utils/config/theme.dart';
 import 'package:flutter_detextre4/utils/general/context_utility.dart';
 import 'package:flutter_detextre4/utils/general/variables.dart';
@@ -15,7 +16,7 @@ import 'package:flutter_gap/flutter_gap.dart';
 BoxConstraints _defaultConstraints(BuildContext context) =>
     BoxConstraints(maxWidth: Vars.getDesignSize(ContextUtility.context!).width);
 
-class BottomSheetCard extends StatelessWidget {
+class BottomSheetCard extends StatefulWidget {
   const BottomSheetCard({
     super.key,
     this.padding,
@@ -107,8 +108,27 @@ class BottomSheetCard extends StatelessWidget {
   }
 
   @override
+  State<BottomSheetCard> createState() => _BottomSheetCardState();
+}
+
+class _BottomSheetCardState extends State<BottomSheetCard> {
+  final mainProvider = MainProvider.read();
+
+  @override
+  void initState() {
+    mainProvider.setCurrentNavContext = context;
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    mainProvider.setCurrentNavContext = null;
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    final p = padding ??
+    final p = widget.padding ??
         EdgeInsets.only(
           top: Vars.gapXLarge,
           left: Vars.gapXLarge,
@@ -117,27 +137,27 @@ class BottomSheetCard extends StatelessWidget {
         );
 
     return DraggableScrollableSheet(
-      expand: expand,
-      initialChildSize: initialChildSize,
-      minChildSize: minChildSize,
-      maxChildSize: maxChildSize,
+      expand: widget.expand,
+      initialChildSize: widget.initialChildSize,
+      minChildSize: widget.minChildSize,
+      maxChildSize: widget.maxChildSize,
       builder: (context, scrollController) {
         final renderWidget = Column(children: [
           CustomPaint(
             size: const Size(double.maxFinite, 38),
-            painter: DraggableFramePainter(bgColor: backgroundColor),
+            painter: DraggableFramePainter(bgColor: widget.backgroundColor),
           ),
 
           // title
-          if (title != null) ...[
+          if (widget.title != null) ...[
             Gap(p.top).column,
-            title!,
-          ] else if (titleText != null)
+            widget.title!,
+          ] else if (widget.titleText != null)
             Padding(
                 padding: p.copyWith(bottom: Vars.gapLow),
                 child: Text(
-                  titleText!,
-                  style: titleStyle ??
+                  widget.titleText!,
+                  style: widget.titleStyle ??
                       const TextStyle(
                         fontWeight: FontWeight.w700,
                         fontSize: 18,
@@ -145,24 +165,25 @@ class BottomSheetCard extends StatelessWidget {
                 )),
 
           // content
-          if (scrollable)
+          if (widget.scrollable)
             Expanded(
               child: SingleChildScrollView(
                 controller: scrollController,
                 physics: const BouncingScrollPhysics(),
                 padding: p,
-                child: child,
+                child: widget.child,
               ),
             )
           else
-            Expanded(child: Padding(padding: p, child: child)),
+            Expanded(child: Padding(padding: p, child: widget.child)),
         ]);
 
-        return floatingActionButton != null || bottomWidget != null
+        return widget.floatingActionButton != null ||
+                widget.bottomWidget != null
             ? Scaffold(
-                floatingActionButton: floatingActionButton,
-                bottomNavigationBar: bottomWidget,
-                backgroundColor: backgroundColor,
+                floatingActionButton: widget.floatingActionButton,
+                bottomNavigationBar: widget.bottomWidget,
+                backgroundColor: widget.backgroundColor,
                 body: renderWidget,
               )
             : renderWidget;
@@ -306,6 +327,20 @@ class _BottomSheetListState<T> extends State<BottomSheetList<T>> {
         .whereIndexed((index, element) =>
             widget.searchFunction!(index, searchController.text))
         .toList();
+  }
+
+  final mainProvider = MainProvider.read();
+
+  @override
+  void initState() {
+    mainProvider.setCurrentNavContext = context;
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    mainProvider.setCurrentNavContext = null;
+    super.dispose();
   }
 
   @override
@@ -629,6 +664,20 @@ class _BottomSheetListMultipleState<T>
     Navigator.pop<List<T>>(context, selectedItems);
 
     if (widget.onComplete != null) widget.onComplete!(selectedItems);
+  }
+
+  final mainProvider = MainProvider.read();
+
+  @override
+  void initState() {
+    mainProvider.setCurrentNavContext = context;
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    mainProvider.setCurrentNavContext = null;
+    super.dispose();
   }
 
   @override

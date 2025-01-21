@@ -10,7 +10,7 @@ import 'package:flutter_detextre4/widgets/defaults/button.dart';
 import 'package:flutter_gap/flutter_gap.dart';
 import 'package:provider/provider.dart';
 
-class Modal extends StatelessWidget {
+class Modal extends StatefulWidget {
   const Modal({
     super.key,
     this.icon,
@@ -224,16 +224,35 @@ class Modal extends StatelessWidget {
   }
 
   @override
+  State<Modal> createState() => _ModalState();
+}
+
+class _ModalState extends State<Modal> {
+  final mainProvider = MainProvider.read();
+
+  @override
+  void initState() {
+    mainProvider.setCurrentNavContext = context;
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    mainProvider.setCurrentNavContext = null;
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     final colors = ThemeApp.of(context).colors;
 
-    final haveActions =
-            onPressedConfirmBtn != null || onPressedCancelBtn != null,
-        haveTitle = titleText != null,
-        haveContent = contentText != null,
-        haveIcon = icon != null;
+    final haveActions = widget.onPressedConfirmBtn != null ||
+            widget.onPressedCancelBtn != null,
+        haveTitle = widget.titleText != null,
+        haveContent = widget.contentText != null,
+        haveIcon = widget.icon != null;
 
-    final tp = titlePadding ??
+    final tp = widget.titlePadding ??
             Vars.paddingScaffold
                 .copyWith(
                   top: haveIcon ? 0 : null,
@@ -243,7 +262,7 @@ class Modal extends StatelessWidget {
                   top: haveIcon ? 0 : Vars.gapNormal,
                   bottom: haveContent || haveActions ? 0 : Vars.gapNormal,
                 )),
-        cp = contentPadding ??
+        cp = widget.contentPadding ??
             Vars.paddingScaffold
                 .copyWith(
                   top: Vars.gapXLarge,
@@ -254,74 +273,75 @@ class Modal extends StatelessWidget {
                   bottom: haveActions ? 0 : Vars.gapNormal,
                 ));
 
-    final boxConstraints = constraints ??
+    final boxConstraints = widget.constraints ??
         BoxConstraints(maxWidth: Vars.getDesignSize(context).width);
 
     // widgets
     final titleWidget = ConstrainedBox(
             constraints: boxConstraints,
-            child: title ??
-                (titleText != null
-                    ? Text(titleText!, textAlign: TextAlign.center)
+            child: widget.title ??
+                (widget.titleText != null
+                    ? Text(widget.titleText!, textAlign: TextAlign.center)
                     : null)),
         contentWidget = ConstrainedBox(
             constraints: boxConstraints,
-            child: content ??
-                (contentText != null
-                    ? Text(contentText!, textAlign: TextAlign.center)
+            child: widget.content ??
+                (widget.contentText != null
+                    ? Text(widget.contentText!, textAlign: TextAlign.center)
                     : null)),
-        actionWidgets = actions ??
+        actionWidgets = widget.actions ??
             [
-              if (onPressedCancelBtn != null)
+              if (widget.onPressedCancelBtn != null)
                 Expanded(
                   child: ButtonVariant(
-                    height: actionButtonsHeight,
-                    text: textCancelBtn ?? "Cancel",
+                    height: widget.actionButtonsHeight,
+                    text: widget.textCancelBtn ?? "Cancel",
                     textFitted: BoxFit.scaleDown,
                     borderRadius: const BorderRadius.all(
                       Radius.circular(Vars.radius12),
                     ),
                     borderSide: BorderSide(color: colors.primary),
                     color: colors.primary,
-                    onPressed: () => onPressedCancelBtn!(context),
+                    onPressed: () => widget.onPressedCancelBtn!(context),
                   ),
                 ),
-              if (onPressedCancelBtn != null && onPressedConfirmBtn != null)
+              if (widget.onPressedCancelBtn != null &&
+                  widget.onPressedConfirmBtn != null)
                 const Gap(Vars.gapXLarge),
-              if (onPressedConfirmBtn != null)
+              if (widget.onPressedConfirmBtn != null)
                 Expanded(
                   child: Button(
-                    height: actionButtonsHeight,
-                    disabled: disabled || loading,
-                    text: textConfirmBtn ?? "Continue",
+                    height: widget.actionButtonsHeight,
+                    disabled: widget.disabled || widget.loading,
+                    text: widget.textConfirmBtn ?? "Continue",
                     textFitted: BoxFit.scaleDown,
                     bgColor: colors.primary,
                     borderRadius: const BorderRadius.all(
                       Radius.circular(Vars.radius12),
                     ),
-                    onPressed: () => onPressedConfirmBtn!(context),
+                    onPressed: () => widget.onPressedConfirmBtn!(context),
                   ),
                 ),
             ];
 
     return AlertDialog(
-      backgroundColor: bgColor,
+      backgroundColor: widget.bgColor,
       shape: RoundedRectangleBorder(
-        borderRadius: borderRadius,
-        side: borderSide,
+        borderRadius: widget.borderRadius,
+        side: widget.borderSide,
       ),
-      elevation: elevation,
+      elevation: widget.elevation,
       iconPadding: const EdgeInsets.all(0),
-      insetPadding: insetPadding,
+      insetPadding: widget.insetPadding,
       titlePadding: tp,
       contentPadding: cp,
       clipBehavior: Clip.hardEdge,
-      actionsPadding: actionsPadding ??
+      actionsPadding: widget.actionsPadding ??
           Vars.paddingScaffold
               .copyWith(top: Vars.gapXLarge)
               .add(const EdgeInsets.only(bottom: Vars.gapNormal)),
       icon: Column(children: [
-        if (loading)
+        if (widget.loading)
           LinearProgressIndicator(
             color: colors.primary,
             backgroundColor: colors.secondary,
@@ -329,24 +349,25 @@ class Modal extends StatelessWidget {
             borderRadius:
                 const BorderRadius.all(Radius.circular(Vars.radius30)),
           ),
-        if (icon != null)
+        if (widget.icon != null)
           Padding(
-            padding: iconPadding ??
+            padding: widget.iconPadding ??
                 Vars.paddingScaffold
                     .copyWith(bottom: Vars.gapXLarge)
                     .add(const EdgeInsets.only(top: Vars.gapNormal)),
-            child: icon,
+            child: widget.icon,
           ),
       ]),
-      iconColor: iconColor ?? colors.text,
+      iconColor: widget.iconColor ?? colors.text,
       title: titleWidget,
-      content:
-          shrinkWrap ? IntrinsicHeight(child: contentWidget) : contentWidget,
+      content: widget.shrinkWrap
+          ? IntrinsicHeight(child: contentWidget)
+          : contentWidget,
       alignment: Alignment.center,
       actionsAlignment: MainAxisAlignment.center,
       actions: actionWidgets.isNotEmpty
           ? [
-              actionsDirection == Axis.horizontal
+              widget.actionsDirection == Axis.horizontal
                   ? Row(children: actionWidgets)
                   : IntrinsicHeight(child: Column(children: actionWidgets))
             ]

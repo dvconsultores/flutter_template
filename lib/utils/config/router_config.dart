@@ -37,6 +37,15 @@ class AppRouterConfig {
           //   return const ErrorPage();
           // },
           redirect: (context, state) async {
+            final mainProvider = MainProvider.read(context);
+            if (mainProvider.currentNavContext != null &&
+                mainProvider.currentNavContext!.mounted) {
+              Navigator.popUntil(
+                mainProvider.currentNavContext!,
+                (route) => route.isFirst,
+              );
+            }
+
             final location = state.path ?? '';
 
             final isLogged = (await SecureStorage.read<String?>(

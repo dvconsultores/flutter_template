@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_detextre4/layouts/navigation_layout/navigation_screen.dart';
 import 'package:flutter_detextre4/main_provider.dart';
-import 'package:flutter_detextre4/utils/general/context_utility.dart';
 import 'package:go_router/go_router.dart';
 
 class NavigationLayout extends StatefulWidget {
@@ -57,11 +56,6 @@ class _NavigationLayoutState extends State<NavigationLayout> {
     };
 
     void handlerTapItem(String routeName) {
-      Navigator.popUntil(
-        mainProvider.currentNavContext ?? ContextUtility.context!,
-        (route) => route.isFirst,
-      );
-
       context.goNamed(routeName);
     }
 
