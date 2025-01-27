@@ -121,12 +121,6 @@ class _BottomSheetCardState extends State<BottomSheetCard> {
   }
 
   @override
-  void dispose() {
-    mainProvider.setCurrentNavContext = null;
-    super.dispose();
-  }
-
-  @override
   Widget build(BuildContext context) {
     final p = widget.padding ??
         EdgeInsets.only(
@@ -335,12 +329,6 @@ class _BottomSheetListState<T> extends State<BottomSheetList<T>> {
   void initState() {
     mainProvider.setCurrentNavContext = context;
     super.initState();
-  }
-
-  @override
-  void dispose() {
-    mainProvider.setCurrentNavContext = null;
-    super.dispose();
   }
 
   @override
@@ -672,12 +660,6 @@ class _BottomSheetListMultipleState<T>
   void initState() {
     mainProvider.setCurrentNavContext = context;
     super.initState();
-  }
-
-  @override
-  void dispose() {
-    mainProvider.setCurrentNavContext = null;
-    super.dispose();
   }
 
   @override

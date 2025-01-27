@@ -127,20 +127,15 @@ class Nav {
   static Future<T?> push<T extends Object?>(
     BuildContext context, {
     required Widget page,
-    bool hideBottomNavigationBar = false,
   }) async {
-    final mainProvider = context.read<MainProvider>();
-    mainProvider.setCurrentNavContext = context;
+    ContextUtility.context!.read<MainProvider>().setCurrentNavContext = context;
 
-    final value = await Navigator.push<T>(
+    return await Navigator.push<T>(
       context,
       !kIsWeb && Platform.isIOS
           ? CupertinoPageRoute(builder: (context) => page)
           : MaterialPageRoute(builder: (context) => page),
     );
-
-    mainProvider.setCurrentNavContext = null;
-    return value;
   }
 
   @optionalTypeArgs
@@ -148,40 +143,30 @@ class Nav {
     BuildContext context, {
     required Widget page,
     required RoutePredicate predicate,
-    bool hideBottomNavigationBar = false,
   }) async {
-    final mainProvider = context.read<MainProvider>();
-    mainProvider.setCurrentNavContext = context;
+    ContextUtility.context!.read<MainProvider>().setCurrentNavContext = context;
 
-    final value = await Navigator.pushAndRemoveUntil(
+    return await Navigator.pushAndRemoveUntil(
       context,
       !kIsWeb && Platform.isIOS
           ? CupertinoPageRoute(builder: (context) => page)
           : MaterialPageRoute(builder: (context) => page),
       predicate,
     );
-
-    mainProvider.setCurrentNavContext = null;
-    return value;
   }
 
   @optionalTypeArgs
   static Future<T?> pushReplacement<T extends Object?>(
     BuildContext context, {
     required Widget page,
-    bool hideBottomNavigationBar = false,
   }) async {
-    final mainProvider = context.read<MainProvider>();
-    mainProvider.setCurrentNavContext = context;
+    ContextUtility.context!.read<MainProvider>().setCurrentNavContext = context;
 
-    final value = await Navigator.pushReplacement(
+    return await Navigator.pushReplacement(
       context,
       !kIsWeb && Platform.isIOS
           ? CupertinoPageRoute(builder: (context) => page)
           : MaterialPageRoute(builder: (context) => page),
     );
-
-    mainProvider.setCurrentNavContext = null;
-    return value;
   }
 }

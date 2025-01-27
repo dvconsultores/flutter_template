@@ -237,12 +237,6 @@ class _ModalState extends State<Modal> {
   }
 
   @override
-  void dispose() {
-    mainProvider.setCurrentNavContext = null;
-    super.dispose();
-  }
-
-  @override
   Widget build(BuildContext context) {
     final colors = ThemeApp.of(context).colors;
 

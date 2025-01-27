@@ -49,19 +49,6 @@ class MainProvider extends ChangeNotifier {
     currentNavContext = context;
   }
 
-  static Future<T?> setContext<T extends Object?>(
-    BuildContext context,
-    Future<T?> callback,
-  ) async {
-    final mainProvider = ContextUtility.context!.read<MainProvider>();
-    mainProvider.setCurrentNavContext = context;
-
-    final value = await callback;
-
-    mainProvider.setCurrentNavContext = null;
-    return value;
-  }
-
   // ? ------------------------Snackbar Provider----------------------------- //
   final List<Flushbar> snackbars = [];
 
