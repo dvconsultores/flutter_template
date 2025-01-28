@@ -448,6 +448,12 @@ extension DoubleExtension on double {
   }
 }
 
+// ? Nullable Color extension
+extension NullableColorExtension on Color? {
+  /// Turn current [Color] value to Hexadecimal.
+  String? toHexadecimal() => this != null ? toString() : null;
+}
+
 // ? Nullable string extension
 extension NullableStringExtension on String? {
   /// Getter to know if String is not `null` or is not [Empty].
@@ -486,6 +492,10 @@ extension NullableStringExtension on String? {
 
     return this!.split(path ?? env.fileApiUrl)[1];
   }
+
+  /// Turn current Hexadecimal value to [Color].
+  Color? hexadecimalToColor() =>
+      this != null ? Color(this!.replaceFirst('#', '0xff').toInt()) : null;
 }
 
 // ? String extension
