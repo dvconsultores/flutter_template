@@ -96,18 +96,29 @@ extension DurationExtension on Duration {
     return "${showHours ? '${twoDigits(hours)}:' : ''}$twoDigitMinutes${showSeconds ? ':$twoDigitSeconds' : ''}";
   }
 
-  String formatToString() {
-    int minutes = inMinutes.remainder(60), seconds = inSeconds.remainder(60);
+  String formatToString({int units = 3}) {
+    int hours = inHours,
+        minutes = inMinutes.remainder(60),
+        seconds = inSeconds.remainder(60);
 
-    // ? seconds
-    if (inHours == 0 && inMinutes == 0) {
-      return "${seconds}seg";
-      // ? minutes
-    } else if (inHours == 0) {
-      return "${minutes}min ${seconds == 0 ? '' : '${seconds}seg'}";
+    List<String> parts = [];
+
+    // Add hours
+    if (hours > 0 && units >= 1) {
+      parts.add("${hours}h");
+      units--; // reduce remnants units
     }
-    // ? hours
-    return "${inHours}h ${minutes == 0 ? '' : '${minutes}min'} ${seconds == 0 ? '' : '${seconds}seg'}";
+
+    // Añadir minutos
+    if (minutes > 0 && units >= 1) {
+      parts.add("${minutes}min");
+      units--; // reduce remnants units
+    }
+
+    // Add seconds
+    if (seconds > 0 && units >= 1) parts.add("${seconds}seg");
+
+    return parts.join(" ");
   }
 }
 
