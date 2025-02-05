@@ -19,6 +19,16 @@ mixin Vars {
   static Size getDesignSize(BuildContext context) =>
       context.width.isMobile ? Vars.mobileSize : Vars.desktopSize;
 
+  static double textScalerFactor(BuildContext context, MediaQueryData media) =>
+      media.size.width.clampMapRanged(
+        minRange: context.width.tablet,
+        maxRange: context.width.desktop,
+        minValue: .8,
+        maxValue: 1,
+      );
+
+  static const double desktopScaffoldMaxWidth = 1000;
+
   static const bottomNavbarHeight = 75.0;
 
   static const double buttonHeight = 45;

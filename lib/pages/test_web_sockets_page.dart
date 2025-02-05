@@ -3,6 +3,7 @@ import 'package:flutter_detextre4/blocs/main_bloc.dart';
 import 'package:flutter_detextre4/utils/general/variables.dart';
 import 'package:flutter_detextre4/widgets/defaults/scaffold.dart';
 import 'package:generic_bloc_provider/generic_bloc_provider.dart';
+import 'package:go_router/go_router.dart';
 import 'package:web_socket_channel/web_socket_channel.dart';
 
 class TestWebSocketsPage extends StatefulWidget {
@@ -27,7 +28,12 @@ class _TestWebSocketsPageState extends State<TestWebSocketsPage> {
   @override
   Widget build(BuildContext context) {
     return AppScaffold(
-      appBar: AppBar(),
+      appBar: AppBar(
+        leading: IconButton(
+          onPressed: context.pop,
+          icon: Icon(Icons.arrow_back_rounded),
+        ),
+      ),
       body: StreamBuilder(
           stream: getChannelStream,
           builder: (BuildContext context, snapshot) {

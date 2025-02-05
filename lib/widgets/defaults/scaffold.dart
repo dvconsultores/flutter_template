@@ -1,7 +1,7 @@
 import 'package:custom_refresh_indicator/custom_refresh_indicator.dart';
-import 'package:double_back_to_exit/double_back_to_exit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_detextre4/utils/general/variables.dart';
+import 'package:flutter_detextre4/utils/helper_widgets/will_pop_custom.dart';
 import 'package:flutter_detextre4/widgets/loaders/refresh_indicator.dart';
 import 'package:go_router/go_router.dart';
 
@@ -23,6 +23,7 @@ class _BackgroundStyled extends StatelessWidget {
     this.onPullDown,
     this.backgroundStack,
     this.foregroundStack,
+    required this.constraints,
   });
   final EdgeInsetsGeometry? padding;
   final Color? color;
@@ -39,14 +40,18 @@ class _BackgroundStyled extends StatelessWidget {
   final List<Positioned>? backgroundStack;
   final List<Positioned>? foregroundStack;
   final Widget child;
+  final BoxConstraints constraints;
 
   @override
   Widget build(BuildContext context) {
     final c = color ?? Theme.of(context).scaffoldBackgroundColor;
 
-    final body = Padding(
-          padding: padding ?? Vars.paddingScaffold,
-          child: child,
+    final body = ConstrainedBox(
+          constraints: constraints,
+          child: Padding(
+            padding: padding ?? Vars.paddingScaffold,
+            child: child,
+          ),
         ),
         bodyScrollable = SingleChildScrollView(
           controller: scrollController,
@@ -84,18 +89,23 @@ class _BackgroundStyled extends StatelessWidget {
     }
 
     return SafeArea(
-      child: Stack(fit: StackFit.expand, children: [
-        Positioned.fill(
-            child: Container(
-                decoration: BoxDecoration(
-          color: c,
-          gradient: gradient,
-          image: decorationImage,
-        ))),
-        if (backgroundStack != null) ...backgroundStack!,
-        renderBody(),
-        if (foregroundStack != null) ...foregroundStack!,
-      ]),
+      child: SizedBox(
+        width: double.maxFinite,
+        child: Stack(alignment: Alignment.center, children: [
+          Positioned.fill(
+            child: DecoratedBox(
+              decoration: BoxDecoration(
+                color: c,
+                gradient: gradient,
+                image: decorationImage,
+              ),
+            ),
+          ),
+          if (backgroundStack != null) ...backgroundStack!,
+          renderBody(),
+          if (foregroundStack != null) ...foregroundStack!,
+        ]),
+      ),
     );
   }
 }
@@ -121,11 +131,11 @@ class AppScaffold extends StatelessWidget {
     this.textOnPullDown = "Pull to fetch more",
     this.onRefresh,
     this.onPullDown,
-    this.messageOnDoubleBack,
     this.goHomeOnBack = false,
     this.onPop,
     this.backgroundStack,
     this.foregroundStack,
+    this.maxWidth = Vars.desktopScaffoldMaxWidth,
   });
   final Widget? drawer;
   final PreferredSizeWidget? appBar;
@@ -144,20 +154,18 @@ class AppScaffold extends StatelessWidget {
   final String textOnPullDown;
   final Future<void> Function()? onRefresh;
   final Future<void> Function()? onPullDown;
-  final String? messageOnDoubleBack;
   final bool goHomeOnBack;
   final VoidCallback? onPop;
   final List<Positioned>? backgroundStack;
   final List<Positioned>? foregroundStack;
+  final double? maxWidth;
 
   @override
   Widget build(BuildContext context) {
-    return DoubleBackToExit(
-      mode: messageOnDoubleBack != null
-          ? DoubleBackMode.doublePop
-          : DoubleBackMode.pop,
-      snackBarMessage: messageOnDoubleBack ?? '',
-      onWillPop: () {
+    final constraints = BoxConstraints(maxWidth: maxWidth ?? double.maxFinite);
+
+    return WillPopCustom(
+      onWillPop: () async {
         if (onPop != null) {
           onPop!();
         } else if (goHomeOnBack) {
@@ -165,6 +173,8 @@ class AppScaffold extends StatelessWidget {
         } else if (context.canPop()) {
           context.pop();
         }
+
+        return false;
       },
       child: Scaffold(
         drawer: drawer,
@@ -184,9 +194,16 @@ class AppScaffold extends StatelessWidget {
           onPullDown: onPullDown,
           backgroundStack: backgroundStack,
           foregroundStack: foregroundStack,
+          constraints: constraints,
           child: body,
         ),
-        bottomSheet: bottomWidget,
+        bottomSheet: Center(
+          heightFactor: 1,
+          child: ConstrainedBox(
+            constraints: constraints,
+            child: bottomWidget,
+          ),
+        ),
         floatingActionButton: floatingActionButton,
       ),
     );
