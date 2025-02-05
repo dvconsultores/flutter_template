@@ -238,7 +238,7 @@ class _ModalState extends State<Modal> {
 
   @override
   Widget build(BuildContext context) {
-    final colors = ThemeApp.of(context).colors;
+    final themeApp = ThemeApp.of(context);
 
     final haveActions = widget.onPressedConfirmBtn != null ||
             widget.onPressedCancelBtn != null,
@@ -281,7 +281,11 @@ class _ModalState extends State<Modal> {
             constraints: boxConstraints,
             child: widget.content ??
                 (widget.contentText != null
-                    ? Text(widget.contentText!, textAlign: TextAlign.center)
+                    ? Text(
+                        widget.contentText!,
+                        textAlign: TextAlign.center,
+                        style: themeApp.textTheme.bodyMedium,
+                      )
                     : null)),
         actionWidgets = widget.actions ??
             [
@@ -294,8 +298,8 @@ class _ModalState extends State<Modal> {
                     borderRadius: const BorderRadius.all(
                       Radius.circular(Vars.radius12),
                     ),
-                    borderSide: BorderSide(color: colors.primary),
-                    color: colors.primary,
+                    borderSide: BorderSide(color: themeApp.colors.primary),
+                    color: themeApp.colors.primary,
                     onPressed: () => widget.onPressedCancelBtn!(context),
                   ),
                 ),
@@ -309,7 +313,7 @@ class _ModalState extends State<Modal> {
                     disabled: widget.disabled || widget.loading,
                     text: widget.textConfirmBtn ?? "Continue",
                     textFitted: BoxFit.scaleDown,
-                    bgColor: colors.primary,
+                    bgColor: themeApp.colors.primary,
                     borderRadius: const BorderRadius.all(
                       Radius.circular(Vars.radius12),
                     ),
@@ -337,8 +341,8 @@ class _ModalState extends State<Modal> {
       icon: Column(children: [
         if (widget.loading)
           LinearProgressIndicator(
-            color: colors.primary,
-            backgroundColor: colors.secondary,
+            color: themeApp.colors.primary,
+            backgroundColor: themeApp.colors.secondary,
             minHeight: 5,
             borderRadius:
                 const BorderRadius.all(Radius.circular(Vars.radius30)),
@@ -352,7 +356,7 @@ class _ModalState extends State<Modal> {
             child: widget.icon,
           ),
       ]),
-      iconColor: widget.iconColor ?? colors.text,
+      iconColor: widget.iconColor ?? themeApp.colors.text,
       title: titleWidget,
       content: widget.shrinkWrap
           ? IntrinsicHeight(child: contentWidget)
