@@ -96,27 +96,72 @@ extension DurationExtension on Duration {
     return "${showHours ? '${twoDigits(hours)}:' : ''}$twoDigitMinutes${showSeconds ? ':$twoDigitSeconds' : ''}";
   }
 
-  String formatToString({int units = 3}) {
-    int hours = inHours,
+  String formatToString({int units = 3, String locale = 'es'}) {
+    int years = inDays ~/ 365,
+        months = (inDays % 365) ~/ 30,
+        days = (inDays % 365) % 30,
+        hours = inHours.remainder(24),
         minutes = inMinutes.remainder(60),
         seconds = inSeconds.remainder(60);
 
     List<String> parts = [];
 
-    // Add hours
-    if (hours > 0 && units >= 1) {
-      parts.add("${hours}h");
-      units--; // reduce remnants units
+    // Function to get the name of the unit based on locale
+    getUnitName(String unit, int value) => switch (locale) {
+          'es' => switch (unit) {
+              'year' => value == 1 ? 'año' : 'años',
+              'month' => value == 1 ? 'mes' : 'meses',
+              'day' => value == 1 ? 'día' : 'días',
+              'hour' => 'h',
+              'minute' => 'min',
+              'second' => 'seg',
+              _ => unit,
+            },
+          String() => switch (unit) {
+              'year' => value == 1 ? 'year' : 'years',
+              'month' => value == 1 ? 'month' : 'months',
+              'day' => value == 1 ? 'day' : 'days',
+              'hour' => 'h',
+              'minute' => 'min',
+              'second' => 'sec',
+              _ => unit,
+            },
+        };
+
+    // Add years
+    if (years > 0 && units >= 1) {
+      parts.add("$years ${getUnitName('year', years)}");
+      units--;
     }
 
-    // Añadir minutos
+    // Add months
+    if (months > 0 && units >= 1) {
+      parts.add("$months ${getUnitName('month', months)}");
+      units--;
+    }
+
+    // Add days
+    if (days > 0 && units >= 1) {
+      parts.add("$days ${getUnitName('day', days)}");
+      units--;
+    }
+
+    // Add hours
+    if (hours > 0 && units >= 1) {
+      parts.add("$hours${getUnitName('hour', hours)}");
+      units--;
+    }
+
+    // Add minutes
     if (minutes > 0 && units >= 1) {
-      parts.add("${minutes}min");
-      units--; // reduce remnants units
+      parts.add("$minutes${getUnitName('minute', minutes)}");
+      units--;
     }
 
     // Add seconds
-    if (seconds > 0 && units >= 1) parts.add("${seconds}seg");
+    if (seconds > 0 && units >= 1) {
+      parts.add("$seconds${getUnitName('second', seconds)}");
+    }
 
     return parts.join(" ");
   }
