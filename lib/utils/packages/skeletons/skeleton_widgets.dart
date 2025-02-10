@@ -5,10 +5,10 @@ import 'package:flutter/material.dart';
 import 'skeleton_shimmer.dart';
 import 'skeleton_stylings.dart';
 
-export './skeleton_shimmer.dart';
-export './skeleton_stylings.dart';
-export './skeleton_theme.dart';
-export './skeleton_widgets.dart';
+export 'skeleton_shimmer.dart';
+export 'skeleton_stylings.dart';
+export 'skeleton_theme.dart';
+export 'skeleton_widgets.dart';
 
 part 'skeleton.dart';
 

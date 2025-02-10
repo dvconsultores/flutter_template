@@ -2,7 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_detextre4/utils/config/theme.dart';
 import 'package:flutter_detextre4/utils/general/context_utility.dart';
-import 'package:flutter_detextre4/utils/skeletons/skeleton_widgets.dart';
+import 'package:flutter_detextre4/utils/packages/skeletons/skeleton_widgets.dart';
 
 // ? text extension
 extension TextExtension on Text {
