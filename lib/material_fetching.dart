@@ -88,7 +88,7 @@ class _MaterialFetchingState extends State<MaterialFetching>
           error.type == DioExceptionType.connectionError) {
         await Modal.showSystemAlert(
           ContextUtility.context!,
-          titleText: errorMessage,
+          contentText: errorMessage,
           textConfirmBtn: "Okay",
         );
         return;

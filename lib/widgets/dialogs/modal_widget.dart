@@ -174,7 +174,9 @@ class Modal extends StatefulWidget {
     Key? key,
     Widget? icon,
     Color? iconColor,
+    Widget Function(TextStyle style)? title,
     String? titleText,
+    Widget Function(TextStyle style)? content,
     String? contentText,
     String? textConfirmBtn,
     String? textCancelBtn,
@@ -188,15 +190,46 @@ class Modal extends StatefulWidget {
     if (mainProvider.preventModal) return null;
     mainProvider.setPreventModal = true;
 
+    final themeApp = ThemeApp.of(context);
+
+    final haveActions =
+            onPressedConfirmBtn != null || onPressedCancelBtn != null,
+        haveTitle = titleText != null || title != null,
+        haveContent = contentText != null || content != null;
+
+    final ts =
+        themeApp.textTheme.titleSmall!.copyWith(fontWeight: FontWeight.w600);
+    final cs = themeApp.textTheme.bodyMedium!.copyWith(fontSize: 15);
+
     final value = await showModal<bool>(
       context,
       key: key,
       barrierDismissible: dismissible,
       barrierColor: barrierColor,
+      borderSide: BorderSide(color: themeApp.colors.secondary, width: 2),
       icon: icon,
       iconColor: iconColor,
-      titleText: titleText,
-      contentText: contentText,
+      title: title != null
+          ? title(ts)
+          : Column(children: [
+              Text(
+                titleText ?? "Notificación del sistema",
+                style: ts,
+              ),
+              if (haveContent) ...[Gap(Vars.gapXLow).column, Divider()],
+            ]),
+      content: content != null
+          ? content(cs)
+          : (contentText != null ? Text(contentText, style: cs) : null),
+      contentPadding: Vars.paddingScaffold
+          .copyWith(
+            top: Vars.gapNormal,
+            bottom:
+                haveActions ? Vars.gapNormal : Vars.gapXLarge + Vars.gapNormal,
+          )
+          .add(EdgeInsets.only(
+            top: haveTitle ? 0 : Vars.gapNormal,
+          )),
       textConfirmBtn: textConfirmBtn,
       textCancelBtn: textCancelBtn,
       onPressedCancelBtn: onPressedCancelBtn ??
@@ -242,8 +275,8 @@ class _ModalState extends State<Modal> {
 
     final haveActions = widget.onPressedConfirmBtn != null ||
             widget.onPressedCancelBtn != null,
-        haveTitle = widget.titleText != null,
-        haveContent = widget.contentText != null,
+        haveTitle = widget.titleText != null || widget.title != null,
+        haveContent = widget.contentText != null || widget.content != null,
         haveIcon = widget.icon != null;
 
     final tp = widget.titlePadding ??
@@ -260,11 +293,10 @@ class _ModalState extends State<Modal> {
             Vars.paddingScaffold
                 .copyWith(
                   top: Vars.gapXLarge,
-                  bottom: haveActions ? 0 : Vars.gapXLarge,
+                  bottom: haveActions ? 0 : Vars.gapXLarge + Vars.gapNormal,
                 )
                 .add(EdgeInsets.only(
                   top: haveTitle ? 0 : Vars.gapNormal,
-                  bottom: haveActions ? 0 : Vars.gapNormal,
                 ));
 
     final boxConstraints = widget.constraints ??

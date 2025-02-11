@@ -18,7 +18,7 @@ class MainProvider extends ChangeNotifier {
 
   // ? -------------------------Global variables----------------------------- //
   bool appStarted = false;
-  get setAppStarted {
+  void get setAppStarted {
     if (appStarted) return;
 
     appStarted = true;
