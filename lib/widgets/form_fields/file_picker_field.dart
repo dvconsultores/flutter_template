@@ -238,6 +238,7 @@ class _FilePickerFieldState extends State<FilePickerField>
                               height: widget.height,
                               clipBehavior: Clip.antiAlias,
                               decoration: BoxDecoration(
+                                color: widget.color,
                                 borderRadius: widget.borderRadius,
                                 border: Border.fromBorderSide(
                                   widget.disabled
