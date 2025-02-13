@@ -84,7 +84,7 @@ class AppRouterConfig {
                 builder: (context, state, child) => NavigationLayout(
                       state,
                       child,
-                      routerConfig.router.state?.topRoute,
+                      routerConfig.router.state.topRoute,
                     ),
                 routes: [
                   GoRoute(
@@ -114,7 +114,7 @@ class AppRouterConfig {
 
 extension GoRouterExtension on GoRouter {
   /// Getter yo know if current route require authentication to show it
-  bool get requireAuth => !(state?.fullPath ?? '').contains('/auth');
+  bool get requireAuth => !(state.fullPath ?? '').contains('/auth');
 
   /// Get list of main routes on the [ShellRoute].
   List<RouteBase> get shellRoutes => configuration.routes

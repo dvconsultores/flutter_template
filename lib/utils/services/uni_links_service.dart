@@ -2,13 +2,14 @@ import 'dart:async';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/scheduler.dart';
+import 'package:flutter_detextre4/utils/services/local_data/env_service.dart';
 import 'package:uni_links/uni_links.dart';
 
 enum UniLinksKey {
-  testKey(null);
+  testKey("true");
 
-  const UniLinksKey(this.value);
-  final String? value;
+  const UniLinksKey(this.defaultParameter);
+  final String defaultParameter;
 }
 
 enum UniLinksTypeHandler {
@@ -79,4 +80,7 @@ class UniLinksService {
       }
     });
   }
+
+  static String getDeepLink(UniLinksKey key, [dynamic value]) =>
+      '${env.deepLinkBaseUrl}/?${key.name}=${value ?? key.defaultParameter}';
 }

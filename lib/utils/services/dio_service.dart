@@ -52,7 +52,7 @@ class DioService {
 
   // * set configuration
   static void init() {
-    dio.options.baseUrl = env.baseUrl;
+    dio.options.baseUrl = env.apiUrl;
     // ..connectTimeout = const Duration(seconds: 5)
     // ..receiveTimeout = const Duration(seconds: 3);
 

@@ -523,32 +523,6 @@ extension NullableStringExtension on String? {
 
   String removeQuery() => this?.split('?')[0] ?? '';
 
-  /// Add Custom network base url path to `string`.
-  ///
-  /// normally must to end without slash `/`.
-  String? addNetworkPath({String? path}) {
-    if (this == null) return null;
-    if (hasNetworkPath) {
-      debugPrint("$this - already has scheme ⭕");
-      return this;
-    }
-
-    return "${path ?? env.fileApiUrl}$this";
-  }
-
-  /// Remove Custom network base url path to `string`.
-  ///
-  /// normally must to end without slash [/].
-  String? removeNetworkPath({String? path}) {
-    if (this == null) return null;
-    if (hasNetworkPath) {
-      debugPrint("$this - haven't scheme ⭕");
-      return this;
-    }
-
-    return this!.split(path ?? env.fileApiUrl)[1];
-  }
-
   /// Turn current Hexadecimal value to [Color].
   Color? hexadecimalToColor() =>
       this != null ? Color(this!.replaceFirst('#', '0xff').toInt()) : null;

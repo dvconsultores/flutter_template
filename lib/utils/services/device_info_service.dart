@@ -50,6 +50,9 @@ class DeviceInfo {
   /// IOS module info
   static final ios = _IOS(instance);
 
+  /// Web module info
+  static final web = _Web(instance);
+
   /// Getter to device [PhysicalMemory] using [DiskSpace] package
   static Future<PhysicalMemory> get physicalMemory async =>
       PhysicalMemory.fromDouble(await DiskSpace.getFreeDiskSpace);
@@ -82,7 +85,7 @@ class _Android {
 
   /// Display device information
   Future<String> info() async {
-    if (!kIsWeb && !io.Platform.isAndroid) throw "Android device not founded";
+    assert(kIsWeb && !io.Platform.isAndroid, "Android device not found");
 
     final value =
         'Android ${await release} (SDK ${await sdkInt}), ${await manufacturer} ${await model}';
@@ -122,11 +125,66 @@ class _IOS {
 
   /// Display device information
   Future<String> ios() async {
-    if (!kIsWeb && !io.Platform.isIOS) throw "IOS device not founded";
+    assert(io.Platform.isIOS, "IOS device not found");
 
     final value =
         '${await systemName} ${await version}, ${await name} ${await model}';
     debugPrint(value); // iOS 13.1, iPhone 11 Pro Max iPhone
     return value;
+  }
+}
+
+class _Web {
+  _Web(this._instance);
+  final DeviceInfoPlugin _instance;
+
+  /// Information derived from `UIDevice`.
+  ///
+  /// See: https://developer.apple.com/documentation/uikit/uidevice
+  late final instance = _instance.webBrowserInfo;
+
+  /// The name of the current operating system.
+  /// https://developer.apple.com/documentation/uikit/uidevice/1620054-systemname
+  late final systemName = instance.then((value) => value.browserName.name);
+
+  /// The current operating system version.
+  /// https://developer.apple.com/documentation/uikit/uidevice/1620043-systemversion
+  late final version = instance.then((value) => value.appVersion);
+
+  /// Device name.
+  ///
+  /// On iOS < 16 returns user-assigned device name
+  /// On iOS >= 16 returns a generic device name if project has
+  /// no entitlement to get user-assigned device name.
+  /// https://developer.apple.com/documentation/uikit/uidevice/1620015-name
+  late final name = instance.then((value) => value.appName);
+
+  late final platform = instance.then((value) => value.platform);
+
+  late final userAgent = instance.then((value) => value.userAgent);
+
+  /// Display device information
+  Future<String> web() async {
+    assert(kIsWeb, "Web platform not found");
+
+    final value =
+        '${await systemName} ${await version}, ${await name}, platform: ${await platform}, userAgent: ${await userAgent}';
+    debugPrint(value);
+    // edge 5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/133.0.0.0 Safari/537.36 Edg/133.0.0.0, Netscape, platform: Win32, userAgent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/133.0.0.0 Safari/537.36 Edg/133.0.0.0
+    return value;
+  }
+
+  /// get the [TargetPlatform] from current device
+  ///
+  /// if returns [null] it means that current platform is Web
+  Future<TargetPlatform?> getOSInsideWeb() async {
+    assert(kIsWeb, "Web platform not found");
+    final agent = (await userAgent) ?? '';
+
+    if (agent.contains("iphone")) return TargetPlatform.iOS;
+    if (agent.contains("ipad")) return TargetPlatform.iOS;
+    if (agent.contains("android")) return TargetPlatform.android;
+
+    return null;
   }
 }
