@@ -103,13 +103,6 @@ class _AppState extends State<App> {
                           AppLocalizations.localizationsDelegates,
                       supportedLocales: AppLocalizations.supportedLocales,
                       routerConfig: routerConfig.router,
-                      // // * global text scale factorized
-                      // builder: (context, child) {
-                      //   return MediaQuery(
-                      //     data: MediaQuery.of(context).copyWith(textScaleFactor: 1),
-                      //     child: child!,
-                      //   );
-                      // },
                     ),
                   );
                 }),

@@ -19,12 +19,18 @@ mixin Vars {
   static Size getDesignSize(BuildContext context) =>
       context.width.isMobile ? Vars.mobileSize : Vars.desktopSize;
 
-  static double textScalerFactor(BuildContext context, MediaQueryData media) =>
-      media.size.width.clampMapRanged(
-        minRange: context.width.tablet,
-        maxRange: context.width.desktop,
-        minValue: .8,
-        maxValue: 1,
+  static double scalerFactor(
+    BuildContext context, {
+    double? minRange,
+    double? maxRange,
+    double? minValue,
+    double? maxValue,
+  }) =>
+      context.width.screenWidth.clampMapRanged(
+        minRange: minRange ?? context.width.tablet,
+        maxRange: maxRange ?? context.width.desktop,
+        minValue: minValue ?? .8,
+        maxValue: maxValue ?? 1,
       );
 
   static const double desktopScaffoldMaxWidth = 1000;
@@ -47,12 +53,16 @@ mixin Vars {
       gapMax = 20;
 
   static const double radius50 = 50,
+      radius45 = 45,
       radius40 = 40,
+      radius35 = 35,
       radius30 = 30,
+      radius25 = 25,
       radius20 = 20,
       radius15 = 15,
       radius12 = 12,
-      radius10 = 10;
+      radius10 = 10,
+      radius8 = 8;
 
   // gradient
   static LinearGradient getGradient(BuildContext context) => LinearGradient(

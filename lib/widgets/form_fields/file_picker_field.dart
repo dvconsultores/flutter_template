@@ -29,6 +29,7 @@ class FilePickerField extends StatefulWidget {
     this.width = double.maxFinite,
     this.height = 150,
     this.borderRadius = const BorderRadius.all(Radius.circular(Vars.radius10)),
+    this.color = Colors.white,
     this.border,
     this.borderDisabled,
     this.borderFocused,
@@ -57,6 +58,7 @@ class FilePickerField extends StatefulWidget {
   final double width;
   final double? height;
   final BorderRadius borderRadius;
+  final Color color;
   final BorderSide? border;
   final BorderSide? borderDisabled;
   final BorderSide? borderFocused;
@@ -182,163 +184,173 @@ class _FilePickerFieldState extends State<FilePickerField>
     );
 
     return FormField<PlatformFile>(
-      restorationId: widget.restorationId,
-      onSaved: widget.onSaved,
-      initialValue: widget.initialValue,
-      validator: widget.validator,
-      autovalidateMode: widget.autovalidateMode,
-      enabled: !widget.disabled,
-      builder: (state) {
-        // set values
-        formState ??= state;
-        widget.controller?.value = state.value;
+        restorationId: widget.restorationId,
+        onSaved: widget.onSaved,
+        initialValue: widget.initialValue,
+        validator: widget.validator,
+        autovalidateMode: widget.autovalidateMode,
+        enabled: !widget.disabled,
+        builder: (state) {
+          // set values
+          formState ??= state;
+          widget.controller?.value = state.value;
 
-        final ps = TextStyle(color: colors.label),
-            placeholderWidget = widget.placeholder ??
-                (widget.placeholderText != null
-                    ? Text(
-                        widget.placeholderText ?? '',
-                        textAlign: TextAlign.center,
-                        style: ps,
-                      )
-                    : Icon(
-                        Icons.add_photo_alternate_outlined,
-                        size: widget.defaultPlaceholderSize,
-                        color: colors.primary,
-                      ));
+          final ps = TextStyle(color: colors.label),
+              placeholderWidget = widget.placeholder ??
+                  (widget.placeholderText != null
+                      ? Text(
+                          widget.placeholderText ?? '',
+                          textAlign: TextAlign.center,
+                          style: ps,
+                        )
+                      : Icon(
+                          Icons.add_photo_alternate_outlined,
+                          size: widget.defaultPlaceholderSize,
+                          color: colors.primary,
+                        ));
 
-        return Row(children: [
-          SizedBox(
-            width: widget.width,
-            child:
-                Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-              // field
-              AnimatedBuilder(
-                  animation: animation,
-                  builder: (context, child) {
-                    final isOpen = animation.isCompleted;
+          return Row(mainAxisSize: MainAxisSize.min, children: [
+            SizedBox(
+              width: widget.width,
+              child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    // field
+                    AnimatedBuilder(
+                        animation: animation,
+                        builder: (context, child) {
+                          final isOpen = animation.isCompleted;
 
-                    return GestureDetector(
-                      onTap: widget.disabled
-                          ? null
-                          : () => switch (widget.filePickerMode) {
-                                FilePickerMode.fromFiles => pickFile(),
-                                FilePickerMode.fromCamera => pickImage(),
-                                FilePickerMode.both => attachmentPressed(
-                                    context,
-                                    onImage: pickImage,
-                                    onMedia: pickFile,
-                                  ),
-                              },
-                      child: Container(
-                        width: widget.width,
-                        height: widget.height,
-                        clipBehavior: Clip.antiAlias,
-                        decoration: BoxDecoration(
-                          borderRadius: widget.borderRadius,
-                          border: Border.fromBorderSide(
-                            widget.disabled
-                                ? widget.borderDisabled ??
-                                    BorderSide(
-                                        width: 0, color: theme.disabledColor)
-                                : isOpen
-                                    ? widget.borderFocused ??
-                                        BorderSide(color: theme.focusColor)
-                                    : widget.border ??
-                                        const BorderSide(
-                                            width: 0,
-                                            color: Colors.transparent),
-                          ),
-                          boxShadow: widget.boxShadow,
-                        ),
-                        child: Row(children: [
-                          Expanded(
+                          return GestureDetector(
+                            onTap: widget.disabled
+                                ? null
+                                : () => switch (widget.filePickerMode) {
+                                      FilePickerMode.fromFiles => pickFile(),
+                                      FilePickerMode.fromCamera => pickImage(),
+                                      FilePickerMode.both => attachmentPressed(
+                                          context,
+                                          onImage: pickImage,
+                                          onMedia: pickFile,
+                                        ),
+                                    },
                             child: Container(
-                              height: double.maxFinite,
+                              width: widget.width,
+                              height: widget.height,
                               clipBehavior: Clip.antiAlias,
                               decoration: BoxDecoration(
-                                color: Colors.white,
-                                borderRadius: widget.borderRadius.subtract(
-                                  const BorderRadius.all(Radius.circular(4)),
+                                borderRadius: widget.borderRadius,
+                                border: Border.fromBorderSide(
+                                  widget.disabled
+                                      ? widget.borderDisabled ??
+                                          BorderSide(
+                                              width: 0,
+                                              color: theme.disabledColor)
+                                      : isOpen
+                                          ? widget.borderFocused ??
+                                              BorderSide(
+                                                  color: theme.focusColor)
+                                          : widget.border ??
+                                              const BorderSide(
+                                                  width: 0,
+                                                  color: Colors.transparent),
                                 ),
+                                boxShadow: widget.boxShadow,
                               ),
-                              child:
-                                  Stack(alignment: Alignment.center, children: [
-                                if (state.value != null) ...[
-                                  if (imagesAllowed.contains(
-                                      state.value?.extension?.toLowerCase()))
-                                    kIsWeb
-                                        ? Image.memory(
-                                            state.value!.bytes!,
-                                            fit: BoxFit.contain,
-                                          )
-                                        : Image.file(
-                                            File(state.value!.path!),
-                                            fit: BoxFit.contain,
-                                          )
-                                  else
-                                    Transform.translate(
-                                      offset: const Offset(-4, 0),
-                                      child: FractionallySizedBox(
-                                        widthFactor: .9,
-                                        child: Row(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.center,
-                                            children: [
-                                              const Icon(
-                                                  Icons.file_copy_rounded),
-                                              Expanded(
-                                                child: Text(
-                                                  state.value!.name,
-                                                  textAlign: TextAlign.right,
-                                                  overflow:
-                                                      TextOverflow.ellipsis,
+                              child: Row(children: [
+                                Expanded(
+                                  child: Container(
+                                    height: double.maxFinite,
+                                    clipBehavior: Clip.antiAlias,
+                                    decoration: BoxDecoration(
+                                      color: widget.color,
+                                      borderRadius: widget.borderRadius,
+                                    ),
+                                    child: Stack(
+                                        alignment: Alignment.center,
+                                        children: [
+                                          if (state.value != null) ...[
+                                            if (imagesAllowed.contains(state
+                                                .value?.extension
+                                                ?.toLowerCase()))
+                                              kIsWeb
+                                                  ? Image.memory(
+                                                      state.value!.bytes!,
+                                                      fit: BoxFit.contain,
+                                                    )
+                                                  : Image.file(
+                                                      File(state.value!.path!),
+                                                      fit: BoxFit.contain,
+                                                    )
+                                            else
+                                              Transform.translate(
+                                                offset: const Offset(-4, 0),
+                                                child: FractionallySizedBox(
+                                                  widthFactor: .9,
+                                                  child: Row(
+                                                      mainAxisAlignment:
+                                                          MainAxisAlignment
+                                                              .center,
+                                                      children: [
+                                                        const Icon(Icons
+                                                            .file_copy_rounded),
+                                                        Expanded(
+                                                          child: Text(
+                                                            state.value!.name,
+                                                            textAlign:
+                                                                TextAlign.right,
+                                                            overflow:
+                                                                TextOverflow
+                                                                    .ellipsis,
+                                                          ),
+                                                        ),
+                                                      ]),
                                                 ),
                                               ),
-                                            ]),
-                                      ),
-                                    ),
-                                  Positioned(
-                                      right: widget.chipPositionRight,
-                                      bottom: widget.chipPositionBottom,
-                                      child: Chip(
-                                        visualDensity: VisualDensity.compact,
-                                        label: Text(
-                                          state.value!.size.formatBytes(),
-                                          textAlign: TextAlign.center,
-                                          style: ps.copyWith(fontSize: 13),
-                                        ),
-                                      ))
-                                ] else
-                                  placeholderWidget,
+                                            Positioned(
+                                                right: widget.chipPositionRight,
+                                                bottom:
+                                                    widget.chipPositionBottom,
+                                                child: Chip(
+                                                  visualDensity:
+                                                      VisualDensity.compact,
+                                                  label: Text(
+                                                    state.value!.size
+                                                        .formatBytes(),
+                                                    textAlign: TextAlign.center,
+                                                    style: ps.copyWith(
+                                                        fontSize: 13),
+                                                  ),
+                                                ))
+                                          ] else
+                                            placeholderWidget,
+                                        ]),
+                                  ),
+                                ),
+                                if (widget.showClearButton &&
+                                    widget.clearButtonInside &&
+                                    state.value != null)
+                                  clearButtonWidget
                               ]),
                             ),
-                          ),
-                          if (widget.showClearButton &&
-                              widget.clearButtonInside &&
-                              state.value != null)
-                            clearButtonWidget
-                        ]),
-                      ),
-                    );
-                  }),
+                          );
+                        }),
 
-              // error text
-              if (state.hasError && (widget.errorText?.isNotEmpty ?? true))
-                ErrorText(
-                  widget.errorText ?? state.errorText ?? '',
-                  style: widget.errorStyle ??
-                      theme.textTheme.labelMedium
-                          ?.copyWith(color: theme.colorScheme.error),
-                )
-            ]),
-          ),
-          if (widget.showClearButton &&
-              !widget.clearButtonInside &&
-              state.value != null)
-            clearButtonWidget
-        ]);
-      },
-    );
+                    // error text
+                    if (state.hasError &&
+                        (widget.errorText?.isNotEmpty ?? true))
+                      ErrorText(
+                        widget.errorText ?? state.errorText ?? '',
+                        style: widget.errorStyle ??
+                            theme.textTheme.labelMedium
+                                ?.copyWith(color: theme.colorScheme.error),
+                      )
+                  ]),
+            ),
+            if (widget.showClearButton &&
+                !widget.clearButtonInside &&
+                state.value != null)
+              clearButtonWidget
+          ]);
+        });
   }
 }
