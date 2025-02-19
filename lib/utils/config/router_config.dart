@@ -39,7 +39,8 @@ class AppRouterConfig {
           redirect: (context, state) async {
             final mainProvider = MainProvider.read(context);
             if (mainProvider.currentNavContext != null &&
-                mainProvider.currentNavContext!.mounted) {
+                mainProvider.currentNavContext!.mounted &&
+                Navigator.canPop(mainProvider.currentNavContext!)) {
               Navigator.popUntil(
                 mainProvider.currentNavContext!,
                 (route) => route.isFirst,
