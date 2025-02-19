@@ -376,7 +376,7 @@ extension DioExceptionExtension on DioException {
 
     debugPrint("⭕ exceptionType: $type ⭕");
     debugPrint(
-        "⭕ statusCode: ${response?.statusCode} ⭕\n⭕ data: ${response?.data} ⭕");
+        "⭕ statusCode: ${response?.statusCode} ⭕\n⭕ data: ${response?.data} ⭕\n⭕ url: ${response?.realUri} ⭕");
 
     if (responseData.isHtml()) return fallback;
     return responseData.isNotEmpty ? responseData : fallback;
