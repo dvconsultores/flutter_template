@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 import 'dart:io' show Directory, File;
 import 'dart:ui' as ui;
@@ -17,7 +18,8 @@ import 'package:launch_review/launch_review.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:responsive_mixin_layout/responsive_mixin_layout.dart';
-import 'package:url_launcher/url_launcher.dart';
+import 'package:universal_html/html.dart' as html;
+import 'package:url_launcher/url_launcher_string.dart';
 import 'package:version/version.dart';
 
 Future<ByteArrayAndroidBitmap?> buildAndroidBitmap(
@@ -75,11 +77,19 @@ void popMultiple(BuildContext context, [int count = 1]) {
 }
 
 /// * Launch external url from the app
-Future<void> openUrl(String url) async {
-  final urlParsed = Uri.parse(url);
-  if (!await launchUrl(urlParsed, mode: LaunchMode.externalApplication)) {
-    throw Exception('Could not launch $urlParsed');
+/// returns null when webTarget is enabled
+Future<bool?> openUrl(
+  String url, {
+  LaunchMode mode = LaunchMode.externalApplication,
+  String? webTarget,
+  String? webOptions,
+}) async {
+  if (webTarget != null) {
+    html.window.open(url, webTarget, webOptions);
+    return null;
   }
+
+  return await launchUrlString(url, mode: mode);
 }
 
 /// * Used to get a function instance inside widget building
