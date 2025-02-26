@@ -14,7 +14,6 @@ import 'package:flutter_detextre4/utils/general/context_utility.dart';
 import 'package:flutter_detextre4/utils/helper_widgets/custom_transition_wrapper.dart';
 import 'package:flutter_detextre4/utils/services/local_data/secure_storage_service.dart';
 import 'package:go_router/go_router.dart';
-import 'package:provider/provider.dart';
 
 final routerConfig = AppRouterConfig();
 
@@ -129,7 +128,7 @@ class Nav {
     BuildContext context, {
     required Widget page,
   }) async {
-    ContextUtility.context!.read<MainProvider>().setCurrentNavContext = context;
+    MainProvider.read().setCurrentNavContext = context;
 
     return await Navigator.push<T>(
       context,
@@ -145,7 +144,7 @@ class Nav {
     required Widget page,
     required RoutePredicate predicate,
   }) async {
-    ContextUtility.context!.read<MainProvider>().setCurrentNavContext = context;
+    MainProvider.read().setCurrentNavContext = context;
 
     return await Navigator.pushAndRemoveUntil(
       context,
@@ -161,7 +160,7 @@ class Nav {
     BuildContext context, {
     required Widget page,
   }) async {
-    ContextUtility.context!.read<MainProvider>().setCurrentNavContext = context;
+    MainProvider.read().setCurrentNavContext = context;
 
     return await Navigator.pushReplacement(
       context,

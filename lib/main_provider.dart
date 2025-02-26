@@ -5,6 +5,7 @@ import 'package:flutter_detextre4/models/profile_model.dart';
 import 'package:flutter_detextre4/utils/config/config.dart';
 import 'package:flutter_detextre4/utils/general/context_utility.dart';
 import 'package:flutter_detextre4/utils/services/local_data/hive_data_service.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:provider/provider.dart';
 
 class MainProvider extends ChangeNotifier {
@@ -47,6 +48,9 @@ class MainProvider extends ChangeNotifier {
   BuildContext? currentNavContext;
   set setCurrentNavContext(BuildContext? context) {
     currentNavContext = context;
+    SchedulerBinding.instance.addPostFrameCallback((timeStamp) {
+      notifyListeners();
+    });
   }
 
   // ? ------------------------Snackbar Provider----------------------------- //

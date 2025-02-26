@@ -10,7 +10,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_detextre4/utils/config/config.dart';
 import 'package:flutter_detextre4/utils/general/variables.dart';
-import 'package:flutter_detextre4/utils/services/local_data/env_service.dart';
 import 'package:flutter_detextre4/widgets/defaults/snackbar.dart';
 import 'package:gallery_saver/gallery_saver.dart';
 import 'package:intl/intl.dart';
