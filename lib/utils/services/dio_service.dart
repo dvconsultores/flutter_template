@@ -206,6 +206,39 @@ extension DioExtensions on Dio {
     }
   }
 
+  Future<Response> deleteDebug(
+    String path, {
+    String? requestRef,
+    bool showRequest = false,
+    bool showResponse = false,
+    Object? data,
+    Map<String, dynamic>? queryParameters,
+    Options? options,
+    CancelToken? cancelToken,
+  }) async {
+    try {
+      if (requestRef != null) log("$requestRef⬅️");
+
+      if (showRequest) log("${jsonEncode(data)} ⭐");
+
+      final response = await delete(
+        path,
+        data: data,
+        cancelToken: cancelToken,
+        options: options,
+        queryParameters: queryParameters,
+      );
+
+      if (showResponse) {
+        log("${requestRef ?? ""} ${jsonEncode(response.data)} ✅");
+      }
+
+      return response;
+    } on DioException {
+      rethrow;
+    }
+  }
+
   Future<Response> patchDebug(
     String path, {
     String? requestRef,
