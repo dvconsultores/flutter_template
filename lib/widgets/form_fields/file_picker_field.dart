@@ -348,10 +348,8 @@ class _FilePickerFieldState extends State<FilePickerField>
                       if (state.hasError &&
                           (widget.errorText?.isNotEmpty ?? true))
                         ErrorText(
-                          widget.errorText ?? state.errorText ?? '',
-                          style: widget.errorStyle ??
-                              theme.textTheme.labelMedium
-                                  ?.copyWith(color: theme.colorScheme.error),
+                          widget.errorText ?? state.errorText,
+                          style: widget.errorStyle,
                         )
                     ]),
               ),

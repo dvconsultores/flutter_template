@@ -164,12 +164,8 @@ class _CheckboxFieldState extends State<CheckboxField> {
           // error text
           if (state.hasError && (widget.errorText?.isNotEmpty ?? true))
             ErrorText(
-              widget.errorText ?? state.errorText ?? '',
-              style: widget.errorStyle ??
-                  Theme.of(context)
-                      .textTheme
-                      .labelMedium
-                      ?.copyWith(color: Theme.of(context).colorScheme.error),
+              widget.errorText ?? state.errorText,
+              style: widget.errorStyle,
             )
         ]);
       },

@@ -18,15 +18,15 @@ class ErrorText extends StatelessWidget {
   Widget build(BuildContext context) {
     if (text == null) return const SizedBox.shrink();
 
+    final theme = Theme.of(context);
+
     final defaultPadding =
             padding ?? const EdgeInsets.symmetric(horizontal: Vars.gapMedium),
         errorWidget = Text(
           text!,
           style: style ??
-              Theme.of(context)
-                  .textTheme
-                  .labelMedium
-                  ?.copyWith(color: Theme.of(context).colorScheme.error),
+              theme.textTheme.labelMedium
+                  ?.copyWith(color: theme.colorScheme.error),
         );
 
     return SingleAnimatedBuilder(
