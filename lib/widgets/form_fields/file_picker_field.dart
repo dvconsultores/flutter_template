@@ -210,142 +210,151 @@ class _FilePickerFieldState extends State<FilePickerField>
                         ));
 
           return Row(mainAxisSize: MainAxisSize.min, children: [
-            SizedBox(
-              width: widget.width,
-              child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    // field
-                    AnimatedBuilder(
-                        animation: animation,
-                        builder: (context, child) {
-                          final isOpen = animation.isCompleted;
+            Expanded(
+              child: SizedBox(
+                width: widget.width,
+                child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      // field
+                      AnimatedBuilder(
+                          animation: animation,
+                          builder: (context, child) {
+                            final isOpen = animation.isCompleted;
 
-                          return GestureDetector(
-                            onTap: widget.disabled
-                                ? null
-                                : () => switch (widget.filePickerMode) {
-                                      FilePickerMode.fromFiles => pickFile(),
-                                      FilePickerMode.fromCamera => pickImage(),
-                                      FilePickerMode.both => attachmentPressed(
-                                          context,
-                                          onImage: pickImage,
-                                          onMedia: pickFile,
-                                        ),
-                                    },
-                            child: Container(
-                              width: widget.width,
-                              height: widget.height,
-                              clipBehavior: Clip.antiAlias,
-                              decoration: BoxDecoration(
-                                color: widget.color,
-                                borderRadius: widget.borderRadius,
-                                border: Border.fromBorderSide(
-                                  widget.disabled
-                                      ? widget.borderDisabled ??
-                                          BorderSide(
-                                              width: 0,
-                                              color: theme.disabledColor)
-                                      : isOpen
-                                          ? widget.borderFocused ??
-                                              BorderSide(
-                                                  color: theme.focusColor)
-                                          : widget.border ??
-                                              const BorderSide(
-                                                  width: 0,
-                                                  color: Colors.transparent),
-                                ),
-                                boxShadow: widget.boxShadow,
-                              ),
-                              child: Row(children: [
-                                Expanded(
-                                  child: Container(
-                                    height: double.maxFinite,
-                                    clipBehavior: Clip.antiAlias,
-                                    decoration: BoxDecoration(
-                                      color: widget.color,
-                                      borderRadius: widget.borderRadius,
-                                    ),
-                                    child: Stack(
-                                        alignment: Alignment.center,
-                                        children: [
-                                          if (state.value != null) ...[
-                                            if (imagesAllowed.contains(state
-                                                .value?.extension
-                                                ?.toLowerCase()))
-                                              kIsWeb
-                                                  ? Image.memory(
-                                                      state.value!.bytes!,
-                                                      fit: BoxFit.contain,
-                                                    )
-                                                  : Image.file(
-                                                      File(state.value!.path!),
-                                                      fit: BoxFit.contain,
-                                                    )
-                                            else
-                                              Transform.translate(
-                                                offset: const Offset(-4, 0),
-                                                child: FractionallySizedBox(
-                                                  widthFactor: .9,
-                                                  child: Row(
-                                                      mainAxisAlignment:
-                                                          MainAxisAlignment
-                                                              .center,
-                                                      children: [
-                                                        const Icon(Icons
-                                                            .file_copy_rounded),
-                                                        Expanded(
-                                                          child: Text(
-                                                            state.value!.name,
-                                                            textAlign:
-                                                                TextAlign.right,
-                                                            overflow:
-                                                                TextOverflow
-                                                                    .ellipsis,
-                                                          ),
-                                                        ),
-                                                      ]),
-                                                ),
-                                              ),
-                                            Positioned(
-                                                right: widget.chipPositionRight,
-                                                bottom:
-                                                    widget.chipPositionBottom,
-                                                child: Chip(
-                                                  visualDensity:
-                                                      VisualDensity.compact,
-                                                  label: Text(
-                                                    state.value!.size
-                                                        .formatBytes(),
-                                                    textAlign: TextAlign.center,
-                                                    style: ps.copyWith(
-                                                        fontSize: 13),
-                                                  ),
-                                                ))
-                                          ] else
-                                            placeholderWidget,
-                                        ]),
+                            return GestureDetector(
+                              onTap: widget.disabled
+                                  ? null
+                                  : () => switch (widget.filePickerMode) {
+                                        FilePickerMode.fromFiles => pickFile(),
+                                        FilePickerMode.fromCamera =>
+                                          pickImage(),
+                                        FilePickerMode.both =>
+                                          attachmentPressed(
+                                            context,
+                                            onImage: pickImage,
+                                            onMedia: pickFile,
+                                          ),
+                                      },
+                              child: Container(
+                                width: widget.width,
+                                height: widget.height,
+                                clipBehavior: Clip.antiAlias,
+                                decoration: BoxDecoration(
+                                  color: widget.color,
+                                  borderRadius: widget.borderRadius,
+                                  border: Border.fromBorderSide(
+                                    widget.disabled
+                                        ? widget.borderDisabled ??
+                                            BorderSide(
+                                                width: 0,
+                                                color: theme.disabledColor)
+                                        : isOpen
+                                            ? widget.borderFocused ??
+                                                BorderSide(
+                                                    color: theme.focusColor)
+                                            : widget.border ??
+                                                const BorderSide(
+                                                    width: 0,
+                                                    color: Colors.transparent),
                                   ),
+                                  boxShadow: widget.boxShadow,
                                 ),
-                                if (widget.showClearButton &&
-                                    widget.clearButtonInside &&
-                                    state.value != null)
-                                  clearButtonWidget
-                              ]),
-                            ),
-                          );
-                        }),
+                                child: Row(children: [
+                                  Expanded(
+                                    child: Container(
+                                      height: double.maxFinite,
+                                      clipBehavior: Clip.antiAlias,
+                                      decoration: BoxDecoration(
+                                        color: widget.color,
+                                        borderRadius: widget.borderRadius,
+                                      ),
+                                      child: Stack(
+                                          alignment: Alignment.center,
+                                          children: [
+                                            if (state.value != null) ...[
+                                              if (imagesAllowed.contains(state
+                                                  .value?.extension
+                                                  ?.toLowerCase()))
+                                                kIsWeb
+                                                    ? Image.memory(
+                                                        state.value!.bytes!,
+                                                        fit: BoxFit.contain,
+                                                      )
+                                                    : Image.file(
+                                                        File(
+                                                            state.value!.path!),
+                                                        fit: BoxFit.contain,
+                                                      )
+                                              else
+                                                Transform.translate(
+                                                  offset: const Offset(-4, 0),
+                                                  child: FractionallySizedBox(
+                                                    widthFactor: .9,
+                                                    child: Row(
+                                                        mainAxisAlignment:
+                                                            MainAxisAlignment
+                                                                .center,
+                                                        children: [
+                                                          const Icon(Icons
+                                                              .file_copy_rounded),
+                                                          Expanded(
+                                                            child: Text(
+                                                              state.value!.name,
+                                                              textAlign:
+                                                                  TextAlign
+                                                                      .right,
+                                                              overflow:
+                                                                  TextOverflow
+                                                                      .ellipsis,
+                                                            ),
+                                                          ),
+                                                        ]),
+                                                  ),
+                                                ),
+                                              Positioned(
+                                                  right:
+                                                      widget.chipPositionRight,
+                                                  bottom:
+                                                      widget.chipPositionBottom,
+                                                  child: Chip(
+                                                    visualDensity:
+                                                        VisualDensity.compact,
+                                                    label: Text(
+                                                      state.value!.size
+                                                          .formatBytes(),
+                                                      textAlign:
+                                                          TextAlign.center,
+                                                      style: ps.copyWith(
+                                                          fontSize: 13),
+                                                    ),
+                                                  ))
+                                            ] else
+                                              placeholderWidget,
+                                          ]),
+                                    ),
+                                  ),
+                                  if (widget.showClearButton &&
+                                      widget.clearButtonInside &&
+                                      state.value != null)
+                                    clearButtonWidget
+                                ]),
+                              ),
+                            );
+                          }),
 
-                    // error text
-                    if (state.hasError &&
-                        (widget.errorText?.isNotEmpty ?? true))
-                      ErrorText(
-                        widget.errorText ?? state.errorText ?? '',
-                        style: widget.errorStyle ??
-                            theme.textTheme.labelMedium
-                                ?.copyWith(color: theme.colorScheme.error),
-                      )
-                  ]),
+                      // error text
+                      if (state.hasError &&
+                          (widget.errorText?.isNotEmpty ?? true))
+                        ErrorText(
+                          widget.errorText ?? state.errorText ?? '',
+                          style: widget.errorStyle ??
+                              theme.textTheme.labelMedium
+                                  ?.copyWith(color: theme.colorScheme.error),
+                        )
+                    ]),
+              ),
             ),
             if (widget.showClearButton &&
                 !widget.clearButtonInside &&
