@@ -16,7 +16,6 @@ import 'package:flutter_detextre4/utils/services/local_data/secure_storage_servi
 import 'package:flutter_detextre4/widgets/dialogs/modal_widget.dart';
 import 'package:http/http.dart' as http;
 import 'package:http_parser/http_parser.dart';
-import 'package:provider/provider.dart';
 
 Future<bool> get haveConnection async {
   try {
@@ -50,7 +49,7 @@ class DioService {
     };
   }
 
-  // * set configuration
+  /// * set configuration
   static void init() {
     dio.options.baseUrl = env.apiUrl;
     // ..connectTimeout = const Duration(seconds: 5)
@@ -71,7 +70,9 @@ class DioService {
       onError: (DioException error, handler) async {
         //* catch unauthorized request
         if (error.response?.statusCode == 401) {
-          final mainProvider = ContextUtility.context!.read<MainProvider>();
+          final mainProvider = MainProvider.read();
+
+          Navigator.popUntil(ContextUtility.context!, (route) => route.isFirst);
           routerConfig.router.goNamed("login");
 
           Modal.showSystemAlert(
@@ -297,7 +298,6 @@ extension MultipartResponded on http.MultipartRequest {
   ///
   /// [RFC 2616]: http://www.w3.org/Protocols/rfc2616/rfc2616-sec3.html
   Future<http.Response> sendDebug({
-    List<int> acceptedStatus = const [200, 201, 204],
     String? fallback,
     String connectionFallback = "Connection error, try it later",
     String? requestRef,
@@ -321,16 +321,10 @@ extension MultipartResponded on http.MultipartRequest {
     try {
       final response = await http.Response.fromStream(await send());
 
-      if (response.statusCode == 401) {
-        throw "Session has expired";
-      } else if (!acceptedStatus.contains(response.statusCode)) {
-        throw response.catchErrorMessage(fallback: fallback);
-      }
-
       if (showResponse) log("${requestRef ?? ""} ${response.body} ✅");
       return response;
-    } on SocketException {
-      throw connectionFallback;
+    } catch (error) {
+      throw error.catchErrorMessage(fallback: connectionFallback);
     }
   }
 
@@ -384,61 +378,5 @@ class MultipartContructor {
       contentType: MediaType(typeFile, formatFile),
       filename: file.name,
     );
-  }
-}
-
-// ? dio exception extension
-extension DioExceptionExtension on DioException {
-  /// Will return the `error message` from the api request.
-  ///
-  /// in case not be founded will return a custom default message.
-  String catchErrorMessage({String? fallback}) {
-    //* catch connection failed
-    if (type == DioExceptionType.connectionError) {
-      return "Oops, it looks like a connection error occurred! Please try again later.";
-    }
-
-    //* catch unauthorized request
-    if (response?.statusCode == 401) {
-      return "Your session has expired. Please log in again";
-    }
-
-    fallback ??=
-        "${response?.statusCode ?? 'Error'}: An unexpected error has occurred";
-    final responseData = response?.data.toString() ?? message ?? '';
-
-    debugPrint("⭕ exceptionType: $type ⭕");
-    debugPrint(
-        "⭕ statusCode: ${response?.statusCode} ⭕\n⭕ data: ${response?.data} ⭕\n⭕ url: ${response?.realUri} ⭕");
-
-    if (responseData.isHtml()) return fallback;
-    return responseData.isNotEmpty ? responseData : fallback;
-  }
-}
-
-// ? response extension
-extension ResponseExtension on http.Response {
-  /// Will return the `error message` from the api request.
-  ///
-  /// in case not be founded will return a custom default message.
-  String catchErrorMessage({String? fallback}) {
-    //* catch connection failed
-    if (statusCode == -6) {
-      return "Oops, it looks like a connection error occurred! Please try again later.";
-    }
-
-    //* catch unauthorized request
-    if (statusCode == 401) {
-      return "Your session has expired. Please log in again";
-    }
-
-    fallback ??= "$statusCode: An unexpected error has occurred";
-    final response = body.toString();
-
-    debugPrint("statusCode: $statusCode ⭕");
-    debugPrint("body: $body ⭕");
-
-    if (response.isHtml()) return fallback;
-    return response.isNotEmpty ? response : fallback;
   }
 }

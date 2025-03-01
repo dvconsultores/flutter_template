@@ -122,8 +122,8 @@ class _FilePickerFieldState extends State<FilePickerField>
     final xfile = await ImagePicker().pickImage(
       source: ImageSource.camera,
       imageQuality: 70,
-      maxWidth: 400,
-      maxHeight: 400,
+      maxWidth: 1024,
+      maxHeight: 1024,
     );
 
     if (xfile != null) {

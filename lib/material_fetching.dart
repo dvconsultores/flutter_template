@@ -8,8 +8,8 @@ import 'package:flutter_detextre4/main_provider.dart';
 import 'package:flutter_detextre4/utils/config/config.dart';
 import 'package:flutter_detextre4/utils/config/router_config.dart';
 import 'package:flutter_detextre4/utils/config/theme.dart';
+import 'package:flutter_detextre4/utils/extensions/type_extensions.dart';
 import 'package:flutter_detextre4/utils/general/context_utility.dart';
-import 'package:flutter_detextre4/utils/services/dio_service.dart';
 import 'package:flutter_detextre4/utils/services/local_data/secure_storage_service.dart';
 import 'package:flutter_detextre4/utils/services/uni_links_service.dart';
 import 'package:flutter_detextre4/widgets/defaults/snackbar.dart';
@@ -32,7 +32,8 @@ class MaterialFetching extends StatefulWidget {
 
 class _MaterialFetchingState extends State<MaterialFetching>
     with SingleTickerProviderStateMixin {
-  final notifier = ValueNotifier<(bool, bool)>((false, false));
+  final statusNotifier =
+      ValueNotifier<(bool animationIsDone, bool? fetchIsDone)>((false, false));
 
   late final AnimationController animationController = AnimationController(
     lowerBound: 0.0,
@@ -42,16 +43,16 @@ class _MaterialFetchingState extends State<MaterialFetching>
   );
 
   final loader = AppLoader();
-  bool fetchingData = true;
 
   bool isLogged = false;
 
   void onFinishAnimation(_) {
     if (!mounted) return;
 
-    notifier.value = (true, notifier.value.$2);
+    final (_, fetchIsDone) = statusNotifier.value;
+    statusNotifier.value = (true, fetchIsDone);
 
-    if (fetchingData) loader.open();
+    if (fetchIsDone == false) loader.open();
     updateState(() {});
   }
 
@@ -77,10 +78,10 @@ class _MaterialFetchingState extends State<MaterialFetching>
       ]);
       isLogged = tokenAuth != null;
 
-      fetchingData = false;
       loader.close();
 
-      notifier.value = (notifier.value.$1, true);
+      final (animationIsDone, fetchIsDone) = statusNotifier.value;
+      statusNotifier.value = (animationIsDone, true);
     } catch (error) {
       final errorMessage = handlerError(error);
 
@@ -108,17 +109,16 @@ class _MaterialFetchingState extends State<MaterialFetching>
 
   Future<void> goToHome() async {
     try {
+      MainProvider.read().setPreventModal = true;
+
       handlerNextMaterial();
       routerConfig.router.goNamed("home");
     } catch (error) {
       final errorMessage = handlerError(error);
 
-      showSnackbar(
-        "An error has occurred while running the app 😞, please contact our support team for more information",
-        type: SnackbarType.error,
-      );
-
-      throw errorMessage;
+      showSnackbar(errorMessage, type: SnackbarType.error);
+    } finally {
+      MainProvider.read().setPreventModal = false;
     }
   }
 
@@ -131,34 +131,36 @@ class _MaterialFetchingState extends State<MaterialFetching>
   }
 
   String handlerError(Object error) {
-    notifier.value = (notifier.value.$1, false);
+    loader.stop();
 
-    final errorMessage =
-        error is DioException ? error.catchErrorMessage() : error.toString();
-    debugPrint("MaterialhandlerError: $errorMessage ⭕");
-    fetchingData = false;
+    final (animationIsDone, _) = statusNotifier.value;
+    statusNotifier.value = (animationIsDone, null);
 
-    if (error is DioException && error.response?.statusCode == 401) {
-      notifier.dispose();
-      loader.dispose();
-    } else {
-      loader.close();
+    if (error.catchErrorStatusCode() == "401") {
+      SecureStorage.delete(SecureCollection.tokenAuth);
     }
 
-    updateState(() {});
+    final errorMessage = error.catchErrorMessage(
+      fallback:
+          "An error has occurred while running the app 😞, please contact our support team for more information",
+    );
+    debugPrint("MaterialhandlerError: $errorMessage ⭕");
 
     return errorMessage;
   }
 
+  void onListenStatusNotifier() {
+    updateState(() {});
+
+    final (animationIsDone, fetchIsDone) = statusNotifier.value;
+    if (animationIsDone && fetchIsDone == true && mounted) {
+      goTo();
+    }
+  }
+
   @override
   void initState() {
-    notifier.addListener(() {
-      final (a, b) = notifier.value;
-
-      if (a && b && mounted) {
-        goTo().then((_) => notifier.dispose());
-      }
-    });
+    statusNotifier.addListener(onListenStatusNotifier);
 
     SchedulerBinding.instance.addPostFrameCallback((_) {
       getData();
@@ -168,7 +170,14 @@ class _MaterialFetchingState extends State<MaterialFetching>
   }
 
   @override
+  void dispose() {
+    statusNotifier.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
+    // render original MaterialApp
     if (loader.disposed) {
       return Material(
         color: ThemeApp.lightTheme.colorScheme.tertiary,
@@ -176,6 +185,7 @@ class _MaterialFetchingState extends State<MaterialFetching>
       );
     }
 
+    // render splash page MaterialApp
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: AppName.capitalize.value,

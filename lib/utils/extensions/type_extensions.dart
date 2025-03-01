@@ -929,3 +929,103 @@ extension KeyExtension on Key? {
     );
   }
 }
+
+// ? ExceptionHandler extension
+extension ExceptionHandler on Object {
+  /// Will return the `error message` from the api request.
+  ///
+  /// in case not be founded will return a custom default message.
+  String catchErrorMessage({String? fallback}) {
+    String responseMessage = '';
+    dynamic type;
+    String? statusCode;
+    dynamic error;
+    String? url;
+
+    if (this is dio.DioException) {
+      final exception = this as dio.DioException;
+
+      type = exception.type;
+      statusCode = exception.response?.statusCode.toString();
+      error = exception.response?.data;
+      url = exception.response?.realUri.toString();
+      responseMessage = exception.message ??
+          exception.response?.data['data'] ??
+          exception.response?.data['error'] ??
+          exception.response?.data.toString() ??
+          '';
+    }
+
+    if (this is io.HttpException) {
+      final exception = this as io.HttpException;
+
+      responseMessage = exception.message;
+      url = exception.uri.toString();
+    }
+
+    ///! uncomment if use [firebase-core] package
+    // if (this is FirebaseException) {
+    //   final exception = this as FirebaseException;
+
+    //   statusCode = exception.code;
+    //   url = exception.plugin;
+    //   error = exception.stackTrace;
+    //   responseMessage = exception.message ?? '';
+    // }
+
+    if (this is io.SocketException) {
+      final exception = this as io.SocketException;
+
+      type = /* exception.address?.type ??  */
+          dio.DioExceptionType.connectionError;
+      statusCode = exception.osError?.errorCode.toString();
+      error = exception.osError?.message;
+      url = exception.address?.address;
+      responseMessage = exception.message;
+    }
+
+    //* catch connection failed
+    if (type case dio.DioExceptionType.connectionError) {
+      return "Uppss parece que ocurrió un fallo de conexión!, intentalo más tarde";
+    }
+
+    //* catch unauthorized request
+    if (statusCode == "401") {
+      return "Tu sesión ha expirado. Por favor inicia sesión nuevamente";
+    }
+
+    debugPrint(
+      "⭕ exceptionType: $type ⭕\n⭕ statusCode: $statusCode ⭕\n⭕ error: $error ⭕\n⭕ url: $url ⭕",
+    );
+
+    fallback ??= "${statusCode ?? 'Error'}: Ha ocurrido un error inesperado";
+    if (responseMessage.isHtml()) return fallback;
+    return responseMessage.isNotEmpty ? responseMessage : fallback;
+  }
+
+  /// Will return the `error StatusCode` from the request.
+  String? catchErrorStatusCode() {
+    String? statusCode;
+
+    if (this is dio.DioException) {
+      final exception = this as dio.DioException;
+
+      statusCode = exception.response?.statusCode.toString();
+    }
+
+    ///! uncomment if use [firebase-core] package
+    // if (this is FirebaseException) {
+    //   final exception = this as FirebaseException;
+
+    //   statusCode = exception.code;
+    // }
+
+    if (this is io.SocketException) {
+      final exception = this as io.SocketException;
+
+      statusCode = exception.osError?.errorCode.toString();
+    }
+
+    return statusCode;
+  }
+}
