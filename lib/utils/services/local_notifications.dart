@@ -33,13 +33,15 @@ enum NotificationChannel {
     "This channel is used for firebase push notifications",
     Priority.high,
     Importance.high,
+    "treassure",
   ),
-  campign(
+  campaign(
     "campaign_notifications",
     "Campaign notifications",
     "This channel is used for firebase campaign notifications",
     Priority.low,
     Importance.low,
+    "treassure",
   );
 
   const NotificationChannel(
@@ -48,12 +50,14 @@ enum NotificationChannel {
     this.descriptionText,
     this.priority,
     this.importance,
+    this.sound,
   );
   final String id;
   final String nameText;
   final String descriptionText;
   final Priority priority;
   final Importance importance;
+  final String? sound;
 
   static NotificationChannel get(String channel) =>
       values.singleWhere((element) => element.name == channel);
@@ -85,7 +89,7 @@ class LocalNotifications {
             requestAlertPermission: false,
             notificationCategories: [
               DarwinNotificationCategory(
-                NotificationChannel.campign.id,
+                NotificationChannel.campaign.id,
                 options: {
                   DarwinNotificationCategoryOption.allowInCarPlay,
                 },
@@ -148,7 +152,7 @@ class LocalNotifications {
     final uniqueId = UniqueKey();
 
     final channel =
-        NotificationChannel.get(haveTopics(from) ? 'campign' : 'push');
+        NotificationChannel.get(haveTopics(from) ? 'campaign' : 'push');
 
     await flutterLocalNotificationsPlugin.show(
       uniqueId.hashCode,
@@ -203,6 +207,9 @@ class LocalNotifications {
       channel.id,
       channel.nameText,
       channelDescription: channel.descriptionText,
+      sound: channel.sound != null
+          ? RawResourceAndroidNotificationSound(channel.sound)
+          : null,
       enableLights: true,
       channelShowBadge: channel.name != 'campaign',
       color: const Color.fromRGBO(6, 71, 125, 1),
@@ -266,6 +273,9 @@ class LocalNotifications {
       largeIcon: avatarIcon,
       priority: channel.priority,
       importance: channel.importance,
+      sound: channel.sound != null
+          ? RawResourceAndroidNotificationSound(channel.sound)
+          : null,
       enableLights: true,
       channelShowBadge: channel.name != 'campaign',
       styleInformation: styleInformation,
@@ -291,7 +301,8 @@ class LocalNotifications {
       presentAlert: true,
       presentSound: true,
       presentBanner: true,
-      interruptionLevel: channel.name == 'campign'
+      sound: channel.sound != null ? '${channel.sound}.aiff' : null,
+      interruptionLevel: channel.name == 'campaign'
           ? InterruptionLevel.passive
           : InterruptionLevel.active,
       attachments: attachments,

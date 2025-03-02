@@ -50,7 +50,7 @@ class DioService {
   }
 
   /// * set configuration
-  static void init() {
+  static void init(BuildContext context) {
     dio.options.baseUrl = env.apiUrl;
     // ..connectTimeout = const Duration(seconds: 5)
     // ..receiveTimeout = const Duration(seconds: 3);
@@ -70,20 +70,21 @@ class DioService {
       onError: (DioException error, handler) async {
         //* catch unauthorized request
         if (error.response?.statusCode == 401) {
-          final mainProvider = MainProvider.read();
-
-          Navigator.popUntil(ContextUtility.context!, (route) => route.isFirst);
+          Navigator.popUntil(
+            ContextUtility.context ?? context,
+            (route) => route.isFirst,
+          );
           routerConfig.router.goNamed("login");
 
           Modal.showSystemAlert(
-            ContextUtility.context!,
+            ContextUtility.context ?? context,
             dismissible: false,
             titleText: 'Session has expired',
             contentText: 'Please log in again.',
             textConfirmBtn: "Got it",
           );
 
-          if (!mainProvider.returnDioAuthError) return;
+          if (!MainProvider.read(context).returnDioAuthError) return;
           return handler.next(error);
         }
 

@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter_detextre4/utils/services/local_data/env_service.dart';
 import 'package:uni_links/uni_links.dart';
@@ -27,28 +28,36 @@ class UniLinksService {
   }
 
   /// Initialization method to [UniLinksService]. Just run once.
-  static Future<void> init({checkActualVersion = false}) async {
-    return;
-    if (kIsWeb) return;
+  static Future<void> init(
+    BuildContext? context, {
+    checkActualVersion = false,
+  }) async {
+    if (kIsWeb || context == null) return;
 
     // This is used for cases when: APP is not running and the user clicks on a link.
     try {
       final Uri? uri = await getInitialUri();
-      uniLinkHandler(uri, UniLinksTypeHandler.initialUrl);
+
+      if (context.mounted) {
+        uniLinkHandler(context, uri, UniLinksTypeHandler.initialUrl);
+      }
     } catch (error) {
       if (kDebugMode) print("UniLinks getInitialUri error: $error ⭕");
     }
 
     // This is used for cases when: APP is already running and the user clicks on a link.
-    _sub = uriLinkStream
-        .listen((value) => uniLinkHandler(value, UniLinksTypeHandler.streamUrl),
-            onError: (error) {
+    _sub = uriLinkStream.listen((value) {
+      if (!context.mounted) return;
+
+      uniLinkHandler(context, value, UniLinksTypeHandler.streamUrl);
+    }, onError: (error) {
       if (kDebugMode) print('UniLinks onUriLink error: $error ⭕');
     });
   }
 
   /// handler to manage uri redirect
   static bool uniLinkHandler(
+    BuildContext context,
     Uri? uri,
     UniLinksTypeHandler uniLinksTypeHandler,
   ) {
@@ -59,7 +68,7 @@ class UniLinksService {
       final paramValue = params[key.name];
       if (paramValue == null) continue;
 
-      _uniLinksActions(key, paramValue, uniLinksTypeHandler);
+      _uniLinksActions(context, key, paramValue, uniLinksTypeHandler);
       return true;
     }
 
@@ -68,6 +77,7 @@ class UniLinksService {
 
   /// handler to manage uri redirect
   static void _uniLinksActions(
+    BuildContext context,
     UniLinksKey key,
     String value,
     UniLinksTypeHandler uniLinksTypeHandler,

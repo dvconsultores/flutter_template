@@ -4,7 +4,6 @@ import 'package:flutter/services.dart';
 import 'package:flutter_detextre4/main_provider.dart';
 import 'package:flutter_detextre4/utils/general/context_utility.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:provider/provider.dart';
 
 ///? A Class to get some weigth of current font families.
 /// use like `FontFamily.lato("400")`
@@ -296,7 +295,7 @@ class ThemeApp {
 
   ///* Switch between themeData.
   void switchTheme(ThemeMode themeType) =>
-      context!.read<MainProvider>().switchTheme = themeType;
+      MainProvider.read(context).switchTheme = themeType;
 
   ///* Getter to current [TextTheme]
   TextTheme get textTheme => Theme.of(context!).textTheme;

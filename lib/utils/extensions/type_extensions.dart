@@ -942,6 +942,12 @@ extension ExceptionHandler on Object {
     dynamic error;
     String? url;
 
+    if (this is Exception) {
+      final exception = this as Exception;
+
+      responseMessage = exception.toString();
+    }
+
     if (this is dio.DioException) {
       final exception = this as dio.DioException;
 
@@ -984,14 +990,22 @@ extension ExceptionHandler on Object {
       responseMessage = exception.message;
     }
 
+    if (this is PlatformException) {
+      final exception = this as PlatformException;
+
+      statusCode = exception.code;
+      error = exception.details;
+      responseMessage = exception.message ?? '';
+    }
+
     //* catch connection failed
     if (type case dio.DioExceptionType.connectionError) {
-      return "Uppss parece que ocurrió un fallo de conexión!, intentalo más tarde";
+      return "Oops, it seems that a connection error occurred! Please try again later.";
     }
 
     //* catch unauthorized request
     if (statusCode == "401") {
-      return "Tu sesión ha expirado. Por favor inicia sesión nuevamente";
+      return "Your session has expired. Please log in again.";
     }
 
     debugPrint(
@@ -1024,6 +1038,12 @@ extension ExceptionHandler on Object {
       final exception = this as io.SocketException;
 
       statusCode = exception.osError?.errorCode.toString();
+    }
+
+    if (this is PlatformException) {
+      final exception = this as PlatformException;
+
+      statusCode = exception.code;
     }
 
     return statusCode;

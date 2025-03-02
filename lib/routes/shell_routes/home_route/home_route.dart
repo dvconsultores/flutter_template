@@ -22,7 +22,7 @@ class _HomeRouteState extends State<HomeRoute> {
     return HomeInherited(
       counter: counter,
       incrementCounter: incrementCounter,
-      child: const HomeScreen(),
+      child: HomeScreen(),
     );
   }
 }

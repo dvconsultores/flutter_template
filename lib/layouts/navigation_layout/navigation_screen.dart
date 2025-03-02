@@ -51,6 +51,7 @@ class NavigationScreen extends StatelessWidget {
               }
             }
           : null,
+      // TODO review trouble in double back to exit
       child: DoubleBackToExit(
         mode: isHome ? DoubleBackMode.doublePop : DoubleBackMode.pop,
         snackBarMessage: "Press again to leave",

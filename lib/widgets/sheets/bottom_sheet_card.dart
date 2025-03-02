@@ -112,7 +112,7 @@ class BottomSheetCard extends StatefulWidget {
 }
 
 class _BottomSheetCardState extends State<BottomSheetCard> {
-  final mainProvider = MainProvider.read();
+  late final mainProvider = MainProvider.read(context);
 
   @override
   void initState() {
@@ -323,7 +323,7 @@ class _BottomSheetListState<T> extends State<BottomSheetList<T>> {
         .toList();
   }
 
-  final mainProvider = MainProvider.read();
+  late final mainProvider = MainProvider.read(context);
 
   @override
   void initState() {
@@ -654,7 +654,7 @@ class _BottomSheetListMultipleState<T>
     if (widget.onComplete != null) widget.onComplete!(selectedItems);
   }
 
-  final mainProvider = MainProvider.read();
+  late final mainProvider = MainProvider.read(context);
 
   @override
   void initState() {

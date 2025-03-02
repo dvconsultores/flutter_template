@@ -4,8 +4,6 @@ import 'package:collection/collection.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_detextre4/main_provider.dart';
-import 'package:flutter_detextre4/utils/general/context_utility.dart';
-import 'package:provider/provider.dart';
 
 /// * A collection about application name formats
 enum AppName {
@@ -166,10 +164,9 @@ enum LanguageList {
 
 class AppLocale {
   /// Get current locale.
-  static Locale get locale =>
-      ContextUtility.context!.read<MainProvider>().locale;
+  static Locale get locale => MainProvider.read().locale;
 
   /// A global function to change current language.
   static void changeLanguage(LanguageList value) =>
-      ContextUtility.context!.read<MainProvider>().changeLocale = value;
+      MainProvider.read().changeLocale = value;
 }

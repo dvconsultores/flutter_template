@@ -7,9 +7,9 @@ import 'package:flutter_detextre4/utils/config/theme.dart';
 import 'package:flutter_detextre4/utils/extensions/type_extensions.dart';
 import 'package:flutter_detextre4/utils/general/context_utility.dart';
 import 'package:flutter_detextre4/utils/general/variables.dart';
-import 'package:provider/provider.dart';
 
-BuildContext get _context => ContextUtility.context!;
+BuildContext _getContext(BuildContext? context) =>
+    context ?? ContextUtility.context!;
 
 // * App snackbar types
 enum SnackbarType {
@@ -25,6 +25,7 @@ enum SnackbarType {
 /// TODO do implementation to send snackbar with same id and replace old snackbar by id
 void showSnackbar(
   String? message, {
+  BuildContext? context,
   String? title,
   SnackbarType? type,
   Duration? duration = const Duration(seconds: 15),
@@ -50,32 +51,32 @@ void showSnackbar(
     switch (type) {
       case SnackbarType.success:
         return (
-          color ??= ThemeApp.of(_context).colors.success,
+          color ??= ThemeApp.of(_getContext(context)).colors.success,
           Icon(Icons.check_circle_outline_rounded, color: color),
           FlushbarPosition.BOTTOM
         );
       case SnackbarType.warning:
         return (
-          color ??= ThemeApp.of(_context).colors.warning,
+          color ??= ThemeApp.of(_getContext(context)).colors.warning,
           Icon(Icons.warning_amber_rounded, color: color),
           FlushbarPosition.BOTTOM
         );
       case SnackbarType.error:
         return (
-          color ??= ThemeApp.of(_context).colors.error,
+          color ??= ThemeApp.of(_getContext(context)).colors.error,
           Icon(Icons.error_rounded, color: color),
           FlushbarPosition.BOTTOM
         );
       case SnackbarType.info:
         return (
-          color ??= ThemeApp.of(_context).colors.secondary,
+          color ??= ThemeApp.of(_getContext(context)).colors.secondary,
           Icon(Icons.info_outline_rounded, color: color),
           FlushbarPosition.BOTTOM
         );
       case SnackbarType.neutral:
       default:
         return (
-          color ??= ThemeApp.of(_context).colors.text,
+          color ??= ThemeApp.of(_getContext(context)).colors.text,
           null,
           FlushbarPosition.BOTTOM
         );
@@ -84,18 +85,22 @@ void showSnackbar(
 
   Flushbar? flushbar;
   flushbar = Flushbar(
-    maxWidth: maxWidth ?? Vars.getDesignSize(_context).width,
+    maxWidth: maxWidth ?? Vars.getDesignSize(_getContext(context)).width,
     titleText: title.hasValue
-        ? Text(title!, style: Theme.of(_context).textTheme.bodyLarge)
+        ? Text(title!,
+            style: Theme.of(_getContext(context)).textTheme.bodyLarge)
         : null,
     messageText: Text(
       msg,
-      style: Theme.of(_context).textTheme.bodyMedium?.copyWith(fontSize: 14),
+      style: Theme.of(_getContext(context))
+          .textTheme
+          .bodyMedium
+          ?.copyWith(fontSize: 14),
     ),
     icon: getValueByType().$2,
-    titleColor: ThemeApp.of(_context).colors.text,
-    messageColor: ThemeApp.of(_context).colors.text,
-    backgroundColor: ThemeApp.of(_context).colors.surface,
+    titleColor: ThemeApp.of(_getContext(context)).colors.text,
+    messageColor: ThemeApp.of(_getContext(context)).colors.text,
+    backgroundColor: ThemeApp.of(_getContext(context)).colors.surface,
     borderRadius: const BorderRadius.all(Radius.circular(Vars.radius20)),
     borderColor: getValueByType().$1,
     borderWidth: 2.5,
@@ -114,9 +119,10 @@ void showSnackbar(
     flushbarStyle: flushbarStyle,
   );
 
-  _context.read<MainProvider>().addSnackbar = flushbar;
+  MainProvider.read(context).addSnackbar = flushbar;
 
-  flushbar.show(_context);
+  flushbar.show(_getContext(context));
 }
 
-void clearSnackbars() => _context.read<MainProvider>().clearSnackbars;
+void clearSnackbars([BuildContext? context]) =>
+    MainProvider.read(context).clearSnackbars;

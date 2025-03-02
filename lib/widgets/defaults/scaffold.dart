@@ -1,7 +1,7 @@
+import 'package:app_loader/app_loader.dart';
 import 'package:custom_refresh_indicator/custom_refresh_indicator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_detextre4/utils/general/variables.dart';
-import 'package:flutter_detextre4/utils/helper_widgets/will_pop_custom.dart';
 import 'package:flutter_detextre4/widgets/loaders/refresh_indicator.dart';
 import 'package:go_router/go_router.dart';
 

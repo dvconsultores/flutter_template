@@ -1,6 +1,6 @@
+import 'package:app_loader/app_loader.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_detextre4/widgets/dialogs/modal_widget.dart';
-import 'package:flutter_detextre4/widgets/loaders/loader.dart';
 
 class SafeRequest {
   static Future<T> retryOnFailure<T>(
@@ -32,7 +32,7 @@ class SafeRequest {
     String textConfirm = "Retry",
     String texTCancel = "Cancel",
   }) async {
-    final load = loader ?? AppLoader();
+    final load = loader ?? AppLoader(context);
     int attempt = 0;
 
     while (maxAttempts == 0 || attempt < maxAttempts) {

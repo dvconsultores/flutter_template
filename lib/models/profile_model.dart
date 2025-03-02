@@ -1,7 +1,6 @@
+import 'package:flutter/material.dart';
 import 'package:flutter_detextre4/main_provider.dart';
 import 'package:flutter_detextre4/utils/extensions/type_extensions.dart';
-import 'package:flutter_detextre4/utils/general/context_utility.dart';
-import 'package:provider/provider.dart';
 
 class ProfileModel implements DefaultModel {
   ProfileModel({
@@ -18,8 +17,8 @@ class ProfileModel implements DefaultModel {
   @override
   Iterable get values => toJson().values;
 
-  static ProfileModel get() =>
-      ContextUtility.context!.read<MainProvider>().profile as ProfileModel;
+  static ProfileModel get([BuildContext? context]) =>
+      MainProvider.read(context).profile as ProfileModel;
 
   @override
   ProfileModel copyWith({

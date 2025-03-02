@@ -3,13 +3,18 @@ import 'dart:math' as math;
 import 'package:flutter/material.dart';
 import 'package:flutter_detextre4/utils/config/theme.dart';
 import 'package:flutter_detextre4/utils/general/variables.dart';
+import 'package:flutter_detextre4/widgets/defaults/button.dart';
 
 class SplashPage extends StatefulWidget {
   const SplashPage({
     super.key,
     required this.animationController,
+    required this.shouldShowRestartButton,
+    required this.getData,
   });
   final AnimationController animationController;
+  final bool shouldShowRestartButton;
+  final Future<void> Function() getData;
 
   @override
   State<SplashPage> createState() => _SplashPageState();
@@ -44,6 +49,18 @@ class _SplashPageState extends State<SplashPage> {
     ).animate(widget.animationController);
 
     return Scaffold(
+      floatingActionButton:
+          animationCurve.isCompleted && widget.shouldShowRestartButton
+              ? IntrinsicWidth(
+                  child: Button(
+                    text: "Restart",
+                    padding: EdgeInsets.symmetric(horizontal: Vars.gapXLarge),
+                    disabled: !widget.shouldShowRestartButton,
+                    boxShadow: const [],
+                    onPressed: widget.getData,
+                  ),
+                )
+              : null,
       body: Stack(children: [
         // * background
         SizedBox(

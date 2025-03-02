@@ -1,14 +1,12 @@
 import 'dart:ui';
 
+import 'package:app_loader/app_loader.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_detextre4/main_provider.dart';
 import 'package:flutter_detextre4/utils/config/theme.dart';
-import 'package:flutter_detextre4/utils/general/context_utility.dart';
 import 'package:flutter_detextre4/utils/general/variables.dart';
-import 'package:flutter_detextre4/utils/helper_widgets/will_pop_custom.dart';
 import 'package:flutter_detextre4/widgets/defaults/button.dart';
 import 'package:flutter_gap/flutter_gap.dart';
-import 'package:provider/provider.dart';
 
 class Modal extends StatefulWidget {
   const Modal({
@@ -186,7 +184,7 @@ class Modal extends StatefulWidget {
     Color? barrierColor,
     bool dismissible = true,
   }) async {
-    final mainProvider = ContextUtility.context!.read<MainProvider>();
+    final mainProvider = MainProvider.read(context);
     if (mainProvider.preventModal) return null;
     mainProvider.setPreventModal = true;
 
@@ -261,7 +259,7 @@ class Modal extends StatefulWidget {
 }
 
 class _ModalState extends State<Modal> {
-  final mainProvider = MainProvider.read();
+  late final mainProvider = MainProvider.read(context);
 
   @override
   void initState() {
