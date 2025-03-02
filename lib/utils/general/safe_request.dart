@@ -37,13 +37,10 @@ class SafeRequest {
 
     while (maxAttempts == 0 || attempt < maxAttempts) {
       try {
-        load.open();
-        final response = await future();
-        load.close();
+        final response = await load.open(future: (cancelToken) => future());
 
         return response;
       } catch (error) {
-        load.close();
         if (!context.mounted) return null;
 
         final accepts = await Modal.showAlertToContinue(
