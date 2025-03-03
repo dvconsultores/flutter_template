@@ -956,8 +956,10 @@ extension ExceptionHandler on Object {
       error = exception.message;
       url = exception.response?.realUri.toString();
       responseMessage = exception.response?.data is Map<String, dynamic>
-          ? exception.response!.data!['data'] ??
-              exception.response!.data!['error']
+          ? exception.response!.data!['message']?.toString() ??
+              exception.response!.data!['error']?.toString() ??
+              exception.response!.data!['data']?.toString() ??
+              ''
           : exception.response?.data?.toString() ?? '';
     }
 
