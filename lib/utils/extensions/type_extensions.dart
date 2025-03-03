@@ -953,13 +953,12 @@ extension ExceptionHandler on Object {
 
       type = exception.type;
       statusCode = exception.response?.statusCode.toString();
-      error = exception.response?.data;
+      error = exception.message;
       url = exception.response?.realUri.toString();
-      responseMessage = exception.message ??
-          exception.response?.data['data'] ??
-          exception.response?.data['error'] ??
-          exception.response?.data.toString() ??
-          '';
+      responseMessage = exception.response?.data is Map<String, dynamic>
+          ? exception.response!.data!['data'] ??
+              exception.response!.data!['error']
+          : exception.response?.data?.toString() ?? '';
     }
 
     if (this is io.HttpException) {
