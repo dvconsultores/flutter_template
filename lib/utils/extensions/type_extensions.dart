@@ -942,6 +942,8 @@ extension ExceptionHandler on Object {
     dynamic error;
     String? url;
 
+    if (this is String) return this as String;
+
     if (this is Exception) {
       final exception = this as Exception;
 
