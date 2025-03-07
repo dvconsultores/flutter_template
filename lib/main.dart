@@ -111,25 +111,7 @@ class _AppState extends State<App> {
       loader.close();
       fetchStatus.value = MaterialLoaderStatus.done;
     } catch (error) {
-      final errorMessage =
-          handleError(error, loader: loader, fetchStatus: fetchStatus);
-
-      if (context.mounted) {
-        if (error is DioException &&
-            error.type == DioExceptionType.connectionError) {
-          await Modal.showSystemAlert(
-            context,
-            contentText: errorMessage,
-            textConfirmBtn: "Okay",
-          );
-        } else {
-          showSnackbar(
-            context: context,
-            errorMessage,
-            type: SnackbarType.error,
-          );
-        }
-      }
+      handleError(error, loader: loader, fetchStatus: fetchStatus);
     } finally {
       provider.setPreventModal = false;
     }
@@ -142,7 +124,7 @@ class _AppState extends State<App> {
     routerConfig.router.goNamed(isLogged ? "home" : "login");
   }
 
-  String handleError(
+  void handleError(
     Object error, {
     required AppLoader loader,
     required ValueNotifier<MaterialLoaderStatus> fetchStatus,
@@ -152,15 +134,27 @@ class _AppState extends State<App> {
 
     if (error.catchErrorStatusCode() == "401") {
       SecureStorage.delete(SecureCollection.tokenAuth);
+      return;
     }
+
+    debugPrint("MaterialhandlerError: $error ⭕");
+    if (!context.mounted) return;
 
     final errorMessage = error.catchErrorMessage(
       fallback:
           "An error has occurred while running the app 😞, please contact our support team for more information",
     );
-    debugPrint("MaterialhandlerError: $errorMessage ⭕");
 
-    return errorMessage;
+    if (error is DioException &&
+        error.type == DioExceptionType.connectionError) {
+      Modal.showSystemAlert(
+        context,
+        contentText: errorMessage,
+        textConfirmBtn: "Okay",
+      );
+    } else {
+      showSnackbar(context: context, errorMessage, type: SnackbarType.error);
+    }
   }
 
   @override
