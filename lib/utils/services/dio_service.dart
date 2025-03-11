@@ -31,6 +31,12 @@ Future<bool> get haveConnection async {
 final dio = Dio();
 
 class DioService {
+  /// Default [http] header request to multipart request
+  static final Map<String, String> multipart = {
+    'Content-type': 'multipart/form-data',
+    'Accept': 'multipart/form-data',
+  };
+
   /// Default [http] header request without authorization
   static final Map<String, String> unauthorized = {
     'Content-type': 'application/json',
@@ -277,28 +283,48 @@ extension DioExtensions on Dio {
       rethrow;
     }
   }
-}
 
-// TODO pending to checkout and update
-extension MultipartResponded on http.MultipartRequest {
-  /// ⭐ Custom ⭐
-  /// Sends this request.
-  ///
-  /// This automatically initializes a new [Client] and closes that client once
-  /// the request is complete. If you're planning on making multiple requests to
-  /// the same server, you should use a single [Client] for all of those
-  /// requests.
-  ///
-  ///
-  /// The body of the response as a string.
-  ///
-  /// This is converted from [bodyBytes] using the `charset` parameter of the
-  /// `Content-Type` header field, if available. If it's unavailable or if the
-  /// encoding name is unknown, [latin1] is used by default, as per
-  /// [RFC 2616][].
-  ///
-  /// [RFC 2616]: http://www.w3.org/Protocols/rfc2616/rfc2616-sec3.html
-  Future<http.Response> sendDebug({
+  Future<http.Response> multipartRequest(
+    String url, {
+    String method = 'GET',
+    Map<String, String>? headers,
+    Map<String, dynamic>? fields,
+    List<MultipartContructor>? files,
+  }) async {
+    final request = http.MultipartRequest(
+      method,
+      Uri.parse(url.startsWith("http") ? url : options.baseUrl + url),
+    );
+
+    options.headers = DioService.multipart;
+
+    final optionToken = options.headers['Authorization'],
+        tokenAuth = await SecureStorage.read(SecureCollection.tokenAuth);
+
+    if (tokenAuth != null && optionToken == null) {
+      options.headers['Authorization'] = 'Token $tokenAuth';
+    }
+
+    request.headers.addAll(
+      {
+        ...options.headers,
+        ...headers?.map((key, value) => MapEntry(key, value.toString())) ?? {}
+      },
+    );
+
+    request.addFields(fields ?? {});
+
+    await request.addFiles(files ?? []);
+
+    return await http.Response.fromStream(await request.send());
+  }
+
+  Future<http.Response> multipartRequestDebug(
+    String url, {
+    String method = 'GET',
+    Map<String, String>? headers,
+    Map<String, dynamic>? fields,
+    List<MultipartContructor>? files,
     String? fallback,
     String connectionFallback = "Connection error, try it later",
     String? requestRef,
@@ -307,28 +333,85 @@ extension MultipartResponded on http.MultipartRequest {
   }) async {
     if (requestRef != null) log("$requestRef⬅️");
 
-    if (showRequest) {
-      final f = files
-          .mapIndexed((i, e) => {
-                "contentType": e.contentType.toString(),
-                "field": e.field,
-                "filename": e.filename,
-                "length": e.length,
-              })
-          .toList();
-      log('${jsonEncode({"fields": fields, "files": f})} ⭐');
-    }
-
     try {
-      final response = await http.Response.fromStream(await send());
+      final request = http.MultipartRequest(
+        method,
+        Uri.parse(url.startsWith("http") ? url : options.baseUrl + url),
+      );
 
+      options.headers = DioService.multipart;
+
+      final optionToken = options.headers['Authorization'],
+          tokenAuth = await SecureStorage.read(SecureCollection.tokenAuth);
+
+      if (tokenAuth != null && optionToken == null) {
+        options.headers['Authorization'] = 'Token $tokenAuth';
+      }
+
+      request.headers.addAll(
+        {
+          ...options.headers,
+          ...headers?.map((key, value) => MapEntry(key, value.toString())) ?? {}
+        },
+      );
+
+      request.addFields(fields ?? {});
+
+      await request.addFiles(files ?? []);
+
+      if (showRequest) {
+        final f = request.files
+            .mapIndexed((i, e) => {
+                  "contentType": e.contentType.toString(),
+                  "field": e.field,
+                  "filename": e.filename,
+                  "length": e.length,
+                })
+            .toList();
+        log('${jsonEncode({"fields": fields, "files": f})} ⭐');
+      }
+
+      final response = await http.Response.fromStream(await request.send());
       if (showResponse) log("${requestRef ?? ""} ${response.body} ✅");
+
       return response;
     } catch (error) {
       throw error.catchErrorMessage(fallback: connectionFallback);
     }
   }
+}
 
+/// A constructor used to storage files data.
+///
+/// could be used to add files into `http.MultipartRequest` using `addFiles`
+/// method.
+class MultipartContructor {
+  const MultipartContructor({
+    required this.file,
+    required this.field,
+    this.contentType,
+    this.filename,
+  });
+  final file_picker.PlatformFile file;
+  final String field;
+  final MediaType? contentType;
+  final String? filename;
+
+  Future<http.MultipartFile> build() async {
+    return http.MultipartFile.fromBytes(
+      field,
+      file.bytes!,
+      contentType: contentType ??
+          MediaType(
+            FileType.fromExtension(file.extension!)?.name ?? "unknow",
+            FileType.extension(file.extension!),
+          ),
+      filename: filename ?? file.name,
+    );
+  }
+}
+
+extension MultipartResponded on http.MultipartRequest {
   /// Adds all key/value pairs of `fieldsIncomming` to this map and will be
   /// transformer to string.
   ///
@@ -349,35 +432,5 @@ extension MultipartResponded on http.MultipartRequest {
 
       files.add(await element.build());
     }
-  }
-}
-
-/// A constructor used to storage files data.
-///
-/// could be used to add files into `http.MultipartRequest` using `addFiles`
-/// method.
-class MultipartContructor {
-  const MultipartContructor({
-    required this.file,
-    required this.name,
-    this.format,
-    this.type,
-  });
-  final file_picker.PlatformFile file;
-  final String name;
-  final String? format;
-  final String? type;
-
-  Future<http.MultipartFile> build() async {
-    final typeFile =
-            type ?? FileType.fromExtension(file.extension!)?.name ?? "unknow",
-        formatFile = format ?? FileType.extension(file.extension!);
-
-    return http.MultipartFile.fromBytes(
-      name,
-      file.bytes!,
-      contentType: MediaType(typeFile, formatFile),
-      filename: file.name,
-    );
   }
 }
