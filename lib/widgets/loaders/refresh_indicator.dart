@@ -125,6 +125,7 @@ class AppRefreshIndicator extends StatelessWidget {
       notificationPredicate: notificationPredicate,
       controller: controller,
       builder: (context, child, controller) {
+        localController = controller;
         bool isLeading =
                 onRefresh != null && controller.edge == IndicatorEdge.leading,
             isTrailing =

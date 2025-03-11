@@ -27,7 +27,7 @@ class MainProvider extends ChangeNotifier {
   }
 
   ProfileModel? profile;
-  get clearProfile => profile = null;
+  void get clearProfile => profile = null;
   set setProfile(ProfileModel value) {
     profile = value;
     notifyListeners();
