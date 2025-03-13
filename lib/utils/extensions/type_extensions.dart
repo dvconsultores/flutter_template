@@ -440,8 +440,7 @@ extension DoubleExtension on double {
 
       formattedAmount = formatter.format(this).trim();
     } else {
-      final localeValue = locale ?? AppLocale.locale.languageCode,
-          language = LanguageList.get(localeValue);
+      final localeValue = locale ?? AppLocale.locale.languageCode;
 
       formatter = NumberFormat.currency(
         locale: localeValue,
@@ -454,39 +453,6 @@ extension DoubleExtension on double {
       formatter.minimumFractionDigits = minimumFractionDigits;
 
       formattedAmount = formatter.format(this).trim();
-
-      // prevent round numbers
-      if (maxDecimals >= minimumFractionDigits) {
-        final withoutThousands = formattedAmount
-            .replaceAll(language.thousandsSeparator, '')
-            .replaceAll(',', '.');
-
-        final amountWithoutThousands =
-            withoutThousands.replaceAllMapped(RegExp(r'\d+(\.\d+)?'), (match) {
-          var value = this.maxDecimals(maxDecimals).toString();
-          if (kIsWeb && this is int) value = toStringAsFixed(1);
-
-          final resultSplitted = value.split('.'),
-              multiplier =
-                  minimumFractionDigits - resultSplitted.elementAt(1).length;
-
-          final result =
-                  "${resultSplitted.join(language.decimalSeparator)}${'0' * multiplier}",
-              splittedResult = result.split(language.decimalSeparator);
-
-          if (minimumFractionDigits == 0 &&
-              splittedResult.elementAt(1) == '0') {
-            return splittedResult.elementAt(0);
-          }
-
-          return result;
-        });
-
-        formattedAmount = amountWithoutThousands.replaceAllMapped(
-          RegExp(r'(\d)(?=(\d{3})+(?!\d))'),
-          (match) => '${match.group(1)}${language.thousandsSeparator}',
-        );
-      }
     }
 
     return formattedAmount;
@@ -703,8 +669,7 @@ extension StringExtension on String {
 
       formattedAmount = formatter.format(toDouble()).trim();
     } else {
-      final localeValue = locale ?? AppLocale.locale.languageCode,
-          language = LanguageList.get(localeValue);
+      final localeValue = locale ?? AppLocale.locale.languageCode;
 
       formatter = NumberFormat.currency(
         locale: localeValue,
@@ -717,41 +682,6 @@ extension StringExtension on String {
       formatter.minimumFractionDigits = minimumFractionDigits;
 
       formattedAmount = formatter.format(toDouble()).trim();
-
-      // prevent round numbers
-      if (maxDecimals >= minimumFractionDigits) {
-        final withoutThousands = formattedAmount
-            .replaceAll(language.thousandsSeparator, '')
-            .replaceAll(',', '.');
-
-        final amountWithoutThousands =
-            withoutThousands.replaceAllMapped(RegExp(r'\d+(\.\d+)?'), (match) {
-          var value = toDouble().maxDecimals(maxDecimals).toString();
-          if (kIsWeb && value.toDouble() is int) {
-            value = value.toDouble().toStringAsFixed(1);
-          }
-
-          final resultSplitted = value.split('.'),
-              multiplier =
-                  minimumFractionDigits - resultSplitted.elementAt(1).length;
-
-          final result =
-                  "${resultSplitted.join(language.decimalSeparator)}${'0' * multiplier}",
-              splittedResult = result.split(language.decimalSeparator);
-
-          if (minimumFractionDigits == 0 &&
-              splittedResult.elementAt(1) == '0') {
-            return splittedResult.elementAt(0);
-          }
-
-          return result;
-        });
-
-        formattedAmount = amountWithoutThousands.replaceAllMapped(
-          RegExp(r'(\d)(?=(\d{3})+(?!\d))'),
-          (match) => '${match.group(1)}${language.thousandsSeparator}',
-        );
-      }
     }
 
     return formattedAmount;
