@@ -884,15 +884,14 @@ extension ExceptionHandler on Object {
       final exception = this as dio.DioException;
 
       type = exception.type;
-      statusCode = exception.response?.statusCode.toString();
-      error = exception.message;
       url = exception.response?.realUri.toString();
-      responseMessage = exception.response?.data is Map<String, dynamic>
-          ? exception.response!.data!['message']?.toString() ??
-              exception.response!.data!['error']?.toString() ??
-              exception.response!.data!['data']?.toString() ??
-              ''
-          : exception.response?.data?.toString() ?? '';
+      statusCode = exception.response?.statusCode?.toString();
+      error = exception.response?.data?['data']?.toString() ??
+          exception.response?.data?['error']?.toString() ??
+          exception.message;
+      responseMessage = (exception.response?.data is Map<String, dynamic>)
+          ? exception.response?.data['message']?.toString() ?? ''
+          : exception.response?.data?.toString() ?? exception.message ?? '';
     }
 
     if (this is io.HttpException) {
@@ -942,7 +941,7 @@ extension ExceptionHandler on Object {
     }
 
     debugPrint(
-      "⭕ exceptionType: $type ⭕\n⭕ statusCode: $statusCode ⭕\n⭕ error: $error ⭕\n⭕ url: $url ⭕",
+      "⭕ exceptionType: $type ⭕\n⭕ statusCode: $statusCode ⭕\n⭕ error: $error ⭕\n⭕ url: $url ⭕\n⭕ message: $responseMessage ⭕",
     );
 
     fallback ??= "${statusCode ?? 'Error'}: Ha ocurrido un error inesperado";

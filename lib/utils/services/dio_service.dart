@@ -296,18 +296,19 @@ extension DioExtensions on Dio {
       Uri.parse(url.startsWith("http") ? url : options.baseUrl + url),
     );
 
-    options.headers = DioService.multipart;
+    if (headers != null) {
+      final optionToken = headers['Authorization'],
+          tokenAuth = await SecureStorage.read(SecureCollection.tokenAuth);
 
-    final optionToken = options.headers['Authorization'],
-        tokenAuth = await SecureStorage.read(SecureCollection.tokenAuth);
-
-    if (tokenAuth != null && optionToken == null) {
-      options.headers['Authorization'] = 'Token $tokenAuth';
+      if (tokenAuth != null && optionToken == null) {
+        headers['Authorization'] = 'Token $tokenAuth';
+      }
     }
 
     request.headers.addAll(
       {
         ...options.headers,
+        ...DioService.multipart,
         ...headers?.map((key, value) => MapEntry(key, value.toString())) ?? {}
       },
     );
@@ -339,18 +340,19 @@ extension DioExtensions on Dio {
         Uri.parse(url.startsWith("http") ? url : options.baseUrl + url),
       );
 
-      options.headers = DioService.multipart;
+      if (headers != null) {
+        final optionToken = headers['Authorization'],
+            tokenAuth = await SecureStorage.read(SecureCollection.tokenAuth);
 
-      final optionToken = options.headers['Authorization'],
-          tokenAuth = await SecureStorage.read(SecureCollection.tokenAuth);
-
-      if (tokenAuth != null && optionToken == null) {
-        options.headers['Authorization'] = 'Token $tokenAuth';
+        if (tokenAuth != null && optionToken == null) {
+          headers['Authorization'] = 'Token $tokenAuth';
+        }
       }
 
       request.headers.addAll(
         {
           ...options.headers,
+          ...DioService.multipart,
           ...headers?.map((key, value) => MapEntry(key, value.toString())) ?? {}
         },
       );
