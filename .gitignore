@@ -60,3 +60,4 @@ key.properties
 
 # FVM Version Cache
 .fvm/
+.fvmrc
