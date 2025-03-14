@@ -872,7 +872,17 @@ extension ExceptionHandler on Object {
     dynamic error;
     String? url;
 
-    if (this is String) return this as String;
+    if (this is String || this is Error) return toString();
+
+    if (this is Map<String, dynamic>) {
+      final exception = this as Map<String, dynamic>;
+
+      statusCode =
+          (exception['status'] ?? exception['code'] ?? exception['statusCode'])
+              .toString();
+      responseMessage = exception['message'];
+      error = exception['error'] ?? exception['data'];
+    }
 
     if (this is Exception) {
       final exception = this as Exception;
@@ -886,8 +896,8 @@ extension ExceptionHandler on Object {
       type = exception.type;
       url = exception.response?.realUri.toString();
       statusCode = exception.response?.statusCode?.toString();
-      error = exception.response?.data?['data']?.toString() ??
-          exception.response?.data?['error']?.toString() ??
+      error = exception.response?.data?['error']?.toString() ??
+          exception.response?.data?['data']?.toString() ??
           exception.message;
       responseMessage = (exception.response?.data is Map<String, dynamic>)
           ? exception.response?.data['message']?.toString() ?? ''
@@ -944,7 +954,7 @@ extension ExceptionHandler on Object {
       "⭕ exceptionType: $type ⭕\n⭕ statusCode: $statusCode ⭕\n⭕ error: $error ⭕\n⭕ url: $url ⭕\n⭕ message: $responseMessage ⭕",
     );
 
-    fallback ??= "${statusCode ?? 'Error'}: Ha ocurrido un error inesperado";
+    fallback ??= "${statusCode ?? 'Error'}: Something went wrong";
     if (responseMessage.isHtml()) return fallback;
     return responseMessage.isNotEmpty ? responseMessage : fallback;
   }
@@ -952,6 +962,14 @@ extension ExceptionHandler on Object {
   /// Will return the `error StatusCode` from the request.
   String? catchErrorStatusCode() {
     String? statusCode;
+
+    if (this is Map<String, dynamic>) {
+      final exception = this as Map<String, dynamic>;
+
+      statusCode =
+          (exception['status'] ?? exception['code'] ?? exception['statusCode'])
+              .toString();
+    }
 
     if (this is dio.DioException) {
       final exception = this as dio.DioException;
