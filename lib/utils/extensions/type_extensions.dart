@@ -896,12 +896,16 @@ extension ExceptionHandler on Object {
       type = exception.type;
       url = exception.response?.realUri.toString();
       statusCode = exception.response?.statusCode?.toString();
-      error = exception.response?.data?['error']?.toString() ??
-          exception.response?.data?['data']?.toString() ??
-          exception.message;
-      responseMessage = (exception.response?.data is Map<String, dynamic>)
-          ? exception.response?.data['message']?.toString() ?? ''
-          : exception.response?.data?.toString() ?? exception.message ?? '';
+      error = exception.response?.data is String
+          ? exception.response!.data
+          : exception.response?.data?['error']?.toString() ??
+              exception.response?.data?['data']?.toString() ??
+              exception.message;
+      responseMessage = exception.response?.data is String
+          ? exception.response!.data
+          : exception.response?.data['message']?.toString() ??
+              exception.message ??
+              '';
     }
 
     if (this is io.HttpException) {
