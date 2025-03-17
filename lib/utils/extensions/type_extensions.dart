@@ -459,10 +459,16 @@ extension DoubleExtension on double {
   }
 
   /// Used to limit decimal characters in `double`
-  double maxDecimals([int max = Vars.maxDecimals]) {
-    final splitted = toString().split("."),
+  double maxDecimals([int? max]) {
+    if (!toString().contains(".")) return this;
+
+    final max0 = max ?? Vars.maxDecimals,
+        splitted = toString().split("."),
         decimalsFiltered = splitted.last.substring(
-            0, splitted.last.length > max ? max : splitted.last.length);
+          0,
+          splitted.last.length > max0 ? max0 : splitted.last.length,
+        );
+
     splitted.removeLast();
     splitted.add(decimalsFiltered);
     return double.parse(splitted.join("."));
