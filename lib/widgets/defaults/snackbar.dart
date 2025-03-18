@@ -1,12 +1,11 @@
-import 'dart:convert';
-
 import 'package:another_flushbar/flushbar.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_detextre4/main_provider.dart';
 import 'package:flutter_detextre4/utils/config/theme.dart';
 import 'package:flutter_detextre4/utils/extensions/type_extensions.dart';
 import 'package:flutter_detextre4/utils/general/context_utility.dart';
 import 'package:flutter_detextre4/utils/general/variables.dart';
+import 'package:flutter/material.dart';
+import 'package:responsive_mixin_layout/responsive_mixin_layout.dart';
 
 BuildContext _getContext(BuildContext? context) =>
     context ?? ContextUtility.context!;
@@ -24,7 +23,7 @@ enum SnackbarType {
 /// To make it indefinite, set messageDuration to null
 /// TODO do implementation to send snackbar with same id and replace old snackbar by id
 void showSnackbar(
-  String? message, {
+  String message, {
   BuildContext? context,
   String? title,
   SnackbarType? type,
@@ -33,17 +32,11 @@ void showSnackbar(
   FlushbarDismissDirection dismissDirection = FlushbarDismissDirection.VERTICAL,
   FlushbarPosition? flushbarPosition,
   FlushbarStyle flushbarStyle = FlushbarStyle.FLOATING,
-  String searchBy = "message",
-  String fallback = "Error",
   double? maxWidth,
 }) {
   if (message.hasNotValue) return;
 
-  final String msg = message!.contains('"$searchBy":')
-      ? jsonDecode(message)[searchBy]
-      : message.isNotEmpty
-          ? message
-          : fallback;
+  final isMobile = _getContext(context).width.isMobile;
 
   (Color, Icon?, FlushbarPosition) getValueByType() {
     Color? color;
@@ -53,45 +46,45 @@ void showSnackbar(
         return (
           color ??= ThemeApp.of(_getContext(context)).colors.success,
           Icon(Icons.check_circle_outline_rounded, color: color),
-          FlushbarPosition.BOTTOM
+          isMobile ? FlushbarPosition.BOTTOM : FlushbarPosition.TOP
         );
       case SnackbarType.warning:
         return (
           color ??= ThemeApp.of(_getContext(context)).colors.warning,
           Icon(Icons.warning_amber_rounded, color: color),
-          FlushbarPosition.BOTTOM
+          isMobile ? FlushbarPosition.BOTTOM : FlushbarPosition.TOP
         );
       case SnackbarType.error:
         return (
           color ??= ThemeApp.of(_getContext(context)).colors.error,
           Icon(Icons.error_rounded, color: color),
-          FlushbarPosition.BOTTOM
+          isMobile ? FlushbarPosition.BOTTOM : FlushbarPosition.TOP
         );
       case SnackbarType.info:
         return (
           color ??= ThemeApp.of(_getContext(context)).colors.secondary,
           Icon(Icons.info_outline_rounded, color: color),
-          FlushbarPosition.BOTTOM
+          isMobile ? FlushbarPosition.BOTTOM : FlushbarPosition.TOP
         );
       case SnackbarType.neutral:
       default:
         return (
           color ??= ThemeApp.of(_getContext(context)).colors.text,
           null,
-          FlushbarPosition.BOTTOM
+          isMobile ? FlushbarPosition.BOTTOM : FlushbarPosition.TOP
         );
     }
   }
 
   Flushbar? flushbar;
   flushbar = Flushbar(
-    maxWidth: maxWidth ?? Vars.getDesignSize(_getContext(context)).width,
+    maxWidth: maxWidth ?? Vars.mobileSize.width,
     titleText: title.hasValue
         ? Text(title!,
             style: Theme.of(_getContext(context)).textTheme.bodyLarge)
         : null,
     messageText: Text(
-      msg,
+      message,
       style: Theme.of(_getContext(context))
           .textTheme
           .bodyMedium
@@ -114,7 +107,11 @@ void showSnackbar(
         : null,
     positionOffset: 20,
     flushbarPosition: flushbarPosition ?? getValueByType().$3,
-    margin: const EdgeInsets.only(left: Vars.gapMedium, right: Vars.gapMedium),
+    margin: EdgeInsets.only(
+      top: isMobile ? 0 : Vars.gapMedium,
+      left: Vars.gapMedium,
+      right: Vars.gapMedium,
+    ),
     duration: duration,
     flushbarStyle: flushbarStyle,
   );
