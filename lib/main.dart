@@ -129,7 +129,6 @@ class _AppState extends State<App> {
     required AppLoader loader,
     required ValueNotifier<MaterialLoaderStatus> fetchStatus,
   }) {
-    loader.close();
     fetchStatus.value = MaterialLoaderStatus.error;
 
     if (error.catchErrorStatusCode() == "401") {
