@@ -3,36 +3,26 @@ import 'dart:math' as math;
 import 'package:flutter/material.dart';
 import 'package:flutter_detextre4/utils/config/theme.dart';
 import 'package:flutter_detextre4/utils/general/variables.dart';
+import 'package:flutter_detextre4/utils/services/initialization_service.dart';
 import 'package:flutter_detextre4/widgets/defaults/button.dart';
 
-class SplashPage extends StatefulWidget {
-  const SplashPage({
+class SplashScreen extends StatelessWidget {
+  const SplashScreen({
     super.key,
     required this.animationController,
-    required this.shouldShowRestartButton,
-    required this.getData,
+    required this.handleFetchData,
+    required this.initialFetchStatus,
   });
   final AnimationController animationController;
-  final bool shouldShowRestartButton;
-  final Future<void> Function() getData;
-
-  @override
-  State<SplashPage> createState() => _SplashPageState();
-}
-
-class _SplashPageState extends State<SplashPage> {
-  @override
-  void dispose() {
-    widget.animationController.dispose();
-    super.dispose();
-  }
+  final Future<void> Function() handleFetchData;
+  final ValueNotifier<InitialFetchStatus> initialFetchStatus;
 
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
 
     final Animation<double> animationCurve = CurvedAnimation(
-      parent: widget.animationController,
+      parent: animationController,
       curve: Curves.fastLinearToSlowEaseIn,
     );
     final Animation<double> animMoveText = Tween<double>(
@@ -42,25 +32,31 @@ class _SplashPageState extends State<SplashPage> {
     final Animation<double> animMoveFirstCube = Tween<double>(
       begin: 0.0,
       end: -125,
-    ).animate(widget.animationController);
+    ).animate(animationController);
     final Animation<double> animMoveSecondCube = Tween<double>(
       begin: 0.0,
       end: 125,
-    ).animate(widget.animationController);
+    ).animate(animationController);
 
     return Scaffold(
-      floatingActionButton:
-          animationCurve.isCompleted && widget.shouldShowRestartButton
-              ? IntrinsicWidth(
-                  child: Button(
-                    text: "Restart",
-                    padding: EdgeInsets.symmetric(horizontal: Vars.gapXLarge),
-                    disabled: !widget.shouldShowRestartButton,
-                    boxShadow: const [],
-                    onPressed: widget.getData,
-                  ),
-                )
-              : null,
+      floatingActionButton: ListenableBuilder(
+          listenable: initialFetchStatus,
+          builder: (context, child) {
+            final shouldShowRestartButton = animationCurve.isCompleted &&
+                initialFetchStatus.value == InitialFetchStatus.error;
+
+            if (!shouldShowRestartButton) return SizedBox.shrink();
+
+            return IntrinsicWidth(
+              child: Button(
+                text: "Restart",
+                padding: EdgeInsets.symmetric(horizontal: Vars.gapXLarge),
+                disabled: !shouldShowRestartButton,
+                boxShadow: const [],
+                onPressed: handleFetchData,
+              ),
+            );
+          }),
       body: Stack(children: [
         // * background
         SizedBox(
@@ -115,7 +111,7 @@ class _SplashPageState extends State<SplashPage> {
             tag: "logo demo",
             child: Column(children: [
               AnimatedBuilder(
-                animation: widget.animationController,
+                animation: animationController,
                 builder: (context, child) => Transform.scale(
                   scale: animationCurve.value,
                   child: child,
@@ -126,7 +122,7 @@ class _SplashPageState extends State<SplashPage> {
                 ),
               ),
               AnimatedBuilder(
-                animation: widget.animationController,
+                animation: animationController,
                 builder: (context, child) => Transform.scale(
                     scale: animationCurve.value,
                     child: Transform.translate(

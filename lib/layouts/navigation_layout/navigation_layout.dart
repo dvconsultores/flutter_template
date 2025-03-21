@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_detextre4/layouts/navigation_layout/navigation_screen.dart';
-import 'package:flutter_detextre4/utils/services/initialization_service.dart';
+import 'package:flutter_detextre4/main_provider.dart';
 import 'package:flutter_detextre4/utils/services/reminder_service.dart';
 import 'package:go_router/go_router.dart';
 
@@ -23,7 +23,7 @@ class NavigationLayout extends StatefulWidget {
 
 class _NavigationLayoutState extends State<NavigationLayout>
     with WidgetsBindingObserver {
-  late final InitializationService initializationService;
+  final initializationService = MainProvider.read().initializationService;
 
   ScaffoldState? scaffoldState;
   void setScaffoldState(BuildContext? context) {
@@ -42,7 +42,7 @@ class _NavigationLayoutState extends State<NavigationLayout>
 
   @override
   void initState() {
-    initializationService = InitializationService(context);
+    initializationService.inAppService.initBothInAppServices();
     WidgetsBinding.instance.addObserver(this);
     super.initState();
   }

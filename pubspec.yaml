@@ -118,7 +118,7 @@ dependencies:
   badges: ^3.1.2
   flex_list: ^1.0.0
   universal_html: ^2.2.4
-  material_charts: ^0.0.25
+  syncfusion_flutter_charts: ^28.2.12
   app_loader: ^1.4.0
 
 

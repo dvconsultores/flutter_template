@@ -6,14 +6,12 @@ import 'package:collection/collection.dart';
 import 'package:dio/dio.dart';
 import 'package:file_picker/file_picker.dart' as file_picker;
 import 'package:flutter/material.dart';
-import 'package:flutter_detextre4/main_provider.dart';
 import 'package:flutter_detextre4/utils/config/router_config.dart';
 import 'package:flutter_detextre4/utils/extensions/type_extensions.dart';
 import 'package:flutter_detextre4/utils/general/context_utility.dart';
 import 'package:flutter_detextre4/utils/general/file_type.dart.dart';
 import 'package:flutter_detextre4/utils/services/local_data/env_service.dart';
 import 'package:flutter_detextre4/utils/services/local_data/secure_storage_service.dart';
-import 'package:flutter_detextre4/widgets/dialogs/modal_widget.dart';
 import 'package:http/http.dart' as http;
 import 'package:http_parser/http_parser.dart';
 
@@ -61,8 +59,8 @@ class DioService {
     // ..connectTimeout = const Duration(seconds: 5)
     // ..receiveTimeout = const Duration(seconds: 3);
 
-    dio.interceptors.add(InterceptorsWrapper(
-      onRequest: (options, handler) async {
+    dio.interceptors.add(
+      InterceptorsWrapper(onRequest: (options, handler) async {
         //* set default header auth
         final optionToken = options.headers['Authorization'],
             tokenAuth = await SecureStorage.read(SecureCollection.tokenAuth);
@@ -72,8 +70,7 @@ class DioService {
         }
 
         return handler.next(options);
-      },
-      onError: (DioException error, handler) async {
+      }, onError: (DioException error, handler) async {
         //* catch unauthorized request
         if (error.response?.statusCode == 401) {
           Navigator.popUntil(
@@ -81,22 +78,11 @@ class DioService {
             (route) => route.isFirst,
           );
           routerConfig.router.goNamed("login");
-
-          Modal.showSystemAlert(
-            ContextUtility.context ?? context,
-            dismissible: false,
-            titleText: 'Session has expired',
-            contentText: 'Please log in again.',
-            textConfirmBtn: "Got it",
-          );
-
-          if (!MainProvider.read(context).returnDioAuthError) return;
-          return handler.next(error);
         }
 
         return handler.next(error);
-      },
-    ));
+      }),
+    );
   }
 }
 

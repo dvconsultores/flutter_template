@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:io';
 
 import 'package:flutter/cupertino.dart';
@@ -10,8 +11,10 @@ import 'package:flutter_detextre4/routes/login_route/login_route.dart';
 import 'package:flutter_detextre4/routes/shell_routes/home_route/home_route.dart';
 import 'package:flutter_detextre4/routes/shell_routes/profile_route/profile_route.dart';
 import 'package:flutter_detextre4/routes/shell_routes/search_route/search_route.dart';
+import 'package:flutter_detextre4/routes/splash_route/splash_route.dart';
 import 'package:flutter_detextre4/utils/general/context_utility.dart';
 import 'package:flutter_detextre4/utils/helper_widgets/custom_transition_wrapper.dart';
+import 'package:flutter_detextre4/utils/services/initialization_service.dart';
 import 'package:flutter_detextre4/utils/services/local_data/secure_storage_service.dart';
 import 'package:go_router/go_router.dart';
 
@@ -25,6 +28,41 @@ class AppRouterConfig {
         child: child,
       );
 
+  static FutureOr<String?> Function(BuildContext, GoRouterState) get redirect =>
+      (context, state) async {
+        final mainProvider = MainProvider.read(context);
+
+        if (mainProvider.currentNavContext != null &&
+            mainProvider.currentNavContext!.mounted &&
+            Navigator.canPop(mainProvider.currentNavContext!)) {
+          Navigator.popUntil(
+            mainProvider.currentNavContext!,
+            (route) => route.isFirst,
+          );
+        }
+
+        final location = state.path ?? '';
+
+        if (mainProvider
+                .initializationService.initialFetch.initialFetchStatus.value !=
+            InitialFetchStatus.done) {
+          if (state.uri.toString().contains("redirectPath")) return null;
+
+          return '/splash?redirectPath=${Uri.encodeComponent(state.uri.toString())}';
+        }
+
+        final isLogged = (await SecureStorage.read<String?>(
+                    SecureCollection.tokenAuth)) !=
+                null,
+            requireAuth = !location.contains("/auth");
+
+        if (requireAuth && !isLogged) {
+          return kIsWeb ? "/landing" : "/auth";
+        }
+
+        return null;
+      };
+
   AppRouterConfig() {
     setRouter();
   }
@@ -35,34 +73,26 @@ class AppRouterConfig {
           // errorBuilder: (context, state) {
           //   return const ErrorPage();
           // },
-          redirect: (context, state) async {
-            final mainProvider = MainProvider.read(context);
-            if (mainProvider.currentNavContext != null &&
-                mainProvider.currentNavContext!.mounted &&
-                Navigator.canPop(mainProvider.currentNavContext!)) {
-              Navigator.popUntil(
-                mainProvider.currentNavContext!,
-                (route) => route.isFirst,
-              );
-            }
-
-            final location = state.path ?? '';
-
-            final isLogged = (await SecureStorage.read<String?>(
-                        SecureCollection.tokenAuth)) !=
-                    null,
-                requireAuth = !location.contains("/auth");
-
-            if (requireAuth && !isLogged) {
-              return kIsWeb ? "/landing" : "/auth";
-            }
-
-            return null;
-          },
+          redirect: redirect,
 
           // ? Registered Routes
           routes: [
             //* top level
+            GoRoute(
+              path: '/splash',
+              name: 'splash',
+              pageBuilder: (context, state) {
+                final redirectPath = state.uri.queryParameters['redirectPath'];
+
+                return pageBuilder(
+                  SplashRoute(
+                    redirectPath: redirectPath != null
+                        ? Uri.decodeComponent(redirectPath)
+                        : redirectPath,
+                  ),
+                );
+              },
+            ),
             if (kIsWeb)
               GoRoute(
                 path: '/landing',

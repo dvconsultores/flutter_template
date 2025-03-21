@@ -1,24 +1,14 @@
-import 'package:app_loader/app_loader.dart';
-import 'package:dio/dio.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_detextre4/blocs/main_bloc.dart';
 import 'package:flutter_detextre4/main_provider.dart';
 import 'package:flutter_detextre4/utils/config/config.dart';
 import 'package:flutter_detextre4/utils/config/router_config.dart';
 import 'package:flutter_detextre4/utils/config/session_timeout_config.dart';
 import 'package:flutter_detextre4/utils/config/theme.dart';
-import 'package:flutter_detextre4/utils/extensions/type_extensions.dart';
 import 'package:flutter_detextre4/utils/general/context_utility.dart';
 import 'package:flutter_detextre4/utils/general/scroll_behavior.dart';
 import 'package:flutter_detextre4/utils/general/variables.dart';
-import 'package:flutter_detextre4/utils/services/dio_service.dart';
 import 'package:flutter_detextre4/utils/services/local_data/hive_data_service.dart';
-import 'package:flutter_detextre4/utils/services/local_data/secure_storage_service.dart';
-import 'package:flutter_detextre4/widgets/defaults/snackbar.dart';
-import 'package:flutter_detextre4/widgets/dialogs/modal_widget.dart';
-import 'package:flutter_detextre4/widgets/loaders/splash_page.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -45,12 +35,6 @@ class AppState extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    SystemChrome.setSystemUIOverlayStyle(
-      ThemeApp.of(context)
-          .systemUiOverlayStyle
-          .copyWith(systemNavigationBarColor: Colors.amber),
-    );
-
     // * Route blocs
     return BlocProvider<MainBloc>(
       bloc: MainBloc(),
@@ -73,89 +57,6 @@ class App extends StatefulWidget {
 class _AppState extends State<App> {
   late final SessionTimeoutConfig sessionTimeoutConfig;
 
-  bool isLogged = false;
-
-  Future<void> onFetchData({
-    BuildContext? context,
-    required AppLoader loader,
-    required ValueNotifier<MaterialLoaderStatus> fetchStatus,
-  }) async {
-    if (context == null) return;
-
-    // initialize DioService
-    DioService.init(context);
-
-    final provider = MainProvider.read(context);
-    provider.setReturnDioAuthError = true;
-
-    loader.open();
-
-    try {
-      final [
-        tokenAuth,
-        // _,
-      ] = await Future.wait([
-        SecureStorage.read<String?>(SecureCollection.tokenAuth),
-
-        // initialize deep links
-        // UniLinksService.init(context),
-      ]);
-      isLogged = tokenAuth != null;
-
-      if (isLogged) {
-        provider.setPreventModal = true;
-        // get user data
-        await Future.delayed(Durations.short1);
-      }
-
-      loader.close();
-      fetchStatus.value = MaterialLoaderStatus.done;
-    } catch (error) {
-      handleError(error, loader: loader, fetchStatus: fetchStatus);
-    } finally {
-      provider.setPreventModal = false;
-    }
-  }
-
-  Future<void> onNextMaterial(VoidCallback handleNextMaterial) async {
-    handleNextMaterial();
-    if (kIsWeb) return;
-
-    routerConfig.router.goNamed(isLogged ? "home" : "login");
-  }
-
-  void handleError(
-    Object error, {
-    required AppLoader loader,
-    required ValueNotifier<MaterialLoaderStatus> fetchStatus,
-  }) {
-    fetchStatus.value = MaterialLoaderStatus.error;
-
-    if (error.catchErrorStatusCode() == "401") {
-      SecureStorage.delete(SecureCollection.tokenAuth);
-      return;
-    }
-
-    debugPrint("MaterialhandlerError: $error ⭕");
-    if (!context.mounted) return;
-
-    final errorMessage = error.catchErrorMessage(
-      fallback:
-          "An error has occurred while running the app 😞, please contact our support team for more information",
-    );
-
-    if (error is DioException &&
-        error.type == DioExceptionType.connectionError) {
-      Modal.showSystemAlert(
-        context,
-        contentText: errorMessage,
-        textConfirmBtn: "Okay",
-      );
-    } else {
-      showSnackbar(context: context, errorMessage, type: SnackbarType.error);
-    }
-  }
-
   @override
   void initState() {
     sessionTimeoutConfig = SessionTimeoutConfig(context)..listen();
@@ -171,33 +72,26 @@ class _AppState extends State<App> {
   @override
   Widget build(BuildContext context) => ScreenSizes(
         child: Consumer<MainProvider>(builder: (context, provider, child) {
+          provider.setupInitializationService = context;
+
           return SessionTimeoutManager(
             sessionConfig: sessionTimeoutConfig.instance,
             child: ScreenUtilInit(
                 designSize: Vars.getDesignSize(context),
                 builder: (context, child) {
-                  return MaterialLoader(
-                    onFetchData: onFetchData,
-                    onNextMaterial: onNextMaterial,
-                    splashPage: (animationController, getData, haveError) =>
-                        SplashPage(
-                            animationController: animationController,
-                            getData: getData,
-                            shouldShowRestartButton: haveError),
-                    materialApp: MaterialApp.router(
-                      scrollBehavior: CustomScrollBehavior.of(context),
-                      scaffoldMessengerKey: ContextUtility.scaffoldMessengerKey,
-                      locale: provider.locale,
-                      debugShowCheckedModeBanner: true,
-                      title: AppName.capitalize.value,
-                      theme: ThemeApp.lightTheme,
-                      darkTheme: ThemeApp.darkTheme,
-                      themeMode: provider.appTheme, // * Theme switcher
-                      localizationsDelegates:
-                          AppLocalizations.localizationsDelegates,
-                      supportedLocales: AppLocalizations.supportedLocales,
-                      routerConfig: routerConfig.router,
-                    ),
+                  return MaterialApp.router(
+                    scrollBehavior: CustomScrollBehavior.of(context),
+                    scaffoldMessengerKey: ContextUtility.scaffoldMessengerKey,
+                    locale: provider.locale,
+                    debugShowCheckedModeBanner: true,
+                    title: AppName.capitalize.value,
+                    theme: ThemeApp.lightTheme,
+                    darkTheme: ThemeApp.darkTheme,
+                    themeMode: provider.appTheme, // * Theme switcher
+                    localizationsDelegates:
+                        AppLocalizations.localizationsDelegates,
+                    supportedLocales: AppLocalizations.supportedLocales,
+                    routerConfig: routerConfig.router,
                   );
                 }),
           );

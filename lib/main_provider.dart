@@ -1,11 +1,12 @@
 import 'package:another_flushbar/flushbar.dart';
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:flutter_detextre4/models/profile_model.dart';
 import 'package:flutter_detextre4/utils/config/config.dart';
 import 'package:flutter_detextre4/utils/general/context_utility.dart';
+import 'package:flutter_detextre4/utils/services/initialization_service.dart';
 import 'package:flutter_detextre4/utils/services/local_data/hive_data_service.dart';
-import 'package:flutter/scheduler.dart';
 import 'package:provider/provider.dart';
 
 class MainProvider extends ChangeNotifier {
@@ -18,12 +19,15 @@ class MainProvider extends ChangeNotifier {
   //
 
   // ? -------------------------Global variables----------------------------- //
-  bool appStarted = false;
-  void get setAppStarted {
-    if (appStarted) return;
-
-    appStarted = true;
-    notifyListeners();
+  InitializationService? initializationServiceInstance;
+  InitializationService get initializationService =>
+      initializationServiceInstance!;
+  set setupInitializationService(BuildContext context) {
+    initializationServiceInstance ??=
+        InitializationService(context, notifyListeners);
+    SchedulerBinding.instance.addPostFrameCallback((_) {
+      notifyListeners();
+    });
   }
 
   ProfileModel? profile;
@@ -36,12 +40,6 @@ class MainProvider extends ChangeNotifier {
   bool preventModal = false;
   set setPreventModal(bool value) {
     preventModal = value;
-    notifyListeners();
-  }
-
-  bool returnDioAuthError = false;
-  set setReturnDioAuthError(bool value) {
-    returnDioAuthError = value;
     notifyListeners();
   }
 
