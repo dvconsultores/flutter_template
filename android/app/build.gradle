@@ -123,11 +123,11 @@ android {
     buildTypes {
         // to avoid troubles compiling app with compileSdkVersion 34
         debug {
-            minifyEnabled false
+            minifyEnabled true
             signingConfig signingConfigs.debug
         }
         profile {
-            minifyEnabled false
+            minifyEnabled true
             signingConfig signingConfigs.debug
         }
 
