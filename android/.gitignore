@@ -8,6 +8,7 @@ GeneratedPluginRegistrant.java
 GeneratedPluginRegistrantProd.java
 app/build
 .kotlin/
+.cxx/
 
 # google-services json to firebase
 google-services.json

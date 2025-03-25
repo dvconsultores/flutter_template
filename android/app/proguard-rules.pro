@@ -9,25 +9,42 @@
 
 # Add any project specific keep options here:
 
-# If your project uses WebView with JS, uncomment the following
-# and specify the fully qualified class name to the JavaScript interface
-# class:
-#-keepclassmembers class fqcn.of.javascript.interface.for.webview {
-#   public *;
+# Si tu proyecto utiliza WebView con JS, descomenta y ajusta la siguiente línea:
+# Reemplaza com.example.myapp.WebAppInterface con el nombre completo de tu clase de interfaz JavaScript.
+#-keepclassmembers class com.example.myapp.WebAppInterface {
+#  public *;
 #}
 
-# Uncomment this to preserve the line number information for
-# debugging stack traces.
-#-keepattributes SourceFile,LineNumberTable
+# Descomenta esta línea para conservar la información de número de línea para las trazas de pila de depuración.
+-keepattributes SourceFile,LineNumberTable
 
-# If you keep the line number information, uncomment this to
-# hide the original source file name.
-#-renamesourcefileattribute SourceFile
+# Si conservas la información del número de línea, descomenta esto para ocultar el nombre del archivo fuente original.
+# -renamesourcefileattribute SourceFile
 
-# Flutter Wrapper
+# Reglas básicas de Flutter
 -keep class io.flutter.app.** { *; }
--keep class io.flutter.plugin.**  { *; }
--keep class io.flutter.util.**  { *; }
--keep class io.flutter.view.**  { *; }
--keep class io.flutter.**  { *; }
--keep class io.flutter.plugins.**  { *; }
+-keep class io.flutter.plugin.** { *; }
+-keep class io.flutter.util.** { *; }
+-keep class io.flutter.view.** { *; }
+-keep class io.flutter.** { *; }
+-keep class io.flutter.plugins.** { *; }
+
+# Reglas para Firebase (Ajusta según tus dependencias de Firebase)
+-keep class com.google.firebase.** { *; }
+-keep class com.google.android.gms.** { *; }
+
+# Ejemplos de reglas para otras dependencias (Ajusta según tus dependencias)
+-keep class com.squareup.okhttp3.** { *; } # OkHttp
+-keep class retrofit2.** { *; } # Retrofit
+-keep class com.google.gson.** { *; } # Gson
+-keep class org.greenrobot.eventbus.** { *; } # EventBus
+-keep class com.airbnb.lottie.** { *; } # Lottie
+
+-ignorewarnings
+-keepattributes *Annotation*
+-keepattributes Exceptions
+-keepattributes InnerClasses
+-keepattributes Signature
+-keep class com.huawei.hianalytics.**{*;}
+-keep class com.huawei.updatesdk.**{*;}
+-keep class com.huawei.hms.**{*;}

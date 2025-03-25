@@ -1,3 +1,14 @@
+plugins {
+    id "com.android.application"
+    id "org.jetbrains.kotlin.android"
+    id "dev.flutter.flutter-gradle-plugin"
+}
+
+ext {
+    ext.kotlin_version = '2.0.20'
+}
+
+// Mover las declaraciones de variables y la lectura de archivos aquí
 // read env file
 file("../../.env").readLines().each() {
     if (!it.isEmpty() && !it.startsWith("#")) {
@@ -25,11 +36,6 @@ if (localPropertiesFile.exists()) {
     }
 }
 
-def flutterRoot = localProperties.getProperty('flutter.sdk')
-if (flutterRoot == null) {
-    throw new GradleException("Flutter SDK not found. Define location with flutter.sdk in the local.properties file.")
-}
-
 def flutterVersionCode = localProperties.getProperty('flutter.versionCode')
 if (flutterVersionCode == null) {
     flutterVersionCode = '1'
@@ -40,10 +46,6 @@ if (flutterVersionName == null) {
     flutterVersionName = '1.0'
 }
 
-apply plugin: 'com.android.application'
-apply plugin: 'kotlin-android'
-apply from: "$flutterRoot/packages/flutter_tools/gradle/flutter.gradle"
-
 import groovy.json.JsonSlurper
 import groovy.json.JsonOutput
 
@@ -51,16 +53,26 @@ def bundleIdDev = "com.example.dev"
 def bundleIdProd = "com.example.prod"
 
 android {
+    namespace "com.example.dev"
     compileSdkVersion 34
     ndkVersion flutter.ndkVersion
 
     compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_8
-        targetCompatibility JavaVersion.VERSION_1_8
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
     }
 
     kotlinOptions {
-        jvmTarget = '1.8'
+        jvmTarget = "17"
+    }
+
+    kotlin {
+        jvmToolchain(17)
+    }
+
+    java {
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
     }
 
     sourceSets {
@@ -101,21 +113,21 @@ android {
 
     signingConfigs {
         release {
-           keyAlias keystoreProperties['keyAlias']
-           keyPassword keystoreProperties['keyPassword']
-           storeFile keystoreProperties['storeFile'] ? file(keystoreProperties['storeFile']) : null
-           storePassword keystoreProperties['storePassword']
+            keyAlias keystoreProperties['keyAlias']
+            keyPassword keystoreProperties['keyPassword']
+            storeFile keystoreProperties['storeFile'] ? file(keystoreProperties['storeFile']) : null
+            storePassword keystoreProperties['storePassword']
         }
     }
 
     buildTypes {
         // to avoid troubles compiling app with compileSdkVersion 34
         debug {
-            minifyEnabled true
+            minifyEnabled false
             signingConfig signingConfigs.debug
         }
         profile {
-            minifyEnabled true
+            minifyEnabled false
             signingConfig signingConfigs.debug
         }
 
@@ -123,7 +135,7 @@ android {
             debuggable false
             minifyEnabled true
             shrinkResources true
-            proguardFiles getDefaultProguardFile('proguard-android.txt')
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
             if (keystoreProperties['keyAlias'] != null && keystoreProperties['keyPassword'] != null && keystoreProperties['storeFile'] != null && keystoreProperties['storePassword'] != null) {
                 signingConfig signingConfigs.release
             } else {
@@ -132,7 +144,6 @@ android {
         }
     }
 
-    namespace "com.example.dev"
     lint {
         checkReleaseBuilds false
     }
@@ -144,5 +155,5 @@ flutter {
 
 dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
-    implementation 'com.android.support:multidex:1.0.3'
+    implementation 'androidx.multidex:multidex:2.0.1'
 }

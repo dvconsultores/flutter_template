@@ -23,11 +23,13 @@ class MainProvider extends ChangeNotifier {
   InitializationService get initializationService =>
       initializationServiceInstance!;
   set setupInitializationService(BuildContext context) {
-    initializationServiceInstance ??=
-        InitializationService(context, notifyListeners);
-    SchedulerBinding.instance.addPostFrameCallback((_) {
-      notifyListeners();
-    });
+    if (initializationServiceInstance == null) {
+      initializationServiceInstance =
+          InitializationService(context, notifyListeners);
+      SchedulerBinding.instance.addPostFrameCallback((_) {
+        notifyListeners();
+      });
+    }
   }
 
   ProfileModel? profile;
