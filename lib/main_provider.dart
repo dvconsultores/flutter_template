@@ -19,12 +19,12 @@ class MainProvider extends ChangeNotifier {
   //
 
   // ? -------------------------Global variables----------------------------- //
-  InitializationService? initializationServiceInstance;
+  InitializationService? _initializationServiceInstance;
   InitializationService get initializationService =>
-      initializationServiceInstance!;
+      _initializationServiceInstance!;
   set setupInitializationService(BuildContext context) {
-    if (initializationServiceInstance == null) {
-      initializationServiceInstance =
+    if (_initializationServiceInstance == null) {
+      _initializationServiceInstance =
           InitializationService(context, notifyListeners);
       SchedulerBinding.instance.addPostFrameCallback((_) {
         notifyListeners();
