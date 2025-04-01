@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
+import 'package:flutter_detextre4/utils/extensions/type_extensions.dart';
 import 'package:flutter_detextre4/utils/services/local_data/env_service.dart';
 import 'package:uni_links/uni_links.dart';
 
@@ -66,9 +67,9 @@ class UniLinksService {
 
     for (final key in UniLinksKey.values) {
       final paramValue = params[key.name];
-      if (paramValue == null) continue;
+      if (paramValue.hasNotValue) continue;
 
-      _uniLinksActions(context, key, paramValue, uniLinksTypeHandler);
+      _uniLinksActions(context, key, paramValue!, uniLinksTypeHandler);
       return true;
     }
 
