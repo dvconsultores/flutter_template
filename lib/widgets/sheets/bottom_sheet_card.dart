@@ -31,6 +31,7 @@ class BottomSheetCard extends StatefulWidget {
     this.titleStyle,
     this.floatingActionButton,
     this.bottomWidget,
+    this.scrollController,
     this.backgroundColor = Colors.transparent,
   });
   final EdgeInsets? padding;
@@ -45,6 +46,7 @@ class BottomSheetCard extends StatefulWidget {
   final TextStyle? titleStyle;
   final Widget? floatingActionButton;
   final Widget? bottomWidget;
+  final ScrollController? scrollController;
   final Color? backgroundColor;
 
   static Future<T?> showModal<T>(
@@ -69,6 +71,7 @@ class BottomSheetCard extends StatefulWidget {
     TextStyle? titleStyle,
     Widget? floatingActionButton,
     Widget? bottomWidget,
+    ScrollController? scrollController,
     BoxConstraints? constraints,
   }) async {
     final value = await showModalBottomSheet<T>(
@@ -100,6 +103,7 @@ class BottomSheetCard extends StatefulWidget {
                 titleStyle: titleStyle,
                 floatingActionButton: floatingActionButton,
                 bottomWidget: bottomWidget,
+                scrollController: scrollController,
                 child: child ?? const SizedBox.shrink(),
               ),
     );
@@ -162,7 +166,7 @@ class _BottomSheetCardState extends State<BottomSheetCard> {
           if (widget.scrollable)
             Expanded(
               child: SingleChildScrollView(
-                controller: scrollController,
+                controller: widget.scrollController ?? scrollController,
                 physics: const BouncingScrollPhysics(),
                 padding: p,
                 child: widget.child,
@@ -205,6 +209,7 @@ class BottomSheetList<T> extends StatefulWidget {
     this.itemsGap,
     this.floatingActionButton,
     this.bottomWidget,
+    this.scrollController,
     this.scrollable = true,
     this.searchFunction,
     this.searchLabelText,
@@ -227,6 +232,7 @@ class BottomSheetList<T> extends StatefulWidget {
   final double? itemsGap;
   final Widget? floatingActionButton;
   final Widget? bottomWidget;
+  final ScrollController? scrollController;
   final bool scrollable;
   final bool Function(int index, String search)? searchFunction;
   final String? searchLabelText;
@@ -259,6 +265,7 @@ class BottomSheetList<T> extends StatefulWidget {
     double? itemsGap,
     Widget? floatingActionButton,
     Widget? bottomWidget,
+    ScrollController? scrollController,
     bool Function(int index, String search)? searchFunction,
     String? searchLabelText,
     String? searchHintText,
@@ -297,6 +304,7 @@ class BottomSheetList<T> extends StatefulWidget {
         titleStyle: titleStyle,
         floatingActionButton: floatingActionButton,
         bottomWidget: bottomWidget,
+        scrollController: scrollController,
         scrollable: scrollable,
         searchFunction: searchFunction,
         searchLabelText: searchLabelText,
@@ -353,7 +361,7 @@ class _BottomSheetListState<T> extends State<BottomSheetList<T>> {
           physics: widget.scrollable
               ? const NeverScrollableScrollPhysics()
               : const ClampingScrollPhysics(),
-          controller: scrollController,
+          controller: widget.scrollController ?? scrollController,
           itemCount: filteredItems.length,
           separatorBuilder: (context, index) =>
               Gap(widget.itemsGap ?? Vars.gapXLarge).column,
@@ -488,6 +496,7 @@ class BottomSheetListMultiple<T> extends StatefulWidget {
     this.mainAxisSpacing = Vars.gapXLarge,
     this.floatingActionButton,
     this.bottomWidget,
+    this.scrollController,
     this.scrollable = true,
     this.searchFunction,
     this.searchLabelText,
@@ -522,6 +531,7 @@ class BottomSheetListMultiple<T> extends StatefulWidget {
   final double mainAxisSpacing;
   final Widget? floatingActionButton;
   final Widget? bottomWidget;
+  final ScrollController? scrollController;
   final bool scrollable;
   final bool Function(int index, String search)? searchFunction;
   final String? searchLabelText;
@@ -565,6 +575,7 @@ class BottomSheetListMultiple<T> extends StatefulWidget {
     double mainAxisSpacing = Vars.gapXLarge,
     Widget? floatingActionButton,
     Widget? bottomWidget,
+    ScrollController? scrollController,
     bool Function(int index, String search)? searchFunction,
     String? searchLabelText,
     String? searchHintText,
@@ -613,6 +624,7 @@ class BottomSheetListMultiple<T> extends StatefulWidget {
         scrollable: scrollable,
         floatingActionButton: floatingActionButton,
         bottomWidget: bottomWidget,
+        scrollController: scrollController,
         searchFunction: searchFunction,
         searchLabelText: searchLabelText,
         searchHintText: searchHintText,
@@ -690,6 +702,7 @@ class _BottomSheetListMultipleState<T>
       maxChildSize: widget.maxChildSize,
       builder: (context, scrollController) {
         final gridView = GridView.count(
+          controller: widget.scrollController ?? scrollController,
           crossAxisCount: widget.crossAxisCount,
           childAspectRatio: widget.childAspectRatio,
           crossAxisSpacing: widget.crossAxisSpacing,
