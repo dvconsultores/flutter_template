@@ -8,18 +8,39 @@ ext {
     ext.kotlin_version = '2.0.20'
 }
 
-// Mover las declaraciones de variables y la lectura de archivos aquí
-// read env file
-file("../../.env").readLines().each() {
-    if (!it.isEmpty() && !it.startsWith("#")) {
-        def pos = it.indexOf("=")
-        def key = it.substring(0, pos)
-        def value = it.substring(pos + 1)
+// Function to get specific env variables
+def getEnvVariable(String key, String defaultValue = null) {
+    // get dart define vars
+    if (project.hasProperty('dart-defines')) {
+        def dartDefines = project.property('dart-defines')
+            .split(',')
+            .collectEntries { entry ->
+                def pair = new String(entry.decodeBase64(), 'UTF-8').split('=')
+                [(pair.first()): pair.last()]
+            }
 
-        if (System.getProperty(key) == null) {
-            System.setProperty("env.$key", value)
-        }
+        if (dartDefines.containsKey(key)) { return dartDefines[key] }
     }
+
+    // get env vars
+    def foundLine = file("../../.env").readLines().find { line ->
+        if (!line.isEmpty() && !line.startsWith("#")) {
+            def pos = line.indexOf("=")
+            if (pos > 0) {
+                def envKey = line.substring(0, pos)
+                if (envKey == key) { return line }
+            }
+        }
+        return null
+    }
+
+    if (foundLine != null) {
+        def pos = foundLine.indexOf("=")
+        return foundLine.substring(pos + 1)
+    }
+
+    // return default
+    return defaultValue
 }
 
 def keystoreProperties = new Properties()
@@ -94,11 +115,11 @@ android {
         versionCode flutterVersionCode.toInteger()
         versionName flutterVersionName
         //? 🖊️ FlutterFire Configuration 🖊️
-        // resValue "string", "storage_bucket", System.getProperty("env.FB_STORAGE_BUCKET")
-        // resValue "string", "google_app_id", System.getProperty("env.FB_APP_ID_ANDROID")
-        // resValue "string", "gcm_defaultSenderId", System.getProperty("env.FB_MESSAGING_SENDER_ID")
-        // resValue "string", "google_api_key", System.getProperty("env.FB_API_KEY_ANDROID")
-        // resValue "string", "project_id", System.getProperty("env.FB_PROJECT_ID")
+        // resValue "string", "storage_bucket", getEnvVariable("FB_STORAGE_BUCKET")
+        // resValue "string", "google_app_id", getEnvVariable("FB_APP_ID_ANDROID")
+        // resValue "string", "gcm_defaultSenderId", getEnvVariable("FB_MESSAGING_SENDER_ID")
+        // resValue "string", "google_api_key", getEnvVariable("FB_API_KEY_ANDROID")
+        // resValue "string", "project_id", getEnvVariable("FB_PROJECT_ID")
     }
 
     flavorDimensions "version"
