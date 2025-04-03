@@ -178,9 +178,10 @@ android {
             minifyEnabled true
             shrinkResources true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            // just use signingConfig if running manually, in case of workflow dont use it
             if (keystoreProperties['keyAlias'] != null && keystoreProperties['keyPassword'] != null && keystoreProperties['storeFile'] != null && keystoreProperties['storePassword'] != null) {
                 signingConfig signingConfigs.release
-            } else {
+            } else if (getEnvVariable("ENVIRONMENT") != 'production') {
                 println "Signature configuration not found. Debug keys will be used."
                 signingConfig signingConfigs.debug
             }
