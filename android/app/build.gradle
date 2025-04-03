@@ -43,6 +43,8 @@ def getEnvVariable(String key, String defaultValue = null) {
     return defaultValue
 }
 
+def isProduction = getEnvVariable("ENVIRONMENT") == 'production'
+
 def keystoreProperties = new Properties()
 def keystorePropertiesFile = rootProject.file('key.properties')
 if (keystorePropertiesFile.exists()) {
@@ -154,12 +156,13 @@ android {
     }
 
     buildTypes {
-        // to avoid troubles compiling app with compileSdkVersion 34
+        // 1- to avoid troubles compiling app with compileSdkVersion 34
+        // 2- just use signingConfig if running manually, in case of workflow dont use it
         debug {
             minifyEnabled true
             if (debugKeystoreProperties['keyAlias'] != null && debugKeystoreProperties['keyPassword'] != null && debugKeystoreProperties['storeFile'] != null && debugKeystoreProperties['storePassword'] != null) {
                 signingConfig signingConfigs.profile
-            } else {
+            } else if (!isProduction) {
                 println "Signature configuration not found. Debug keys will be used."
                 signingConfig signingConfigs.debug
             }
@@ -168,7 +171,7 @@ android {
             minifyEnabled true
             if (debugKeystoreProperties['keyAlias'] != null && debugKeystoreProperties['keyPassword'] != null && debugKeystoreProperties['storeFile'] != null && debugKeystoreProperties['storePassword'] != null) {
                 signingConfig signingConfigs.profile
-            } else {
+            } else if (!isProduction) {
                 println "Signature configuration not found. Debug keys will be used."
                 signingConfig signingConfigs.debug
             }
@@ -178,10 +181,9 @@ android {
             minifyEnabled true
             shrinkResources true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-            // just use signingConfig if running manually, in case of workflow dont use it
             if (keystoreProperties['keyAlias'] != null && keystoreProperties['keyPassword'] != null && keystoreProperties['storeFile'] != null && keystoreProperties['storePassword'] != null) {
                 signingConfig signingConfigs.release
-            } else if (getEnvVariable("ENVIRONMENT") != 'production') {
+            } else if (!isProduction) {
                 println "Signature configuration not found. Debug keys will be used."
                 signingConfig signingConfigs.debug
             }
