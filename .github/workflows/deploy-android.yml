@@ -1,5 +1,5 @@
 # Name of the workflow
-name: Apolo Pay PlayStore Release
+name: PlayStore Release
 
 # Controls what will trigger the workflow.
 # Change it to your needs.
