@@ -6,6 +6,7 @@ import 'package:collection/collection.dart';
 import 'package:dio/dio.dart';
 import 'package:file_picker/file_picker.dart' as file_picker;
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_detextre4/utils/config/router_config.dart';
 import 'package:flutter_detextre4/utils/extensions/type_extensions.dart';
 import 'package:flutter_detextre4/utils/general/context_utility.dart';
@@ -382,15 +383,35 @@ class MultipartContructor {
   final String? filename;
 
   Future<http.MultipartFile> build() async {
-    return http.MultipartFile.fromBytes(
-      field,
-      file.bytes!,
-      contentType: contentType ??
-          MediaType(
-            FileType.fromExtension(file.extension!)?.name ?? "unknow",
-            FileType.extension(file.extension!),
-          ),
-      filename: filename ?? file.name,
+    if (file.bytes != null) {
+      return http.MultipartFile.fromBytes(
+        field,
+        file.bytes!,
+        contentType: contentType ??
+            MediaType(
+              FileType.fromExtension(file.extension!)?.name ?? "unknow",
+              FileType.extension(file.extension!),
+            ),
+        filename: filename ?? file.name,
+      );
+    }
+
+    if (file.path != null) {
+      return http.MultipartFile.fromPath(
+        field,
+        file.path!,
+        contentType: contentType ??
+            MediaType(
+              FileType.fromExtension(file.extension!)?.name ?? "unknow",
+              FileType.extension(file.extension!),
+            ),
+        filename: filename ?? file.name,
+      );
+    }
+
+    throw PlatformException(
+      code: "500",
+      message: "Couldn't build PlatfromFile provided",
     );
   }
 }
