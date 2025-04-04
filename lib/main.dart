@@ -3,7 +3,6 @@ import 'package:flutter_detextre4/blocs/main_bloc.dart';
 import 'package:flutter_detextre4/main_provider.dart';
 import 'package:flutter_detextre4/utils/config/config.dart';
 import 'package:flutter_detextre4/utils/config/router_config.dart';
-import 'package:flutter_detextre4/utils/config/session_timeout_config.dart';
 import 'package:flutter_detextre4/utils/config/theme.dart';
 import 'package:flutter_detextre4/utils/general/context_utility.dart';
 import 'package:flutter_detextre4/utils/general/scroll_behavior.dart';
@@ -14,7 +13,6 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:generic_bloc_provider/generic_bloc_provider.dart';
 import 'package:hive_flutter/adapters.dart';
-import 'package:local_session_timeout/local_session_timeout.dart';
 import 'package:provider/provider.dart';
 import 'package:responsive_mixin_layout/responsive_mixin_layout.dart';
 
@@ -47,54 +45,32 @@ class AppState extends StatelessWidget {
   }
 }
 
-class App extends StatefulWidget {
+class App extends StatelessWidget {
   const App({super.key});
-
-  @override
-  State<App> createState() => _AppState();
-}
-
-class _AppState extends State<App> {
-  late final SessionTimeoutConfig sessionTimeoutConfig;
-
-  @override
-  void initState() {
-    sessionTimeoutConfig = SessionTimeoutConfig(context)..listen();
-    super.initState();
-  }
-
-  @override
-  void dispose() {
-    sessionTimeoutConfig.dispose();
-    super.dispose();
-  }
 
   @override
   Widget build(BuildContext context) => ScreenSizes(
         child: Consumer<MainProvider>(builder: (context, provider, child) {
           provider.setupInitializationService = context;
 
-          return SessionTimeoutManager(
-            sessionConfig: sessionTimeoutConfig.instance,
-            child: ScreenUtilInit(
-                designSize: Vars.getDesignSize(context),
-                builder: (context, child) {
-                  return MaterialApp.router(
-                    scrollBehavior: CustomScrollBehavior.of(context),
-                    scaffoldMessengerKey: ContextUtility.scaffoldMessengerKey,
-                    locale: provider.locale,
-                    debugShowCheckedModeBanner: true,
-                    title: AppName.capitalize.value,
-                    theme: ThemeApp.lightTheme,
-                    darkTheme: ThemeApp.darkTheme,
-                    themeMode: provider.appTheme, // * Theme switcher
-                    localizationsDelegates:
-                        AppLocalizations.localizationsDelegates,
-                    supportedLocales: AppLocalizations.supportedLocales,
-                    routerConfig: routerConfig.router,
-                  );
-                }),
-          );
+          return ScreenUtilInit(
+              designSize: Vars.getDesignSize(context),
+              builder: (context, child) {
+                return MaterialApp.router(
+                  scrollBehavior: CustomScrollBehavior.of(context),
+                  scaffoldMessengerKey: ContextUtility.scaffoldMessengerKey,
+                  locale: provider.locale,
+                  debugShowCheckedModeBanner: true,
+                  title: AppName.capitalize.value,
+                  theme: ThemeApp.lightTheme,
+                  darkTheme: ThemeApp.darkTheme,
+                  themeMode: provider.appTheme, // * Theme switcher
+                  localizationsDelegates:
+                      AppLocalizations.localizationsDelegates,
+                  supportedLocales: AppLocalizations.supportedLocales,
+                  routerConfig: routerConfig.router,
+                );
+              });
         }),
       );
 }

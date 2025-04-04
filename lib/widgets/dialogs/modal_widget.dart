@@ -22,6 +22,10 @@ class Modal extends StatefulWidget {
     this.disabled = false,
     this.textCancelBtn,
     this.textConfirmBtn,
+    this.hideCancelButton = false,
+    this.hideConfirmButton = false,
+    this.flexCancelButton = 1,
+    this.flexConfirmButton = 2,
     this.onPressedCancelBtn,
     this.onPressedConfirmBtn,
     this.iconPadding,
@@ -50,6 +54,10 @@ class Modal extends StatefulWidget {
   final bool disabled;
   final String? textCancelBtn;
   final String? textConfirmBtn;
+  final int flexCancelButton;
+  final int flexConfirmButton;
+  final bool hideCancelButton;
+  final bool hideConfirmButton;
   final void Function(BuildContext context)? onPressedCancelBtn;
   final void Function(BuildContext context)? onPressedConfirmBtn;
   final EdgeInsetsGeometry? iconPadding;
@@ -80,6 +88,10 @@ class Modal extends StatefulWidget {
     bool disabled = false,
     String? textCancelBtn,
     String? textConfirmBtn,
+    int flexCancelButton = 1,
+    int flexConfirmButton = 2,
+    bool hideCancelButton = false,
+    bool hideConfirmButton = false,
     void Function(BuildContext context)? onPressedCancelBtn,
     void Function(BuildContext context)? onPressedConfirmBtn,
     EdgeInsetsGeometry? iconPadding,
@@ -118,6 +130,10 @@ class Modal extends StatefulWidget {
               disabled: disabled,
               textCancelBtn: textCancelBtn,
               textConfirmBtn: textConfirmBtn,
+              flexCancelButton: flexCancelButton,
+              flexConfirmButton: flexConfirmButton,
+              hideCancelButton: hideCancelButton,
+              hideConfirmButton: hideConfirmButton,
               onPressedCancelBtn: onPressedCancelBtn,
               onPressedConfirmBtn: onPressedConfirmBtn,
               iconPadding: iconPadding,
@@ -147,6 +163,10 @@ class Modal extends StatefulWidget {
     String? contentText,
     String? textConfirmBtn,
     String? textCancelBtn,
+    int flexCancelButton = 1,
+    int flexConfirmButton = 2,
+    bool hideCancelButton = false,
+    bool hideConfirmButton = false,
     Axis actionsDirection = Axis.horizontal,
     bool barrierDismissible = true,
     Color? barrierColor,
@@ -162,6 +182,10 @@ class Modal extends StatefulWidget {
         contentText: contentText,
         textConfirmBtn: textConfirmBtn,
         textCancelBtn: textCancelBtn,
+        flexCancelButton: flexCancelButton,
+        flexConfirmButton: flexConfirmButton,
+        hideCancelButton: hideCancelButton,
+        hideConfirmButton: hideConfirmButton,
         onPressedConfirmBtn: (context) => Navigator.pop(context, true),
         onPressedCancelBtn: (context) => Navigator.pop(context, false),
         actionsDirection: actionsDirection,
@@ -178,6 +202,10 @@ class Modal extends StatefulWidget {
     String? contentText,
     String? textConfirmBtn,
     String? textCancelBtn,
+    int flexCancelButton = 1,
+    int flexConfirmButton = 2,
+    bool hideCancelButton = false,
+    bool hideConfirmButton = false,
     void Function(BuildContext context)? onPressedCancelBtn,
     void Function(BuildContext context)? onPressedConfirmBtn,
     Axis actionsDirection = Axis.horizontal,
@@ -230,6 +258,10 @@ class Modal extends StatefulWidget {
           )),
       textConfirmBtn: textConfirmBtn,
       textCancelBtn: textCancelBtn,
+      flexCancelButton: flexCancelButton,
+      flexConfirmButton: flexConfirmButton,
+      hideCancelButton: hideCancelButton,
+      hideConfirmButton: hideConfirmButton,
       onPressedCancelBtn: onPressedCancelBtn ??
           (textCancelBtn != null
               ? (context) => Navigator.pop(context, false)
@@ -271,6 +303,11 @@ class _ModalState extends State<Modal> {
   Widget build(BuildContext context) {
     final themeApp = ThemeApp.of(context);
 
+    final showCancelButton =
+            widget.onPressedCancelBtn != null && !widget.hideCancelButton,
+        showConfirmButton =
+            widget.onPressedConfirmBtn != null && !widget.hideConfirmButton;
+
     final haveActions = widget.onPressedConfirmBtn != null ||
             widget.onPressedCancelBtn != null,
         haveTitle = widget.titleText != null || widget.title != null,
@@ -297,8 +334,8 @@ class _ModalState extends State<Modal> {
                   top: haveTitle ? 0 : Vars.gapNormal,
                 ));
 
-    final boxConstraints = widget.constraints ??
-        BoxConstraints(maxWidth: Vars.getDesignSize(context).width);
+    final boxConstraints =
+        widget.constraints ?? BoxConstraints(maxWidth: Vars.mobileSize.width);
 
     // widgets
     final titleWidget = ConstrainedBox(
@@ -319,7 +356,7 @@ class _ModalState extends State<Modal> {
                     : null)),
         actionWidgets = widget.actions ??
             [
-              if (widget.onPressedCancelBtn != null)
+              if (showCancelButton)
                 Expanded(
                   child: ButtonVariant(
                     height: widget.actionButtonsHeight,
@@ -333,10 +370,9 @@ class _ModalState extends State<Modal> {
                     onPressed: () => widget.onPressedCancelBtn!(context),
                   ),
                 ),
-              if (widget.onPressedCancelBtn != null &&
-                  widget.onPressedConfirmBtn != null)
+              if (showCancelButton && showConfirmButton)
                 const Gap(Vars.gapXLarge),
-              if (widget.onPressedConfirmBtn != null)
+              if (showConfirmButton)
                 Expanded(
                   child: Button(
                     height: widget.actionButtonsHeight,

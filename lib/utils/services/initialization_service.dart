@@ -10,6 +10,7 @@ import 'package:flutter_detextre4/utils/services/reminder_service.dart';
 enum InitialFetchStatus {
   fetching,
   error,
+  maintenance,
   done;
 }
 
