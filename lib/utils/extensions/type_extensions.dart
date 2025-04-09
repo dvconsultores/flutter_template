@@ -473,6 +473,11 @@ extension DoubleExtension on double {
     splitted.add(decimalsFiltered);
     return double.parse(splitted.join("."));
   }
+
+  /// Used to limit decimal characters in `double` applying `toStringAsFixed`
+  double maxDecimalsRounded([int? max]) {
+    return toStringAsFixed(max ?? Vars.maxDecimals).toDouble();
+  }
 }
 
 // ? Nullable Color extension
