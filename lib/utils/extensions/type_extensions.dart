@@ -458,6 +458,69 @@ extension DoubleExtension on double {
     return formattedAmount;
   }
 
+  /// Adds a `double` value to this value with controlled precision.
+  ///
+  /// The optional parameter `max` specifies the maximum number of decimal places in the result.
+  /// If `max` is not provided, the default value `Vars.maxDecimals` is used.
+  ///
+  /// Example:
+  /// ```dart
+  /// 1.23.plus(4.56, 2); // Returns 5.79
+  /// 1.23.plus(4.56);    // Returns 5.79 (using Vars.maxDecimals)
+  /// ```
+  double plus(double value, [int? max]) {
+    final max0 = max ?? Vars.maxDecimals;
+    return ((this * math.pow(10, max0)) + (value * math.pow(10, max0))) /
+        math.pow(10, max0);
+  }
+
+  /// Subtracts a `double` value from this value with controlled precision.
+  ///
+  /// The optional parameter `max` specifies the maximum number of decimal places in the result.
+  /// If `max` is not provided, the default value `Vars.maxDecimals` is used.
+  ///
+  /// Example:
+  /// ```dart
+  /// 4.56.minus(1.23, 2); // Returns 3.33
+  /// 4.56.minus(1.23);    // Returns 3.33 (using Vars.maxDecimals)
+  /// ```
+  double minus(double value, [int? max]) {
+    final max0 = max ?? Vars.maxDecimals;
+    return ((this * math.pow(10, max0)) - (value * math.pow(10, max0))) /
+        math.pow(10, max0);
+  }
+
+  /// Divides this `double` value by another `double` value with controlled precision.
+  ///
+  /// The optional parameter `max` specifies the maximum number of decimal places in the result.
+  /// If `max` is not provided, the default value `Vars.maxDecimals` is used.
+  ///
+  /// Example:
+  /// ```dart
+  /// 10.div(2, 2); // Returns 5.00
+  /// 10.div(2);    // Returns 5.00 (using Vars.maxDecimals)
+  /// ```
+  double div(double value, [int? max]) {
+    final max0 = max ?? Vars.maxDecimals;
+    return (this * math.pow(10, max0)) / (value * math.pow(10, max0));
+  }
+
+  /// Multiplies this `double` value by another `double` value with controlled precision.
+  ///
+  /// The optional parameter `max` specifies the maximum number of decimal places in the result.
+  /// If `max` is not provided, the default value `Vars.maxDecimals` is used.
+  ///
+  /// Example:
+  /// ```dart
+  /// 2.multiply(3, 2); // Returns 6.00
+  /// 2.multiply(3);    // Returns 6.00 (using Vars.maxDecimals)
+  /// ```
+  double multiply(double value, [int? max]) {
+    final max0 = max ?? Vars.maxDecimals;
+    return ((this * math.pow(10, max0)) * (value * math.pow(10, max0))) /
+        math.pow(10, max0 * 2);
+  }
+
   /// Used to limit decimal characters in `double`
   double maxDecimals([int? max]) {
     if (!toString().contains(".")) return this;
