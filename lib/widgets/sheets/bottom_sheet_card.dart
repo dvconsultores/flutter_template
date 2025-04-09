@@ -3,7 +3,6 @@ import 'package:easy_debounce/easy_debounce.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_detextre4/main_provider.dart';
 import 'package:flutter_detextre4/utils/config/theme.dart';
-import 'package:flutter_detextre4/utils/general/context_utility.dart';
 import 'package:flutter_detextre4/utils/general/variables.dart';
 import 'package:flutter_detextre4/utils/painters/draggable_frame_painter.dart';
 import 'package:flutter_detextre4/widgets/defaults/button.dart';
@@ -12,9 +11,12 @@ import 'package:flutter_detextre4/widgets/defaults/snackbar.dart';
 import 'package:flutter_detextre4/widgets/form_fields/input_field.dart';
 import 'package:flutter_detextre4/widgets/sheets/card_widget.dart';
 import 'package:flutter_gap/flutter_gap.dart';
+import 'package:responsive_mixin_layout/responsive_mixin_layout.dart';
 
-BoxConstraints _defaultConstraints(BuildContext context) =>
-    BoxConstraints(maxWidth: Vars.getDesignSize(ContextUtility.context!).width);
+BoxConstraints _defaultConstraints(BuildContext context) => BoxConstraints(
+      maxWidth:
+          context.width.isTablet ? double.infinity : Vars.mobileSize.width,
+    );
 
 class BottomSheetCard extends StatefulWidget {
   const BottomSheetCard({
