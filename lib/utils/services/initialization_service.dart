@@ -1,5 +1,3 @@
-// ignore_for_file: library_private_types_in_public_api
-
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter_detextre4/utils/extensions/type_extensions.dart';
@@ -68,7 +66,7 @@ class _InitialFetch {
 
       throw error.catchErrorMessage(
         fallback:
-            "Ha ocurrido un error al correr la aplicación 😞, porfavor contacta con nuestro equipo de soporte para más información",
+            "An error occurred while running the application 😞, please contact our support team for more information",
       );
     }
   }
@@ -79,20 +77,24 @@ class _InitializationInAppService {
   final BuildContext context;
 
   bool inAppStarted = false;
+  bool initializedInAppServices = false;
+  bool initializedPostInAppServices = false;
 
-  void initBothInAppServices() {
-    initInAppServices();
-    SchedulerBinding.instance
-        .addPostFrameCallback((_) => initPostInAppServices());
+  Future<void> initBothInAppServices() async {
+    await Future.wait([
+      initInAppServices(),
+      Future.microtask(() => SchedulerBinding.instance
+          .addPostFrameCallback((_) => initPostInAppServices())),
+    ]);
+
+    _setInAppStarted();
   }
 
-  bool initializedInAppServices = false;
   Future<void> initInAppServices() async {
     initializedInAppServices = true;
     _setInAppStarted();
   }
 
-  bool initializedPostInAppServices = false;
   Future<void> initPostInAppServices() async {
     ReminderService.init();
 
@@ -101,8 +103,6 @@ class _InitializationInAppService {
   }
 
   void _setInAppStarted() {
-    if (!initializedInAppServices || !initializedPostInAppServices) return;
-
-    inAppStarted = true;
+    inAppStarted = initializedInAppServices && initializedPostInAppServices;
   }
 }
