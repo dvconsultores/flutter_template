@@ -492,7 +492,7 @@ class BottomSheetListMultiple<T> extends StatefulWidget {
     this.buttonBuilder,
     this.buttonText,
     this.buttonTextStyle,
-    this.crossAxisCount = 2,
+    this.crossAxisCount,
     this.childAspectRatio = 20 / 4.8,
     this.crossAxisSpacing = Vars.gapXLarge,
     this.mainAxisSpacing = Vars.gapXLarge,
@@ -527,7 +527,7 @@ class BottomSheetListMultiple<T> extends StatefulWidget {
   final String? buttonText;
   final TextStyle? buttonTextStyle;
   final int? maxLenght;
-  final int crossAxisCount;
+  final int? crossAxisCount;
   final double childAspectRatio;
   final double crossAxisSpacing;
   final double mainAxisSpacing;
@@ -571,7 +571,7 @@ class BottomSheetListMultiple<T> extends StatefulWidget {
     Widget? emptyData,
     String? emptyDataText,
     TextStyle? emptyDataStyle,
-    int crossAxisCount = 2,
+    int? crossAxisCount,
     double childAspectRatio = 20 / 4.8,
     double crossAxisSpacing = Vars.gapXLarge,
     double mainAxisSpacing = Vars.gapXLarge,
@@ -697,6 +697,14 @@ class _BottomSheetListMultipleState<T>
           bottom: Vars.paddingScaffold.bottom,
         );
 
+    int crossAxisCount() {
+      if (widget.crossAxisCount != null) return widget.crossAxisCount!;
+      final screenWidth = context.width;
+
+      if (screenWidth.isMobile) return 2;
+      return 3;
+    }
+
     return DraggableScrollableSheet(
       expand: widget.expand,
       initialChildSize: widget.initialChildSize,
@@ -705,7 +713,7 @@ class _BottomSheetListMultipleState<T>
       builder: (context, scrollController) {
         final gridView = GridView.count(
           controller: widget.scrollController ?? scrollController,
-          crossAxisCount: widget.crossAxisCount,
+          crossAxisCount: crossAxisCount(),
           childAspectRatio: widget.childAspectRatio,
           crossAxisSpacing: widget.crossAxisSpacing,
           mainAxisSpacing: widget.mainAxisSpacing,

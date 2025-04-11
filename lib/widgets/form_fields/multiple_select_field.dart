@@ -56,6 +56,7 @@ class MultipleSelectField<T> extends StatefulWidget {
     this.dropdownMaxChildSize = .45,
     this.dropdownMinChildSize = .2,
     this.dropdownChildAspectRatio = 20 / 4.8,
+    this.dropdownCrossAxisCount,
     this.dropdownScrollable = true,
     this.dropdownTitle,
     this.dropdownTitleText,
@@ -117,6 +118,7 @@ class MultipleSelectField<T> extends StatefulWidget {
   final TextStyle? dropdownTitleStyle;
   final Widget? dropdownBottomWidget;
   final double dropdownChildAspectRatio;
+  final int? dropdownCrossAxisCount;
   final bool dropdownScrollable;
   final CustomFocusNode? focusNode;
   final String? labelText;
@@ -200,6 +202,7 @@ class _MultiSelectFieldState<T> extends State<MultipleSelectField<T>>
       initialChildSize: widget.dropdownInitialChildSize,
       maxChildSize: widget.dropdownMaxChildSize,
       childAspectRatio: widget.dropdownChildAspectRatio,
+      crossAxisCount: widget.dropdownCrossAxisCount,
       bottomWidget: widget.dropdownBottomWidget,
       searchFunction: widget.dropdownSearchFunction,
       searchLabelText: widget.dropdownSearchLabelText,
