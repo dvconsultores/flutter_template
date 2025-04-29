@@ -111,6 +111,7 @@ class Modal extends StatefulWidget {
     bool barrierDismissible = true,
     Color? barrierColor,
     double? elevation,
+    BoxConstraints? constraints,
   }) async =>
       await showDialog<T>(
           context: context,
@@ -148,6 +149,7 @@ class Modal extends StatefulWidget {
               borderSide: borderSide,
               borderRadius: borderRadius,
               elevation: elevation,
+              constraints: constraints,
             );
 
             if (builder != null) builder(context, child);

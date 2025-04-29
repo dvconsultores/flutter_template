@@ -78,15 +78,16 @@ class LocalNotifications {
   static bool haveTopics(String? from) => [globalTopic, testingTopic]
       .any((value) => from?.contains(value) ?? false);
 
-  static Future<void> initializeNotifications() async {
+  static Future<void> initializeNotifications(BuildContext context) async {
+    // generate fcm token
+    // await generateToken();
+
     // initialise the plugin.
     // app_icon needs to be a added as a drawable resource to the Android head project
     final initializationSettingsAndroid =
             const AndroidInitializationSettings('@app_icon'),
         initializationSettingsDarwin = DarwinInitializationSettings(
-            requestSoundPermission: false,
-            requestBadgePermission: false,
-            requestAlertPermission: false,
+            requestCriticalPermission: true,
             notificationCategories: [
               DarwinNotificationCategory(
                 NotificationChannel.campaign.id,
@@ -103,18 +104,19 @@ class LocalNotifications {
               )
             ]);
 
-    final initialized = await flutterLocalNotificationsPlugin.initialize(
+    await flutterLocalNotificationsPlugin.initialize(
       InitializationSettings(
         android: initializationSettingsAndroid,
         iOS: initializationSettingsDarwin,
       ),
-      onDidReceiveNotificationResponse: onMessageResponse,
+      onDidReceiveNotificationResponse: (notificationResponse) =>
+          onMessageResponse(context, notificationResponse),
     );
-    if (!(initialized ?? false)) return;
   }
 
   // Notification response listener
   static void onMessageResponse(
+    BuildContext context,
     NotificationResponse notificationResponse,
   ) async {
     if (notificationResponse.payload == null) return;
@@ -123,18 +125,26 @@ class LocalNotifications {
         // actionId = FLNActionId.fromString(notificationResponse.actionId),
         clickAction = FLNClickAction.fromString(messageData['click_action']),
         tokenAuth = await SecureStorage.read(SecureCollection.tokenAuth);
-    if (tokenAuth == null) return;
+    if (tokenAuth == null || !context.mounted) return;
 
-    notificationActionHandler(messageData, clickAction);
+    notificationActionHandler(
+      context,
+      messageData,
+      clickAction,
+    );
 
     await flutterLocalNotificationsPlugin.cancel(notificationResponse.id ?? 1);
   }
 
   static void notificationActionHandler(
+    BuildContext context,
     Map<String, dynamic> message,
-    FLNClickAction? clickAction, [
+    FLNClickAction? clickAction,
+    /* {
     FLNActionId? actionId,
-  ]) {
+    NotificationResponse? notificationResponse,
+  } */
+  ) {
     log("click_action ⭕");
   }
 

@@ -3,6 +3,7 @@ import 'package:flutter/scheduler.dart';
 import 'package:flutter_detextre4/utils/extensions/type_extensions.dart';
 import 'package:flutter_detextre4/utils/services/dio_service.dart';
 import 'package:flutter_detextre4/utils/services/local_data/secure_storage_service.dart';
+import 'package:flutter_detextre4/utils/services/local_notifications.dart';
 import 'package:flutter_detextre4/utils/services/reminder_service.dart';
 
 enum InitialFetchStatus {
@@ -50,19 +51,20 @@ class _InitialFetch {
       if (isLogged) {
         // get user data
         await Future.delayed(Durations.short1);
+
+        // initialize notifications
+        if (context.mounted) {
+          await LocalNotifications.initializeNotifications(context);
+        }
       }
 
       initialFetchStatus.value = InitialFetchStatus.done;
 
       return isLogged;
     } catch (error) {
-      initialFetchStatus.value = InitialFetchStatus.error;
-
       if (error.catchErrorStatusCode() == "401") {
         SecureStorage.delete(SecureCollection.tokenAuth);
       }
-
-      debugPrint("MaterialhandlerError: $error ⭕");
 
       throw error.catchErrorMessage(
         fallback:

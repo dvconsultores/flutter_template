@@ -49,13 +49,18 @@ class _SplashRouteState extends State<SplashRoute>
         isLogged ? (widget.redirectPath ?? "/home") : "/login",
       );
     } catch (error) {
+      await animationCompleter.future;
+
+      initializationService.initialFetch.initialFetchStatus.value =
+          InitialFetchStatus.error;
+
       loader.close();
       if (!mounted) return;
 
       Modal.showSystemAlert(
         context,
         contentText: error.toString(),
-        textConfirmBtn: "Entendido",
+        textConfirmBtn: "Okay",
       );
     }
   }
