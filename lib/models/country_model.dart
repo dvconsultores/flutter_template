@@ -7,8 +7,9 @@ class CountryModel implements DefaultModel {
     required this.flag,
     required this.code,
     required this.prefix,
-    required this.length,
-    required this.lengthAreaCode,
+    this.length,
+    this.lengthAreaCode,
+    this.enableStartCeroValidation,
   });
   final String name;
   final String flag;
@@ -16,6 +17,7 @@ class CountryModel implements DefaultModel {
   final String prefix;
   final int? length;
   final int? lengthAreaCode;
+  final bool? enableStartCeroValidation;
 
   @override
   Iterable get values => toJson().values;
@@ -28,6 +30,7 @@ class CountryModel implements DefaultModel {
     String? prefix,
     int? length,
     int? lengthAreaCode,
+    bool? enableStartCeroValidation,
   }) =>
       CountryModel(
         name: name ?? this.name,
@@ -36,6 +39,8 @@ class CountryModel implements DefaultModel {
         prefix: prefix ?? this.prefix,
         length: length ?? this.length,
         lengthAreaCode: lengthAreaCode ?? this.lengthAreaCode,
+        enableStartCeroValidation:
+            enableStartCeroValidation ?? this.enableStartCeroValidation,
       );
 
   @override
@@ -46,6 +51,7 @@ class CountryModel implements DefaultModel {
         "prefix": prefix,
         "length": length,
         "lengthAreaCode": lengthAreaCode,
+        "enableStartCeroValidation": enableStartCeroValidation,
       };
 
   factory CountryModel.fromJson(Map<String, dynamic> json) => CountryModel(
@@ -55,6 +61,7 @@ class CountryModel implements DefaultModel {
         prefix: json['prefix'],
         length: json['length'],
         lengthAreaCode: json['lengthAreaCode'],
+        enableStartCeroValidation: json['enableStartCeroValidation'],
       );
 
   static List<CountryModel> buildListFrom(Iterable iterableList) =>

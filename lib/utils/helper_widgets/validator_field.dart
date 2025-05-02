@@ -115,11 +115,19 @@ class ValidatorField {
       ? null
       : 'The password must have at least one uppercase letter, one lowercase letter, one number, and one special character';
 
-  String? isValidPhoneNumber([String? mask]) {
-    final val = value as String? ?? '';
+  String? isValidPhoneNumber({
+    String? mask,
+    int length = 11,
+    int lengthAreaCode = 3,
+    bool enableStartCeroValidation = false,
+  }) {
+    final text =
+        MaskTextInputFormatter(mask: mask).unmaskText(value as String? ?? '');
 
-    return Vars.phoneRegExp
-            .hasMatch(MaskTextInputFormatter(mask: mask).unmaskText(val))
+    if (!text.startsWith('0') && enableStartCeroValidation) length -= 1;
+
+    return Vars.phoneRegExp(length: length, lengthAreaCode: lengthAreaCode)
+            .hasMatch(text)
         ? null
         : "Phone invalid";
   }

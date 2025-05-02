@@ -212,7 +212,7 @@
     "flag": "🇧🇴",
     "code": "BO",
     "prefix": "+591",
-    "length": 11,
+    "length": 9,
     "lengthAreaCode": 3
   },
   {
@@ -348,7 +348,7 @@
     "flag": "🇨🇱",
     "code": "CL",
     "prefix": "+56",
-    "length": 11,
+    "length": 9,
     "lengthAreaCode": 3
   },
   {
@@ -1909,7 +1909,8 @@
     "code": "VE",
     "prefix": "+58",
     "length": 11,
-    "lengthAreaCode": 3
+    "lengthAreaCode": 3,
+    "enableStartCeroValidation": true
   },
   {
     "name": "Vietnam",

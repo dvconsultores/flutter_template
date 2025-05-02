@@ -81,6 +81,9 @@ class _PhoneFieldState extends State<PhoneField> {
           ),
     );
 
+    final currentPhoneSelected = widget.phoneList?.firstWhereOrNull(
+        (element) => element.prefix == widget.phonePrefix?.value);
+
     return SelectableInputField(
       selectWidth: (widget.phonePrefix?.value?.length ?? 0) > 3 ? 110 : 100,
       inputController: widget.phone,
@@ -105,9 +108,18 @@ class _PhoneFieldState extends State<PhoneField> {
       dropdownInitialChildSize: widget.dropdownInitialChildSize,
       dropdownMaxChildSize: widget.dropdownMaxChildSize,
       dropdownMinChildSize: widget.dropdownMinChildSize,
-      dropdownSearchFunction: widget.dropdownSearchFunction,
+      dropdownSearchFunction: widget.dropdownSearchFunction ??
+          (index, search) {
+            if (widget.phoneList == null) return true;
+
+            return widget.phoneList![index].prefix
+                    .toLowerCase()
+                    .contains(search) ||
+                widget.phoneList![index].name.toLowerCase().contains(search);
+          },
       dropdownSearchHintText: widget.dropdownSearchHintText,
-      dropdownSearchLabelText: widget.dropdownSearchLabelText,
+      dropdownSearchLabelText:
+          widget.dropdownSearchLabelText ?? "Search by code or country name",
       dropdownTitle: widget.dropdownTitle,
       dropdownTitleStyle: widget.dropdownTitleStyle,
       dropdownTitleText: widget.dropdownTitleText,
@@ -115,8 +127,15 @@ class _PhoneFieldState extends State<PhoneField> {
       keyboardType: TextInputType.phone,
       validator: (value) => ValidatorField.evaluate(
         value,
-        (instance) =>
-            [() => instance.isValidPhoneNumber(maskFormatter.getMask())],
+        (instance) => [
+          () => instance.isValidPhoneNumber(
+                mask: maskFormatter.getMask(),
+                length: currentPhoneSelected?.length ?? 11,
+                lengthAreaCode: currentPhoneSelected?.lengthAreaCode ?? 3,
+                enableStartCeroValidation:
+                    currentPhoneSelected?.enableStartCeroValidation ?? false,
+              )
+        ],
       ),
       onFieldSubmitted: widget.onFieldSubmitted,
       onTap: widget.onTap,
