@@ -14,23 +14,19 @@ enum InitialFetchStatus {
 }
 
 class InitializationService {
-  InitializationService(this.context, this.notifyListeners);
-  final BuildContext context;
-  final VoidCallback notifyListeners;
+  InitializationService();
 
-  late final initialFetch = _InitialFetch(context, notifyListeners);
+  late final initialFetch = _InitialFetch();
 
-  late final inAppService = _InitializationInAppService(context);
+  late final inAppService = _InitializationInAppService();
 }
 
 class _InitialFetch {
-  _InitialFetch(this.context, this.notifyListeners);
-  final BuildContext context;
-  final VoidCallback notifyListeners;
+  _InitialFetch();
 
   final initialFetchStatus = ValueNotifier(InitialFetchStatus.fetching);
 
-  Future<bool> init() async {
+  Future<bool> init(BuildContext context) async {
     initialFetchStatus.value = InitialFetchStatus.fetching;
 
     try {
@@ -75,29 +71,28 @@ class _InitialFetch {
 }
 
 class _InitializationInAppService {
-  _InitializationInAppService(this.context);
-  final BuildContext context;
+  _InitializationInAppService();
 
   bool inAppStarted = false;
   bool initializedInAppServices = false;
   bool initializedPostInAppServices = false;
 
-  Future<void> initBothInAppServices() async {
+  Future<void> initBothInAppServices(BuildContext context) async {
     await Future.wait([
-      initInAppServices(),
+      initInAppServices(context),
       Future.microtask(() => SchedulerBinding.instance
-          .addPostFrameCallback((_) => initPostInAppServices())),
+          .addPostFrameCallback((_) => initPostInAppServices(context))),
     ]);
 
     _setInAppStarted();
   }
 
-  Future<void> initInAppServices() async {
+  Future<void> initInAppServices(BuildContext context) async {
     initializedInAppServices = true;
     _setInAppStarted();
   }
 
-  Future<void> initPostInAppServices() async {
+  Future<void> initPostInAppServices(BuildContext context) async {
     ReminderService.init();
 
     initializedPostInAppServices = true;

@@ -51,8 +51,6 @@ class App extends StatelessWidget {
   @override
   Widget build(BuildContext context) => ScreenSizes(
         child: Consumer<MainProvider>(builder: (context, provider, child) {
-          provider.setupInitializationService = context;
-
           return ScreenUtilInit(
               designSize: Vars.getDesignSize(context),
               builder: (context, child) {

@@ -42,7 +42,7 @@ class _NavigationLayoutState extends State<NavigationLayout>
 
   @override
   void initState() {
-    initializationService.inAppService.initBothInAppServices();
+    initializationService.inAppService.initBothInAppServices(context);
     WidgetsBinding.instance.addObserver(this);
     super.initState();
   }

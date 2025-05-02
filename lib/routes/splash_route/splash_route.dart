@@ -38,7 +38,7 @@ class _SplashRouteState extends State<SplashRoute>
   Future<void> handleFetchData() async {
     try {
       if (animationController.isCompleted) loader.open();
-      final isLogged = await initializationService.initialFetch.init();
+      final isLogged = await initializationService.initialFetch.init(context);
       if (!mounted) return;
 
       loader.close();
