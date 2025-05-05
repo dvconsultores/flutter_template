@@ -48,8 +48,9 @@ jobs:
           flutter build appbundle \
             --flavor prod \
             --dart-define ENVIRONMENT=production \
-            --dart-define BASE_URL=${{ secrets.BASE_URL }}
-            --dart-define API_URL=${{ secrets.API_URL }} && \
+            --dart-define API_URL=${{ secrets.API_URL }} \
+            --dart-define BASE_URL=${{ secrets.BASE_URL }} \
+            --dart-define DEEP_LINK_BASE_URL=${{ secrets.DEEP_LINK_BASE_URL }} && \
           mkdir -p build/app/outputs/bundle/release && \
           mv build/app/outputs/bundle/prodRelease/app-prod-release.aab build/app/outputs/bundle/release/app-release.aab
       - name: Sign App Bundle
