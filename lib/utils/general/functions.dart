@@ -6,9 +6,11 @@ import 'dart:ui' as ui;
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_detextre4/utils/config/router_config.dart';
 import 'package:flutter_detextre4/utils/config/theme.dart';
 import 'package:flutter_detextre4/utils/extensions/type_extensions.dart';
 import 'package:flutter_detextre4/utils/general/variables.dart';
+import 'package:flutter_detextre4/utils/services/local_data/env_service.dart';
 import 'package:flutter_detextre4/widgets/dialogs/modal_widget.dart';
 import 'package:flutter_detextre4/widgets/sheets/bottom_sheet_card.dart';
 import 'package:flutter_gap/flutter_gap.dart';
@@ -84,6 +86,15 @@ Future<bool?> openUrl(
   String? webTarget,
   String? webOptions,
 }) async {
+  if (url.startsWith(env.baseUrl)) {
+    final cleanUrl = url.contains("#")
+        ? url.split("#")[1]
+        : url.replaceFirst(env.baseUrl, '/');
+
+    routerConfig.router.go(cleanUrl);
+    return null;
+  }
+
   if (webTarget != null) {
     html.window.open(url, webTarget, webOptions);
     return null;
