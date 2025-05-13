@@ -53,8 +53,6 @@ class _SplashRouteState extends State<SplashRoute>
 
       initializationService.initialFetch.initialFetchStatus.value =
           InitialFetchStatus.error;
-
-      loader.close();
       if (!mounted) return;
 
       Modal.showSystemAlert(
