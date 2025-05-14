@@ -38,16 +38,18 @@ class _SplashRouteState extends State<SplashRoute>
   Future<void> handleFetchData() async {
     try {
       if (animationController.isCompleted) loader.open();
-      final isLogged = await initializationService.initialFetch.init(context);
+      await initializationService.initialFetch.init(context);
       if (!mounted) return;
 
       loader.close();
 
       await animationCompleter.future;
 
-      routerConfig.router.go(
-        isLogged ? (widget.redirectPath ?? "/home") : "/login",
-      );
+      if (widget.redirectPath == "/auth") {
+        return routerConfig.router.goNamed("login");
+      }
+
+      return routerConfig.router.go(widget.redirectPath ?? "/home");
     } catch (error) {
       await animationCompleter.future;
 

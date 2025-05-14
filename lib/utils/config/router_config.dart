@@ -43,6 +43,8 @@ class AppRouterConfig {
 
         final location = state.path ?? '';
 
+        if (state.uri.toString().startsWith("http")) return '/splash';
+
         if (mainProvider
                 .initializationService.initialFetch.initialFetchStatus.value !=
             InitialFetchStatus.done) {

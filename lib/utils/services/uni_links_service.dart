@@ -40,28 +40,28 @@ class UniLinksService {
       final Uri? uri = await getInitialUri();
 
       if (context.mounted) {
-        uniLinkHandler(context, uri, UniLinksTypeHandler.initialUrl);
+        await uniLinkHandler(context, uri, UniLinksTypeHandler.initialUrl);
       }
     } catch (error) {
       if (kDebugMode) print("UniLinks getInitialUri error: $error ⭕");
     }
 
     // This is used for cases when: APP is already running and the user clicks on a link.
-    _sub = uriLinkStream.listen((value) {
+    _sub = uriLinkStream.listen((value) async {
       if (!context.mounted) return;
 
-      uniLinkHandler(context, value, UniLinksTypeHandler.streamUrl);
+      await uniLinkHandler(context, value, UniLinksTypeHandler.streamUrl);
     }, onError: (error) {
       if (kDebugMode) print('UniLinks onUriLink error: $error ⭕');
     });
   }
 
   /// handler to manage uri redirect
-  static bool uniLinkHandler(
+  static Future<bool> uniLinkHandler(
     BuildContext context,
     Uri? uri,
     UniLinksTypeHandler uniLinksTypeHandler,
-  ) {
+  ) async {
     if (uri == null || uri.queryParameters.isEmpty) return false;
     final params = uri.queryParameters;
 
@@ -69,7 +69,7 @@ class UniLinksService {
       final paramValue = params[key.name];
       if (paramValue.hasNotValue) continue;
 
-      _uniLinksActions(context, key, paramValue!, uniLinksTypeHandler);
+      await _uniLinksActions(context, key, paramValue!, uniLinksTypeHandler);
       return true;
     }
 
@@ -77,19 +77,25 @@ class UniLinksService {
   }
 
   /// handler to manage uri redirect
-  static void _uniLinksActions(
+  static Future<void> _uniLinksActions(
     BuildContext context,
     UniLinksKey key,
     String value,
     UniLinksTypeHandler uniLinksTypeHandler,
-  ) {
-    SchedulerBinding.instance.addPostFrameCallback((_) {
+  ) async {
+    final completer = Completer();
+
+    SchedulerBinding.instance.addPostFrameCallback((_) async {
       switch (key) {
         case UniLinksKey.testKey:
           if (kDebugMode) print("test key");
           break;
       }
+
+      completer.complete();
     });
+
+    await completer.future;
   }
 
   static String getDeepLink(UniLinksKey key, [dynamic value]) =>
