@@ -37,13 +37,19 @@ class _SplashRouteState extends State<SplashRoute>
   /// initialize services using [InitializationService] context
   Future<void> handleFetchData() async {
     try {
-      if (animationController.isCompleted) loader.open();
-      await initializationService.initialFetch.init(context);
+      if (animationController.isCompleted) {
+        await loader.open(
+          future: (cancelToken) =>
+              initializationService.initialFetch.init(context),
+        );
+      } else {
+        await initializationService.initialFetch.init(context);
+      }
       if (!mounted) return;
 
-      loader.close();
-
       await animationCompleter.future;
+
+      if (mounted) Navigator.popUntil(context, (route) => route.isFirst);
 
       if (widget.redirectPath == "/auth") {
         return routerConfig.router.goNamed("login");

@@ -85,8 +85,9 @@ Future<bool?> openUrl(
   LaunchMode mode = LaunchMode.externalApplication,
   String? webTarget,
   String? webOptions,
+  bool enableInternalNavigation = true,
 }) async {
-  if (url.startsWith(env.baseUrl)) {
+  if (enableInternalNavigation && url.startsWith(env.baseUrl)) {
     final cleanUrl = url.contains("#")
         ? url.split("#")[1]
         : url.replaceFirst(env.baseUrl, '/');
