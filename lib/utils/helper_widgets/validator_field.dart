@@ -117,7 +117,7 @@ class ValidatorField {
 
   String? isValidPhoneNumber({
     String? mask,
-    int length = 11,
+    int length = 10,
     int lengthAreaCode = 3,
     bool enableStartCeroValidation = false,
   }) {

@@ -45,9 +45,9 @@ class AppRouterConfig {
 
         if (state.uri.toString().startsWith("http")) return '/splash';
 
-        if (mainProvider
-                .initializationService.initialFetch.initialFetchStatus.value !=
-            InitialFetchStatus.done) {
+        if (![InitialFetchStatus.done, InitialFetchStatus.unilinkDone].contains(
+            mainProvider
+                .initializationService.initialFetch.initialFetchStatus.value)) {
           if (state.uri.toString().contains("redirectPath")) return null;
 
           return '/splash?redirectPath=${Uri.encodeComponent(state.uri.toString())}';

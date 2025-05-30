@@ -4,6 +4,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter_detextre4/utils/extensions/type_extensions.dart';
+import 'package:flutter_detextre4/utils/services/initialization_service.dart';
 import 'package:flutter_detextre4/utils/services/local_data/env_service.dart';
 import 'package:uni_links/uni_links.dart';
 
@@ -21,44 +22,45 @@ enum UniLinksTypeHandler {
 }
 
 class UniLinksService {
-  static StreamSubscription? _sub;
+  UniLinksService(
+    this.context, {
+    required this.initialFetchStatus,
+  });
+  final BuildContext context;
+  final ValueNotifier<InitialFetchStatus> initialFetchStatus;
 
-  static void dispose() {
+  StreamSubscription? _sub;
+
+  void dispose() {
     _sub?.cancel();
     _sub = null;
   }
 
   /// Initialization method to [UniLinksService]. Just run once.
-  static Future<void> init(
-    BuildContext? context, {
-    checkActualVersion = false,
-  }) async {
-    if (kIsWeb || context == null) return;
+  Future<UniLinksService?> init({checkActualVersion = false}) async {
+    if (kIsWeb) return null;
 
     // This is used for cases when: APP is not running and the user clicks on a link.
     try {
       final Uri? uri = await getInitialUri();
 
-      if (context.mounted) {
-        await uniLinkHandler(context, uri, UniLinksTypeHandler.initialUrl);
-      }
+      await uniLinkHandler(uri, UniLinksTypeHandler.initialUrl);
     } catch (error) {
       if (kDebugMode) print("UniLinks getInitialUri error: $error ⭕");
     }
 
     // This is used for cases when: APP is already running and the user clicks on a link.
     _sub = uriLinkStream.listen((value) async {
-      if (!context.mounted) return;
-
-      await uniLinkHandler(context, value, UniLinksTypeHandler.streamUrl);
+      await uniLinkHandler(value, UniLinksTypeHandler.streamUrl);
     }, onError: (error) {
       if (kDebugMode) print('UniLinks onUriLink error: $error ⭕');
     });
+
+    return this;
   }
 
   /// handler to manage uri redirect
-  static Future<bool> uniLinkHandler(
-    BuildContext context,
+  Future<bool> uniLinkHandler(
     Uri? uri,
     UniLinksTypeHandler uniLinksTypeHandler,
   ) async {
@@ -69,7 +71,7 @@ class UniLinksService {
       final paramValue = params[key.name];
       if (paramValue.hasNotValue) continue;
 
-      await _uniLinksActions(context, key, paramValue!, uniLinksTypeHandler);
+      await _uniLinksActions(key, paramValue!, uniLinksTypeHandler);
       return true;
     }
 
@@ -77,8 +79,7 @@ class UniLinksService {
   }
 
   /// handler to manage uri redirect
-  static Future<void> _uniLinksActions(
-    BuildContext context,
+  Future<void> _uniLinksActions(
     UniLinksKey key,
     String value,
     UniLinksTypeHandler uniLinksTypeHandler,
@@ -88,7 +89,11 @@ class UniLinksService {
     SchedulerBinding.instance.addPostFrameCallback((_) async {
       switch (key) {
         case UniLinksKey.testKey:
-          if (kDebugMode) print("test key");
+          {
+            if (kDebugMode) print("test key");
+            initialFetchStatus.value = InitialFetchStatus.unilinkDone;
+          }
+
           break;
       }
 

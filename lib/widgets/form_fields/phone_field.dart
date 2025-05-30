@@ -130,7 +130,7 @@ class _PhoneFieldState extends State<PhoneField> {
         (instance) => [
           () => instance.isValidPhoneNumber(
                 mask: maskFormatter.getMask(),
-                length: currentPhoneSelected?.length ?? 11,
+                length: currentPhoneSelected?.length ?? 10,
                 lengthAreaCode: currentPhoneSelected?.lengthAreaCode ?? 3,
                 enableStartCeroValidation:
                     currentPhoneSelected?.enableStartCeroValidation ?? false,

@@ -1,15 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter_detextre4/utils/extensions/type_extensions.dart';
+import 'package:flutter_detextre4/utils/general/functions.dart';
 import 'package:flutter_detextre4/utils/services/dio_service.dart';
 import 'package:flutter_detextre4/utils/services/local_data/secure_storage_service.dart';
 import 'package:flutter_detextre4/utils/services/local_notifications.dart';
 import 'package:flutter_detextre4/utils/services/reminder_service.dart';
+import 'package:flutter_detextre4/utils/services/uni_links_service.dart';
 
 enum InitialFetchStatus {
+  stopped,
   fetching,
   error,
   maintenance,
+  unilinkDone,
   done;
 }
 
@@ -24,23 +28,28 @@ class InitializationService {
 class _InitialFetch {
   _InitialFetch();
 
-  final initialFetchStatus = ValueNotifier(InitialFetchStatus.fetching);
+  final initialFetchStatus = ValueNotifier(InitialFetchStatus.stopped);
 
-  Future<bool> init(BuildContext context) async {
-    initialFetchStatus.value = InitialFetchStatus.fetching;
-
+  Future<void> init(BuildContext context) async {
     try {
       // initialize DioService
       DioService.init(context);
 
+      // review app version
+      final updatePressed = await checkVersion(context);
+      if (updatePressed) {
+        initialFetchStatus.value = InitialFetchStatus.error;
+        return;
+      }
+
+      if (!context.mounted) return;
+
+      initialFetchStatus.value = InitialFetchStatus.fetching;
+
       final [
         tokenAuth,
-        // _,
       ] = await Future.wait([
         SecureStorage.read<String?>(SecureCollection.tokenAuth),
-
-        // initialize deep links
-        // UniLinksService.init(context),
       ]);
       final isLogged = tokenAuth != null;
 
@@ -54,9 +63,15 @@ class _InitialFetch {
         }
       }
 
-      initialFetchStatus.value = InitialFetchStatus.done;
+      // initialize deep links
+      if (context.mounted) {
+        await UniLinksService(context, initialFetchStatus: initialFetchStatus)
+            .init();
+      }
 
-      return isLogged;
+      if (initialFetchStatus.value == InitialFetchStatus.unilinkDone) return;
+
+      initialFetchStatus.value = InitialFetchStatus.done;
     } catch (error) {
       if (error.catchErrorStatusCode() == "401") {
         SecureStorage.delete(SecureCollection.tokenAuth);
@@ -64,7 +79,7 @@ class _InitialFetch {
 
       throw error.catchErrorMessage(
         fallback:
-            "An error occurred while running the application 😞, please contact our support team for more information",
+            "Ha ocurrido un error al correr la aplicación 😞, porfavor contacta con nuestro equipo de soporte para más información",
       );
     }
   }

@@ -10,13 +10,13 @@ import 'package:flutter_detextre4/utils/config/router_config.dart';
 import 'package:flutter_detextre4/utils/config/theme.dart';
 import 'package:flutter_detextre4/utils/extensions/type_extensions.dart';
 import 'package:flutter_detextre4/utils/general/variables.dart';
+import 'package:flutter_detextre4/utils/services/app_review_service.dart';
 import 'package:flutter_detextre4/utils/services/local_data/env_service.dart';
 import 'package:flutter_detextre4/widgets/dialogs/modal_widget.dart';
 import 'package:flutter_detextre4/widgets/sheets/bottom_sheet_card.dart';
 import 'package:flutter_gap/flutter_gap.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:http/http.dart' show Response, get;
-import 'package:launch_review/launch_review.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:responsive_mixin_layout/responsive_mixin_layout.dart';
@@ -215,30 +215,45 @@ Future<void> attachmentPressed(
   );
 }
 
-Future<void> checkVersion(BuildContext context) =>
-    PackageInfo.fromPlatform().then((packageInfo) async {
-      final (minVersion, currentVersion) =
-          ("1.0.0", "1.0.0"); //? implement fetch to get version 🖊️
+/// If returns [true] it means that user pressed on the update button
+/// else returns [false] it means that user no choose any option
+Future<bool> checkVersion(BuildContext context) async {
+  if (kIsWeb) return false;
 
-      final packageVersion = packageInfo.version,
-          hasUpdate =
-              Version.parse(packageVersion) < Version.parse(currentVersion),
-          requireUpdate =
-              Version.parse(packageVersion) < Version.parse(minVersion);
+  final packageInfo = await PackageInfo.fromPlatform();
 
-      if (context.mounted && hasUpdate) {
-        await Modal.showSystemAlert(
-          context,
-          barrierColor: Colors.black.withAlpha(26),
-          titleText: "Update Available!",
-          contentText: requireUpdate
-              ? "You must to update the application to continue"
-              : "We have a new version available to you on the store",
-          dismissible: !requireUpdate,
-          textCancelBtn: requireUpdate ? null : "Continue",
-          textConfirmBtn: "Update",
-          onPressedConfirmBtn: (context) =>
-              LaunchReview.launch(androidAppId: packageInfo.packageName),
-        );
-      }
-    });
+  final (minVersion, currentVersion) =
+      ("1.0.0", "1.0.0"); //? implement fetch to get version 🖊️
+  final packageVersion = packageInfo.version;
+
+  final hasUpdate =
+      Version.parse(packageVersion) < Version.parse(currentVersion);
+  final requireUpdate =
+      Version.parse(packageVersion) < Version.parse(minVersion);
+
+  bool updateButtonPressed = false;
+
+  if (context.mounted && hasUpdate) {
+    Navigator.popUntil(context, (route) => route.isFirst);
+
+    await Modal.showSystemAlert(
+      context,
+      barrierColor: Colors.black.withAlpha(26),
+      titleText: "Actualización disponible!",
+      contentText: requireUpdate
+          ? "Debes actualizar tu applicación de Apolo Pay para poder continuar"
+          : "Tenemos una nueva versión de Apolo Pay disponible para ti en la tienda",
+      dismissible: !requireUpdate,
+      hideConfirmButton: requireUpdate,
+      textConfirmBtn: "Continuar",
+      textCancelBtn: "Actualizar",
+      onPressedCancelBtn: (context) {
+        Navigator.pop(context);
+        updateButtonPressed = true;
+        AppReviewService.openStore();
+      },
+    );
+  }
+
+  return updateButtonPressed;
+}

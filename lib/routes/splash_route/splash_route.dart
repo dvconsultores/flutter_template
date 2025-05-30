@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:app_loader/app_loader.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter/services.dart';
@@ -37,25 +38,34 @@ class _SplashRouteState extends State<SplashRoute>
   /// initialize services using [InitializationService] context
   Future<void> handleFetchData() async {
     try {
-      if (animationController.isCompleted) {
-        await loader.open(
-          future: (cancelToken) =>
-              initializationService.initialFetch.init(context),
-        );
-      } else {
-        await initializationService.initialFetch.init(context);
-      }
+      await initializationService.initialFetch.init(context);
       if (!mounted) return;
 
       await animationCompleter.future;
 
-      if (mounted) Navigator.popUntil(context, (route) => route.isFirst);
+      switch (initializationService.initialFetch.initialFetchStatus.value) {
+        case InitialFetchStatus.done:
+          {
+            if (mounted) Navigator.popUntil(context, (route) => route.isFirst);
 
-      if (widget.redirectPath == "/auth") {
-        return routerConfig.router.goNamed("login");
+            if (widget.redirectPath == "/auth") {
+              return routerConfig.router.goNamed(
+                "login",
+                queryParameters: {if (!kIsWeb) "showBiometric": "true"},
+              );
+            }
+
+            routerConfig.router.go(widget.redirectPath ?? "/home");
+          }
+          break;
+
+        case InitialFetchStatus.maintenance:
+          routerConfig.router.goNamed("maintenance");
+          break;
+
+        default:
+          break;
       }
-
-      return routerConfig.router.go(widget.redirectPath ?? "/home");
     } catch (error) {
       await animationCompleter.future;
 
@@ -71,8 +81,23 @@ class _SplashRouteState extends State<SplashRoute>
     }
   }
 
+  void onListenInitialFetchStatus() {
+    switch (initializationService.initialFetch.initialFetchStatus.value) {
+      case InitialFetchStatus.fetching:
+        loader.open();
+        break;
+
+      case InitialFetchStatus():
+        loader.close();
+        break;
+    }
+  }
+
   @override
   void initState() {
+    initializationService.initialFetch.initialFetchStatus
+        .addListener(onListenInitialFetchStatus);
+
     SchedulerBinding.instance.addPostFrameCallback((_) {
       SystemChrome.setSystemUIOverlayStyle(
           ThemeApp.of(context).systemUiOverlayStyle.copyWith(
@@ -87,6 +112,7 @@ class _SplashRouteState extends State<SplashRoute>
 
         animationCompleter.complete();
       });
+
       handleFetchData();
     });
     super.initState();
@@ -94,6 +120,8 @@ class _SplashRouteState extends State<SplashRoute>
 
   @override
   void dispose() {
+    initializationService.initialFetch.initialFetchStatus
+        .removeListener(onListenInitialFetchStatus);
     animationController.dispose();
     super.dispose();
   }
