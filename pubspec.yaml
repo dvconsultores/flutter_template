@@ -119,7 +119,7 @@ dependencies:
   flex_list: ^1.0.0
   universal_html: ^2.2.4
   syncfusion_flutter_charts: ^28.2.12
-  app_loader: ^1.4.0
+  app_loader: ^1.4.1
 
 
 dev_dependencies:
