@@ -81,10 +81,12 @@ class _SplashRouteState extends State<SplashRoute>
     }
   }
 
-  void onListenInitialFetchStatus() {
+  Future<void> onListenInitialFetchStatus() async {
     switch (initializationService.initialFetch.initialFetchStatus.value) {
       case InitialFetchStatus.fetching:
-        loader.open();
+        await animationCompleter.future;
+
+        if (mounted) loader.open();
         break;
 
       case InitialFetchStatus():

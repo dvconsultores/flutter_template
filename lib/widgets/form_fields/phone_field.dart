@@ -14,6 +14,7 @@ class PhoneField extends StatefulWidget {
     this.mask,
     this.length,
     this.lengthAreaCode,
+    this.enableStartCeroValidation,
     this.loading = false,
     this.disabled = false,
     this.onFieldSubmitted,
@@ -36,6 +37,7 @@ class PhoneField extends StatefulWidget {
   final String? mask;
   final int? length;
   final int? lengthAreaCode;
+  final bool? enableStartCeroValidation;
   final bool loading;
   final bool disabled;
   final void Function(String)? onFieldSubmitted;
@@ -129,11 +131,14 @@ class _PhoneFieldState extends State<PhoneField> {
         value,
         (instance) => [
           () => instance.isValidPhoneNumber(
-                mask: maskFormatter.getMask(),
-                length: currentPhoneSelected?.length ?? 10,
-                lengthAreaCode: currentPhoneSelected?.lengthAreaCode ?? 3,
-                enableStartCeroValidation:
-                    currentPhoneSelected?.enableStartCeroValidation ?? false,
+                mask: widget.mask ?? maskFormatter.getMask(),
+                length: widget.length ?? currentPhoneSelected?.length ?? 11,
+                lengthAreaCode: widget.lengthAreaCode ??
+                    currentPhoneSelected?.lengthAreaCode ??
+                    3,
+                enableStartCeroValidation: widget.enableStartCeroValidation ??
+                    currentPhoneSelected?.enableStartCeroValidation ??
+                    false,
               )
         ],
       ),
