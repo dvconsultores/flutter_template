@@ -117,19 +117,36 @@ class ValidatorField {
 
   String? isValidPhoneNumber({
     String? mask,
-    int length = 11,
-    int lengthAreaCode = 3,
-    bool enableStartCeroValidation = false,
+    int? minLength,
+    int? maxLength,
+    int? lengthAreaCode,
+    bool? enableStartCeroValidation,
   }) {
+    minLength ??= 11;
+    maxLength ??= 13;
+    lengthAreaCode ??= 3;
+    enableStartCeroValidation ??= false;
+
     final text =
         MaskTextInputFormatter(mask: mask).unmaskText(value as String? ?? '');
 
-    if (!text.startsWith('0') && enableStartCeroValidation) length -= 1;
+    if (text.length < minLength) {
+      return "El número telefónico debe tener al menos $minLength dígitos";
+    }
 
-    return Vars.phoneRegExp(length: length, lengthAreaCode: lengthAreaCode)
+    if (text.length > maxLength) {
+      return "El número telefónico debe tener como máximo $maxLength dígitos";
+    }
+
+    if (!text.startsWith('0') && enableStartCeroValidation) minLength -= 1;
+
+    return Vars.phoneRegExp(
+                minLength: minLength,
+                maxLength: maxLength,
+                lengthAreaCode: lengthAreaCode)
             .hasMatch(text)
         ? null
-        : "Phone invalid";
+        : "Número telefónico inválido";
   }
 
   String? walletValidator(String blockchainAsset, [String? customMessage]) {

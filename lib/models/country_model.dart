@@ -7,7 +7,8 @@ class CountryModel implements DefaultModel {
     required this.flag,
     required this.code,
     required this.prefix,
-    this.length,
+    this.minLength,
+    this.maxLength,
     this.lengthAreaCode,
     this.enableStartCeroValidation,
   });
@@ -15,7 +16,8 @@ class CountryModel implements DefaultModel {
   final String flag;
   final String code;
   final String prefix;
-  final int? length;
+  final int? minLength;
+  final int? maxLength;
   final int? lengthAreaCode;
   final bool? enableStartCeroValidation;
 
@@ -28,7 +30,8 @@ class CountryModel implements DefaultModel {
     String? flag,
     String? code,
     String? prefix,
-    int? length,
+    int? minLength,
+    int? maxLength,
     int? lengthAreaCode,
     bool? enableStartCeroValidation,
   }) =>
@@ -37,7 +40,8 @@ class CountryModel implements DefaultModel {
         flag: flag ?? this.flag,
         code: code ?? this.code,
         prefix: prefix ?? this.prefix,
-        length: length ?? this.length,
+        minLength: minLength ?? this.minLength,
+        maxLength: maxLength ?? this.maxLength,
         lengthAreaCode: lengthAreaCode ?? this.lengthAreaCode,
         enableStartCeroValidation:
             enableStartCeroValidation ?? this.enableStartCeroValidation,
@@ -49,7 +53,8 @@ class CountryModel implements DefaultModel {
         "flag": flag,
         "code": code,
         "prefix": prefix,
-        "length": length,
+        "minLength": minLength,
+        "maxLength": maxLength,
         "lengthAreaCode": lengthAreaCode,
         "enableStartCeroValidation": enableStartCeroValidation,
       };
@@ -59,7 +64,8 @@ class CountryModel implements DefaultModel {
         flag: json['flag'],
         code: json['code'],
         prefix: json['prefix'],
-        length: json['length'],
+        minLength: json['minLength'],
+        maxLength: json['maxLength'],
         lengthAreaCode: json['lengthAreaCode'],
         enableStartCeroValidation: json['enableStartCeroValidation'],
       );

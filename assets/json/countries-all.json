@@ -4,7 +4,8 @@
     "flag": "🇦🇫",
     "code": "AF",
     "prefix": "+93",
-    "length": 11,
+    "minLength": 11,
+    "maxLength": 13,
     "lengthAreaCode": 3
   },
   {
@@ -12,7 +13,8 @@
     "flag": "🇦🇽",
     "code": "AX",
     "prefix": "+358",
-    "length": 11,
+    "minLength": 11,
+    "maxLength": 13,
     "lengthAreaCode": 3
   },
   {
@@ -20,7 +22,8 @@
     "flag": "🇦🇱",
     "code": "AL",
     "prefix": "+355",
-    "length": 11,
+    "minLength": 11,
+    "maxLength": 13,
     "lengthAreaCode": 3
   },
   {
@@ -28,7 +31,8 @@
     "flag": "🇩🇿",
     "code": "DZ",
     "prefix": "+213",
-    "length": 11,
+    "minLength": 11,
+    "maxLength": 13,
     "lengthAreaCode": 3
   },
   {
@@ -36,7 +40,8 @@
     "flag": "🇦🇸",
     "code": "AS",
     "prefix": "+1684",
-    "length": 11,
+    "minLength": 11,
+    "maxLength": 13,
     "lengthAreaCode": 3
   },
   {
@@ -44,7 +49,8 @@
     "flag": "🇦🇩",
     "code": "AD",
     "prefix": "+376",
-    "length": 11,
+    "minLength": 11,
+    "maxLength": 13,
     "lengthAreaCode": 3
   },
   {
@@ -52,7 +58,8 @@
     "flag": "🇦🇴",
     "code": "AO",
     "prefix": "+244",
-    "length": 11,
+    "minLength": 11,
+    "maxLength": 13,
     "lengthAreaCode": 3
   },
   {
@@ -60,7 +67,8 @@
     "flag": "🇦🇮",
     "code": "AI",
     "prefix": "+1264",
-    "length": 11,
+    "minLength": 11,
+    "maxLength": 13,
     "lengthAreaCode": 3
   },
   {
@@ -68,7 +76,8 @@
     "flag": "🇦🇶",
     "code": "AQ",
     "prefix": "+672",
-    "length": 11,
+    "minLength": 11,
+    "maxLength": 13,
     "lengthAreaCode": 3
   },
   {
@@ -76,7 +85,8 @@
     "flag": "🇦🇬",
     "code": "AG",
     "prefix": "+1268",
-    "length": 11,
+    "minLength": 11,
+    "maxLength": 13,
     "lengthAreaCode": 3
   },
   {
@@ -84,7 +94,8 @@
     "flag": "🇦🇷",
     "code": "AR",
     "prefix": "+54",
-    "length": 11,
+    "minLength": 11,
+    "maxLength": 13,
     "lengthAreaCode": 3
   },
   {
@@ -92,7 +103,8 @@
     "flag": "🇦🇲",
     "code": "AM",
     "prefix": "+374",
-    "length": 11,
+    "minLength": 11,
+    "maxLength": 13,
     "lengthAreaCode": 3
   },
   {
@@ -100,7 +112,8 @@
     "flag": "🇦🇼",
     "code": "AW",
     "prefix": "+297",
-    "length": 11,
+    "minLength": 11,
+    "maxLength": 13,
     "lengthAreaCode": 3
   },
   {
@@ -108,7 +121,8 @@
     "flag": "🇦🇺",
     "code": "AU",
     "prefix": "+61",
-    "length": 11,
+    "minLength": 11,
+    "maxLength": 13,
     "lengthAreaCode": 3
   },
   {
@@ -116,7 +130,8 @@
     "flag": "🇦🇹",
     "code": "AT",
     "prefix": "+43",
-    "length": 11,
+    "minLength": 11,
+    "maxLength": 13,
     "lengthAreaCode": 3
   },
   {
@@ -124,7 +139,8 @@
     "flag": "🇦🇿",
     "code": "AZ",
     "prefix": "+994",
-    "length": 11,
+    "minLength": 11,
+    "maxLength": 13,
     "lengthAreaCode": 3
   },
   {
@@ -132,7 +148,8 @@
     "flag": "🇧🇸",
     "code": "BS",
     "prefix": "+1242",
-    "length": 11,
+    "minLength": 11,
+    "maxLength": 13,
     "lengthAreaCode": 3
   },
   {
@@ -140,7 +157,8 @@
     "flag": "🇧🇭",
     "code": "BH",
     "prefix": "+973",
-    "length": 11,
+    "minLength": 11,
+    "maxLength": 13,
     "lengthAreaCode": 3
   },
   {
@@ -148,7 +166,8 @@
     "flag": "🇧🇩",
     "code": "BD",
     "prefix": "+880",
-    "length": 11,
+    "minLength": 11,
+    "maxLength": 13,
     "lengthAreaCode": 3
   },
   {
@@ -156,7 +175,8 @@
     "flag": "🇧🇧",
     "code": "BB",
     "prefix": "+1246",
-    "length": 11,
+    "minLength": 11,
+    "maxLength": 13,
     "lengthAreaCode": 3
   },
   {
@@ -164,7 +184,8 @@
     "flag": "🇧🇾",
     "code": "BY",
     "prefix": "+375",
-    "length": 11,
+    "minLength": 11,
+    "maxLength": 13,
     "lengthAreaCode": 3
   },
   {
@@ -172,7 +193,8 @@
     "flag": "🇧🇪",
     "code": "BE",
     "prefix": "+32",
-    "length": 11,
+    "minLength": 11,
+    "maxLength": 13,
     "lengthAreaCode": 3
   },
   {
@@ -180,7 +202,8 @@
     "flag": "🇧🇿",
     "code": "BZ",
     "prefix": "+501",
-    "length": 11,
+    "minLength": 11,
+    "maxLength": 13,
     "lengthAreaCode": 3
   },
   {
@@ -188,7 +211,8 @@
     "flag": "🇧🇯",
     "code": "BJ",
     "prefix": "+229",
-    "length": 11,
+    "minLength": 11,
+    "maxLength": 13,
     "lengthAreaCode": 3
   },
   {
@@ -196,7 +220,8 @@
     "flag": "🇧🇲",
     "code": "BM",
     "prefix": "+1441",
-    "length": 11,
+    "minLength": 11,
+    "maxLength": 13,
     "lengthAreaCode": 3
   },
   {
@@ -204,7 +229,8 @@
     "flag": "🇧🇹",
     "code": "BT",
     "prefix": "+975",
-    "length": 11,
+    "minLength": 11,
+    "maxLength": 13,
     "lengthAreaCode": 3
   },
   {
@@ -212,7 +238,8 @@
     "flag": "🇧🇴",
     "code": "BO",
     "prefix": "+591",
-    "length": 9,
+    "minLength": 9,
+    "maxLength": 11,
     "lengthAreaCode": 3
   },
   {
@@ -220,7 +247,8 @@
     "flag": "🇧🇦",
     "code": "BA",
     "prefix": "+387",
-    "length": 11,
+    "minLength": 11,
+    "maxLength": 13,
     "lengthAreaCode": 3
   },
   {
@@ -228,7 +256,8 @@
     "flag": "🇧🇼",
     "code": "BW",
     "prefix": "+267",
-    "length": 11,
+    "minLength": 11,
+    "maxLength": 13,
     "lengthAreaCode": 3
   },
   {
@@ -236,7 +265,8 @@
     "flag": "🇧🇻",
     "code": "BV",
     "prefix": "+47",
-    "length": 11,
+    "minLength": 11,
+    "maxLength": 13,
     "lengthAreaCode": 3
   },
   {
@@ -244,7 +274,8 @@
     "flag": "🇧🇷",
     "code": "BR",
     "prefix": "+55",
-    "length": 11,
+    "minLength": 11,
+    "maxLength": 13,
     "lengthAreaCode": 3
   },
   {
@@ -252,7 +283,8 @@
     "flag": "🇮🇴",
     "code": "IO",
     "prefix": "+246",
-    "length": 11,
+    "minLength": 11,
+    "maxLength": 13,
     "lengthAreaCode": 3
   },
   {
@@ -260,7 +292,8 @@
     "flag": "🇧🇳",
     "code": "BN",
     "prefix": "+673",
-    "length": 11,
+    "minLength": 11,
+    "maxLength": 13,
     "lengthAreaCode": 3
   },
   {
@@ -268,7 +301,8 @@
     "flag": "🇧🇬",
     "code": "BG",
     "prefix": "+359",
-    "length": 11,
+    "minLength": 11,
+    "maxLength": 13,
     "lengthAreaCode": 3
   },
   {
@@ -276,7 +310,8 @@
     "flag": "🇧🇫",
     "code": "BF",
     "prefix": "+226",
-    "length": 11,
+    "minLength": 11,
+    "maxLength": 13,
     "lengthAreaCode": 3
   },
   {
@@ -284,7 +319,8 @@
     "flag": "🇧🇮",
     "code": "BI",
     "prefix": "+257",
-    "length": 11,
+    "minLength": 11,
+    "maxLength": 13,
     "lengthAreaCode": 3
   },
   {
@@ -292,7 +328,8 @@
     "flag": "🇰🇭",
     "code": "KH",
     "prefix": "+855",
-    "length": 11,
+    "minLength": 11,
+    "maxLength": 13,
     "lengthAreaCode": 3
   },
   {
@@ -300,7 +337,8 @@
     "flag": "🇨🇲",
     "code": "CM",
     "prefix": "+237",
-    "length": 11,
+    "minLength": 11,
+    "maxLength": 13,
     "lengthAreaCode": 3
   },
   {
@@ -308,7 +346,8 @@
     "flag": "🇨🇦",
     "code": "CA",
     "prefix": "+1",
-    "length": 11,
+    "minLength": 11,
+    "maxLength": 13,
     "lengthAreaCode": 3
   },
   {
@@ -316,7 +355,8 @@
     "flag": "🇨🇻",
     "code": "CV",
     "prefix": "+238",
-    "length": 11,
+    "minLength": 11,
+    "maxLength": 13,
     "lengthAreaCode": 3
   },
   {
@@ -324,7 +364,8 @@
     "flag": "🇰🇾",
     "code": "KY",
     "prefix": "+345",
-    "length": 11,
+    "minLength": 11,
+    "maxLength": 13,
     "lengthAreaCode": 3
   },
   {
@@ -332,7 +373,8 @@
     "flag": "🇨🇫",
     "code": "CF",
     "prefix": "+236",
-    "length": 11,
+    "minLength": 11,
+    "maxLength": 13,
     "lengthAreaCode": 3
   },
   {
@@ -340,7 +382,8 @@
     "flag": "🇹🇩",
     "code": "TD",
     "prefix": "+235",
-    "length": 11,
+    "minLength": 11,
+    "maxLength": 13,
     "lengthAreaCode": 3
   },
   {
@@ -348,7 +391,8 @@
     "flag": "🇨🇱",
     "code": "CL",
     "prefix": "+56",
-    "length": 9,
+    "minLength": 9,
+    "maxLength": 11,
     "lengthAreaCode": 3
   },
   {
@@ -356,7 +400,8 @@
     "flag": "🇨🇳",
     "code": "CN",
     "prefix": "+86",
-    "length": 11,
+    "minLength": 11,
+    "maxLength": 13,
     "lengthAreaCode": 3
   },
   {
@@ -364,7 +409,8 @@
     "flag": "🇨🇽",
     "code": "CX",
     "prefix": "+61",
-    "length": 11,
+    "minLength": 11,
+    "maxLength": 13,
     "lengthAreaCode": 3
   },
   {
@@ -372,7 +418,8 @@
     "flag": "🇨🇨",
     "code": "CC",
     "prefix": "+61",
-    "length": 11,
+    "minLength": 11,
+    "maxLength": 13,
     "lengthAreaCode": 3
   },
   {
@@ -380,7 +427,8 @@
     "flag": "🇨🇴",
     "code": "CO",
     "prefix": "+57",
-    "length": 11,
+    "minLength": 10,
+    "maxLength": 12,
     "lengthAreaCode": 3
   },
   {
@@ -388,7 +436,8 @@
     "flag": "🇰🇲",
     "code": "KM",
     "prefix": "+269",
-    "length": 11,
+    "minLength": 11,
+    "maxLength": 13,
     "lengthAreaCode": 3
   },
   {
@@ -396,7 +445,8 @@
     "flag": "🇨🇬",
     "code": "CG",
     "prefix": "+242",
-    "length": 11,
+    "minLength": 11,
+    "maxLength": 13,
     "lengthAreaCode": 3
   },
   {
@@ -404,7 +454,8 @@
     "flag": "🇨🇩",
     "code": "CD",
     "prefix": "+243",
-    "length": 11,
+    "minLength": 11,
+    "maxLength": 13,
     "lengthAreaCode": 3
   },
   {
@@ -412,7 +463,8 @@
     "flag": "🇨🇰",
     "code": "CK",
     "prefix": "+682",
-    "length": 11,
+    "minLength": 11,
+    "maxLength": 13,
     "lengthAreaCode": 3
   },
   {
@@ -420,7 +472,8 @@
     "flag": "🇨🇷",
     "code": "CR",
     "prefix": "+506",
-    "length": 11,
+    "minLength": 11,
+    "maxLength": 13,
     "lengthAreaCode": 3
   },
   {
@@ -428,7 +481,8 @@
     "flag": "🇨🇮",
     "code": "CI",
     "prefix": "+225",
-    "length": 11,
+    "minLength": 11,
+    "maxLength": 13,
     "lengthAreaCode": 3
   },
   {
@@ -436,7 +490,8 @@
     "flag": "🇭🇷",
     "code": "HR",
     "prefix": "+385",
-    "length": 11,
+    "minLength": 11,
+    "maxLength": 13,
     "lengthAreaCode": 3
   },
   {
@@ -444,7 +499,8 @@
     "flag": "🇨🇺",
     "code": "CU",
     "prefix": "+53",
-    "length": 11,
+    "minLength": 11,
+    "maxLength": 13,
     "lengthAreaCode": 3
   },
   {
@@ -452,7 +508,8 @@
     "flag": "🇨🇾",
     "code": "CY",
     "prefix": "+357",
-    "length": 11,
+    "minLength": 11,
+    "maxLength": 13,
     "lengthAreaCode": 3
   },
   {
@@ -460,7 +517,8 @@
     "flag": "🇨🇿",
     "code": "CZ",
     "prefix": "+411",
-    "length": 11,
+    "minLength": 11,
+    "maxLength": 13,
     "lengthAreaCode": 3
   },
   {
@@ -468,7 +526,8 @@
     "flag": "🇩🇰",
     "code": "DK",
     "prefix": "+45",
-    "length": 11,
+    "minLength": 11,
+    "maxLength": 13,
     "lengthAreaCode": 3
   },
   {
@@ -476,7 +535,8 @@
     "flag": "🇩🇯",
     "code": "DJ",
     "prefix": "+253",
-    "length": 11,
+    "minLength": 11,
+    "maxLength": 13,
     "lengthAreaCode": 3
   },
   {
@@ -484,7 +544,8 @@
     "flag": "🇩🇲",
     "code": "DM",
     "prefix": "+1767",
-    "length": 11,
+    "minLength": 11,
+    "maxLength": 13,
     "lengthAreaCode": 3
   },
   {
@@ -492,7 +553,8 @@
     "flag": "🇩🇴",
     "code": "DO",
     "prefix": "+1849",
-    "length": 11,
+    "minLength": 11,
+    "maxLength": 13,
     "lengthAreaCode": 3
   },
   {
@@ -500,7 +562,8 @@
     "flag": "🇪🇨",
     "code": "EC",
     "prefix": "+593",
-    "length": 11,
+    "minLength": 11,
+    "maxLength": 13,
     "lengthAreaCode": 3
   },
   {
@@ -508,7 +571,8 @@
     "flag": "🇪🇬",
     "code": "EG",
     "prefix": "+10",
-    "length": 11,
+    "minLength": 11,
+    "maxLength": 13,
     "lengthAreaCode": 3
   },
   {
@@ -516,7 +580,8 @@
     "flag": "🇸🇻",
     "code": "SV",
     "prefix": "+503",
-    "length": 11,
+    "minLength": 11,
+    "maxLength": 13,
     "lengthAreaCode": 3
   },
   {
@@ -524,7 +589,8 @@
     "flag": "🇬🇶",
     "code": "GQ",
     "prefix": "+240",
-    "length": 11,
+    "minLength": 11,
+    "maxLength": 13,
     "lengthAreaCode": 3
   },
   {
@@ -532,7 +598,8 @@
     "flag": "🇪🇷",
     "code": "ER",
     "prefix": "+291",
-    "length": 11,
+    "minLength": 11,
+    "maxLength": 13,
     "lengthAreaCode": 3
   },
   {
@@ -540,7 +607,8 @@
     "flag": "🇪🇪",
     "code": "EE",
     "prefix": "+372",
-    "length": 11,
+    "minLength": 11,
+    "maxLength": 13,
     "lengthAreaCode": 3
   },
   {
@@ -548,7 +616,8 @@
     "flag": "🇪🇹",
     "code": "ET",
     "prefix": "+251",
-    "length": 11,
+    "minLength": 11,
+    "maxLength": 13,
     "lengthAreaCode": 3
   },
   {
@@ -556,7 +625,8 @@
     "flag": "🇫🇰",
     "code": "FK",
     "prefix": "+500",
-    "length": 11,
+    "minLength": 11,
+    "maxLength": 13,
     "lengthAreaCode": 3
   },
   {
@@ -564,7 +634,8 @@
     "flag": "🇫🇴",
     "code": "FO",
     "prefix": "+298",
-    "length": 11,
+    "minLength": 11,
+    "maxLength": 13,
     "lengthAreaCode": 3
   },
   {
@@ -572,7 +643,8 @@
     "flag": "🇫🇯",
     "code": "FJ",
     "prefix": "+679",
-    "length": 11,
+    "minLength": 11,
+    "maxLength": 13,
     "lengthAreaCode": 3
   },
   {
@@ -580,7 +652,8 @@
     "flag": "🇫🇮",
     "code": "FI",
     "prefix": "+358",
-    "length": 11,
+    "minLength": 11,
+    "maxLength": 13,
     "lengthAreaCode": 3
   },
   {
@@ -588,7 +661,8 @@
     "flag": "🇫🇷",
     "code": "FR",
     "prefix": "+33",
-    "length": 11,
+    "minLength": 11,
+    "maxLength": 13,
     "lengthAreaCode": 3
   },
   {
@@ -596,7 +670,8 @@
     "flag": "🇬🇫",
     "code": "GF",
     "prefix": "+594",
-    "length": 11,
+    "minLength": 11,
+    "maxLength": 13,
     "lengthAreaCode": 3
   },
   {
@@ -604,7 +679,8 @@
     "flag": "🇵🇫",
     "code": "PF",
     "prefix": "+689",
-    "length": 11,
+    "minLength": 11,
+    "maxLength": 13,
     "lengthAreaCode": 3
   },
   {
@@ -612,7 +688,8 @@
     "flag": "🇹🇫",
     "code": "TF",
     "prefix": "+262",
-    "length": 11,
+    "minLength": 11,
+    "maxLength": 13,
     "lengthAreaCode": 3
   },
   {
@@ -620,7 +697,8 @@
     "flag": "🇬🇦",
     "code": "GA",
     "prefix": "+241",
-    "length": 11,
+    "minLength": 11,
+    "maxLength": 13,
     "lengthAreaCode": 3
   },
   {
@@ -628,7 +706,8 @@
     "flag": "🇬🇲",
     "code": "GM",
     "prefix": "+211",
-    "length": 11,
+    "minLength": 11,
+    "maxLength": 13,
     "lengthAreaCode": 3
   },
   {
@@ -636,7 +715,8 @@
     "flag": "🇬🇪",
     "code": "GE",
     "prefix": "+995",
-    "length": 11,
+    "minLength": 11,
+    "maxLength": 13,
     "lengthAreaCode": 3
   },
   {
@@ -644,7 +724,8 @@
     "flag": "🇩🇪",
     "code": "DE",
     "prefix": "+49",
-    "length": 11,
+    "minLength": 11,
+    "maxLength": 13,
     "lengthAreaCode": 3
   },
   {
@@ -652,7 +733,8 @@
     "flag": "🇬🇭",
     "code": "GH",
     "prefix": "+233",
-    "length": 11,
+    "minLength": 11,
+    "maxLength": 13,
     "lengthAreaCode": 3
   },
   {
@@ -660,7 +742,8 @@
     "flag": "🇬🇮",
     "code": "GI",
     "prefix": "+350",
-    "length": 11,
+    "minLength": 11,
+    "maxLength": 13,
     "lengthAreaCode": 3
   },
   {
@@ -668,7 +751,8 @@
     "flag": "🇬🇷",
     "code": "GR",
     "prefix": "+30",
-    "length": 11,
+    "minLength": 11,
+    "maxLength": 13,
     "lengthAreaCode": 3
   },
   {
@@ -676,7 +760,8 @@
     "flag": "🇬🇱",
     "code": "GL",
     "prefix": "+299",
-    "length": 11,
+    "minLength": 11,
+    "maxLength": 13,
     "lengthAreaCode": 3
   },
   {
@@ -684,7 +769,8 @@
     "flag": "🇬🇩",
     "code": "GD",
     "prefix": "+1473",
-    "length": 11,
+    "minLength": 11,
+    "maxLength": 13,
     "lengthAreaCode": 3
   },
   {
@@ -692,7 +778,8 @@
     "flag": "🇬🇵",
     "code": "GP",
     "prefix": "+590",
-    "length": 11,
+    "minLength": 11,
+    "maxLength": 13,
     "lengthAreaCode": 3
   },
   {
@@ -700,7 +787,8 @@
     "flag": "🇬🇺",
     "code": "GU",
     "prefix": "+1671",
-    "length": 11,
+    "minLength": 11,
+    "maxLength": 13,
     "lengthAreaCode": 3
   },
   {
@@ -708,7 +796,8 @@
     "flag": "🇬🇹",
     "code": "GT",
     "prefix": "+502",
-    "length": 11,
+    "minLength": 11,
+    "maxLength": 13,
     "lengthAreaCode": 3
   },
   {
@@ -716,7 +805,8 @@
     "flag": "🇬🇬",
     "code": "GG",
     "prefix": "+44",
-    "length": 11,
+    "minLength": 11,
+    "maxLength": 13,
     "lengthAreaCode": 4
   },
   {
@@ -724,7 +814,8 @@
     "flag": "🇬🇳",
     "code": "GN",
     "prefix": "+224",
-    "length": 11,
+    "minLength": 11,
+    "maxLength": 13,
     "lengthAreaCode": 3
   },
   {
@@ -732,7 +823,8 @@
     "flag": "🇬🇼",
     "code": "GW",
     "prefix": "+245",
-    "length": 11,
+    "minLength": 11,
+    "maxLength": 13,
     "lengthAreaCode": 3
   },
   {
@@ -740,7 +832,8 @@
     "flag": "🇬🇾",
     "code": "GY",
     "prefix": "+592",
-    "length": 11,
+    "minLength": 11,
+    "maxLength": 13,
     "lengthAreaCode": 3
   },
   {
@@ -748,7 +841,8 @@
     "flag": "🇭🇹",
     "code": "HT",
     "prefix": "+509",
-    "length": 11,
+    "minLength": 11,
+    "maxLength": 13,
     "lengthAreaCode": 3
   },
   {
@@ -756,7 +850,8 @@
     "flag": "🇭🇲",
     "code": "HM",
     "prefix": "+672",
-    "length": 11,
+    "minLength": 11,
+    "maxLength": 13,
     "lengthAreaCode": 3
   },
   {
@@ -764,7 +859,8 @@
     "flag": "🇻🇦",
     "code": "VA",
     "prefix": "+379",
-    "length": 11,
+    "minLength": 11,
+    "maxLength": 13,
     "lengthAreaCode": 3
   },
   {
@@ -772,7 +868,8 @@
     "flag": "🇭🇳",
     "code": "HN",
     "prefix": "+504",
-    "length": 11,
+    "minLength": 11,
+    "maxLength": 13,
     "lengthAreaCode": 3
   },
   {
@@ -780,7 +877,8 @@
     "flag": "🇭🇰",
     "code": "HK",
     "prefix": "+852",
-    "length": 11,
+    "minLength": 11,
+    "maxLength": 13,
     "lengthAreaCode": 3
   },
   {
@@ -788,7 +886,8 @@
     "flag": "🇭🇺",
     "code": "HU",
     "prefix": "+36",
-    "length": 11,
+    "minLength": 11,
+    "maxLength": 13,
     "lengthAreaCode": 3
   },
   {
@@ -796,7 +895,8 @@
     "flag": "🇮🇸",
     "code": "IS",
     "prefix": "+354",
-    "length": 11,
+    "minLength": 11,
+    "maxLength": 13,
     "lengthAreaCode": 3
   },
   {
@@ -804,7 +904,8 @@
     "flag": "🇮🇳",
     "code": "IN",
     "prefix": "+91",
-    "length": 11,
+    "minLength": 11,
+    "maxLength": 13,
     "lengthAreaCode": 3
   },
   {
@@ -812,7 +913,8 @@
     "flag": "🇮🇩",
     "code": "ID",
     "prefix": "+62",
-    "length": 11,
+    "minLength": 11,
+    "maxLength": 13,
     "lengthAreaCode": 3
   },
   {
@@ -820,7 +922,8 @@
     "flag": "🇮🇷",
     "code": "IR",
     "prefix": "+98",
-    "length": 11,
+    "minLength": 11,
+    "maxLength": 13,
     "lengthAreaCode": 3
   },
   {
@@ -828,7 +931,8 @@
     "flag": "🇮🇶",
     "code": "IQ",
     "prefix": "+964",
-    "length": 11,
+    "minLength": 11,
+    "maxLength": 13,
     "lengthAreaCode": 3
   },
   {
@@ -836,7 +940,8 @@
     "flag": "🇮🇪",
     "code": "IE",
     "prefix": "+353",
-    "length": 11,
+    "minLength": 11,
+    "maxLength": 13,
     "lengthAreaCode": 3
   },
   {
@@ -844,7 +949,8 @@
     "flag": "🇮🇲",
     "code": "IM",
     "prefix": "+44",
-    "length": 11,
+    "minLength": 11,
+    "maxLength": 13,
     "lengthAreaCode": 3
   },
   {
@@ -852,7 +958,8 @@
     "flag": "🇮🇱",
     "code": "IL",
     "prefix": "+972",
-    "length": 11,
+    "minLength": 11,
+    "maxLength": 13,
     "lengthAreaCode": 3
   },
   {
@@ -860,7 +967,8 @@
     "flag": "🇮🇹",
     "code": "IT",
     "prefix": "+39",
-    "length": 11,
+    "minLength": 11,
+    "maxLength": 13,
     "lengthAreaCode": 3
   },
   {
@@ -868,7 +976,8 @@
     "flag": "🇯🇲",
     "code": "JM",
     "prefix": "+1876",
-    "length": 11,
+    "minLength": 11,
+    "maxLength": 13,
     "lengthAreaCode": 3
   },
   {
@@ -876,7 +985,8 @@
     "flag": "🇯🇵",
     "code": "JP",
     "prefix": "+81",
-    "length": 11,
+    "minLength": 11,
+    "maxLength": 13,
     "lengthAreaCode": 3
   },
   {
@@ -884,7 +994,8 @@
     "flag": "🇯🇪",
     "code": "JE",
     "prefix": "+44",
-    "length": 11,
+    "minLength": 11,
+    "maxLength": 13,
     "lengthAreaCode": 3
   },
   {
@@ -892,7 +1003,8 @@
     "flag": "🇯🇴",
     "code": "JO",
     "prefix": "+962",
-    "length": 11,
+    "minLength": 11,
+    "maxLength": 13,
     "lengthAreaCode": 3
   },
   {
@@ -900,7 +1012,8 @@
     "flag": "🇰🇿",
     "code": "KZ",
     "prefix": "+7",
-    "length": 11,
+    "minLength": 11,
+    "maxLength": 13,
     "lengthAreaCode": 3
   },
   {
@@ -908,7 +1021,8 @@
     "flag": "🇰🇪",
     "code": "KE",
     "prefix": "+254",
-    "length": 11,
+    "minLength": 11,
+    "maxLength": 13,
     "lengthAreaCode": 3
   },
   {
@@ -916,7 +1030,8 @@
     "flag": "🇰🇮",
     "code": "KI",
     "prefix": "+686",
-    "length": 11,
+    "minLength": 11,
+    "maxLength": 13,
     "lengthAreaCode": 3
   },
   {
@@ -924,7 +1039,8 @@
     "flag": "🇰🇵",
     "code": "KP",
     "prefix": "+850",
-    "length": 11,
+    "minLength": 11,
+    "maxLength": 13,
     "lengthAreaCode": 3
   },
   {
@@ -932,7 +1048,8 @@
     "flag": "🇰🇷",
     "code": "KR",
     "prefix": "+82",
-    "length": 11,
+    "minLength": 11,
+    "maxLength": 13,
     "lengthAreaCode": 3
   },
   {
@@ -940,7 +1057,8 @@
     "flag": "🇽🇰",
     "code": "XK",
     "prefix": "+383",
-    "length": 11,
+    "minLength": 11,
+    "maxLength": 13,
     "lengthAreaCode": 3
   },
   {
@@ -948,7 +1066,8 @@
     "flag": "🇰🇼",
     "code": "KW",
     "prefix": "+965",
-    "length": 11,
+    "minLength": 11,
+    "maxLength": 13,
     "lengthAreaCode": 3
   },
   {
@@ -956,7 +1075,8 @@
     "flag": "🇰🇬",
     "code": "KG",
     "prefix": "+996",
-    "length": 11,
+    "minLength": 11,
+    "maxLength": 13,
     "lengthAreaCode": 3
   },
   {
@@ -964,7 +1084,8 @@
     "flag": "🇱🇦",
     "code": "LA",
     "prefix": "+856",
-    "length": 11,
+    "minLength": 11,
+    "maxLength": 13,
     "lengthAreaCode": 3
   },
   {
@@ -972,7 +1093,8 @@
     "flag": "🇱🇻",
     "code": "LV",
     "prefix": "+371",
-    "length": 11,
+    "minLength": 11,
+    "maxLength": 13,
     "lengthAreaCode": 3
   },
   {
@@ -980,7 +1102,8 @@
     "flag": "🇱🇧",
     "code": "LB",
     "prefix": "+961",
-    "length": 11,
+    "minLength": 11,
+    "maxLength": 13,
     "lengthAreaCode": 3
   },
   {
@@ -988,7 +1111,8 @@
     "flag": "🇱🇸",
     "code": "LS",
     "prefix": "+266",
-    "length": 11,
+    "minLength": 11,
+    "maxLength": 13,
     "lengthAreaCode": 3
   },
   {
@@ -996,7 +1120,8 @@
     "flag": "🇱🇷",
     "code": "LR",
     "prefix": "+231",
-    "length": 11,
+    "minLength": 11,
+    "maxLength": 13,
     "lengthAreaCode": 3
   },
   {
@@ -1004,7 +1129,8 @@
     "flag": "🇱🇾",
     "code": "LY",
     "prefix": "+218",
-    "length": 11,
+    "minLength": 11,
+    "maxLength": 13,
     "lengthAreaCode": 3
   },
   {
@@ -1012,7 +1138,8 @@
     "flag": "🇱🇮",
     "code": "LI",
     "prefix": "+423",
-    "length": 11,
+    "minLength": 11,
+    "maxLength": 13,
     "lengthAreaCode": 3
   },
   {
@@ -1020,7 +1147,8 @@
     "flag": "🇱🇹",
     "code": "LT",
     "prefix": "+370",
-    "length": 11,
+    "minLength": 11,
+    "maxLength": 13,
     "lengthAreaCode": 3
   },
   {
@@ -1028,7 +1156,8 @@
     "flag": "🇱🇺",
     "code": "LU",
     "prefix": "+352",
-    "length": 11,
+    "minLength": 11,
+    "maxLength": 13,
     "lengthAreaCode": 3
   },
   {
@@ -1036,7 +1165,8 @@
     "flag": "🇲🇴",
     "code": "MO",
     "prefix": "+853",
-    "length": 11,
+    "minLength": 11,
+    "maxLength": 13,
     "lengthAreaCode": 3
   },
   {
@@ -1044,7 +1174,8 @@
     "flag": "🇲🇰",
     "code": "MK",
     "prefix": "+389",
-    "length": 11,
+    "minLength": 11,
+    "maxLength": 13,
     "lengthAreaCode": 3
   },
   {
@@ -1052,7 +1183,8 @@
     "flag": "🇲🇬",
     "code": "MG",
     "prefix": "+261",
-    "length": 11,
+    "minLength": 11,
+    "maxLength": 13,
     "lengthAreaCode": 3
   },
   {
@@ -1060,7 +1192,8 @@
     "flag": "🇲🇼",
     "code": "MW",
     "prefix": "+265",
-    "length": 11,
+    "minLength": 11,
+    "maxLength": 13,
     "lengthAreaCode": 3
   },
   {
@@ -1068,7 +1201,8 @@
     "flag": "🇲🇾",
     "code": "MY",
     "prefix": "+60",
-    "length": 11,
+    "minLength": 11,
+    "maxLength": 13,
     "lengthAreaCode": 3
   },
   {
@@ -1076,7 +1210,8 @@
     "flag": "🇲🇻",
     "code": "MV",
     "prefix": "+960",
-    "length": 11,
+    "minLength": 11,
+    "maxLength": 13,
     "lengthAreaCode": 3
   },
   {
@@ -1084,7 +1219,8 @@
     "flag": "🇲🇱",
     "code": "ML",
     "prefix": "+223",
-    "length": 11,
+    "minLength": 11,
+    "maxLength": 13,
     "lengthAreaCode": 3
   },
   {
@@ -1092,7 +1228,8 @@
     "flag": "🇲🇹",
     "code": "MT",
     "prefix": "+356",
-    "length": 11,
+    "minLength": 11,
+    "maxLength": 13,
     "lengthAreaCode": 3
   },
   {
@@ -1100,7 +1237,8 @@
     "flag": "🇲🇭",
     "code": "MH",
     "prefix": "+692",
-    "length": 11,
+    "minLength": 11,
+    "maxLength": 13,
     "lengthAreaCode": 3
   },
   {
@@ -1108,7 +1246,8 @@
     "flag": "🇲🇶",
     "code": "MQ",
     "prefix": "+596",
-    "length": 11,
+    "minLength": 11,
+    "maxLength": 13,
     "lengthAreaCode": 3
   },
   {
@@ -1116,7 +1255,8 @@
     "flag": "🇲🇷",
     "code": "MR",
     "prefix": "+222",
-    "length": 11,
+    "minLength": 11,
+    "maxLength": 13,
     "lengthAreaCode": 3
   },
   {
@@ -1124,7 +1264,8 @@
     "flag": "🇲🇺",
     "code": "MU",
     "prefix": "+230",
-    "length": 11,
+    "minLength": 11,
+    "maxLength": 13,
     "lengthAreaCode": 3
   },
   {
@@ -1132,7 +1273,8 @@
     "flag": "🇾🇹",
     "code": "YT",
     "prefix": "+262",
-    "length": 11,
+    "minLength": 11,
+    "maxLength": 13,
     "lengthAreaCode": 3
   },
   {
@@ -1140,7 +1282,8 @@
     "flag": "🇲🇽",
     "code": "MX",
     "prefix": "+52",
-    "length": 11,
+    "minLength": 11,
+    "maxLength": 13,
     "lengthAreaCode": 3
   },
   {
@@ -1148,7 +1291,8 @@
     "flag": "🇫🇲",
     "code": "FM",
     "prefix": "+691",
-    "length": 11,
+    "minLength": 11,
+    "maxLength": 13,
     "lengthAreaCode": 3
   },
   {
@@ -1156,7 +1300,8 @@
     "flag": "🇲🇩",
     "code": "MD",
     "prefix": "+373",
-    "length": 11,
+    "minLength": 11,
+    "maxLength": 13,
     "lengthAreaCode": 3
   },
   {
@@ -1164,7 +1309,8 @@
     "flag": "🇲🇨",
     "code": "MC",
     "prefix": "+377",
-    "length": 11,
+    "minLength": 11,
+    "maxLength": 13,
     "lengthAreaCode": 3
   },
   {
@@ -1172,7 +1318,8 @@
     "flag": "🇲🇳",
     "code": "MN",
     "prefix": "+976",
-    "length": 11,
+    "minLength": 11,
+    "maxLength": 13,
     "lengthAreaCode": 3
   },
   {
@@ -1180,7 +1327,8 @@
     "flag": "🇲🇪",
     "code": "ME",
     "prefix": "+382",
-    "length": 11,
+    "minLength": 11,
+    "maxLength": 13,
     "lengthAreaCode": 3
   },
   {
@@ -1188,7 +1336,8 @@
     "flag": "🇲🇸",
     "code": "MS",
     "prefix": "+1664",
-    "length": 11,
+    "minLength": 11,
+    "maxLength": 13,
     "lengthAreaCode": 3
   },
   {
@@ -1196,7 +1345,8 @@
     "flag": "🇲🇦",
     "code": "MA",
     "prefix": "+212",
-    "length": 11,
+    "minLength": 11,
+    "maxLength": 13,
     "lengthAreaCode": 3
   },
   {
@@ -1204,7 +1354,8 @@
     "flag": "🇲🇿",
     "code": "MZ",
     "prefix": "+258",
-    "length": 11,
+    "minLength": 11,
+    "maxLength": 13,
     "lengthAreaCode": 3
   },
   {
@@ -1212,7 +1363,8 @@
     "flag": "🇲🇲",
     "code": "MM",
     "prefix": "+95",
-    "length": 11,
+    "minLength": 11,
+    "maxLength": 13,
     "lengthAreaCode": 3
   },
   {
@@ -1220,7 +1372,8 @@
     "flag": "🇳🇦",
     "code": "NA",
     "prefix": "+264",
-    "length": 11,
+    "minLength": 11,
+    "maxLength": 13,
     "lengthAreaCode": 3
   },
   {
@@ -1228,7 +1381,8 @@
     "flag": "🇳🇷",
     "code": "NR",
     "prefix": "+674",
-    "length": 11,
+    "minLength": 11,
+    "maxLength": 13,
     "lengthAreaCode": 3
   },
   {
@@ -1236,7 +1390,8 @@
     "flag": "🇳🇵",
     "code": "NP",
     "prefix": "+977",
-    "length": 11,
+    "minLength": 11,
+    "maxLength": 13,
     "lengthAreaCode": 3
   },
   {
@@ -1244,7 +1399,8 @@
     "flag": "🇳🇱",
     "code": "NL",
     "prefix": "+31",
-    "length": 11,
+    "minLength": 11,
+    "maxLength": 13,
     "lengthAreaCode": 3
   },
   {
@@ -1252,7 +1408,8 @@
     "flag": "",
     "code": "AN",
     "prefix": "+599",
-    "length": 11,
+    "minLength": 11,
+    "maxLength": 13,
     "lengthAreaCode": 3
   },
   {
@@ -1260,7 +1417,8 @@
     "flag": "🇳🇨",
     "code": "NC",
     "prefix": "+687",
-    "length": 11,
+    "minLength": 11,
+    "maxLength": 13,
     "lengthAreaCode": 3
   },
   {
@@ -1268,7 +1426,8 @@
     "flag": "🇳🇿",
     "code": "NZ",
     "prefix": "+64",
-    "length": 11,
+    "minLength": 11,
+    "maxLength": 13,
     "lengthAreaCode": 3
   },
   {
@@ -1276,7 +1435,8 @@
     "flag": "🇳🇮",
     "code": "NI",
     "prefix": "+505",
-    "length": 11,
+    "minLength": 11,
+    "maxLength": 13,
     "lengthAreaCode": 3
   },
   {
@@ -1284,7 +1444,8 @@
     "flag": "🇳🇪",
     "code": "NE",
     "prefix": "+227",
-    "length": 11,
+    "minLength": 11,
+    "maxLength": 13,
     "lengthAreaCode": 3
   },
   {
@@ -1292,7 +1453,8 @@
     "flag": "🇳🇬",
     "code": "NG",
     "prefix": "+234",
-    "length": 11,
+    "minLength": 11,
+    "maxLength": 13,
     "lengthAreaCode": 3
   },
   {
@@ -1300,7 +1462,8 @@
     "flag": "🇳🇺",
     "code": "NU",
     "prefix": "+683",
-    "length": 11,
+    "minLength": 11,
+    "maxLength": 13,
     "lengthAreaCode": 3
   },
   {
@@ -1308,7 +1471,8 @@
     "flag": "🇳🇫",
     "code": "NF",
     "prefix": "+672",
-    "length": 11,
+    "minLength": 11,
+    "maxLength": 13,
     "lengthAreaCode": 3
   },
   {
@@ -1316,7 +1480,8 @@
     "flag": "🇲🇵",
     "code": "MP",
     "prefix": "+1670",
-    "length": 11,
+    "minLength": 11,
+    "maxLength": 13,
     "lengthAreaCode": 3
   },
   {
@@ -1324,7 +1489,8 @@
     "flag": "🇳🇴",
     "code": "NO",
     "prefix": "+47",
-    "length": 11,
+    "minLength": 11,
+    "maxLength": 13,
     "lengthAreaCode": 3
   },
   {
@@ -1332,7 +1498,8 @@
     "flag": "🇴🇲",
     "code": "OM",
     "prefix": "+968",
-    "length": 11,
+    "minLength": 11,
+    "maxLength": 13,
     "lengthAreaCode": 3
   },
   {
@@ -1340,7 +1507,8 @@
     "flag": "🇵🇰",
     "code": "PK",
     "prefix": "+92",
-    "length": 11,
+    "minLength": 11,
+    "maxLength": 13,
     "lengthAreaCode": 3
   },
   {
@@ -1348,7 +1516,8 @@
     "flag": "🇵🇼",
     "code": "PW",
     "prefix": "+680",
-    "length": 11,
+    "minLength": 11,
+    "maxLength": 13,
     "lengthAreaCode": 3
   },
   {
@@ -1356,7 +1525,8 @@
     "flag": "🇵🇸",
     "code": "PS",
     "prefix": "+970",
-    "length": 11,
+    "minLength": 11,
+    "maxLength": 13,
     "lengthAreaCode": 3
   },
   {
@@ -1364,7 +1534,8 @@
     "flag": "🇵🇦",
     "code": "PA",
     "prefix": "+507",
-    "length": 11,
+    "minLength": 11,
+    "maxLength": 13,
     "lengthAreaCode": 3
   },
   {
@@ -1372,7 +1543,8 @@
     "flag": "🇵🇬",
     "code": "PG",
     "prefix": "+675",
-    "length": 11,
+    "minLength": 11,
+    "maxLength": 13,
     "lengthAreaCode": 3
   },
   {
@@ -1380,7 +1552,8 @@
     "flag": "🇵🇾",
     "code": "PY",
     "prefix": "+595",
-    "length": 11,
+    "minLength": 11,
+    "maxLength": 13,
     "lengthAreaCode": 3
   },
   {
@@ -1388,7 +1561,8 @@
     "flag": "🇵🇪",
     "code": "PE",
     "prefix": "+51",
-    "length": 11,
+    "minLength": 11,
+    "maxLength": 13,
     "lengthAreaCode": 3
   },
   {
@@ -1396,7 +1570,8 @@
     "flag": "🇵🇭",
     "code": "PH",
     "prefix": "+63",
-    "length": 11,
+    "minLength": 11,
+    "maxLength": 13,
     "lengthAreaCode": 3
   },
   {
@@ -1404,7 +1579,8 @@
     "flag": "🇵🇳",
     "code": "PN",
     "prefix": "+64",
-    "length": 11,
+    "minLength": 11,
+    "maxLength": 13,
     "lengthAreaCode": 3
   },
   {
@@ -1412,7 +1588,8 @@
     "flag": "🇵🇱",
     "code": "PL",
     "prefix": "+48",
-    "length": 11,
+    "minLength": 11,
+    "maxLength": 13,
     "lengthAreaCode": 3
   },
   {
@@ -1420,7 +1597,8 @@
     "flag": "🇵🇹",
     "code": "PT",
     "prefix": "+351",
-    "length": 11,
+    "minLength": 11,
+    "maxLength": 13,
     "lengthAreaCode": 3
   },
   {
@@ -1428,7 +1606,8 @@
     "flag": "🇵🇷",
     "code": "PR",
     "prefix": "+1939",
-    "length": 11,
+    "minLength": 11,
+    "maxLength": 13,
     "lengthAreaCode": 3
   },
   {
@@ -1436,7 +1615,8 @@
     "flag": "🇶🇦",
     "code": "QA",
     "prefix": "+974",
-    "length": 11,
+    "minLength": 11,
+    "maxLength": 13,
     "lengthAreaCode": 3
   },
   {
@@ -1444,7 +1624,8 @@
     "flag": "🇷🇴",
     "code": "RO",
     "prefix": "+40",
-    "length": 11,
+    "minLength": 11,
+    "maxLength": 13,
     "lengthAreaCode": 3
   },
   {
@@ -1452,7 +1633,8 @@
     "flag": "🇷🇺",
     "code": "RU",
     "prefix": "+7",
-    "length": 11,
+    "minLength": 11,
+    "maxLength": 13,
     "lengthAreaCode": 3
   },
   {
@@ -1460,7 +1642,8 @@
     "flag": "🇷🇼",
     "code": "RW",
     "prefix": "+250",
-    "length": 11,
+    "minLength": 11,
+    "maxLength": 13,
     "lengthAreaCode": 3
   },
   {
@@ -1468,7 +1651,8 @@
     "flag": "🇷🇪",
     "code": "RE",
     "prefix": "+262",
-    "length": 11,
+    "minLength": 11,
+    "maxLength": 13,
     "lengthAreaCode": 3
   },
   {
@@ -1476,7 +1660,8 @@
     "flag": "🇧🇱",
     "code": "BL",
     "prefix": "+590",
-    "length": 11,
+    "minLength": 11,
+    "maxLength": 13,
     "lengthAreaCode": 3
   },
   {
@@ -1484,7 +1669,8 @@
     "flag": "🇸🇭",
     "code": "SH",
     "prefix": "+290",
-    "length": 11,
+    "minLength": 11,
+    "maxLength": 13,
     "lengthAreaCode": 3
   },
   {
@@ -1492,7 +1678,8 @@
     "flag": "🇰🇳",
     "code": "KN",
     "prefix": "+1869",
-    "length": 11,
+    "minLength": 11,
+    "maxLength": 13,
     "lengthAreaCode": 3
   },
   {
@@ -1500,7 +1687,8 @@
     "flag": "🇱🇨",
     "code": "LC",
     "prefix": "+1758",
-    "length": 11,
+    "minLength": 11,
+    "maxLength": 13,
     "lengthAreaCode": 3
   },
   {
@@ -1508,7 +1696,8 @@
     "flag": "🇲🇫",
     "code": "MF",
     "prefix": "+590",
-    "length": 11,
+    "minLength": 11,
+    "maxLength": 13,
     "lengthAreaCode": 3
   },
   {
@@ -1516,7 +1705,8 @@
     "flag": "🇵🇲",
     "code": "PM",
     "prefix": "+508",
-    "length": 11,
+    "minLength": 11,
+    "maxLength": 13,
     "lengthAreaCode": 3
   },
   {
@@ -1524,7 +1714,8 @@
     "flag": "🇻🇨",
     "code": "VC",
     "prefix": "+1784",
-    "length": 11,
+    "minLength": 11,
+    "maxLength": 13,
     "lengthAreaCode": 3
   },
   {
@@ -1532,7 +1723,8 @@
     "flag": "🇼🇸",
     "code": "WS",
     "prefix": "+685",
-    "length": 11,
+    "minLength": 11,
+    "maxLength": 13,
     "lengthAreaCode": 3
   },
   {
@@ -1540,7 +1732,8 @@
     "flag": "🇸🇲",
     "code": "SM",
     "prefix": "+378",
-    "length": 11,
+    "minLength": 11,
+    "maxLength": 13,
     "lengthAreaCode": 3
   },
   {
@@ -1548,7 +1741,8 @@
     "flag": "🇸🇹",
     "code": "ST",
     "prefix": "+239",
-    "length": 11,
+    "minLength": 11,
+    "maxLength": 13,
     "lengthAreaCode": 3
   },
   {
@@ -1556,7 +1750,8 @@
     "flag": "🇸🇦",
     "code": "SA",
     "prefix": "+966",
-    "length": 11,
+    "minLength": 11,
+    "maxLength": 13,
     "lengthAreaCode": 3
   },
   {
@@ -1564,7 +1759,8 @@
     "flag": "🇸🇳",
     "code": "SN",
     "prefix": "+221",
-    "length": 11,
+    "minLength": 11,
+    "maxLength": 13,
     "lengthAreaCode": 3
   },
   {
@@ -1572,7 +1768,8 @@
     "flag": "🇷🇸",
     "code": "RS",
     "prefix": "+381",
-    "length": 11,
+    "minLength": 11,
+    "maxLength": 13,
     "lengthAreaCode": 3
   },
   {
@@ -1580,7 +1777,8 @@
     "flag": "🇸🇨",
     "code": "SC",
     "prefix": "+248",
-    "length": 11,
+    "minLength": 11,
+    "maxLength": 13,
     "lengthAreaCode": 3
   },
   {
@@ -1588,7 +1786,8 @@
     "flag": "🇸🇱",
     "code": "SL",
     "prefix": "+232",
-    "length": 11,
+    "minLength": 11,
+    "maxLength": 13,
     "lengthAreaCode": 3
   },
   {
@@ -1596,7 +1795,8 @@
     "flag": "🇸🇬",
     "code": "SG",
     "prefix": "+65",
-    "length": 11,
+    "minLength": 11,
+    "maxLength": 13,
     "lengthAreaCode": 3
   },
   {
@@ -1604,7 +1804,8 @@
     "flag": "🇸🇰",
     "code": "SK",
     "prefix": "+421",
-    "length": 11,
+    "minLength": 11,
+    "maxLength": 13,
     "lengthAreaCode": 3
   },
   {
@@ -1612,7 +1813,8 @@
     "flag": "🇸🇮",
     "code": "SI",
     "prefix": "+386",
-    "length": 11,
+    "minLength": 11,
+    "maxLength": 13,
     "lengthAreaCode": 3
   },
   {
@@ -1620,7 +1822,8 @@
     "flag": "🇸🇧",
     "code": "SB",
     "prefix": "+677",
-    "length": 11,
+    "minLength": 11,
+    "maxLength": 13,
     "lengthAreaCode": 3
   },
   {
@@ -1628,7 +1831,8 @@
     "flag": "🇸🇴",
     "code": "SO",
     "prefix": "+252",
-    "length": 11,
+    "minLength": 11,
+    "maxLength": 13,
     "lengthAreaCode": 3
   },
   {
@@ -1636,7 +1840,8 @@
     "flag": "🇿🇦",
     "code": "ZA",
     "prefix": "+27",
-    "length": 11,
+    "minLength": 11,
+    "maxLength": 13,
     "lengthAreaCode": 3
   },
   {
@@ -1644,7 +1849,8 @@
     "flag": "🇸🇸",
     "code": "SS",
     "prefix": "+211",
-    "length": 11,
+    "minLength": 11,
+    "maxLength": 13,
     "lengthAreaCode": 3
   },
   {
@@ -1652,7 +1858,8 @@
     "flag": "🇬🇸",
     "code": "GS",
     "prefix": "+500",
-    "length": 11,
+    "minLength": 11,
+    "maxLength": 13,
     "lengthAreaCode": 3
   },
   {
@@ -1660,7 +1867,8 @@
     "flag": "🇪🇸",
     "code": "ES",
     "prefix": "+34",
-    "length": 11,
+    "minLength": 11,
+    "maxLength": 13,
     "lengthAreaCode": 3
   },
   {
@@ -1668,7 +1876,8 @@
     "flag": "🇱🇰",
     "code": "LK",
     "prefix": "+94",
-    "length": 11,
+    "minLength": 11,
+    "maxLength": 13,
     "lengthAreaCode": 3
   },
   {
@@ -1676,7 +1885,8 @@
     "flag": "🇸🇩",
     "code": "SD",
     "prefix": "+249",
-    "length": 11,
+    "minLength": 11,
+    "maxLength": 13,
     "lengthAreaCode": 3
   },
   {
@@ -1684,7 +1894,8 @@
     "flag": "🇸🇷",
     "code": "SR",
     "prefix": "+597",
-    "length": 11,
+    "minLength": 11,
+    "maxLength": 13,
     "lengthAreaCode": 3
   },
   {
@@ -1692,7 +1903,8 @@
     "flag": "🇸🇯",
     "code": "SJ",
     "prefix": "+47",
-    "length": 11,
+    "minLength": 11,
+    "maxLength": 13,
     "lengthAreaCode": 3
   },
   {
@@ -1700,7 +1912,8 @@
     "flag": "🇸🇿",
     "code": "SZ",
     "prefix": "+268",
-    "length": 11,
+    "minLength": 11,
+    "maxLength": 13,
     "lengthAreaCode": 3
   },
   {
@@ -1708,7 +1921,8 @@
     "flag": "🇸🇪",
     "code": "SE",
     "prefix": "+46",
-    "length": 11,
+    "minLength": 11,
+    "maxLength": 13,
     "lengthAreaCode": 3
   },
   {
@@ -1716,7 +1930,8 @@
     "flag": "🇨🇭",
     "code": "CH",
     "prefix": "+41",
-    "length": 11,
+    "minLength": 11,
+    "maxLength": 13,
     "lengthAreaCode": 3
   },
   {
@@ -1724,7 +1939,8 @@
     "flag": "🇸🇾",
     "code": "SY",
     "prefix": "+963",
-    "length": 11,
+    "minLength": 11,
+    "maxLength": 13,
     "lengthAreaCode": 3
   },
   {
@@ -1732,7 +1948,8 @@
     "flag": "🇹🇼",
     "code": "TW",
     "prefix": "+886",
-    "length": 11,
+    "minLength": 11,
+    "maxLength": 13,
     "lengthAreaCode": 3
   },
   {
@@ -1740,7 +1957,8 @@
     "flag": "🇹🇯",
     "code": "TJ",
     "prefix": "+992",
-    "length": 11,
+    "minLength": 11,
+    "maxLength": 13,
     "lengthAreaCode": 3
   },
   {
@@ -1748,7 +1966,8 @@
     "flag": "🇹🇿",
     "code": "TZ",
     "prefix": "+255",
-    "length": 11,
+    "minLength": 11,
+    "maxLength": 13,
     "lengthAreaCode": 3
   },
   {
@@ -1756,7 +1975,8 @@
     "flag": "🇹🇭",
     "code": "TH",
     "prefix": "+66",
-    "length": 11,
+    "minLength": 11,
+    "maxLength": 13,
     "lengthAreaCode": 3
   },
   {
@@ -1764,7 +1984,8 @@
     "flag": "🇹🇱",
     "code": "TL",
     "prefix": "+670",
-    "length": 11,
+    "minLength": 11,
+    "maxLength": 13,
     "lengthAreaCode": 3
   },
   {
@@ -1772,7 +1993,8 @@
     "flag": "🇹🇬",
     "code": "TG",
     "prefix": "+228",
-    "length": 11,
+    "minLength": 11,
+    "maxLength": 13,
     "lengthAreaCode": 3
   },
   {
@@ -1780,7 +2002,8 @@
     "flag": "🇹🇰",
     "code": "TK",
     "prefix": "+690",
-    "length": 11,
+    "minLength": 11,
+    "maxLength": 13,
     "lengthAreaCode": 3
   },
   {
@@ -1788,7 +2011,8 @@
     "flag": "🇹🇴",
     "code": "TO",
     "prefix": "+676",
-    "length": 11,
+    "minLength": 11,
+    "maxLength": 13,
     "lengthAreaCode": 3
   },
   {
@@ -1796,7 +2020,8 @@
     "flag": "🇹🇹",
     "code": "TT",
     "prefix": "+1868",
-    "length": 11,
+    "minLength": 11,
+    "maxLength": 13,
     "lengthAreaCode": 3
   },
   {
@@ -1804,7 +2029,8 @@
     "flag": "🇹🇳",
     "code": "TN",
     "prefix": "+216",
-    "length": 11,
+    "minLength": 11,
+    "maxLength": 13,
     "lengthAreaCode": 3
   },
   {
@@ -1812,7 +2038,8 @@
     "flag": "🇹🇷",
     "code": "TR",
     "prefix": "+90",
-    "length": 11,
+    "minLength": 11,
+    "maxLength": 13,
     "lengthAreaCode": 3
   },
   {
@@ -1820,7 +2047,8 @@
     "flag": "🇹🇲",
     "code": "TM",
     "prefix": "+993",
-    "length": 11,
+    "minLength": 11,
+    "maxLength": 13,
     "lengthAreaCode": 3
   },
   {
@@ -1828,7 +2056,8 @@
     "flag": "🇹🇨",
     "code": "TC",
     "prefix": "+1649",
-    "length": 11,
+    "minLength": 11,
+    "maxLength": 13,
     "lengthAreaCode": 3
   },
   {
@@ -1836,7 +2065,8 @@
     "flag": "🇹🇻",
     "code": "TV",
     "prefix": "+688",
-    "length": 11,
+    "minLength": 11,
+    "maxLength": 13,
     "lengthAreaCode": 3
   },
   {
@@ -1844,7 +2074,8 @@
     "flag": "🇺🇬",
     "code": "UG",
     "prefix": "+256",
-    "length": 11,
+    "minLength": 11,
+    "maxLength": 13,
     "lengthAreaCode": 3
   },
   {
@@ -1852,7 +2083,8 @@
     "flag": "🇺🇦",
     "code": "UA",
     "prefix": "+380",
-    "length": 11,
+    "minLength": 11,
+    "maxLength": 13,
     "lengthAreaCode": 3
   },
   {
@@ -1860,7 +2092,8 @@
     "flag": "🇦🇪",
     "code": "AE",
     "prefix": "+971",
-    "length": 11,
+    "minLength": 11,
+    "maxLength": 13,
     "lengthAreaCode": 3
   },
   {
@@ -1868,7 +2101,8 @@
     "flag": "🇬🇧",
     "code": "GB",
     "prefix": "+44",
-    "length": 11,
+    "minLength": 11,
+    "maxLength": 13,
     "lengthAreaCode": 3
   },
   {
@@ -1876,7 +2110,8 @@
     "flag": "🇺🇸",
     "code": "US",
     "prefix": "+1",
-    "length": 11,
+    "minLength": 11,
+    "maxLength": 13,
     "lengthAreaCode": 3
   },
   {
@@ -1884,7 +2119,8 @@
     "flag": "🇺🇾",
     "code": "UY",
     "prefix": "+598",
-    "length": 11,
+    "minLength": 11,
+    "maxLength": 13,
     "lengthAreaCode": 3
   },
   {
@@ -1892,7 +2128,8 @@
     "flag": "🇺🇿",
     "code": "UZ",
     "prefix": "+998",
-    "length": 11,
+    "minLength": 11,
+    "maxLength": 13,
     "lengthAreaCode": 3
   },
   {
@@ -1900,7 +2137,8 @@
     "flag": "🇻🇺",
     "code": "VU",
     "prefix": "+678",
-    "length": 11,
+    "minLength": 11,
+    "maxLength": 13,
     "lengthAreaCode": 3
   },
   {
@@ -1908,7 +2146,8 @@
     "flag": "🇻🇪",
     "code": "VE",
     "prefix": "+58",
-    "length": 11,
+    "minLength": 11,
+    "maxLength": 13,
     "lengthAreaCode": 3,
     "enableStartCeroValidation": true
   },
@@ -1917,7 +2156,8 @@
     "flag": "🇻🇳",
     "code": "VN",
     "prefix": "+84",
-    "length": 11,
+    "minLength": 11,
+    "maxLength": 13,
     "lengthAreaCode": 3
   },
   {
@@ -1925,7 +2165,8 @@
     "flag": "🇻🇬",
     "code": "VG",
     "prefix": "+1284",
-    "length": 11,
+    "minLength": 11,
+    "maxLength": 13,
     "lengthAreaCode": 3
   },
   {
@@ -1933,7 +2174,8 @@
     "flag": "🇻🇮",
     "code": "VI",
     "prefix": "+1340",
-    "length": 11,
+    "minLength": 11,
+    "maxLength": 13,
     "lengthAreaCode": 3
   },
   {
@@ -1941,7 +2183,8 @@
     "flag": "🇼🇫",
     "code": "WF",
     "prefix": "+681",
-    "length": 11,
+    "minLength": 11,
+    "maxLength": 13,
     "lengthAreaCode": 3
   },
   {
@@ -1949,7 +2192,8 @@
     "flag": "🇾🇪",
     "code": "YE",
     "prefix": "+967",
-    "length": 11,
+    "minLength": 11,
+    "maxLength": 13,
     "lengthAreaCode": 3
   },
   {
@@ -1957,7 +2201,8 @@
     "flag": "🇿🇲",
     "code": "ZM",
     "prefix": "+260",
-    "length": 11,
+    "minLength": 11,
+    "maxLength": 13,
     "lengthAreaCode": 3
   },
   {
@@ -1965,7 +2210,8 @@
     "flag": "🇿🇼",
     "code": "ZW",
     "prefix": "+263",
-    "length": 11,
+    "minLength": 11,
+    "maxLength": 13,
     "lengthAreaCode": 3
   }
 ]

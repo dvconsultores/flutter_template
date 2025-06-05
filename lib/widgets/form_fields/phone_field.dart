@@ -12,7 +12,8 @@ class PhoneField extends StatefulWidget {
     required this.phone,
     this.phoneList,
     this.mask,
-    this.length,
+    this.minLength,
+    this.maxLength,
     this.lengthAreaCode,
     this.enableStartCeroValidation,
     this.loading = false,
@@ -35,7 +36,8 @@ class PhoneField extends StatefulWidget {
   final TextEditingController phone;
   final List<CountryModel>? phoneList;
   final String? mask;
-  final int? length;
+  final int? minLength;
+  final int? maxLength;
   final int? lengthAreaCode;
   final bool? enableStartCeroValidation;
   final bool loading;
@@ -77,7 +79,7 @@ class _PhoneFieldState extends State<PhoneField> {
       newValue: widget.phone.value.copyWith(text: widget.phone.text),
       mask: widget.mask ??
           MaskPhoneInputFormatter.getPhoneMask(
-            lengthDigits: widget.length ?? currentCountry?.length,
+            lengthDigits: widget.maxLength ?? currentCountry?.maxLength,
             lengthAreaCode:
                 startsWithCero && lengthAreaCode == 3 ? 4 : lengthAreaCode,
           ),
@@ -132,13 +134,12 @@ class _PhoneFieldState extends State<PhoneField> {
         (instance) => [
           () => instance.isValidPhoneNumber(
                 mask: widget.mask ?? maskFormatter.getMask(),
-                length: widget.length ?? currentPhoneSelected?.length ?? 11,
+                minLength: widget.minLength ?? currentPhoneSelected?.minLength,
+                maxLength: widget.maxLength ?? currentPhoneSelected?.maxLength,
                 lengthAreaCode: widget.lengthAreaCode ??
-                    currentPhoneSelected?.lengthAreaCode ??
-                    3,
+                    currentPhoneSelected?.lengthAreaCode,
                 enableStartCeroValidation: widget.enableStartCeroValidation ??
-                    currentPhoneSelected?.enableStartCeroValidation ??
-                    false,
+                    currentPhoneSelected?.enableStartCeroValidation,
               )
         ],
       ),

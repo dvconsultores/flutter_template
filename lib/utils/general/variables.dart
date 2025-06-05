@@ -107,10 +107,16 @@ mixin Vars {
       emailRegExp = RegExp(r'^[a-zA-Z\-\_0-9.]+@[a-zA-Z0-9]+\.[a-zA-Z]+'),
       passwordRegExp = RegExp(
           r'^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%&*-.]).{6,}$');
-  static RegExp phoneRegExp({int length = 11, int lengthAreaCode = 3}) =>
+  static RegExp phoneRegExp({
+    int minLength = 11,
+    int maxLength = 13,
+    int lengthAreaCode = 3,
+  }) =>
       RegExp(r'^[\+]?[(]?[0-9]{' +
           lengthAreaCode.toString() +
           r'}[)]?[-\s\.]?[0-9]{' +
-          (length - lengthAreaCode).toString() +
+          (minLength - lengthAreaCode).toString() +
+          r',' +
+          (maxLength - lengthAreaCode).toString() +
           r'}$');
 }

@@ -4,7 +4,8 @@
     "flag": "🇻🇪",
     "code": "VE",
     "prefix": "+58",
-    "length": 11,
+    "minLength": 11,
+    "maxLength": 13,
     "lengthAreaCode": 3,
     "enableStartCeroValidation": true
   },
@@ -13,7 +14,8 @@
     "flag": "🇦🇷",
     "code": "AR",
     "prefix": "+54",
-    "length": 11,
+    "minLength": 11,
+    "maxLength": 13,
     "lengthAreaCode": 3
   },
   {
@@ -21,7 +23,8 @@
     "flag": "🇧🇴",
     "code": "BO",
     "prefix": "+591",
-    "length": 9,
+    "minLength": 9,
+    "maxLength": 11,
     "lengthAreaCode": 3
   },
   {
@@ -29,7 +32,8 @@
     "flag": "🇧🇷",
     "code": "BR",
     "prefix": "+55",
-    "length": 11,
+    "minLength": 11,
+    "maxLength": 13,
     "lengthAreaCode": 3
   },
   {
@@ -37,7 +41,8 @@
     "flag": "🇨🇱",
     "code": "CL",
     "prefix": "+56",
-    "length": 9,
+    "minLength": 9,
+    "maxLength": 11,
     "lengthAreaCode": 3
   },
   {
@@ -45,7 +50,8 @@
     "flag": "🇨🇴",
     "code": "CO",
     "prefix": "+57",
-    "length": 11,
+    "minLength": 10,
+    "maxLength": 12,
     "lengthAreaCode": 3
   },
   {
@@ -53,7 +59,8 @@
     "flag": "🇪🇨",
     "code": "EC",
     "prefix": "+593",
-    "length": 11,
+    "minLength": 11,
+    "maxLength": 13,
     "lengthAreaCode": 3
   },
   {
@@ -61,7 +68,8 @@
     "flag": "🇲🇽",
     "code": "MX",
     "prefix": "+52",
-    "length": 11,
+    "minLength": 11,
+    "maxLength": 13,
     "lengthAreaCode": 3
   },
   {
@@ -69,7 +77,8 @@
     "flag": "🇵🇾",
     "code": "PY",
     "prefix": "+595",
-    "length": 11,
+    "minLength": 11,
+    "maxLength": 13,
     "lengthAreaCode": 3
   },
   {
@@ -77,7 +86,8 @@
     "flag": "🇵🇪",
     "code": "PE",
     "prefix": "+51",
-    "length": 11,
+    "minLength": 11,
+    "maxLength": 13,
     "lengthAreaCode": 3
   },
   {
@@ -85,7 +95,8 @@
     "flag": "🇩🇴",
     "code": "DO",
     "prefix": "+1849",
-    "length": 11,
+    "minLength": 11,
+    "maxLength": 13,
     "lengthAreaCode": 3
   },
   {
@@ -93,7 +104,8 @@
     "flag": "🇺🇾",
     "code": "UY",
     "prefix": "+598",
-    "length": 11,
+    "minLength": 11,
+    "maxLength": 13,
     "lengthAreaCode": 3
   },
   {
@@ -101,7 +113,8 @@
     "flag": "🇺🇸",
     "code": "US",
     "prefix": "+1",
-    "length": 11,
+    "minLength": 11,
+    "maxLength": 13,
     "lengthAreaCode": 3
   },
   {
@@ -109,7 +122,8 @@
     "flag": "🇪🇸",
     "code": "ES",
     "prefix": "+34",
-    "length": 11,
+    "minLength": 11,
+    "maxLength": 13,
     "lengthAreaCode": 3
   }
 ]
