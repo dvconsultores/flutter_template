@@ -20,6 +20,7 @@ class Modal extends StatefulWidget {
     this.actions,
     this.loading = false,
     this.disabled = false,
+    this.dismissible = true,
     this.textCancelBtn,
     this.textConfirmBtn,
     this.hideCancelButton = false,
@@ -52,6 +53,7 @@ class Modal extends StatefulWidget {
   final List<Widget>? actions;
   final bool loading;
   final bool disabled;
+  final bool dismissible;
   final String? textCancelBtn;
   final String? textConfirmBtn;
   final int flexCancelButton;
@@ -108,7 +110,7 @@ class Modal extends StatefulWidget {
     BorderRadius borderRadius =
         const BorderRadius.all(Radius.circular(Vars.radius30)),
     Widget Function(BuildContext context, Widget child)? builder,
-    bool barrierDismissible = true,
+    bool dismissible = true,
     Color? barrierColor,
     double? elevation,
     BoxConstraints? constraints,
@@ -116,7 +118,7 @@ class Modal extends StatefulWidget {
       await showDialog<T>(
           context: context,
           barrierColor: barrierColor,
-          barrierDismissible: barrierDismissible,
+          barrierDismissible: dismissible,
           builder: (context) {
             final child = Modal(
               key: key,
@@ -129,6 +131,7 @@ class Modal extends StatefulWidget {
               actions: actions,
               loading: loading,
               disabled: disabled,
+              dismissible: dismissible,
               textCancelBtn: textCancelBtn,
               textConfirmBtn: textConfirmBtn,
               flexCancelButton: flexCancelButton,
@@ -169,14 +172,35 @@ class Modal extends StatefulWidget {
     int flexConfirmButton = 2,
     bool hideCancelButton = false,
     bool hideConfirmButton = false,
+    void Function(BuildContext context)? onPressedCancelBtn,
+    void Function(BuildContext context)? onPressedConfirmBtn,
+    EdgeInsetsGeometry? iconPadding,
+    EdgeInsetsGeometry? titlePadding,
+    EdgeInsetsGeometry? contentPadding,
+    EdgeInsetsGeometry? actionsPadding,
+    EdgeInsets insetPadding =
+        const EdgeInsets.symmetric(horizontal: 40.0, vertical: 24.0),
+    double actionButtonsHeight = 40,
     Axis actionsDirection = Axis.horizontal,
-    bool barrierDismissible = true,
+    bool shrinkWrap = false,
+    Color? bgColor,
+    BorderSide borderSide = BorderSide.none,
+    BorderRadius borderRadius =
+        const BorderRadius.all(Radius.circular(Vars.radius30)),
+    bool dismissible = true,
     Color? barrierColor,
+    double? elevation,
+    BoxConstraints? constraints,
+    bool loading = false,
+    bool disabled = false,
+    List<Widget>? actions,
+    Widget? title,
+    Widget? content,
   }) async =>
       await showModal<bool>(
         context,
         key: key,
-        barrierDismissible: barrierDismissible,
+        dismissible: dismissible,
         barrierColor: barrierColor,
         icon: icon,
         iconColor: iconColor,
@@ -188,9 +212,32 @@ class Modal extends StatefulWidget {
         flexConfirmButton: flexConfirmButton,
         hideCancelButton: hideCancelButton,
         hideConfirmButton: hideConfirmButton,
-        onPressedConfirmBtn: (context) => Navigator.pop(context, true),
-        onPressedCancelBtn: (context) => Navigator.pop(context, false),
+        onPressedConfirmBtn: onPressedConfirmBtn ??
+            (textConfirmBtn != null
+                ? (context) => Navigator.pop(context, true)
+                : null),
+        onPressedCancelBtn: onPressedCancelBtn ??
+            (textCancelBtn != null
+                ? (context) => Navigator.pop(context, false)
+                : null),
         actionsDirection: actionsDirection,
+        iconPadding: iconPadding,
+        titlePadding: titlePadding,
+        contentPadding: contentPadding,
+        actionsPadding: actionsPadding,
+        insetPadding: insetPadding,
+        actionButtonsHeight: actionButtonsHeight,
+        shrinkWrap: shrinkWrap,
+        bgColor: bgColor,
+        borderSide: borderSide,
+        borderRadius: borderRadius,
+        elevation: elevation,
+        constraints: constraints,
+        loading: loading,
+        disabled: disabled,
+        actions: actions,
+        title: title,
+        content: content,
       );
 
   static Future<bool?> showSystemAlert(
@@ -213,6 +260,22 @@ class Modal extends StatefulWidget {
     Axis actionsDirection = Axis.horizontal,
     Color? barrierColor,
     bool dismissible = true,
+    EdgeInsetsGeometry? iconPadding,
+    EdgeInsetsGeometry? titlePadding,
+    EdgeInsetsGeometry? actionsPadding,
+    EdgeInsets insetPadding =
+        const EdgeInsets.symmetric(horizontal: 40.0, vertical: 24.0),
+    double actionButtonsHeight = 40,
+    bool shrinkWrap = false,
+    Color? bgColor,
+    BorderSide borderSide = BorderSide.none,
+    BorderRadius borderRadius =
+        const BorderRadius.all(Radius.circular(Vars.radius30)),
+    double? elevation,
+    BoxConstraints? constraints,
+    bool loading = false,
+    bool disabled = false,
+    List<Widget>? actions,
   }) async {
     final mainProvider = MainProvider.read(context);
     if (mainProvider.preventModal) return null;
@@ -232,7 +295,7 @@ class Modal extends StatefulWidget {
     final value = await showModal<bool>(
       context,
       key: key,
-      barrierDismissible: dismissible,
+      dismissible: dismissible,
       barrierColor: barrierColor,
       borderSide: BorderSide(color: themeApp.colors.secondary, width: 2),
       icon: icon,
@@ -274,14 +337,24 @@ class Modal extends StatefulWidget {
               : null),
       actionsDirection: actionsDirection,
       builder: (context, child) {
-        return WillPopCustom(
-          onWillPop: () async => dismissible,
-          child: BackdropFilter(
-            filter: ImageFilter.blur(sigmaX: 2, sigmaY: 2),
-            child: child,
-          ),
+        return BackdropFilter(
+          filter: ImageFilter.blur(sigmaX: 2, sigmaY: 2),
+          child: child,
         );
       },
+      iconPadding: iconPadding,
+      titlePadding: titlePadding,
+      actionsPadding: actionsPadding,
+      insetPadding: insetPadding,
+      actionButtonsHeight: actionButtonsHeight,
+      shrinkWrap: shrinkWrap,
+      bgColor: bgColor,
+      borderRadius: borderRadius,
+      elevation: elevation,
+      constraints: constraints,
+      loading: loading,
+      disabled: disabled,
+      actions: actions,
     );
 
     Future.delayed(Durations.long2, () => mainProvider.setPreventModal = false);
@@ -360,6 +433,7 @@ class _ModalState extends State<Modal> {
             [
               if (showCancelButton)
                 Expanded(
+                  flex: widget.flexCancelButton,
                   child: ButtonVariant(
                     height: widget.actionButtonsHeight,
                     text: widget.textCancelBtn ?? "Cancel",
@@ -376,6 +450,7 @@ class _ModalState extends State<Modal> {
                 const Gap(Vars.gapXLarge),
               if (showConfirmButton)
                 Expanded(
+                  flex: widget.flexConfirmButton,
                   child: Button(
                     height: widget.actionButtonsHeight,
                     disabled: widget.disabled || widget.loading,
@@ -390,54 +465,57 @@ class _ModalState extends State<Modal> {
                 ),
             ];
 
-    return AlertDialog(
-      backgroundColor: widget.bgColor,
-      shape: RoundedRectangleBorder(
-        borderRadius: widget.borderRadius,
-        side: widget.borderSide,
+    return WillPopCustom(
+      onWillPop: () => widget.dismissible,
+      child: AlertDialog(
+        backgroundColor: widget.bgColor,
+        shape: RoundedRectangleBorder(
+          borderRadius: widget.borderRadius,
+          side: widget.borderSide,
+        ),
+        elevation: widget.elevation,
+        iconPadding: const EdgeInsets.all(0),
+        insetPadding: widget.insetPadding,
+        titlePadding: tp,
+        contentPadding: cp,
+        clipBehavior: Clip.hardEdge,
+        actionsPadding: widget.actionsPadding ??
+            Vars.paddingScaffold
+                .copyWith(top: Vars.gapXLarge)
+                .add(const EdgeInsets.only(bottom: Vars.gapNormal)),
+        icon: Column(children: [
+          if (widget.loading)
+            LinearProgressIndicator(
+              color: themeApp.colors.primary,
+              backgroundColor: themeApp.colors.secondary,
+              minHeight: 5,
+              borderRadius:
+                  const BorderRadius.all(Radius.circular(Vars.radius30)),
+            ),
+          if (widget.icon != null)
+            Padding(
+              padding: widget.iconPadding ??
+                  Vars.paddingScaffold
+                      .copyWith(bottom: Vars.gapXLarge)
+                      .add(const EdgeInsets.only(top: Vars.gapNormal)),
+              child: widget.icon,
+            ),
+        ]),
+        iconColor: widget.iconColor ?? themeApp.colors.text,
+        title: titleWidget,
+        content: widget.shrinkWrap
+            ? IntrinsicHeight(child: contentWidget)
+            : contentWidget,
+        alignment: Alignment.center,
+        actionsAlignment: MainAxisAlignment.center,
+        actions: actionWidgets.isNotEmpty
+            ? [
+                widget.actionsDirection == Axis.horizontal
+                    ? Row(children: actionWidgets)
+                    : IntrinsicHeight(child: Column(children: actionWidgets))
+              ]
+            : null,
       ),
-      elevation: widget.elevation,
-      iconPadding: const EdgeInsets.all(0),
-      insetPadding: widget.insetPadding,
-      titlePadding: tp,
-      contentPadding: cp,
-      clipBehavior: Clip.hardEdge,
-      actionsPadding: widget.actionsPadding ??
-          Vars.paddingScaffold
-              .copyWith(top: Vars.gapXLarge)
-              .add(const EdgeInsets.only(bottom: Vars.gapNormal)),
-      icon: Column(children: [
-        if (widget.loading)
-          LinearProgressIndicator(
-            color: themeApp.colors.primary,
-            backgroundColor: themeApp.colors.secondary,
-            minHeight: 5,
-            borderRadius:
-                const BorderRadius.all(Radius.circular(Vars.radius30)),
-          ),
-        if (widget.icon != null)
-          Padding(
-            padding: widget.iconPadding ??
-                Vars.paddingScaffold
-                    .copyWith(bottom: Vars.gapXLarge)
-                    .add(const EdgeInsets.only(top: Vars.gapNormal)),
-            child: widget.icon,
-          ),
-      ]),
-      iconColor: widget.iconColor ?? themeApp.colors.text,
-      title: titleWidget,
-      content: widget.shrinkWrap
-          ? IntrinsicHeight(child: contentWidget)
-          : contentWidget,
-      alignment: Alignment.center,
-      actionsAlignment: MainAxisAlignment.center,
-      actions: actionWidgets.isNotEmpty
-          ? [
-              widget.actionsDirection == Axis.horizontal
-                  ? Row(children: actionWidgets)
-                  : IntrinsicHeight(child: Column(children: actionWidgets))
-            ]
-          : null,
     );
   }
 }
