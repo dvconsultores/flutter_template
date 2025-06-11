@@ -107,13 +107,13 @@ dependencies:
   appinio_video_player: ^1.2.2
 
   # Firebase and Chat
-  # firebase_core: 3.14.0
-  # cloud_firestore: 5.6.8
-  # flutter_firebase_chat_core: 1.6.8
-  # flutter_chat_types: 3.6.2
-  # firebase_auth: 5.6.0
-  # firebase_storage: 12.4.7
-  # firebase_messaging: 15.2.7
+  # firebase_core: 3.10.0
+  # cloud_firestore: ^5.6.1
+  # flutter_firebase_chat_core: ^1.6.7
+  # flutter_chat_types: ^3.6.2
+  # firebase_auth: ^5.4.0
+  # firebase_storage: ^12.4.0
+  # firebase_messaging: ^15.2.0
   # # firebase_analytics: ^10.8.9
   # # firebase_app_check: ^0.3.2+5
 
