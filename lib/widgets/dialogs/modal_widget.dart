@@ -212,14 +212,10 @@ class Modal extends StatefulWidget {
         flexConfirmButton: flexConfirmButton,
         hideCancelButton: hideCancelButton,
         hideConfirmButton: hideConfirmButton,
-        onPressedConfirmBtn: onPressedConfirmBtn ??
-            (textConfirmBtn != null
-                ? (context) => Navigator.pop(context, true)
-                : null),
-        onPressedCancelBtn: onPressedCancelBtn ??
-            (textCancelBtn != null
-                ? (context) => Navigator.pop(context, false)
-                : null),
+        onPressedConfirmBtn:
+            onPressedConfirmBtn ?? (context) => Navigator.pop(context, true),
+        onPressedCancelBtn:
+            onPressedCancelBtn ?? (context) => Navigator.pop(context, false),
         actionsDirection: actionsDirection,
         iconPadding: iconPadding,
         titlePadding: titlePadding,
