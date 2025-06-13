@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
+import 'package:flutter_detextre4/utils/config/router_config.dart';
 import 'package:flutter_detextre4/utils/extensions/type_extensions.dart';
 import 'package:flutter_detextre4/utils/services/initialization_service.dart';
 import 'package:flutter_detextre4/utils/services/local_data/env_service.dart';
@@ -18,6 +19,7 @@ enum UniLinksKey {
 enum UniLinksTypeHandler {
   initialUrl,
   streamUrl,
+  webUrl,
   installReferrer;
 }
 
@@ -38,7 +40,13 @@ class UniLinksService {
 
   /// Initialization method to [UniLinksService]. Just run once.
   Future<UniLinksService?> init({checkActualVersion = false}) async {
-    if (kIsWeb) return null;
+    if (kIsWeb) {
+      uniLinkHandler(
+        routerConfig.router.state.uri,
+        UniLinksTypeHandler.webUrl,
+      );
+      return this;
+    }
 
     // This is used for cases when: APP is not running and the user clicks on a link.
     try {

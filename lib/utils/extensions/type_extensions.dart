@@ -837,35 +837,48 @@ extension StringExtension on String {
   }
 }
 
-// ? Unused
 // ? Uri extension
-// extension UriExtension on Uri {
-//   /// Getter to path value without mutations
-//   String get originalPath {
-//     if (hasScheme) {
-//       return "/${pathSegments.join("/").split(origin)[0]}";
-//     }
-//     return pathSegments.join("/");
-//   }
+extension UriExtension on Uri {
+  /// Converts the URI's query parameters into a URL query string.
+  ///
+  /// This getter transforms a map of [queryParameters] (key-value pairs)
+  /// into the standard URL query string format, starting with '?'
+  /// and joining the pairs with '&'.
+  ///
+  /// Each key and value is encoded using [Uri.encodeComponent]
+  /// to ensure special characters (like spaces, '/', '&') are
+  /// handled correctly, preventing formatting and security issues in the URL.
+  ///
+  /// ### Example:
+  ///
+  /// If `this.queryParameters` is `{'name': 'John Doe', 'age': '30'}`:
+  ///
+  /// ```dart
+  /// final uri = Uri.parse('/path?name=John%20Doe&age=30');
+  /// print(uri.queryUrlParams); // Output: "?name=John%20Doe&age=30"
+  /// ```
+  ///
+  /// If the [Uri] has no query parameters ([queryParameters] is empty),
+  /// the method will return an empty string.
+  ///
+  /// ```dart
+  /// final uri = Uri.parse('/path');
+  /// print(uri.queryUrlParams); // Output: ""
+  /// ```
+  String get queryUrlParams {
+    String queryString = '';
 
-//   /// Add Custom network base url path to uri.
-//   Uri addNetworkPath(String netWorkPath) {
-//     if (!hasScheme) {
-//       return Uri.parse("$netWorkPath$originalPath");
-//     }
-//     debugPrint("$this - already has scheme ⭕");
-//     return this;
-//   }
+    if (queryParameters.isNotEmpty) {
+      queryString = '?';
+      queryString += queryParameters.entries
+          .map((e) =>
+              '${Uri.encodeComponent(e.key)}=${Uri.encodeComponent(e.value)}')
+          .join('&');
+    }
 
-//   /// Remove Custom network base url path to uri.
-//   Uri removeNetworkPath() {
-//     if (hasScheme) {
-//       return Uri.parse(originalPath);
-//     }
-//     debugPrint("$this - haven't scheme ⭕");
-//     return this;
-//   }
-// }
+    return queryString;
+  }
+}
 
 // ? Screenshot extension
 extension ScreenshotExtension on ScreenshotController {

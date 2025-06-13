@@ -91,7 +91,7 @@ class _SplashRouteState extends State<SplashRoute>
         break;
 
       case InitialFetchStatus():
-        loader.close();
+        Future.delayed(Durations.short2, loader.close);
         break;
     }
   }

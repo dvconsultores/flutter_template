@@ -48,7 +48,9 @@ class AppRouterConfig {
         if (![InitialFetchStatus.done, InitialFetchStatus.unilinkDone].contains(
             mainProvider
                 .initializationService.initialFetch.initialFetchStatus.value)) {
-          if (state.uri.toString().contains("redirectPath")) return null;
+          if (state.uri.toString().contains("/splash?redirectPath")) {
+            return null;
+          }
 
           return '/splash?redirectPath=${Uri.encodeComponent(state.uri.toString())}';
         }
@@ -59,7 +61,13 @@ class AppRouterConfig {
             requireAuth = !location.contains("/auth");
 
         if (requireAuth && !isLogged) {
-          return kIsWeb ? "/landing" : "/auth";
+          if (state.uri.toString().contains("/auth?redirectPath")) {
+            return null;
+          }
+
+          return kIsWeb
+              ? "/landing"
+              : "/auth/auth?redirectPath=${Uri.encodeComponent(state.uri.toString())}";
         }
 
         return null;
@@ -106,7 +114,17 @@ class AppRouterConfig {
             GoRoute(
               path: '/auth',
               name: 'login',
-              pageBuilder: (context, state) => pageBuilder(const LoginRoute()),
+              pageBuilder: (context, state) {
+                final redirectPath = state.uri.queryParameters['redirectPath'];
+
+                return pageBuilder(LoginRoute(
+                  showBiometric:
+                      state.uri.queryParameters['showBiometric'] != null,
+                  redirectPath: redirectPath != null
+                      ? Uri.decodeComponent(redirectPath)
+                      : redirectPath,
+                ));
+              },
               routes: const [],
             ),
 
