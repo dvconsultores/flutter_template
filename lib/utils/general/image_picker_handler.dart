@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_detextre4/utils/config/theme.dart';
 import 'package:flutter_detextre4/utils/general/context_utility.dart';
@@ -15,12 +16,14 @@ class ImagePickerHandler extends image.ImagePicker {
     image.CameraDevice preferredCameraDevice = image.CameraDevice.rear,
     bool requestFullMetadata = true,
   }) async {
-    final permissions = Permission.camera;
+    if (!kIsWeb) {
+      final permissions = Permission.camera;
 
-    if (await permissions.isPermanentlyDenied) {
-      final permissionsGranted =
-          await openAppSettingsModal(ContextUtility.context!, permissions);
-      if (permissionsGranted != true) return null;
+      if (await permissions.isPermanentlyDenied) {
+        final permissionsGranted =
+            await openAppSettingsModal(ContextUtility.context!, permissions);
+        if (permissionsGranted != true) return null;
+      }
     }
 
     return await super.pickImage(
@@ -40,12 +43,14 @@ class ImagePickerHandler extends image.ImagePicker {
     int? imageQuality,
     bool requestFullMetadata = true,
   }) async {
-    final permissions = Permission.mediaLibrary;
+    if (!kIsWeb) {
+      final permissions = Permission.mediaLibrary;
 
-    if (await permissions.isPermanentlyDenied) {
-      final permissionsGranted =
-          await openAppSettingsModal(ContextUtility.context!, permissions);
-      if (permissionsGranted != true) return null;
+      if (await permissions.isPermanentlyDenied) {
+        final permissionsGranted =
+            await openAppSettingsModal(ContextUtility.context!, permissions);
+        if (permissionsGranted != true) return null;
+      }
     }
 
     return await super.pickMedia(
@@ -62,12 +67,14 @@ class ImagePickerHandler extends image.ImagePicker {
     image.CameraDevice preferredCameraDevice = image.CameraDevice.rear,
     Duration? maxDuration,
   }) async {
-    final permissions = Permission.videos;
+    if (!kIsWeb) {
+      final permissions = Permission.videos;
 
-    if (await permissions.isPermanentlyDenied) {
-      final permissionsGranted =
-          await openAppSettingsModal(ContextUtility.context!, permissions);
-      if (permissionsGranted != true) return null;
+      if (await permissions.isPermanentlyDenied) {
+        final permissionsGranted =
+            await openAppSettingsModal(ContextUtility.context!, permissions);
+        if (permissionsGranted != true) return null;
+      }
     }
 
     return await super.pickVideo(
@@ -85,12 +92,14 @@ class ImagePickerHandler extends image.ImagePicker {
     int? limit,
     bool requestFullMetadata = true,
   }) async {
-    final permissions = Permission.mediaLibrary;
+    if (!kIsWeb) {
+      final permissions = Permission.mediaLibrary;
 
-    if (await permissions.isPermanentlyDenied) {
-      final permissionsGranted =
-          await openAppSettingsModal(ContextUtility.context!, permissions);
-      if (permissionsGranted != true) return [];
+      if (await permissions.isPermanentlyDenied) {
+        final permissionsGranted =
+            await openAppSettingsModal(ContextUtility.context!, permissions);
+        if (permissionsGranted != true) return [];
+      }
     }
 
     return await super.pickMultipleMedia(
@@ -110,12 +119,14 @@ class ImagePickerHandler extends image.ImagePicker {
     int? limit,
     bool requestFullMetadata = true,
   }) async {
-    final permissions = Permission.photos;
+    if (!kIsWeb) {
+      final permissions = Permission.photos;
 
-    if (await permissions.isPermanentlyDenied) {
-      final permissionsGranted =
-          await openAppSettingsModal(ContextUtility.context!, permissions);
-      if (permissionsGranted != true) return [];
+      if (await permissions.isPermanentlyDenied) {
+        final permissionsGranted =
+            await openAppSettingsModal(ContextUtility.context!, permissions);
+        if (permissionsGranted != true) return [];
+      }
     }
 
     return await super.pickMultiImage(
