@@ -78,6 +78,12 @@ class VTable<T> extends StatefulWidget {
   /// Whether to show column headers.
   final bool showHeaders;
 
+  /// Determines whether a separator should be displayed between the table headers and the table body.
+  ///
+  /// If set to `true`, a visual separator (such as a line) will be shown below the headers.
+  /// If set to `false`, no separator will be displayed.
+  final bool showHeadersSeparator;
+
   /// Whether to show a table toolbar.
   final bool showToolbar;
 
@@ -155,6 +161,7 @@ class VTable<T> extends StatefulWidget {
     this.headersHeight = defaultHeadersHeight,
     this.includeCopyToClipboardAction = false,
     this.showHeaders = true,
+    this.showHeadersSeparator = true,
     this.showToolbar = true,
     this.showToolbarSeparator = true,
     this.showSeparators = true,
@@ -367,9 +374,11 @@ class _VTableState<T> extends State<VTable<T>> {
             onTap: () => _select(item),
             onDoubleTap: () => _doubleTap(item),
             child: DecoratedBox(
-              decoration: (widget.showHeaders || index != 0)
-                  ? rowSeparator
-                  : const BoxDecoration(),
+              decoration:
+                  ((widget.showHeaders && widget.showHeadersSeparator) ||
+                          index != 0)
+                      ? rowSeparator
+                      : const BoxDecoration(),
               child: widget.rowsBuilder != null
                   ? widget.rowsBuilder!(context, row, selected)
                   : row,

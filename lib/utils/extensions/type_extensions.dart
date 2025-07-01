@@ -24,6 +24,11 @@ abstract class DefaultModel<T> {
   Map<String, dynamic> toJson();
 }
 
+mixin EnumMethod<T extends Enum> {
+  static T getByName<T extends Enum>(List<T> values, String value) =>
+      values.singleWhere((method) => method.name == value);
+}
+
 // ? AssetBundle extension
 extension AssetBundleExtension on AssetBundle {
   /// Read JSON asset file
