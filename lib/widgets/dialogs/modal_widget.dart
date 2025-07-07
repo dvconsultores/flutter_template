@@ -15,6 +15,7 @@ class Modal extends StatefulWidget {
     this.iconColor,
     this.title,
     this.titleText,
+    this.showTitleDivider = false,
     this.content,
     this.contentText,
     this.actions,
@@ -48,6 +49,7 @@ class Modal extends StatefulWidget {
   final Color? iconColor;
   final Widget? title;
   final String? titleText;
+  final bool showTitleDivider;
   final Widget? content;
   final String? contentText;
   final List<Widget>? actions;
@@ -83,6 +85,7 @@ class Modal extends StatefulWidget {
     Color? iconColor,
     Widget? title,
     String? titleText,
+    bool showTitleDivider = false,
     Widget? content,
     String? contentText,
     List<Widget>? actions,
@@ -126,6 +129,7 @@ class Modal extends StatefulWidget {
               iconColor: iconColor,
               title: title,
               titleText: titleText,
+              showTitleDivider: showTitleDivider,
               content: content,
               contentText: contentText,
               actions: actions,
@@ -165,6 +169,7 @@ class Modal extends StatefulWidget {
     Widget? icon,
     Color? iconColor,
     String? titleText,
+    bool showTitleDivider = false,
     String? contentText,
     String? textConfirmBtn,
     String? textCancelBtn,
@@ -205,6 +210,7 @@ class Modal extends StatefulWidget {
         icon: icon,
         iconColor: iconColor,
         titleText: titleText,
+        showTitleDivider: showTitleDivider,
         contentText: contentText,
         textConfirmBtn: textConfirmBtn,
         textCancelBtn: textCancelBtn,
@@ -243,6 +249,7 @@ class Modal extends StatefulWidget {
     Color? iconColor,
     Widget Function(TextStyle style)? title,
     String? titleText,
+    bool showTitleDivider = false,
     Widget Function(TextStyle style)? content,
     String? contentText,
     String? textConfirmBtn,
@@ -410,11 +417,19 @@ class _ModalState extends State<Modal> {
 
     // widgets
     final titleWidget = ConstrainedBox(
-            constraints: boxConstraints,
-            child: widget.title ??
+          constraints: boxConstraints,
+          child: Column(mainAxisSize: MainAxisSize.min, children: [
+            widget.title ??
                 (widget.titleText != null
                     ? Text(widget.titleText!, textAlign: TextAlign.center)
-                    : null)),
+                    : SizedBox.shrink()),
+            if ((widget.title != null || widget.titleText != null) &&
+                widget.showTitleDivider) ...[
+              Gap(Vars.gapNormal).column,
+              Divider(thickness: 1, height: 0)
+            ],
+          ]),
+        ),
         contentWidget = ConstrainedBox(
             constraints: boxConstraints,
             child: widget.content ??
