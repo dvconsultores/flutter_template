@@ -10,8 +10,13 @@ class ValidatorField {
   final Object? value;
   final List<String? Function()> Function(ValidatorField instance)? validators;
 
-  /// Main method used to inizialize [ValidatorField] and get the instance
-  String? validate() {
+  /// Helper function to validate fields
+  static String? _validate(
+    Object? value,
+    List<String? Function()> Function(ValidatorField instance)? validators,
+  ) {
+    assert(validators != null, '"validators" field can\'t be null');
+
     for (final validator in validators!(ValidatorField(value))) {
       if (validator() == null) continue;
       return validator();
@@ -21,26 +26,19 @@ class ValidatorField {
   }
 
   /// Main method used to inizialize [ValidatorField] and get the instance
-  static String? evaluate(
-    Object? value,
-    List<String? Function()> Function(ValidatorField instance) validators,
-  ) {
-    for (final validator in validators(ValidatorField(value))) {
-      if (validator() == null) continue;
-      return validator();
-    }
+  String? validate() => _validate(value, validators);
 
-    return null;
-  }
+  /// Main method used to inizialize [ValidatorField] and get the instance
+  static String? Function(Object? value) evaluate(
+    List<String? Function()> Function(ValidatorField instance) validators,
+  ) =>
+      (Object? value) => _validate(value, validators);
 
   /// Main method used to validate multiple [ValidatorField] instance
   static String? evaluateMultiple(List<ValidatorField> validations) {
     for (final validation in validations) {
-      for (final validator
-          in validation.validators!(ValidatorField(validation.value))) {
-        if (validator() == null) continue;
-        return validator();
-      }
+      final error = validation.validate();
+      if (error != null) return error;
     }
 
     return null;
@@ -48,6 +46,7 @@ class ValidatorField {
 
   bool get _isIterable => value is Iterable?;
   Iterable? get _iterableValue => value as Iterable?;
+  bool get _isBool => value is bool;
 
   //* Validators
   String? required([String? customMessage]) {
@@ -55,6 +54,8 @@ class ValidatorField {
 
     if (_isIterable) {
       sentence = _iterableValue.hasNotValue;
+    } else if (_isBool) {
+      sentence = !(value as bool);
     } else {
       sentence = value?.toString().isEmpty ?? true;
     }

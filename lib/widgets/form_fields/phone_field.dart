@@ -129,10 +129,9 @@ class _PhoneFieldState extends State<PhoneField> {
       dropdownTitleText: widget.dropdownTitleText,
       autovalidateMode: AutovalidateMode.onUserInteraction,
       keyboardType: TextInputType.phone,
-      validator: (value) => ValidatorField.evaluate(
-        value,
-        (instance) => [
-          () => instance.isValidPhoneNumber(
+      validator: ValidatorField.evaluate(
+        (i) => [
+          () => i.isValidPhoneNumber(
                 mask: widget.mask ?? maskFormatter.getMask(),
                 minLength: widget.minLength ?? currentPhoneSelected?.minLength,
                 maxLength: widget.maxLength ?? currentPhoneSelected?.maxLength,
