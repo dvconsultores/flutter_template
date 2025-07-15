@@ -108,7 +108,7 @@ class _InitializationInAppService {
   }
 
   Future<void> initPostInAppServices(BuildContext context) async {
-    ReminderService.init();
+    await ReminderService.init(context);
 
     initializedPostInAppServices = true;
     _setInAppStarted();

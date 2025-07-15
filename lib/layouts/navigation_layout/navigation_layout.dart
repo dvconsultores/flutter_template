@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_detextre4/layouts/navigation_layout/navigation_screen.dart';
 import 'package:flutter_detextre4/main_provider.dart';
-import 'package:flutter_detextre4/utils/services/reminder_service.dart';
 import 'package:go_router/go_router.dart';
 
 class NavigationLayout extends StatefulWidget {
@@ -21,8 +20,7 @@ class NavigationLayout extends StatefulWidget {
   State<NavigationLayout> createState() => _NavigationLayoutState();
 }
 
-class _NavigationLayoutState extends State<NavigationLayout>
-    with WidgetsBindingObserver {
+class _NavigationLayoutState extends State<NavigationLayout> {
   final initializationService = MainProvider.read().initializationService;
 
   ScaffoldState? scaffoldState;
@@ -32,25 +30,9 @@ class _NavigationLayoutState extends State<NavigationLayout>
   }
 
   @override
-  Future<void> didChangeAppLifecycleState(AppLifecycleState state) async {
-    if (state == AppLifecycleState.resumed) {
-      ReminderService.validate();
-    }
-
-    super.didChangeAppLifecycleState(state);
-  }
-
-  @override
   void initState() {
     initializationService.inAppService.initBothInAppServices(context);
-    WidgetsBinding.instance.addObserver(this);
     super.initState();
-  }
-
-  @override
-  void dispose() {
-    WidgetsBinding.instance.removeObserver(this);
-    super.dispose();
   }
 
   @override
