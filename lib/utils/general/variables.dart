@@ -8,14 +8,23 @@ mixin Vars {
   static final isProduction = env.environment == "production";
 
   // * fetching
+  /// int -> 20
   static const requestTiming = 20;
 
   // * values
+  /// int -> 3
   static const maxDecimals = 3;
+
+  /// Duration -> 1500
   static const skeletonDuration = Duration(milliseconds: 1500);
 
   // * Sizing
-  static const mobileSize = Size(360, 690), desktopSize = Size(1512, 720);
+  /// Size -> Size(360, 690)
+  static const mobileSize = Size(360, 690);
+
+  /// Size -> Size(1512, 720)
+  static const desktopSize = Size(1512, 720);
+
   static Size getDesignSize(BuildContext context) =>
       context.width.isMobile ? Vars.mobileSize : Vars.desktopSize;
 
@@ -33,24 +42,45 @@ mixin Vars {
         maxValue: maxValue ?? 1,
       );
 
+  /// width -> 1000
   static const double desktopScaffoldMaxWidth = 1000;
 
+  /// height -> 75.0
   static const bottomNavbarHeight = 75.0;
 
+  /// height -> 45
   static const double buttonHeight = 45;
 
+  /// Padding ->
+  /// EdgeInsets.symmetric(
+  ///   vertical: 16,
+  ///   horizontal: 24,
+  /// );
   static const paddingScaffold = EdgeInsets.symmetric(
     vertical: 16,
     horizontal: 24,
   );
 
-  static const double gapXLow = 2,
-      gapLow = 4,
-      gapNormal = 8,
-      gapMedium = 10,
-      gapLarge = 12,
-      gapXLarge = 16,
-      gapMax = 20;
+  /// gap -> 2
+  static const double gapXLow = 2;
+
+  /// gap -> 4
+  static const double gapLow = 4;
+
+  /// gap -> 8
+  static const double gapNormal = 8;
+
+  /// gap -> 10
+  static const double gapMedium = 10;
+
+  /// gap -> 12
+  static const double gapLarge = 12;
+
+  /// gap -> 16
+  static const double gapXLarge = 16;
+
+  /// gap -> 20
+  static const double gapMax = 20;
 
   static const double radius50 = 50,
       radius45 = 45,
@@ -100,7 +130,11 @@ mixin Vars {
         color: Color(0xffE15517),
       );
 
-  static const double minInputHeight = 42, maxInputHeight = 50;
+  /// height -> 42
+  static const double minInputHeight = 42;
+
+  /// height -> 50
+  static const double maxInputHeight = 50;
 
   // RegExps
   static final nicknameRegExp = RegExp(r'^[a-zA-ZñÑ0-9_-]{5,12}$'),

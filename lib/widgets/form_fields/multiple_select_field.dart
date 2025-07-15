@@ -10,7 +10,7 @@ import 'package:flutter_detextre4/utils/general/functions.dart';
 import 'package:flutter_detextre4/utils/general/variables.dart';
 import 'package:flutter_detextre4/widgets/defaults/error_text.dart';
 import 'package:flutter_detextre4/widgets/defaults/tooltip.dart';
-import 'package:flutter_detextre4/widgets/sheets/bottom_sheet_card.dart';
+import 'package:flutter_detextre4/widgets/sheets/bottom_sheet_list_multiple.dart';
 import 'package:flutter_gap/flutter_gap.dart';
 
 class MultipleSelectField<T> extends StatefulWidget {

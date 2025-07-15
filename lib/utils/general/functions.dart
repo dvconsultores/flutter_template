@@ -13,7 +13,7 @@ import 'package:flutter_detextre4/utils/general/variables.dart';
 import 'package:flutter_detextre4/utils/services/app_review_service.dart';
 import 'package:flutter_detextre4/utils/services/local_data/env_service.dart';
 import 'package:flutter_detextre4/widgets/dialogs/modal_widget.dart';
-import 'package:flutter_detextre4/widgets/sheets/bottom_sheet_card.dart';
+import 'package:flutter_detextre4/widgets/sheets/bottom_sheet_list.dart';
 import 'package:flutter_gap/flutter_gap.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:http/http.dart' show Response, get;
