@@ -97,7 +97,7 @@ class DeviceInfo {
 
   /// Getter to determine if the device is mobile or desktop.
   /// 📱 | 💻
-  static Future<String?> get getDeviceId async {
+  static Future<String?> get deviceId async {
     String? deviceId;
 
     if (kIsWeb) {
