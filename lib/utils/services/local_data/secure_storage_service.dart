@@ -4,7 +4,8 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 ///? Collection used to know storage elements into secure storage.
 enum SecureCollection {
-  tokenAuth;
+  tokenAuth,
+  webUuid;
 }
 
 /// Configuration class to Secure storage.

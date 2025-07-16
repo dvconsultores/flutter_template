@@ -3,6 +3,8 @@ import 'dart:io' as io;
 import 'package:device_info_plus/device_info_plus.dart';
 import 'package:disk_space_update/disk_space_update.dart';
 import 'package:flutter/foundation.dart';
+import 'package:flutter_detextre4/utils/services/local_data/secure_storage_service.dart';
+import 'package:uuid/uuid.dart';
 
 /// enum to classify devices 📱 | 💻
 enum DeviceType { mobile, desktop, unknown }
@@ -91,6 +93,28 @@ class DeviceInfo {
     }
 
     return DeviceType.unknown;
+  }
+
+  /// Getter to determine if the device is mobile or desktop.
+  /// 📱 | 💻
+  static Future<String?> get getDeviceId async {
+    String? deviceId;
+
+    if (kIsWeb) {
+      deviceId = await SecureStorage.read(SecureCollection.webUuid);
+
+      // generate device uuid
+      if (deviceId == null) {
+        deviceId = Uuid().v4();
+        await SecureStorage.write(SecureCollection.webUuid, deviceId);
+      }
+    } else if (io.Platform.isIOS) {
+      deviceId = (await ios.instance).identifierForVendor;
+    } else if (io.Platform.isAndroid) {
+      deviceId = (await android.instance).id;
+    }
+
+    return deviceId;
   }
 }
 
