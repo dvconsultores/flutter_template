@@ -64,7 +64,7 @@ class DeviceInfo {
     late final String deviceName;
 
     if (kIsWeb) {
-      deviceName = await web.getModel();
+      deviceName = await web.getBrowser();
     } else if (io.Platform.isAndroid) {
       deviceName = await android.model;
     } else {
@@ -242,8 +242,8 @@ class _Web {
     return osInfo ?? 'unknown';
   }
 
-  /// Get the model representation from the web device
-  Future<String> getModel() async {
+  /// Get the Browser representation from the web device
+  Future<String> getBrowser() async {
     assert(kIsWeb, "Web platform not found");
     final agent = (await userAgent) ?? '';
     String browser = '';
@@ -260,7 +260,14 @@ class _Web {
       browser = 'Navegador desconocido';
     }
 
-    return '$browser (${getOS()})';
+    return browser;
+  }
+
+  /// Get the model representation from the web device
+  Future<String> getModel() async {
+    assert(kIsWeb, "Web platform not found");
+
+    return "${await getBrowser()} (${await getOS()})";
   }
 
   /// get the [TargetPlatform] from current device
