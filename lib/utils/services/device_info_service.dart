@@ -6,9 +6,6 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter_detextre4/utils/services/local_data/secure_storage_service.dart';
 import 'package:uuid/uuid.dart';
 
-/// enum to classify devices 📱 | 💻
-enum DeviceType { mobile, desktop, unknown }
-
 /// Physical memory state collection
 enum PhysicalMemoryState {
   low(1024),
@@ -67,36 +64,36 @@ class DeviceInfo {
     late final String deviceName;
 
     if (kIsWeb) {
-      deviceName = await DeviceInfo.web.getModel();
+      deviceName = await web.getModel();
     } else if (io.Platform.isAndroid) {
-      deviceName = await DeviceInfo.android.model;
+      deviceName = await android.model;
     } else {
-      deviceName = await DeviceInfo.ios.model;
+      deviceName = await ios.model;
     }
 
     return deviceName;
   }
 
-  /// Getter to determine if the device is mobile or desktop.
-  /// 📱 | 💻
-  static Future<DeviceType> get deviceType async {
+  /// Getter to determine TargetPlatform from device
+  static Future<String> get deviceOS async {
+    late final String deviceOS;
+
     if (kIsWeb) {
-      return await DeviceInfo.web.getDeviceType();
+      deviceOS = await web.getOS();
+    } else if (io.Platform.isAndroid) {
+      deviceOS = "Android ${await android.release}";
     } else {
-      if (io.Platform.isAndroid || io.Platform.isIOS) {
-        return DeviceType.mobile;
-      } else if (io.Platform.isWindows ||
-          io.Platform.isLinux ||
-          io.Platform.isMacOS) {
-        return DeviceType.desktop;
-      }
+      deviceOS = "iOS ${await ios.version}";
     }
 
-    return DeviceType.unknown;
+    return deviceOS;
   }
 
-  /// Getter to determine if the device is mobile or desktop.
-  /// 📱 | 💻
+  /// Getter to determine TargetPlatform from device
+  static Future<TargetPlatform?> get deviceType async =>
+      kIsWeb ? await DeviceInfo.web.getOSInsideWeb() : defaultTargetPlatform;
+
+  /// Getter to determine deviceId from device
   static Future<String?> get deviceId async {
     String? deviceId;
 
@@ -234,13 +231,21 @@ class _Web {
     return value;
   }
 
-  /// Get the model representation from the web device
-  Future<String> getModel() async {
+  /// Get the OS representation from the web device
+  Future<String> getOS() async {
     assert(kIsWeb, "Web platform not found");
     final agent = (await userAgent) ?? '';
 
     final osMatch = RegExp(r'\(([^)]+)\)').firstMatch(agent);
     final osInfo = osMatch != null ? osMatch.group(1) : '';
+
+    return osInfo ?? 'unknown';
+  }
+
+  /// Get the model representation from the web device
+  Future<String> getModel() async {
+    assert(kIsWeb, "Web platform not found");
+    final agent = (await userAgent) ?? '';
     String browser = '';
 
     if (agent.contains('Edg/')) {
@@ -255,7 +260,7 @@ class _Web {
       browser = 'Navegador desconocido';
     }
 
-    return '$browser ($osInfo)';
+    return '$browser (${getOS()})';
   }
 
   /// get the [TargetPlatform] from current device
@@ -265,26 +270,11 @@ class _Web {
     assert(kIsWeb, "Web platform not found");
     final agent = (await userAgent) ?? '';
 
-    if (agent.contains("iphone")) return TargetPlatform.iOS;
-    if (agent.contains("ipad")) return TargetPlatform.iOS;
+    if (agent.contains("iphone") || agent.contains("ipad")) {
+      return TargetPlatform.iOS;
+    }
     if (agent.contains("android")) return TargetPlatform.android;
 
     return null;
-  }
-
-  /// Determines if the browser is running on a mobile or desktop device
-  /// by analyzing the user agent string.
-  Future<DeviceType> getDeviceType() async {
-    assert(kIsWeb, "Web platform not found");
-    final agent = (await userAgent ?? '').toLowerCase();
-
-    // Patrones comunes para identificar navegadores móviles.
-    if (agent.contains('mobi') ||
-        agent.contains('android') ||
-        agent.contains('iphone')) {
-      return DeviceType.mobile;
-    }
-
-    return DeviceType.desktop;
   }
 }
